@@ -1,10 +1,13 @@
-package com.rithsagea.atelier;
+package com.rithsagea.atelier.listeners;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.rithsagea.atelier.command.AtelierCommand;
-import com.rithsagea.atelier.command.CommandRegistry;
+import com.rithsagea.atelier.AtelierBot;
+import com.rithsagea.atelier.AtelierCommand;
+import com.rithsagea.atelier.CommandRegistry;
+import com.rithsagea.atelier.Config;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -24,7 +27,8 @@ public class MessageListener extends ListenerAdapter {
 		String message = event.getMessage().getContentRaw();
 		if(message.startsWith(config.getCommandPrefix())) {
 			
-			List<String> args = Arrays.asList(message.substring(config.getCommandPrefix().length()).split(" "));
+			List<String> args = new ArrayList<String>(Arrays.asList(
+					message.substring(config.getCommandPrefix().length()).split(" ")));
 			
 			AtelierCommand command = reg.getCommand(args.get(0));
 			if(command != null) command.execute(args, event);

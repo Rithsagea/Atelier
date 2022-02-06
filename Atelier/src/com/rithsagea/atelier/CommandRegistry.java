@@ -1,4 +1,4 @@
-package com.rithsagea.atelier.command;
+package com.rithsagea.atelier;
 
 import java.util.HashMap;
 import java.util.Map;
