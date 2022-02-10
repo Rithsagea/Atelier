@@ -1,4 +1,4 @@
-package com.rithsagea.atelier.music;
+package com.rithsagea.atelier.discord.music;
 
 import java.util.HashMap;
 import java.util.Map;

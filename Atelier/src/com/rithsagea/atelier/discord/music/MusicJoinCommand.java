@@ -1,8 +1,8 @@
-package com.rithsagea.atelier.music;
+package com.rithsagea.atelier.discord.music;
 
 import java.util.List;
 
-import com.rithsagea.atelier.AtelierCommand;
+import com.rithsagea.atelier.discord.AtelierCommand;
 
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;

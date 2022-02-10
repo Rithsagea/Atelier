@@ -5,8 +5,9 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rithsagea.atelier.listeners.MessageListener;
-import com.rithsagea.atelier.music.MusicCommand;
+import com.rithsagea.atelier.discord.CommandRegistry;
+import com.rithsagea.atelier.discord.listeners.MessageListener;
+import com.rithsagea.atelier.discord.music.MusicCommand;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -45,7 +46,6 @@ public class AtelierBot {
 	}
 	
 	private void registerCommands() {
-		commandRegistry.registerCommand(new PingCommand());
 		commandRegistry.registerCommand(new MusicCommand());
 	}
 	

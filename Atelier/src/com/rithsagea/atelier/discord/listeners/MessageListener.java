@@ -1,13 +1,13 @@
-package com.rithsagea.atelier.listeners;
+package com.rithsagea.atelier.discord.listeners;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
-import com.rithsagea.atelier.AtelierCommand;
-import com.rithsagea.atelier.CommandRegistry;
 import com.rithsagea.atelier.Config;
+import com.rithsagea.atelier.discord.AtelierCommand;
+import com.rithsagea.atelier.discord.CommandRegistry;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -34,5 +34,4 @@ public class MessageListener extends ListenerAdapter {
 			if(command != null) command.execute(args, event);
 		}
 	}
-
 }

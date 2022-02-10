@@ -1,4 +1,4 @@
-package com.rithsagea.atelier.music;
+package com.rithsagea.atelier.discord.music;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.BlockingQueue;

@@ -1,8 +1,8 @@
-package com.rithsagea.atelier.music;
+package com.rithsagea.atelier.discord.music;
 
 import java.util.List;
 
-import com.rithsagea.atelier.AtelierSubCommand;
+import com.rithsagea.atelier.discord.AtelierSubCommand;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

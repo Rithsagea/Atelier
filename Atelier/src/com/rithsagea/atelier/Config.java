@@ -12,6 +12,7 @@ public class Config {
 	private Properties prop;
 	
 	private static final String DB_URL_KEY = "databaseUrl";
+	private static final String DB_NAME = "databaseName";
 	private static final String DISCORD_TOKEN = "discordToken";
 	private static final String COMMAND_PREFIX = "commandPrefix";
 	
@@ -29,6 +30,7 @@ public class Config {
 		
 		load();
 		setDefault(DB_URL_KEY, "");
+		setDefault(DB_NAME, "atelier");
 		setDefault(DISCORD_TOKEN, "");
 		setDefault(COMMAND_PREFIX, "!");
 		save();
@@ -60,6 +62,10 @@ public class Config {
 	
 	public String getDatabaseUrl() {
 		return prop.getProperty(DB_URL_KEY);
+	}
+	
+	public String getDatabaseName() {
+		return prop.getProperty(DB_NAME);
 	}
 	
 	public String getDiscordToken() {
