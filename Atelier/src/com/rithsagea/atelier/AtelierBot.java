@@ -6,27 +6,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rithsagea.atelier.discord.CommandRegistry;
+import com.rithsagea.atelier.discord.StopCommand;
 import com.rithsagea.atelier.discord.listeners.MessageListener;
+import com.rithsagea.atelier.discord.music.AtelierAudioManager;
 import com.rithsagea.atelier.discord.music.MusicCommand;
+import com.rithsagea.atelier.dnd.database.AtelierDB;
+import com.rithsagea.atelier.dnd.discord.CharacterCommand;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
 public class AtelierBot {
 	
+	private AtelierDB db;
 	private Config config;
 	private CommandRegistry commandRegistry;
 	private Logger logger;
 	private JDA jda;
+	
+	private AtelierAudioManager audioManager;
 	
 	private boolean running;
 	
 	public AtelierBot(Config config) {
 		this.config = config;
 		
+		db = new AtelierDB(config);
 		commandRegistry = new CommandRegistry();
 		logger = LoggerFactory.getLogger("Atelier");
 		running = true;
+		
+		audioManager = new AtelierAudioManager();
 	}
 	
 	public void init() {
@@ -46,7 +56,10 @@ public class AtelierBot {
 	}
 	
 	private void registerCommands() {
-		commandRegistry.registerCommand(new MusicCommand());
+		commandRegistry.registerCommand(new StopCommand(this));
+		
+		commandRegistry.registerCommand(new MusicCommand(this));
+		commandRegistry.registerCommand(new CharacterCommand(this));
 	}
 	
 	public Config getConfig() {
@@ -57,14 +70,25 @@ public class AtelierBot {
 		return logger;
 	}
 	
+	public AtelierDB getDatabase() {
+		return db;
+	}
+	
 	public CommandRegistry getCommandRegistry() {
 		return commandRegistry;
 	}
 	
-	public void stop() {
-		running = false;
+	public AtelierAudioManager getAudioManager() {
+		return audioManager;
 	}
 	
+	public void stop() {
+		running = false;
+		jda.shutdownNow();
+		audioManager.shutdown();
+		db.disconnect();
+	}
+		
 	public boolean isRunning() {
 		return running;
 	}

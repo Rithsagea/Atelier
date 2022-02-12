@@ -30,8 +30,6 @@ public class MusicJoinCommand implements AtelierCommand {
 
 	@Override
 	public void execute(List<String> args, MessageReceivedEvent event) {
-		System.out.println("asdf");
-		
 		if(event.getAuthor().isBot()) return;
 		
 		Guild guild = event.getGuild();

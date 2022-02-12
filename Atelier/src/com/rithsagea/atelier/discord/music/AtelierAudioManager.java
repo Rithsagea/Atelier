@@ -20,6 +20,10 @@ public class AtelierAudioManager {
 		audioHandlers = new HashMap<>();
 	}
 	
+	public void shutdown() {
+		playerManager.shutdown();
+	}
+	
 	public AtelierAudioHandler getAudioHandler(Guild guild) {
 		if(!audioHandlers.containsKey(guild)) {
 			audioHandlers.put(guild, new AtelierAudioHandler(playerManager, playerManager.createPlayer()));
