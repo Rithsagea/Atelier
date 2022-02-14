@@ -9,6 +9,8 @@ public class Sheet {
 	
 	private final UUID id;
 	
+	private String name;
+	
 	@BsonCreator
 	public Sheet(@BsonId UUID id) {
 		this.id = id;
@@ -22,5 +24,15 @@ public class Sheet {
 	
 	public UUID getId() {
 		return id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	//MUTATORS
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 }

@@ -5,15 +5,23 @@ import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
 import com.rithsagea.atelier.discord.AtelierSubCommand;
+import com.rithsagea.atelier.dnd.database.AtelierDB;
+import com.rithsagea.atelier.dnd.database.Sheet;
+import com.rithsagea.atelier.dnd.database.User;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CharacterCommand extends AtelierSubCommand {
 	
+	private AtelierDB db;
+	
 	public CharacterCommand(AtelierBot bot) {
+		db = bot.getDatabase();
+		
 		registerCommand(new CharacterCreateCommand(bot));
 		registerCommand(new CharacterListCommand(bot));
 		registerCommand(new CharacterSelectCommand(bot));
+		registerCommand(new CharacterSetCommand(bot));
 	}
 	
 	@Override
@@ -28,7 +36,14 @@ public class CharacterCommand extends AtelierSubCommand {
 
 	@Override
 	public void executeDefault(List<String> args, MessageReceivedEvent event) {
+		User user = db.findUser(event.getAuthor().getIdLong());
+		Sheet sheet = db.findSheet(user.getSheetId());
 		
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("Name: " + sheet.getName() + "\n");
+		
+		event.getChannel().sendMessage(builder.toString()).queue();
 	}
 
 }
