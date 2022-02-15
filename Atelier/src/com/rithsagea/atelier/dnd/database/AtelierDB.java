@@ -4,10 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.UuidRepresentation;
+import org.mongojack.JacksonMongoCollection;
+import org.mongojack.ObjectMapperConfigurer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -20,6 +21,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.rithsagea.atelier.Config;
 
 public class AtelierDB {
+	
 	private MongoClient client;
 	private MongoDatabase db;
 	
@@ -29,23 +31,24 @@ public class AtelierDB {
 	private ReplaceOptions replaceUpsertOption;
 	
 	public AtelierDB(Config config) {
-		CodecRegistry codecs = CodecRegistries.fromRegistries(
-				MongoClientSettings.getDefaultCodecRegistry(),
-				CodecRegistries.fromProviders(PojoCodecProvider.builder()
-						.automatic(true)
-						.register(User.class)
-						.register(Sheet.class)
-						.build()));
-		
-		client = MongoClients.create(MongoClientSettings.builder()
+		MongoClientSettings settings = MongoClientSettings.builder()
 				.applyConnectionString(new ConnectionString(config.getDatabaseUrl()))
-				.codecRegistry(codecs)
-				.build());
+				.uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
+				.build();
 		
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapperConfigurer.configureObjectMapper(mapper);
+		
+		client = MongoClients.create(settings);
 		db = client.getDatabase(config.getDatabaseName());
-		users = db.getCollection("users", User.class);
-		sheets = db.getCollection("sheets", Sheet.class);
 		
+		users = JacksonMongoCollection.builder()
+				.withObjectMapper(mapper)
+				.build(db.getCollection("users", User.class), User.class, UuidRepresentation.JAVA_LEGACY);
+		sheets = JacksonMongoCollection.builder()
+				.withObjectMapper(mapper)
+				.build(db.getCollection("sheets", Sheet.class), Sheet.class, UuidRepresentation.JAVA_LEGACY);
+	
 		replaceUpsertOption = new ReplaceOptions().upsert(true);
 	}
 	
@@ -53,18 +56,34 @@ public class AtelierDB {
 		client.close();
 	}
 	
+	/**
+	 * @param id the id of the user to find
+	 * @return the user
+	 */
 	public User findUser(long id) {
 		return users.find(Filters.eq("_id", id)).first();
 	}
 	
+	/**
+	 * updates or replace the provided user into the db
+	 * @param user the user to update
+	 */
 	public void updateUser(User user) {
 		users.replaceOne(Filters.eq("_id", user.getId()), user, replaceUpsertOption);
 	}
 	
+	
+	/**
+	 * @param id the uuid of the sheet to find
+	 * @return the sheet
+	 */
 	public Sheet findSheet(UUID id) {
 		return sheets.find(Filters.eq("_id", id)).first();
 	}
 	
+	/**
+	 * @return all existing character sheets
+	 */
 	public Set<Sheet> listSheets() {
 		Set<Sheet> sheets = new HashSet<>();
 		this.sheets.find()
@@ -75,6 +94,10 @@ public class AtelierDB {
 		return sheets;
 	}
 	
+	/**
+	 * updates or replace the provided sheet into the db
+	 * @param sheet the sheet to update
+	 */
 	public void updateSheet(Sheet sheet) {
 		sheets.replaceOne(Filters.eq("_id", sheet.getId()), sheet, replaceUpsertOption);
 	}

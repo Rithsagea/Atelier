@@ -2,18 +2,20 @@ package com.rithsagea.atelier.dnd.database;
 
 import java.util.UUID;
 
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonId;
+import org.mongojack.Id;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class User {
 	
+	@Id
 	private final long id;
 	
 	private String name;
 	private UUID sheetId;
 	
-	@BsonCreator
-	public User(@BsonId long id) {
+	@JsonCreator
+	public User(@Id long id) {
 		this.id = id;
 	}
 	
