@@ -19,7 +19,7 @@ public class LangUtil {
 		LangUtil.locale = locale;
 	}
 	
-	public String getMessage(String key) {
+	public static String getMessage(String key) {
 		return resources.getString(key);
 	}
 }
