@@ -5,8 +5,8 @@ import java.util.Set;
 
 import com.rithsagea.atelier.AtelierBot;
 import com.rithsagea.atelier.discord.AtelierCommand;
+import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
-import com.rithsagea.atelier.dnd.database.Sheet;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

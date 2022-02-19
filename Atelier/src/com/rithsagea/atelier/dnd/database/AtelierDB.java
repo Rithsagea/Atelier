@@ -8,6 +8,8 @@ import org.bson.UuidRepresentation;
 import org.mongojack.JacksonMongoCollection;
 import org.mongojack.ObjectMapperConfigurer;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -19,6 +21,8 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.ReplaceOptions;
 import com.rithsagea.atelier.Config;
+import com.rithsagea.atelier.dnd.Sheet;
+import com.rithsagea.atelier.dnd.User;
 
 public class AtelierDB {
 	
@@ -37,6 +41,7 @@ public class AtelierDB {
 				.build();
 		
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 		ObjectMapperConfigurer.configureObjectMapper(mapper);
 		
 		client = MongoClients.create(settings);

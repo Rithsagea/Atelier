@@ -1,4 +1,4 @@
-package com.rithsagea.atelier.dnd.database;
+package com.rithsagea.atelier.dnd;
 
 import java.util.UUID;
 
