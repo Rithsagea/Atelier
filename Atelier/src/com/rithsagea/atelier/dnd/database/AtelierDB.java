@@ -1,7 +1,8 @@
 package com.rithsagea.atelier.dnd.database;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bson.UuidRepresentation;
@@ -29,10 +30,13 @@ public class AtelierDB {
 	private MongoClient client;
 	private MongoDatabase db;
 	
-	private MongoCollection<User> users;
-	private MongoCollection<Sheet> sheets;
+	private MongoCollection<User> userCollection;
+	private MongoCollection<Sheet> sheetCollection;
 	
 	private ReplaceOptions replaceUpsertOption;
+	
+	private Map<Long, User> users;
+	private Map<UUID, Sheet> sheets;
 	
 	public AtelierDB(Config config) {
 		MongoClientSettings settings = MongoClientSettings.builder()
@@ -47,63 +51,96 @@ public class AtelierDB {
 		client = MongoClients.create(settings);
 		db = client.getDatabase(config.getDatabaseName());
 		
-		users = JacksonMongoCollection.builder()
+		userCollection = JacksonMongoCollection.builder()
 				.withObjectMapper(mapper)
 				.build(db.getCollection("users", User.class), User.class, UuidRepresentation.JAVA_LEGACY);
-		sheets = JacksonMongoCollection.builder()
+		sheetCollection = JacksonMongoCollection.builder()
 				.withObjectMapper(mapper)
 				.build(db.getCollection("sheets", Sheet.class), Sheet.class, UuidRepresentation.JAVA_LEGACY);
 	
 		replaceUpsertOption = new ReplaceOptions().upsert(true);
+		
+		users = new HashMap<>();
+		sheets = new HashMap<>();
 	}
 	
 	public void disconnect() {
+		save();
+		
 		client.close();
 	}
 	
-	/**
-	 * @param id the id of the user to find
-	 * @return the user
-	 */
-	public User findUser(long id) {
-		return users.find(Filters.eq("_id", id)).first();
+	private User findUser(long id) {
+		return userCollection.find(Filters.eq("_id", id)).first();
 	}
 	
-	/**
-	 * updates or replace the provided user into the db
-	 * @param user the user to update
-	 */
-	public void updateUser(User user) {
-		users.replaceOne(Filters.eq("_id", user.getId()), user, replaceUpsertOption);
+	private void updateUser(User user) {
+		userCollection.replaceOne(Filters.eq("_id", user.getId()), user, replaceUpsertOption);
 	}
 	
-	
-	/**
-	 * @param id the uuid of the sheet to find
-	 * @return the sheet
-	 */
-	public Sheet findSheet(UUID id) {
-		return sheets.find(Filters.eq("_id", id)).first();
+	private Sheet findSheet(UUID id) {
+		return sheetCollection.find(Filters.eq("_id", id)).first();
 	}
 	
-	/**
-	 * @return all existing character sheets
-	 */
-	public Set<Sheet> listSheets() {
-		Set<Sheet> sheets = new HashSet<>();
-		this.sheets.find()
+	private void updateSheet(Sheet sheet) {
+		sheetCollection.replaceOne(Filters.eq("_id", sheet.getId()), sheet, replaceUpsertOption);
+	}
+	
+	public Collection<Sheet> listSheets() {
+		this.sheetCollection.find()
 			.projection(Projections.fields(
 					Projections.include("_id")))
-			.forEach((Sheet sheet) -> sheets.add(sheet));
+			.forEach((Sheet sheet) -> {
+				if(!sheets.containsKey(sheet.getId()))
+					sheets.put(sheet.getId(), sheet);
+			});
 		
-		return sheets;
+		return sheets.values();
 	}
 	
 	/**
-	 * updates or replace the provided sheet into the db
-	 * @param sheet the sheet to update
+	 * Finds a user based on an id. Returns a blank user if it does not exist
+	 * @param id the numerical discord id of the user
 	 */
-	public void updateSheet(Sheet sheet) {
-		sheets.replaceOne(Filters.eq("_id", sheet.getId()), sheet, replaceUpsertOption);
+	public User getUser(long id) {
+		User user = users.get(id);
+		if(user == null) {
+			user = findUser(id);
+			if(user == null) {
+				user = new User(id);
+			}
+			
+			users.put(id, user);
+		}
+		
+		return user;
+	}
+	
+	/**
+	 * Finds a sheet based on an id. Returns null if it does not exist
+	 * @param id the uuid of the sheet
+	 */
+	public Sheet getSheet(UUID id) {
+		Sheet sheet = sheets.get(id);
+		if(sheet == null) {
+			sheet = findSheet(id);
+			sheets.put(id, sheet);
+		}
+		
+		return sheet;
+	}
+	
+	public void addSheet(Sheet sheet) {
+		sheets.put(sheet.getId(), sheet);
+	}
+	
+	public void save() {
+		for(User user : users.values()) {
+			updateUser(user);
+		}
+		
+		for(Sheet sheet : sheets.values()) {
+			updateSheet(sheet);
+		}
 	}
 }

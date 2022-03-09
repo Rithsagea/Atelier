@@ -33,8 +33,8 @@ public class CharacterCreateCommand implements AtelierCommand {
 	public void execute(List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = args.size() > 1 ?
 				new Sheet(UUID.fromString(args.get(1))) : new Sheet();
-		sheet.setName("Unnamed");		
-		db.updateSheet(sheet);
+		sheet.setName("Unnamed");
+		db.addSheet(sheet);
 		
 		event.getChannel().sendMessage("Created new character sheet: " + sheet.getId()).queue();
 	}

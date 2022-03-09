@@ -33,10 +33,9 @@ public class CharacterSelectCommand implements AtelierCommand {
 	public void execute(List<String> args, MessageReceivedEvent event) {
 		long id = event.getMember().getIdLong();
 		UUID sheetId = UUID.fromString(args.get(1));
-		User user = db.findUser(id);
-		if(user == null) user = new User(id);
+		User user = db.getUser(id);
+		Sheet sheet = db.getSheet(sheetId);
 		
-		Sheet sheet = db.findSheet(sheetId);
 		if(sheet != null) {
 			user.setSheetId(sheetId);
 			event.getChannel().sendMessage("Sheet Changed to " + sheetId).queue();
@@ -45,8 +44,6 @@ public class CharacterSelectCommand implements AtelierCommand {
 		}
 		
 		user.setName(event.getAuthor().getName());
-		
-		db.updateUser(user);
 	}
 
 }

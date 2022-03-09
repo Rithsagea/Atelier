@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.mongojack.Id;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.rithsagea.atelier.discord.PermissionLevel;
 
 public class User {
 	
@@ -14,9 +15,13 @@ public class User {
 	private String name;
 	private UUID sheetId;
 	
+	private PermissionLevel level;
+	
 	@JsonCreator
 	public User(@Id long id) {
 		this.id = id;
+		
+		level = PermissionLevel.USER;
 	}
 	
 	//ACCESSORS
@@ -33,6 +38,10 @@ public class User {
 		return sheetId;
 	}
 	
+	public PermissionLevel getLevel() {
+		return level;
+	}
+	
 	//MUTATORS
 	
 	public void setName(String name) {
@@ -41,5 +50,9 @@ public class User {
 	
 	public void setSheetId(UUID id) {
 		sheetId = id;
+	}
+	
+	public void setLevel(PermissionLevel level) {
+		this.level = level;
 	}
 }

@@ -19,7 +19,6 @@ public class CharacterCommand extends AtelierSubCommand {
 		db = bot.getDatabase();
 		
 		registerCommand(new CharacterCreateCommand(bot));
-		registerCommand(new CharacterListCommand(bot));
 		registerCommand(new CharacterSelectCommand(bot));
 		registerCommand(new CharacterSetCommand(bot));
 	}
@@ -36,8 +35,8 @@ public class CharacterCommand extends AtelierSubCommand {
 
 	@Override
 	public void executeDefault(List<String> args, MessageReceivedEvent event) {
-		User user = db.findUser(event.getAuthor().getIdLong());
-		Sheet sheet = db.findSheet(user.getSheetId());
+		User user = db.getUser(event.getAuthor().getIdLong());
+		Sheet sheet = db.getSheet(user.getSheetId());
 		
 		StringBuilder builder = new StringBuilder();
 		

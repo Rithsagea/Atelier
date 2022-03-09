@@ -1,4 +1,4 @@
-package com.rithsagea.atelier.dnd.database;
+package com.rithsagea.test;
 
 import java.util.UUID;
 
@@ -6,6 +6,7 @@ import com.rithsagea.atelier.Config;
 import com.rithsagea.atelier.dnd.Ability;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;
+import com.rithsagea.atelier.dnd.database.AtelierDB;
 import com.rithsagea.atelier.dnd.types.spread.PointBuySpread;
 
 public class DBTest {
@@ -35,8 +36,8 @@ public class DBTest {
 		Config config = new Config("config.properties");
 		AtelierDB db = new AtelierDB(config);
 		
-		User user = db.findUser(171378138041942016l);
-		Sheet sheet = db.findSheet(UUID.fromString("1ced756c-dbc6-4be5-af0f-d6e66beffb0e"));
+		User user = db.getUser(171378138041942016l);
+		Sheet sheet = db.getSheet(UUID.fromString("1ced756c-dbc6-4be5-af0f-d6e66beffb0e"));
 		
 		for(Sheet s : db.listSheets()) {
 			System.out.println(s.getId());
@@ -49,7 +50,6 @@ public class DBTest {
 		initializeLita(sheet);
 		printSheet(sheet);
 		
-		db.updateUser(user);
-		db.updateSheet(sheet);
+		db.save();
 	}
 }

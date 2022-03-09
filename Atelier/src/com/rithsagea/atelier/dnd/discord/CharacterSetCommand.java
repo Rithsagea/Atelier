@@ -31,8 +31,8 @@ public class CharacterSetCommand implements AtelierCommand {
 	@Override
 	public void execute(List<String> args, MessageReceivedEvent event) {
 		long id = event.getMember().getIdLong();
-		User user = db.findUser(id);
-		Sheet sheet = db.findSheet(user.getSheetId());
+		User user = db.getUser(id);
+		Sheet sheet = db.getSheet(user.getSheetId());
 		
 		switch(args.get(1)) {
 		
@@ -42,8 +42,6 @@ public class CharacterSetCommand implements AtelierCommand {
 			break;
 			
 		}
-		
-		db.updateSheet(sheet);
 	}
 
 }
