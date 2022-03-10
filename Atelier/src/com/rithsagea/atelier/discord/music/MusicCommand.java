@@ -3,11 +3,13 @@ package com.rithsagea.atelier.discord.music;
 import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
-import com.rithsagea.atelier.discord.AtelierSubCommand;
+import com.rithsagea.atelier.discord.AtelierGroupCommand;
+import com.rithsagea.atelier.discord.PermissionLevel;
+import com.rithsagea.atelier.dnd.User;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class MusicCommand extends AtelierSubCommand {
+public class MusicCommand extends AtelierGroupCommand {
 
 	private AtelierAudioManager audioManager;
 	
@@ -29,7 +31,12 @@ public class MusicCommand extends AtelierSubCommand {
 	}
 
 	@Override
-	public void executeDefault(List<String> args, MessageReceivedEvent event) {
+	public PermissionLevel getLevel() {
+		return PermissionLevel.USER;
+	}
+	
+	@Override
+	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		
 	}
 

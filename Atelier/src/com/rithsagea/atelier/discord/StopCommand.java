@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
+import com.rithsagea.atelier.dnd.User;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -24,12 +25,16 @@ public class StopCommand implements AtelierCommand {
 	public List<String> getAliases() {
 		return Arrays.asList(new String[] {"quit", "exit"});
 	}
+	
+	@Override
+	public PermissionLevel getLevel() {
+		return PermissionLevel.ADMINISTRATOR;
+	}
 
 	@Override
-	public void execute(List<String> args, MessageReceivedEvent event) {
+	public void execute(User user, List<String> args, MessageReceivedEvent event) {
 		event.getChannel().sendMessage("Stopping AtelierBot!").queue();
 		
 		bot.stop();
 	}
-
 }

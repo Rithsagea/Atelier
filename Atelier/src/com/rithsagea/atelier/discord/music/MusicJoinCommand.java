@@ -3,6 +3,8 @@ package com.rithsagea.atelier.discord.music;
 import java.util.List;
 
 import com.rithsagea.atelier.discord.AtelierCommand;
+import com.rithsagea.atelier.discord.PermissionLevel;
+import com.rithsagea.atelier.dnd.User;
 
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
@@ -29,7 +31,12 @@ public class MusicJoinCommand implements AtelierCommand {
 	}
 
 	@Override
-	public void execute(List<String> args, MessageReceivedEvent event) {
+	public PermissionLevel getLevel() {
+		return PermissionLevel.USER;
+	}
+	
+	@Override
+	public void execute(User user, List<String> args, MessageReceivedEvent event) {
 		if(event.getAuthor().isBot()) return;
 		
 		Guild guild = event.getGuild();

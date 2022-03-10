@@ -4,14 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
-import com.rithsagea.atelier.discord.AtelierSubCommand;
+import com.rithsagea.atelier.discord.AtelierGroupCommand;
+import com.rithsagea.atelier.discord.PermissionLevel;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterCommand extends AtelierSubCommand {
+public class CharacterCommand extends AtelierGroupCommand {
 	
 	private AtelierDB db;
 	
@@ -34,8 +35,12 @@ public class CharacterCommand extends AtelierSubCommand {
 	}
 
 	@Override
-	public void executeDefault(List<String> args, MessageReceivedEvent event) {
-		User user = db.getUser(event.getAuthor().getIdLong());
+	public PermissionLevel getLevel() {
+		return PermissionLevel.USER;
+	}
+	
+	@Override
+	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = db.getSheet(user.getSheetId());
 		
 		StringBuilder builder = new StringBuilder();

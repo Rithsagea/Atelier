@@ -6,7 +6,9 @@ import java.util.UUID;
 
 import com.rithsagea.atelier.AtelierBot;
 import com.rithsagea.atelier.discord.AtelierCommand;
+import com.rithsagea.atelier.discord.PermissionLevel;
 import com.rithsagea.atelier.dnd.Sheet;
+import com.rithsagea.atelier.dnd.User;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -29,8 +31,14 @@ public class CharacterCreateCommand implements AtelierCommand {
 		return Arrays.asList(new String[] {"new"});
 	}
 
+	
 	@Override
-	public void execute(List<String> args, MessageReceivedEvent event) {
+	public PermissionLevel getLevel() {
+		return PermissionLevel.ADMINISTRATOR;
+	}
+	
+	@Override
+	public void execute(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = args.size() > 1 ?
 				new Sheet(UUID.fromString(args.get(1))) : new Sheet();
 		sheet.setName("Unnamed");

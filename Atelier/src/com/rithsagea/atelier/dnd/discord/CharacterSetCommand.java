@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
 import com.rithsagea.atelier.discord.AtelierCommand;
+import com.rithsagea.atelier.discord.PermissionLevel;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
@@ -29,9 +30,12 @@ public class CharacterSetCommand implements AtelierCommand {
 	}
 
 	@Override
-	public void execute(List<String> args, MessageReceivedEvent event) {
-		long id = event.getMember().getIdLong();
-		User user = db.getUser(id);
+	public PermissionLevel getLevel() {
+		return PermissionLevel.ADMINISTRATOR;
+	}
+	
+	@Override
+	public void execute(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = db.getSheet(user.getSheetId());
 		
 		switch(args.get(1)) {
