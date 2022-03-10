@@ -11,8 +11,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class MusicQueueCommand extends MusicSubCommand {
 
-	private AtelierAudioManager audioManager;
-	
 	public MusicQueueCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
 	}

@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rithsagea.atelier.discord.CommandRegistry;
+import com.rithsagea.atelier.discord.MessageListener;
 import com.rithsagea.atelier.discord.StopCommand;
-import com.rithsagea.atelier.discord.listeners.MessageListener;
 import com.rithsagea.atelier.discord.music.AtelierAudioManager;
 import com.rithsagea.atelier.discord.music.MusicCommand;
 import com.rithsagea.atelier.dnd.database.AtelierDB;

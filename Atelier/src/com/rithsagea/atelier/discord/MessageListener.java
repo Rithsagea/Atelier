@@ -1,4 +1,4 @@
-package com.rithsagea.atelier.discord.listeners;
+package com.rithsagea.atelier.discord;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,11 +6,11 @@ import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
 import com.rithsagea.atelier.Config;
-import com.rithsagea.atelier.discord.AtelierCommand;
-import com.rithsagea.atelier.discord.CommandRegistry;
 import com.rithsagea.atelier.dnd.User;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
 
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -42,5 +42,15 @@ public class MessageListener extends ListenerAdapter {
 			AtelierCommand command = reg.getCommand(args.get(0));
 			if(command != null) command.execute(user, args, event);
 		}
+	}
+	
+	@Override
+	public void onButtonInteraction(ButtonInteractionEvent event) {
+		
+	}
+	
+	@Override
+	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+		
 	}
 }

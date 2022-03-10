@@ -19,6 +19,7 @@ public class MusicCommand extends AtelierGroupCommand {
 		
 		registerCommand(new MusicJoinCommand(audioManager));
 		registerCommand(new MusicPlayCommand(audioManager));
+		registerCommand(new MusicQueueCommand(audioManager));
 	}
 	
 	@Override
