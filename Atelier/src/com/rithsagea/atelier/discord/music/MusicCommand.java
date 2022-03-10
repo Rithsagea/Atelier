@@ -1,5 +1,6 @@
 package com.rithsagea.atelier.discord.music;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
@@ -27,7 +28,7 @@ public class MusicCommand extends AtelierGroupCommand {
 
 	@Override
 	public List<String> getAliases() {
-		return null;
+		return Arrays.asList("audio");
 	}
 
 	@Override

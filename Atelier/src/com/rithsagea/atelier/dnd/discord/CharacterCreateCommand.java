@@ -28,7 +28,7 @@ public class CharacterCreateCommand implements AtelierCommand {
 
 	@Override
 	public List<String> getAliases() {
-		return Arrays.asList(new String[] {"new"});
+		return Arrays.asList("new");
 	}
 
 	

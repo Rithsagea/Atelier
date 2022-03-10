@@ -31,7 +31,7 @@ public class CharacterCommand extends AtelierGroupCommand {
 
 	@Override
 	public List<String> getAliases() {
-		return Arrays.asList(new String[] {"char", "dnd"});
+		return Arrays.asList("char", "dnd");
 	}
 
 	@Override
