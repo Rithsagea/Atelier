@@ -2,7 +2,6 @@ package com.rithsagea.atelier.discord.music;
 
 import java.util.List;
 
-import com.rithsagea.atelier.discord.AtelierCommand;
 import com.rithsagea.atelier.discord.PermissionLevel;
 import com.rithsagea.atelier.dnd.User;
 
@@ -12,12 +11,10 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-public class MusicJoinCommand implements AtelierCommand {
+public class MusicJoinCommand extends MusicSubCommand {
 
-	private AtelierAudioManager audioManager;
-	
 	public MusicJoinCommand(AtelierAudioManager audioManager) {
-		this.audioManager = audioManager;
+		super(audioManager);
 	}
 	
 	@Override
@@ -36,7 +33,7 @@ public class MusicJoinCommand implements AtelierCommand {
 	}
 	
 	@Override
-	public void execute(User user, List<String> args, MessageReceivedEvent event) {
+	public void execute(User user, AtelierAudioHandler audioHandler, List<String> args, MessageReceivedEvent event) {
 		if(event.getAuthor().isBot()) return;
 		
 		Guild guild = event.getGuild();
@@ -48,7 +45,7 @@ public class MusicJoinCommand implements AtelierCommand {
 		AudioChannel channel = state.getChannel();
 		if(channel == null) return;
 		
-		manager.setSendingHandler(audioManager.getAudioHandler(guild));
+		manager.setSendingHandler(audioHandler);
 		manager.openAudioConnection(channel);
 	}
 

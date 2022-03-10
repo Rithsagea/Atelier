@@ -2,19 +2,15 @@ package com.rithsagea.atelier.discord.music;
 
 import java.util.List;
 
-import com.rithsagea.atelier.discord.AtelierCommand;
 import com.rithsagea.atelier.discord.PermissionLevel;
 import com.rithsagea.atelier.dnd.User;
 
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class MusicPlayCommand implements AtelierCommand {
+public class MusicPlayCommand extends MusicSubCommand {
 
-	private AtelierAudioManager audioManager;
-	
 	public MusicPlayCommand(AtelierAudioManager audioManager) {
-		this.audioManager = audioManager;
+		super(audioManager);
 	}
 	
 	@Override
@@ -33,10 +29,7 @@ public class MusicPlayCommand implements AtelierCommand {
 	}
 	
 	@Override
-	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		Guild guild = event.getGuild();
-		AtelierAudioHandler audioHandler = audioManager.getAudioHandler(guild);
-		
+	public void execute(User user, AtelierAudioHandler audioHandler, List<String> args, MessageReceivedEvent event) {
 		audioHandler.loadTrack(args.get(1));
 	}
 

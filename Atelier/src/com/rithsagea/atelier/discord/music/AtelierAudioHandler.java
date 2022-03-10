@@ -1,8 +1,10 @@
 package com.rithsagea.atelier.discord.music;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -35,16 +37,19 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 		manager.loadItem(identifier, this);
 	}
 	
-	public void queue(AudioTrack track) {
+	private void queue(AudioTrack track) {
 		if(!player.startTrack(track, true)) {
 			queue.offer(track);
 		}
 	}
 	
-	public void nextTrack() {
+	private void nextTrack() {
 		player.startTrack(queue.poll(), false);
 	}
 	
+	public List<AudioTrack> getQueue() {
+		return queue.stream().collect(Collectors.toList());
+	}
 	
 	/// AUDIO EVENT ADAPTER
 	
