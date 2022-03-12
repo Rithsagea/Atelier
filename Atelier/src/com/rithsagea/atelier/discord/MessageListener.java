@@ -40,7 +40,7 @@ public class MessageListener extends ListenerAdapter {
 					message.substring(config.getCommandPrefix().length()).split(" ")));
 			
 			AtelierCommand command = reg.getCommand(args.get(0));
-			if(command != null) command.execute(user, args, event);
+			if(command != null && command.getLevel().ordinal() <= user.getLevel().ordinal()) command.execute(user, args, event);
 		}
 	}
 	

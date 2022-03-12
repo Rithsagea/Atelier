@@ -3,6 +3,7 @@ package com.rithsagea.test;
 import java.util.UUID;
 
 import com.rithsagea.atelier.Config;
+import com.rithsagea.atelier.discord.PermissionLevel;
 import com.rithsagea.atelier.dnd.Ability;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;
@@ -44,7 +45,9 @@ public class DBTest {
 		}
 		
 		System.out.println(user.getName() + ": " + user.getId());
+		System.out.println("Level: " + user.getLevel());
 		
+		user.setLevel(PermissionLevel.ADMINISTRATOR);
 		user.setSheetId(sheet.getId());
 		
 		initializeLita(sheet);
