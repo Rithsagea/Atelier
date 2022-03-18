@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.rithsagea.atelier.discord.CommandRegistry;
 import com.rithsagea.atelier.discord.MessageListener;
+import com.rithsagea.atelier.discord.WaifuCommand;
 import com.rithsagea.atelier.discord.StopCommand;
 import com.rithsagea.atelier.discord.music.AtelierAudioManager;
 import com.rithsagea.atelier.discord.music.MusicCommand;
@@ -29,6 +30,8 @@ public class AtelierBot {
 	private boolean running;
 	
 	public AtelierBot(Config config) {
+		System.setProperty("http.agent", "Chrome");
+		
 		this.config = config;
 		
 		db = new AtelierDB(config);
@@ -57,6 +60,8 @@ public class AtelierBot {
 	
 	private void registerCommands() {
 		commandRegistry.registerCommand(new StopCommand(this));
+		
+		commandRegistry.registerCommand(new WaifuCommand());
 		
 		commandRegistry.registerCommand(new MusicCommand(this));
 		commandRegistry.registerCommand(new CharacterCommand(this));
