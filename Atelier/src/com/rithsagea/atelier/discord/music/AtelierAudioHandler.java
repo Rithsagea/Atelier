@@ -37,13 +37,17 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 		manager.loadItem(identifier, this);
 	}
 	
-	private void queue(AudioTrack track) {
+	public void queue(AudioTrack track) {
 		if(!player.startTrack(track, true)) {
 			queue.offer(track);
 		}
 	}
 	
-	private void nextTrack() {
+	public AudioTrack getPlayingTrack() {
+		return player.getPlayingTrack();
+	}
+	
+	public void nextTrack() {
 		player.startTrack(queue.poll(), false);
 	}
 	

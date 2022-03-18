@@ -19,6 +19,7 @@ public class MusicCommand extends AtelierGroupCommand {
 		
 		registerCommand(new MusicJoinCommand(audioManager));
 		registerCommand(new MusicPlayCommand(audioManager));
+		registerCommand(new MusicSkipCommand(audioManager));
 		registerCommand(new MusicQueueCommand(audioManager));
 	}
 	
@@ -29,7 +30,7 @@ public class MusicCommand extends AtelierGroupCommand {
 
 	@Override
 	public List<String> getAliases() {
-		return Arrays.asList("audio");
+		return Arrays.asList("m", "audio");
 	}
 
 	@Override
