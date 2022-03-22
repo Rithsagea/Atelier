@@ -1,5 +1,6 @@
-package com.rithsagea.atelier.dnd.discord;
+package com.rithsagea.atelier.dnd.discord.character;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,24 +13,25 @@ import com.rithsagea.atelier.dnd.database.AtelierDB;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterSelectCommand implements AtelierCommand {
+public class CharacterCreateCommand implements AtelierCommand {
 
 	private AtelierDB db;
 	
-	public CharacterSelectCommand(AtelierBot bot) {
+	public CharacterCreateCommand(AtelierBot bot) {
 		db = bot.getDatabase();
 	}
 	
 	@Override
 	public String getLabel() {
-		return "select";
+		return "create";
 	}
 
 	@Override
 	public List<String> getAliases() {
-		return null;
+		return Arrays.asList("new");
 	}
 
+	
 	@Override
 	public PermissionLevel getLevel() {
 		return PermissionLevel.ADMINISTRATOR;
@@ -37,17 +39,12 @@ public class CharacterSelectCommand implements AtelierCommand {
 	
 	@Override
 	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		UUID sheetId = UUID.fromString(args.get(1));
-		Sheet sheet = db.getSheet(sheetId);
+		Sheet sheet = args.size() > 1 ?
+				new Sheet(UUID.fromString(args.get(1))) : new Sheet();
+		sheet.setName("Unnamed");
+		db.addSheet(sheet);
 		
-		if(sheet != null) {
-			user.setSheetId(sheetId);
-			event.getChannel().sendMessage("Sheet Changed to " + sheetId).queue();
-		} else {
-			event.getChannel().sendMessage("Sheet does not exist!").queue();
-		}
-		
-		user.setName(event.getAuthor().getName());
+		event.getChannel().sendMessage("Created new character sheet: " + sheet.getId()).queue();
 	}
-
+	
 }

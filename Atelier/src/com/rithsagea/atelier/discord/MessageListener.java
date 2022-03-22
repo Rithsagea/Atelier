@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+
 import com.rithsagea.atelier.AtelierBot;
 import com.rithsagea.atelier.Config;
 import com.rithsagea.atelier.dnd.User;
@@ -19,11 +21,13 @@ public class MessageListener extends ListenerAdapter {
 	private AtelierDB db;
 	private CommandRegistry reg;
 	private Config config;
+	private Logger logger;
 	
 	public MessageListener(AtelierBot bot) {
 		db = bot.getDatabase();
 		reg = bot.getCommandRegistry();
 		config = bot.getConfig();
+		logger = bot.getLogger();
 	}
 	
 	@Override
@@ -40,7 +44,10 @@ public class MessageListener extends ListenerAdapter {
 					message.substring(config.getCommandPrefix().length()).split(" ")));
 			
 			AtelierCommand command = reg.getCommand(args.get(0));
-			if(command != null && command.getLevel().ordinal() <= user.getLevel().ordinal()) command.execute(user, args, event);
+			if(command != null && command.getLevel().ordinal() <= user.getLevel().ordinal()) {
+				logger.info("Received Command: " + command.getLabel() + " from " + author);
+				command.execute(user, args, event);
+			}
 		}
 	}
 	

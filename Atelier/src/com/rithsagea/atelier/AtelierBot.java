@@ -6,9 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rithsagea.atelier.discord.CommandRegistry;
+import com.rithsagea.atelier.discord.LoginListener;
 import com.rithsagea.atelier.discord.MessageListener;
-import com.rithsagea.atelier.discord.WaifuCommand;
 import com.rithsagea.atelier.discord.StopCommand;
+import com.rithsagea.atelier.discord.WaifuCommand;
 import com.rithsagea.atelier.discord.music.AtelierAudioManager;
 import com.rithsagea.atelier.discord.music.MusicCommand;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
@@ -55,6 +56,7 @@ public class AtelierBot {
 		
 		registerCommands();
 		
+		jda.addEventListener(new LoginListener(this));
 		jda.addEventListener(new MessageListener(this));
 	}
 	

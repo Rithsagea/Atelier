@@ -9,6 +9,10 @@ import com.rithsagea.atelier.discord.PermissionLevel;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
+import com.rithsagea.atelier.dnd.discord.character.CharacterCreateCommand;
+import com.rithsagea.atelier.dnd.discord.character.CharacterRollCommand;
+import com.rithsagea.atelier.dnd.discord.character.CharacterSelectCommand;
+import com.rithsagea.atelier.dnd.discord.character.CharacterSetCommand;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -22,6 +26,7 @@ public class CharacterCommand extends AtelierGroupCommand {
 		registerCommand(new CharacterCreateCommand(bot));
 		registerCommand(new CharacterSelectCommand(bot));
 		registerCommand(new CharacterSetCommand(bot));
+		registerCommand(new CharacterRollCommand(bot));
 	}
 	
 	@Override
