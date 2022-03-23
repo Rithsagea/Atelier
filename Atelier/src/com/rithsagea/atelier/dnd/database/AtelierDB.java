@@ -19,13 +19,14 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.ReplaceOptions;
 import com.rithsagea.atelier.Config;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;
 
 public class AtelierDB {
+	
+	private static final boolean OFFLINE_MODE = true;
 	
 	private MongoClient client;
 	private MongoDatabase db;
@@ -71,14 +72,17 @@ public class AtelierDB {
 	}
 	
 	private User findUser(long id) {
+		if(OFFLINE_MODE) return null;
 		return userCollection.find(Filters.eq("_id", id)).first();
 	}
 	
 	private void updateUser(User user) {
+		if(OFFLINE_MODE) return;
 		userCollection.replaceOne(Filters.eq("_id", user.getId()), user, replaceUpsertOption);
 	}
 	
 	private Sheet findSheet(UUID id) {
+		if(OFFLINE_MODE) return null;
 		return sheetCollection.find(Filters.eq("_id", id)).first();
 	}
 	
@@ -87,9 +91,7 @@ public class AtelierDB {
 	}
 	
 	public Collection<Sheet> listSheets() {
-		this.sheetCollection.find()
-			.projection(Projections.fields(
-					Projections.include("_id")))
+		if(!OFFLINE_MODE) this.sheetCollection.find()
 			.forEach((Sheet sheet) -> {
 				if(!sheets.containsKey(sheet.getId()))
 					sheets.put(sheet.getId(), sheet);
@@ -135,6 +137,8 @@ public class AtelierDB {
 	}
 	
 	public void save() {
+		if(OFFLINE_MODE) return;
+		
 		for(User user : users.values()) {
 			updateUser(user);
 		}

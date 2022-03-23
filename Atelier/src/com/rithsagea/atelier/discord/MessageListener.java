@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 
 import com.rithsagea.atelier.AtelierBot;
 import com.rithsagea.atelier.Config;
+import com.rithsagea.atelier.discord.menu.AtelierMenu;
+import com.rithsagea.atelier.discord.menu.AtelierMenuManager;
 import com.rithsagea.atelier.dnd.User;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
 
@@ -20,12 +22,14 @@ public class MessageListener extends ListenerAdapter {
 	
 	private AtelierDB db;
 	private CommandRegistry reg;
+	private AtelierMenuManager menuManager;
 	private Config config;
 	private Logger logger;
 	
 	public MessageListener(AtelierBot bot) {
 		db = bot.getDatabase();
 		reg = bot.getCommandRegistry();
+		menuManager = bot.getMenuManager();
 		config = bot.getConfig();
 		logger = bot.getLogger();
 	}
@@ -53,11 +57,19 @@ public class MessageListener extends ListenerAdapter {
 	
 	@Override
 	public void onButtonInteraction(ButtonInteractionEvent event) {
-		
+		AtelierMenu menu = menuManager.getMenu(event.getMessageIdLong());
+		if(menu != null) menu.onButtonInteract(event);
+		else {
+			event.getMessage().editMessageComponents().queue();
+		}
 	}
 	
 	@Override
 	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
-		
+		AtelierMenu menu = menuManager.getMenu(event.getMessageIdLong());
+		if(menu != null) menu.onMenuSelect(event);
+		else {
+			event.getMessage().editMessageComponents().queue();
+		}
 	}
 }

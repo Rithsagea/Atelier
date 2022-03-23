@@ -10,6 +10,7 @@ import com.rithsagea.atelier.discord.LoginListener;
 import com.rithsagea.atelier.discord.MessageListener;
 import com.rithsagea.atelier.discord.StopCommand;
 import com.rithsagea.atelier.discord.WaifuCommand;
+import com.rithsagea.atelier.discord.menu.AtelierMenuManager;
 import com.rithsagea.atelier.discord.music.AtelierAudioManager;
 import com.rithsagea.atelier.discord.music.MusicCommand;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
@@ -27,6 +28,7 @@ public class AtelierBot {
 	private JDA jda;
 	
 	private AtelierAudioManager audioManager;
+	private AtelierMenuManager menuManager;
 	
 	private boolean running;
 	
@@ -41,6 +43,7 @@ public class AtelierBot {
 		running = true;
 		
 		audioManager = new AtelierAudioManager();
+		menuManager = new AtelierMenuManager();
 	}
 	
 	public void init() {
@@ -87,6 +90,10 @@ public class AtelierBot {
 	
 	public AtelierAudioManager getAudioManager() {
 		return audioManager;
+	}
+	
+	public AtelierMenuManager getMenuManager() {
+		return menuManager;
 	}
 	
 	public void stop() {

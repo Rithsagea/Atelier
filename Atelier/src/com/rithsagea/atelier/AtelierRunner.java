@@ -1,11 +1,29 @@
 package com.rithsagea.atelier;
 
+import java.util.UUID;
+
+import com.rithsagea.atelier.discord.PermissionLevel;
+import com.rithsagea.atelier.dnd.Sheet;
+import com.rithsagea.atelier.dnd.User;
+import com.rithsagea.atelier.dnd.database.AtelierDB;
+import com.rithsagea.test.DBTest;
+
 public class AtelierRunner {
 	public static void main(String[] args) {
 		Config config = new Config("config.properties");		
 		AtelierBot bot = new AtelierBot(config);
 		
 		bot.init();
+		
+		//For when MongoDB breaks
+		AtelierDB db = bot.getDatabase();
+		User user = db.getUser(171378138041942016l);
+		Sheet sheet = new Sheet(UUID.fromString("1ced756c-dbc6-4be5-af0f-d6e66beffb0e"));
+		
+		user.setLevel(PermissionLevel.ADMINISTRATOR);
+		user.setSheetId(sheet.getId());
+		DBTest.initializeLita(sheet);
+		db.addSheet(sheet);
 		
 		while(bot.isRunning());
 	}
