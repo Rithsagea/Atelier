@@ -26,7 +26,7 @@ import com.rithsagea.atelier.dnd.User;
 
 public class AtelierDB {
 	
-	private static final boolean OFFLINE_MODE = true;
+	private static final boolean OFFLINE_MODE = false;
 	
 	private MongoClient client;
 	private MongoDatabase db;
