@@ -37,7 +37,7 @@ public class CharacterSelectCommand implements AtelierCommand {
 	
 	@Override
 	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		UUID sheetId = UUID.fromString(args.get(1));
+		UUID sheetId = UUID.fromString(args.get(2));
 		Sheet sheet = db.getSheet(sheetId);
 		
 		if(sheet != null) {

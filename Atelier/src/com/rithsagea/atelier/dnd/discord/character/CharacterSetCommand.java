@@ -33,11 +33,11 @@ public class CharacterSetCommand extends CharacterSubCommand {
 	
 	@Override
 	public void execute(User user, Sheet sheet, List<String> args, MessageReceivedEvent event) {
-		switch(args.get(1)) {
+		switch(args.get(2)) {
 		
 		case "name":
-			sheet.setName(args.get(2));
-			event.getChannel().sendMessage("Changed name to: " + args.get(2)).queue();
+			sheet.setName(args.get(3));
+			event.getChannel().sendMessage("Changed name to: " + args.get(3)).queue();
 			break;
 			
 		}

@@ -39,8 +39,8 @@ public class CharacterCreateCommand implements AtelierCommand {
 	
 	@Override
 	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		Sheet sheet = args.size() > 1 ?
-				new Sheet(UUID.fromString(args.get(1))) : new Sheet();
+		Sheet sheet = args.size() > 2 ?
+				new Sheet(UUID.fromString(args.get(2))) : new Sheet();
 		sheet.setName("Unnamed");
 		db.addSheet(sheet);
 		

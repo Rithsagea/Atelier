@@ -15,7 +15,6 @@ public abstract class AtelierGroupCommand extends CommandRegistry implements Ate
 			AtelierCommand command = getCommand(label);
 			
 			if(command != null && command.getLevel().ordinal() <= user.getLevel().ordinal()) {
-				args.remove(0);
 				command.execute(user, args, event);
 				return;
 			}

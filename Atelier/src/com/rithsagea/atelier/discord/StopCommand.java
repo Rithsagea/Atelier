@@ -23,7 +23,7 @@ public class StopCommand implements AtelierCommand {
 
 	@Override
 	public List<String> getAliases() {
-		return Arrays.asList(new String[] {"quit", "exit"});
+		return Arrays.asList("quit", "exit");
 	}
 	
 	@Override
