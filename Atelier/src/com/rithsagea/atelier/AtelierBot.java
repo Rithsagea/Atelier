@@ -1,5 +1,9 @@
 package com.rithsagea.atelier;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import javax.security.auth.login.LoginException;
 
 import org.slf4j.Logger;
@@ -14,6 +18,7 @@ import com.rithsagea.atelier.discord.menu.AtelierMenuManager;
 import com.rithsagea.atelier.discord.music.AtelierAudioManager;
 import com.rithsagea.atelier.discord.music.MusicCommand;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
+import com.rithsagea.atelier.dnd.database.DBSaveTask;
 import com.rithsagea.atelier.dnd.discord.CharacterCommand;
 
 import net.dv8tion.jda.api.JDA;
@@ -26,6 +31,8 @@ public class AtelierBot {
 	private CommandRegistry commandRegistry;
 	private Logger logger;
 	private JDA jda;
+	
+	private ScheduledExecutorService scheduler;
 	
 	private AtelierAudioManager audioManager;
 	private AtelierMenuManager menuManager;
@@ -42,6 +49,8 @@ public class AtelierBot {
 		logger = LoggerFactory.getLogger("Atelier");
 		running = true;
 		
+		scheduler = Executors.newScheduledThreadPool(10);
+		
 		audioManager = new AtelierAudioManager();
 		menuManager = new AtelierMenuManager();
 	}
@@ -57,10 +66,15 @@ public class AtelierBot {
 			System.exit(0);
 		}
 		
+		registerTasks();
 		registerCommands();
 		
 		jda.addEventListener(new LoginListener(this));
 		jda.addEventListener(new MessageListener(this));
+	}
+	
+	private void registerTasks() {
+		scheduler.scheduleAtFixedRate(new DBSaveTask(db), 15, 300, TimeUnit.SECONDS);
 	}
 	
 	private void registerCommands() {
