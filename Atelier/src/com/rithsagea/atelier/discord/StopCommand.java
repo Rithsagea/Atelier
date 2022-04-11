@@ -33,8 +33,7 @@ public class StopCommand implements AtelierCommand {
 
 	@Override
 	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		event.getChannel().sendMessage("Stopping AtelierBot!").queue();
-		
-		bot.stop();
+		event.getChannel().sendMessage("Stopping AtelierBot!").queue(
+				(m) -> {bot.stop();});
 	}
 }
