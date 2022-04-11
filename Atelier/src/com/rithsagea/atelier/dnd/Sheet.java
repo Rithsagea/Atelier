@@ -44,6 +44,10 @@ public class Sheet {
 		return baseScores.getBaseScore(ability);
 	}
 	
+	public int getAbilityModifier(Ability ability) {
+		return (baseScores.getBaseScore(ability)-10)/2;
+	}
+	
 	//MUTATORS
 	
 	public void setName(String name) {
