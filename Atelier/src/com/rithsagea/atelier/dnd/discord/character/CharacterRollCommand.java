@@ -43,7 +43,8 @@ public class CharacterRollCommand extends CharacterSubCommand {
 	@Override
 	public void execute(User user, Sheet sheet, List<String> args, MessageReceivedEvent event) {
 		Ability a = null;
-		switch(args.get(0))
+		String s = args.get(2);
+		switch(args.get(2))
 		{
 		case "str":
 			sheet.getAbilityScore(Ability.STRENGTH);
@@ -70,7 +71,7 @@ public class CharacterRollCommand extends CharacterSubCommand {
 			a = Ability.DEXTERITY;
 			break;
 		}
-		event.getChannel().sendMessage("" + (int)(Math.random()*20 + 1 + sheet.getAbilityModifier(a))).queue();
+		event.getChannel().sendMessage(s + " roll: " + (int)(Math.random()*20 + 1 + sheet.getAbilityModifier(a))).queue();
 		
 	}
 	
