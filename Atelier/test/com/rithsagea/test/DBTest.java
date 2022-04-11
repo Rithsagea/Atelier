@@ -16,7 +16,7 @@ public class DBTest {
 	}
 	
 	public static void editDB(AtelierDB db) {
-		User user = db.getUser(171378138041942016l); // Rithsagea
+		User user = db.getUser(0l); // Put your Discord ID here
 		user.setLevel(PermissionLevel.ADMINISTRATOR);
 	}
 }
