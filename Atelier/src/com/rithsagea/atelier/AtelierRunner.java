@@ -1,9 +1,8 @@
 package com.rithsagea.atelier;
 
 public class AtelierRunner {
-	public static void main(String[] args) {
-		Config config = new Config("config.properties");		
-		AtelierBot bot = new AtelierBot(config);
+	public static void main(String[] args) {	
+		AtelierBot bot = new AtelierBot("config.properties");
 		
 		bot.init();
 		

@@ -39,10 +39,10 @@ public class AtelierBot {
 	
 	private boolean running;
 	
-	public AtelierBot(Config config) {
+	public AtelierBot(String configPath) {
 		System.setProperty("http.agent", "Chrome");
 		
-		this.config = config;
+		this.config = new Config(configPath);
 		
 		db = new AtelierDB(config);
 		commandRegistry = new CommandRegistry();
@@ -111,10 +111,10 @@ public class AtelierBot {
 	}
 	
 	public void stop() {
-		running = false;
-		jda.shutdownNow();
+		jda.shutdown();
 		audioManager.shutdown();
 		db.disconnect();
+		running = false;
 	}
 		
 	public boolean isRunning() {
