@@ -14,12 +14,11 @@ import com.rithsagea.atelier.discord.LoginListener;
 import com.rithsagea.atelier.discord.MessageListener;
 import com.rithsagea.atelier.discord.StopCommand;
 import com.rithsagea.atelier.discord.WaifuCommand;
-import com.rithsagea.atelier.discord.menu.AtelierMenuManager;
 import com.rithsagea.atelier.discord.music.AtelierAudioManager;
 import com.rithsagea.atelier.discord.music.MusicCommand;
+import com.rithsagea.atelier.dnd.CharacterCommand;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
 import com.rithsagea.atelier.dnd.database.DBSaveTask;
-import com.rithsagea.atelier.dnd.discord.CharacterCommand;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -35,7 +34,6 @@ public class AtelierBot {
 	private ScheduledExecutorService scheduler;
 	
 	private AtelierAudioManager audioManager;
-	private AtelierMenuManager menuManager;
 	
 	private boolean running;
 	
@@ -52,7 +50,6 @@ public class AtelierBot {
 		scheduler = Executors.newScheduledThreadPool(10);
 		
 		audioManager = new AtelierAudioManager();
-		menuManager = new AtelierMenuManager();
 	}
 	
 	public void init() {
@@ -104,10 +101,6 @@ public class AtelierBot {
 	
 	public AtelierAudioManager getAudioManager() {
 		return audioManager;
-	}
-	
-	public AtelierMenuManager getMenuManager() {
-		return menuManager;
 	}
 	
 	public void stop() {
