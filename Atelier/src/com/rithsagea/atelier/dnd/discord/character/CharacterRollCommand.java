@@ -71,7 +71,7 @@ public class CharacterRollCommand extends CharacterSubCommand {
 			a = Ability.DEXTERITY;
 			break;
 		}
-		event.getChannel().sendMessage(s + " roll: " + (int)(Math.random()*20 + 1 + sheet.getAbilityModifier(a))).queue();
+		event.getChannel().sendMessage(a.getLabel().toLowerCase().substring(0,a.getLabel().length()) + " roll: " + (int)(Math.random()*20 + 1 + sheet.getAbilityModifier(a))).queue();
 		
 	}
 	
