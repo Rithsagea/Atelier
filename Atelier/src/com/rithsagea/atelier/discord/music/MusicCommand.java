@@ -1,5 +1,6 @@
 package com.rithsagea.atelier.discord.music;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,13 +63,18 @@ public class MusicCommand implements AtelierCommand {
 		
 		case "queue":
 			EmbedBuilder eb = new EmbedBuilder();
-			String msg = "";
-			for (int i = 0; i < audioHandler.getQueue().size(); i++) {
-				msg = msg.concat((i+1) + " - " + audioHandler.getQueue().get(i).getInfo().title + "\n");
+			eb.setColor(Color.CYAN);
+			StringBuilder msg = new StringBuilder();
+			int queueSize = audioHandler.getQueue().size();
+			for (int i = 0; i < queueSize; i++) {
+				msg.append((i+1) + " - " + audioHandler.getQueue().get(i).getInfo().title + "\n");
 			}
-			if (msg == "")
-				msg = "No song in queue!";
-			eb.addField("Queue:", msg, true);
+			if (msg.length() == 0)
+				eb.setTitle("No songs in queue!");
+			else {
+				eb.setTitle(queueSize + (queueSize > 1 ?" songs" :" song"));
+				eb.addField("Queue:", msg.toString(), true);
+			}
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 			break;
 		}
