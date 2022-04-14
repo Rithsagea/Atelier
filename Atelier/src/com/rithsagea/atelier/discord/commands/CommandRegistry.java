@@ -1,4 +1,4 @@
-package com.rithsagea.atelier.discord;
+package com.rithsagea.atelier.discord.commands;
 
 import java.util.HashMap;
 import java.util.Map;

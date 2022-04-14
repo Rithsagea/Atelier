@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
-import com.rithsagea.atelier.discord.AtelierCommand;
-import com.rithsagea.atelier.discord.PermissionLevel;
+import com.rithsagea.atelier.discord.commands.AtelierCommand;
+import com.rithsagea.atelier.discord.commands.PermissionLevel;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
 import com.rithsagea.util.WordUtil;
 

@@ -1,7 +1,7 @@
 package com.rithsagea.test;
 
 import com.rithsagea.atelier.Config;
-import com.rithsagea.atelier.discord.PermissionLevel;
+import com.rithsagea.atelier.discord.commands.PermissionLevel;
 import com.rithsagea.atelier.dnd.Ability;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;

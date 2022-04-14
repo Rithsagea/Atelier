@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.rithsagea.atelier.AtelierBot;
-import com.rithsagea.atelier.discord.AtelierCommand;
-import com.rithsagea.atelier.discord.PermissionLevel;
+import com.rithsagea.atelier.discord.commands.AtelierCommand;
+import com.rithsagea.atelier.discord.commands.PermissionLevel;
 import com.rithsagea.atelier.dnd.User;
 
 import net.dv8tion.jda.api.entities.AudioChannel;

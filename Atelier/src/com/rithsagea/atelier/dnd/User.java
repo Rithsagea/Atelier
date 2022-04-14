@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.mongojack.Id;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.rithsagea.atelier.discord.PermissionLevel;
+import com.rithsagea.atelier.discord.commands.PermissionLevel;
 
 public class User {
 	

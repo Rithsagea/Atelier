@@ -9,14 +9,10 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rithsagea.atelier.discord.CommandRegistry;
 import com.rithsagea.atelier.discord.LoginListener;
 import com.rithsagea.atelier.discord.MessageListener;
-import com.rithsagea.atelier.discord.StopCommand;
-import com.rithsagea.atelier.discord.WaifuCommand;
+import com.rithsagea.atelier.discord.commands.CommandRegistry;
 import com.rithsagea.atelier.discord.music.AtelierAudioManager;
-import com.rithsagea.atelier.discord.music.MusicCommand;
-import com.rithsagea.atelier.dnd.CharacterCommand;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
 import com.rithsagea.atelier.dnd.database.DBSaveTask;
 
@@ -64,7 +60,6 @@ public class AtelierBot {
 		}
 		
 		registerTasks();
-		registerCommands();
 		
 		jda.addEventListener(new LoginListener(this));
 		jda.addEventListener(new MessageListener(this));
@@ -72,15 +67,6 @@ public class AtelierBot {
 	
 	private void registerTasks() {
 		scheduler.scheduleAtFixedRate(new DBSaveTask(db), 15, 300, TimeUnit.SECONDS);
-	}
-	
-	private void registerCommands() {
-		commandRegistry.registerCommand(new StopCommand(this));
-		
-		commandRegistry.registerCommand(new WaifuCommand());
-		
-		commandRegistry.registerCommand(new MusicCommand(this));
-		commandRegistry.registerCommand(new CharacterCommand(this));
 	}
 	
 	public Config getConfig() {
