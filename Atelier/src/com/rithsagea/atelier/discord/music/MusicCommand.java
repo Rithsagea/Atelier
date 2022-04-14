@@ -8,6 +8,7 @@ import com.rithsagea.atelier.discord.AtelierCommand;
 import com.rithsagea.atelier.discord.PermissionLevel;
 import com.rithsagea.atelier.dnd.User;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -58,7 +59,18 @@ public class MusicCommand implements AtelierCommand {
 		case "play":
 			audioHandler.loadTrack(args.get(2));
 			break;
-			
+		
+		case "queue":
+			EmbedBuilder eb = new EmbedBuilder();
+			String msg = "";
+			for (int i = 0; i < audioHandler.getQueue().size(); i++) {
+				msg = msg.concat((i+1) + " - " + audioHandler.getQueue().get(i).getInfo().title + "\n");
+			}
+			if (msg == "")
+				msg = "No song in queue!";
+			eb.addField("Queue:", msg, true);
+			event.getChannel().sendMessageEmbeds(eb.build()).queue();
+			break;
 		}
 	}
 
