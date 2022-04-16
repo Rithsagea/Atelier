@@ -41,6 +41,13 @@ public class CharacterCommand implements AtelierCommand {
 		if(args.size() <= 1) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("Name: " + sheet.getName() + "\n");
+			for(Ability ability : Ability.values()) {
+				builder.append(String.format("%s: %d [%s]\n", 
+						WordUtil.capitalize(ability.name()),
+						sheet.getAbilityScore(ability),
+						WordUtil.formatModifier(sheet.getAbilityModifier(ability))));
+			}
+			
 			event.getChannel().sendMessage(builder.toString()).queue();
 			
 			return;
