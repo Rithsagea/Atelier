@@ -67,7 +67,10 @@ public class MusicCommand implements AtelierCommand {
 			StringBuilder msg = new StringBuilder();
 			int queueSize = audioHandler.getQueue().size();
 			for (int i = 0; i < queueSize; i++) {
-				msg.append((i+1) + " - " + audioHandler.getQueue().get(i).getInfo().title + "\n");
+				msg.append(String.format("`[%d]` - **%s**\n",
+						i + 1, 
+						audioHandler.getQueue().get(i).getInfo().title));
+				
 			}
 			if (msg.length() == 0)
 				eb.setTitle("No songs in queue!");
