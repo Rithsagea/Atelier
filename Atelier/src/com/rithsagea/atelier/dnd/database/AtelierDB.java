@@ -12,6 +12,7 @@ import org.mongojack.ObjectMapperConfigurer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -23,6 +24,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.rithsagea.atelier.Config;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;
+import com.rithsagea.atelier.dnd.types.spread.PointBuySpread;
 
 public class AtelierDB {
 	
@@ -47,6 +49,10 @@ public class AtelierDB {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+		
+		mapper.registerSubtypes(
+				new NamedType(PointBuySpread.class, "pointBuy"));
+		
 		ObjectMapperConfigurer.configureObjectMapper(mapper);
 		
 		client = MongoClients.create(settings);
