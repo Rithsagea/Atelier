@@ -1,11 +1,15 @@
 package com.rithsagea.atelier.dnd;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.mongojack.Id;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rithsagea.atelier.dnd.types.character.AbstractClass;
+import com.rithsagea.atelier.dnd.types.enums.Ability;
 import com.rithsagea.atelier.dnd.types.spread.AbilitySpread;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,9 +21,13 @@ public class Sheet {
 	private String name;
 	private AbilitySpread baseScores;
 	
+	private List<AbstractClass> classes;
+	
 	@JsonCreator
 	public Sheet(@Id UUID id) {
 		this.id = id;
+		
+		classes = new ArrayList<>();
 	}
 	
 	public Sheet() {
@@ -48,6 +56,10 @@ public class Sheet {
 		return (baseScores.getBaseScore(ability)-10)/2;
 	}
 	
+	public List<AbstractClass> getClasses() {
+		return classes;
+	}
+	
 	//MUTATORS
 	
 	public void setName(String name) {
@@ -56,5 +68,9 @@ public class Sheet {
 	
 	public void setBaseScores(AbilitySpread spread) {
 		baseScores = spread;
+	}
+	
+	public void addClass(AbstractClass clazz) {
+		classes.add(clazz);
 	}
 }

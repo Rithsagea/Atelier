@@ -7,6 +7,7 @@ import com.rithsagea.atelier.AtelierBot;
 import com.rithsagea.atelier.discord.commands.AtelierCommand;
 import com.rithsagea.atelier.discord.commands.PermissionLevel;
 import com.rithsagea.atelier.dnd.database.AtelierDB;
+import com.rithsagea.atelier.dnd.types.enums.Ability;
 import com.rithsagea.util.WordUtil;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

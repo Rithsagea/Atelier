@@ -3,7 +3,7 @@ package com.rithsagea.atelier.dnd.types.spread;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.rithsagea.atelier.dnd.Ability;
+import com.rithsagea.atelier.dnd.types.enums.Ability;
 
 public class PointBuySpread implements AbilitySpread {
 

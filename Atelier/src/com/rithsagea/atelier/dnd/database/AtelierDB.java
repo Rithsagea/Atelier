@@ -11,6 +11,7 @@ import org.mongojack.ObjectMapperConfigurer;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.mongodb.ConnectionString;
@@ -24,6 +25,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.rithsagea.atelier.Config;
 import com.rithsagea.atelier.dnd.Sheet;
 import com.rithsagea.atelier.dnd.User;
+import com.rithsagea.atelier.dnd.types.character.classes.Rogue;
 import com.rithsagea.atelier.dnd.types.spread.PointBuySpread;
 
 public class AtelierDB {
@@ -48,10 +50,10 @@ public class AtelierDB {
 				.build();
 		
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-		
-		mapper.registerSubtypes(
-				new NamedType(PointBuySpread.class, "pointBuy"));
+		registerSubtypes(mapper);
 		
 		ObjectMapperConfigurer.configureObjectMapper(mapper);
 		
@@ -69,6 +71,16 @@ public class AtelierDB {
 		
 		users = new HashMap<>();
 		sheets = new HashMap<>();
+	}
+	
+	private void registerSubtypes(ObjectMapper mapper) {
+		//ability spreads
+		mapper.registerSubtypes(
+				new NamedType(PointBuySpread.class, "pointBuy"));
+		
+		//character classes
+		mapper.registerSubtypes(
+				new NamedType(Rogue.class, "rogue"));
 	}
 	
 	public void disconnect() {
