@@ -1,4 +1,4 @@
-package com.rithsagea.test;
+package com.atelier.test;
 
 import com.tempera.util.NekoUtil;
 

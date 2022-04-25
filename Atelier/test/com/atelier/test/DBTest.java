@@ -1,4 +1,4 @@
-package com.rithsagea.test;
+package com.atelier.test;
 
 import com.tempera.atelier.Config;
 import com.tempera.atelier.discord.commands.PermissionLevel;
