@@ -1,6 +1,6 @@
 package com.rithsagea.test;
 
-import com.rithsagea.util.NekoUtil;
+import com.tempera.util.NekoUtil;
 
 public class NekoTest {
 	public static void main(String[] args) {
