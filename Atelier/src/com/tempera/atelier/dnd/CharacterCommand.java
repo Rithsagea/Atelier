@@ -8,6 +8,7 @@ import com.tempera.atelier.discord.commands.AtelierCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.database.AtelierDB;
 import com.tempera.atelier.dnd.types.enums.Ability;
+import com.tempera.atelier.dnd.types.enums.Skill;
 import com.tempera.util.WordUtil;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -58,6 +59,9 @@ public class CharacterCommand implements AtelierCommand {
 		
 		case "roll":
 		Ability a = null;
+		Skill[] skills = Skill.values();
+		if(args.get(2).equals("str") || args.get(2).equals("int") || args.get(2).equals("cha") || args.get(2).equals("wis") || args.get(2).equals("con") || args.get(2).equals("dex"))
+		{
 		switch(args.get(2))
 		{
 			case "str": a = Ability.STRENGTH; break;
@@ -70,6 +74,19 @@ public class CharacterCommand implements AtelierCommand {
 		int roll = (int) (Math.random() * 20 + 1 + sheet.getAbilityModifier(a));
 		event.getChannel().sendMessage(
 				WordUtil.capitalize(a.name()) + " roll: " + roll).queue();
+		}
+		else
+		{
+			Skill solution = null;
+			for(Skill skill : skills)
+			{
+				if(skill.getLabel().equals(args.get(2)))
+					solution = skill;
+			}
+			int skillroll = (int)(Math.random() * 20 + 1 + sheet.getSkillModifier(solution));
+			event.getChannel().sendMessage(
+					WordUtil.capitalize(solution.name()) + " roll: " + skillroll).queue();
+		}
 		break;
 		
 		case "info":
