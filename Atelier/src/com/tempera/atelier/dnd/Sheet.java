@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
 import com.tempera.atelier.dnd.types.enums.Ability;
+import com.tempera.atelier.dnd.types.enums.Skill;
 import com.tempera.atelier.dnd.types.spread.AbilitySpread;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -54,6 +55,10 @@ public class Sheet {
 	
 	public int getAbilityModifier(Ability ability) {
 		return (baseScores.getBaseScore(ability)-10)/2;
+	}
+	
+	public int getSkillModifier(Skill skill) {
+		return getAbilityModifier(skill.getAbility());
 	}
 	
 	public List<AbstractClass> getClasses() {
