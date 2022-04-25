@@ -1,4 +1,4 @@
-package com.atelier.test;
+package com.tempera.test;
 
 import com.tempera.util.NekoUtil;
 

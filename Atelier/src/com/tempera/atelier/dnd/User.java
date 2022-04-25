@@ -24,6 +24,11 @@ public class User {
 		level = PermissionLevel.USER;
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("%s [%d]", name, id);
+	}
+	
 	//ACCESSORS
 	
 	public long getId() {
