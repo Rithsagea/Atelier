@@ -101,7 +101,11 @@ public class Sheet implements Listener {
 	}
 	
 	public int getAbilityModifier(Ability ability) {
-		return (baseScores.getBaseScore(ability)-10)/2;
+		return (baseScores.getBaseScore(ability) - 10) / 2;
+	}
+	
+	public int getSkillModifier(Skill skill) {
+		return getAbilityModifier(skill.getAbility());
 	}
 	
 	public boolean hasSavingProficiency(Ability ability) {

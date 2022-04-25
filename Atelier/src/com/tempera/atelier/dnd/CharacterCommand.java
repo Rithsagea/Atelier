@@ -72,8 +72,14 @@ public class CharacterCommand implements AtelierCommand {
 				WordUtil.capitalize(a.name()) + " roll: " + roll).queue();
 		break;
 		
-		
-		
+		case "info":
+		String s = "";
+		for(Ability ab : Ability.values())
+		{
+			s += "**" + WordUtil.capitalize(ab.name()) + "**: " + "*" + sheet.getAbilityScore(ab) + "*" + " (*" + sheet.getAbilityModifier(ab) + "*)\n";
+		}
+		event.getChannel().sendMessage(sheet.getName() + ": " + sheet.getClasses() + "\n" + s).queue();
+		break;
 		}
 	}
 

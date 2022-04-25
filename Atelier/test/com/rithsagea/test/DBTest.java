@@ -1,12 +1,11 @@
 package com.rithsagea.test;
 
-import com.rithsagea.atelier.Config;
-import com.rithsagea.atelier.discord.commands.PermissionLevel;
-import com.rithsagea.atelier.dnd.Ability;
-import com.rithsagea.atelier.dnd.Sheet;
-import com.rithsagea.atelier.dnd.User;
-import com.rithsagea.atelier.dnd.database.AtelierDB;
-import com.rithsagea.atelier.dnd.types.spread.PointBuySpread;
+import com.tempera.atelier.Config;
+import com.tempera.atelier.discord.commands.PermissionLevel;
+import com.tempera.atelier.dnd.Sheet;
+import com.tempera.atelier.dnd.User;
+import com.tempera.atelier.dnd.database.AtelierDB;
+import com.tempera.atelier.dnd.types.character.classes.Rogue;
 
 public class DBTest {
 	public static void main(String[] args) {
@@ -23,8 +22,5 @@ public class DBTest {
 		user.setLevel(PermissionLevel.ADMINISTRATOR);
 		
 		Sheet sheet = db.getSheet(user.getSheetId());
-		PointBuySpread spread = (PointBuySpread) sheet.getBaseScores();
-		for(Ability ability : Ability.values())
-			spread.setScore(ability, 8);
 	}
 }
