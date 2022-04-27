@@ -68,7 +68,6 @@ public class Sheet implements Listener {
 	private void onLoadSavingProficiency(LoadSavingProficiencyEvent e) {
 		savingProficiencies.clear();
 		savingProficiencies.addAll(e.getProficiencies());
-		System.out.println("a");
 	}
 	
 	@EventHandler(priority = EventPriority.ROOT)
