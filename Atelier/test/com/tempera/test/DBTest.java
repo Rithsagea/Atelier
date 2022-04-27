@@ -24,11 +24,17 @@ public class DBTest {
 		
 		Sheet sheet = db.getSheet(user.getSheetId());
 		
+//		sheet.addClass(new Rogue());
+//		sheet.reload();
+		
 		System.out.println("User: " + user);
 		System.out.println("Name: " + sheet.getName());
 		for(Ability a : Ability.values()) {
-			System.out.printf("%s: %d [%s]\n", WordUtil.capitalize(a.name()),
-					sheet.getAbilityScore(a), WordUtil.formatModifier(sheet.getAbilityModifier(a)));
+			System.out.printf("%s%s: %d [%s]\n",
+					sheet.hasSavingProficiency(a) ? "*" : "",
+					WordUtil.capitalize(a.name()),
+					sheet.getAbilityScore(a), 
+					WordUtil.formatModifier(sheet.getAbilityModifier(a)));
 		}
 	}
 }

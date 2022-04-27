@@ -1,5 +1,6 @@
 package com.tempera.atelier.dnd.types.character;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +12,10 @@ public abstract class CharacterClass implements AbstractClass {
 	
 	protected void addAttribute(Attribute a) {
 		attributes.add(a);
+	}
+	
+	protected void addAttributes(Attribute... a) {
+		attributes.addAll(Arrays.asList(a));
 	}
 	
 	protected void removeAttribute(Attribute a) {

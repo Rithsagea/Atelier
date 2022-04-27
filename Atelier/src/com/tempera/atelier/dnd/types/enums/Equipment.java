@@ -1,6 +1,6 @@
 package com.tempera.atelier.dnd.types.enums;
 
-public enum Equipment {
+public enum Equipment implements Proficiency {
 	LIGHT_ARMOR,
 	
 	SIMPLE_WEAPONS,

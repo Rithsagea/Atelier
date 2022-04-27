@@ -26,6 +26,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.tempera.atelier.Config;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
+import com.tempera.atelier.dnd.types.character.attributes.ProficiencyFeature;
 import com.tempera.atelier.dnd.types.character.classes.Rogue;
 import com.tempera.atelier.dnd.types.spread.PointBuySpread;
 
@@ -83,6 +84,10 @@ public class AtelierDB {
 		//character classes
 		mapper.registerSubtypes(
 				new NamedType(Rogue.class, "rogue"));
+		
+		//attributes
+		mapper.registerSubtypes(
+				new NamedType(ProficiencyFeature.class, "feature-proficiency"));
 	}
 	
 	public void disconnect() {
@@ -103,7 +108,9 @@ public class AtelierDB {
 	
 	private Sheet findSheet(UUID id) {
 		if(OFFLINE_MODE) return null;
-		return sheetCollection.find(Filters.eq("_id", id)).first();
+		Sheet sheet = sheetCollection.find(Filters.eq("_id", id)).first();
+		if(sheet != null) sheet.reload();
+		return sheet;
 	}
 	
 	private void updateSheet(Sheet sheet) {
