@@ -1,6 +1,6 @@
 package com.tempera.atelier.dnd.types.character;
 
-import java.util.Set;
+import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -11,7 +11,7 @@ public interface AbstractClass {
 	
 	public int getLevel();
 	
-	public Set<Attribute> getAttributes();
+	public Collection<Attribute> getAttributes();
 	
 	//TODO multiclassing flag somewhere
 }

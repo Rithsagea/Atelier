@@ -1,25 +1,20 @@
 package com.tempera.atelier.dnd.types.character;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class CharacterClass implements AbstractClass {
 	
-	private Set<Attribute> attributes = new HashSet<>();
+	private Map<String, Attribute> attributes = new HashMap<>();
 	private int level = 1;
 	
-	protected void addAttribute(Attribute a) {
-		attributes.add(a);
+	protected void addAttribute(String key, Attribute attribute) {
+		attributes.put(key, attribute);
 	}
 	
-	protected void addAttributes(Attribute... a) {
-		attributes.addAll(Arrays.asList(a));
-	}
-	
-	protected void removeAttribute(Attribute a) {
-		attributes.remove(a);
+	protected Attribute removeAttribute(String key) {
+		return attributes.remove(key);
 	}
 	
 	@Override
@@ -28,8 +23,8 @@ public abstract class CharacterClass implements AbstractClass {
 	}
 	
 	@Override
-	public Set<Attribute> getAttributes() {
-		return Collections.unmodifiableSet(attributes);
+	public Collection<Attribute> getAttributes() {
+		return attributes.values();
 	}
 	
 	@Override

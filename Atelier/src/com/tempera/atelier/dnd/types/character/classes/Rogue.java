@@ -8,12 +8,13 @@ import com.tempera.atelier.dnd.types.enums.Equipment;
 public class Rogue extends CharacterClass {
 	
 	public Rogue() {
-		addAttributes(new ProficiencyFeature(
-				Equipment.LIGHT_ARMOR, Equipment.SIMPLE_WEAPONS, Equipment.HAND_CROSSBOWS,
-				Equipment.LONGSWORDS, Equipment.RAPIERS, Equipment.SHORTSWORDS,
-				Equipment.THIEVES_TOOLS,
-				
-				Ability.DEXTERITY, Ability.INTELLIGENCE));
+		addAttribute("proficiency",
+				new ProficiencyFeature(
+					Equipment.LIGHT_ARMOR, Equipment.SIMPLE_WEAPONS, Equipment.HAND_CROSSBOWS,
+					Equipment.LONGSWORDS, Equipment.RAPIERS, Equipment.SHORTSWORDS,
+					Equipment.THIEVES_TOOLS,
+					
+					Ability.DEXTERITY, Ability.INTELLIGENCE));
 	}
 	
 	@Override
