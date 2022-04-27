@@ -1,19 +1,21 @@
 package com.tempera.atelier.dnd.types.character;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.tempera.atelier.dnd.types.enums.Ability;
-import com.tempera.atelier.dnd.types.enums.Equipment;
-import com.tempera.atelier.dnd.types.enums.Proficiency;
-import com.tempera.atelier.dnd.types.enums.Skill;
-
 public abstract class CharacterClass implements AbstractClass {
+	
+	private Set<Attribute> attributes = new HashSet<>();
 	private int level = 1;
 	
-	private Set<Ability> savingProficiencies = new HashSet<>();
-	private Set<Skill> skillProficiencies = new HashSet<>();
-	private Set<Equipment> equipmentProficiencies = new HashSet<>();
+	protected void addAttribute(Attribute a) {
+		attributes.add(a);
+	}
+	
+	protected void removeAttribute(Attribute a) {
+		attributes.remove(a);
+	}
 	
 	@Override
 	public int getLevel() {
@@ -21,25 +23,9 @@ public abstract class CharacterClass implements AbstractClass {
 	}
 	
 	@Override
-	public boolean hasProficiency(Proficiency proficiency) {
-		if(proficiency instanceof Ability) return savingProficiencies.contains(proficiency);
-		if(proficiency instanceof Skill) return skillProficiencies.contains(proficiency);
-		if(proficiency instanceof Equipment) return equipmentProficiencies.contains(proficiency);
-		
-		return false;
+	public Set<Attribute> getAttributes() {
+		return Collections.unmodifiableSet(attributes);
 	}
-	
-	protected void addProficiency(Proficiency proficiency) {
-		if(proficiency instanceof Ability) savingProficiencies.add((Ability) proficiency);
-		if(proficiency instanceof Skill) skillProficiencies.add((Skill) proficiency);
-		if(proficiency instanceof Equipment) equipmentProficiencies.add((Equipment) proficiency);
-	}
-	
-	protected void addProficiencies(Proficiency...proficiencies) {
-		for(Proficiency p : proficiencies)
-			addProficiency(p);
-	}
-	
 	
 	@Override
 	public String toString() {

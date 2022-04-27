@@ -1,4 +1,4 @@
-package com.rithsagea.test;
+package com.tempera.test;
 
 import com.tempera.util.Dice;
 
