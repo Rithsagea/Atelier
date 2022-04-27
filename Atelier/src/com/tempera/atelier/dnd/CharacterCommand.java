@@ -58,46 +58,24 @@ public class CharacterCommand implements AtelierCommand {
 		switch(args.get(1)) {
 		
 		case "roll":
-		Ability a = null;
-		Skill[] skills = Skill.values();
-		if(args.get(2).equals("str") || args.get(2).equals("int") || args.get(2).equals("cha") || args.get(2).equals("wis") || args.get(2).equals("con") || args.get(2).equals("dex"))
+		for(Ability a : Ability.values())
 		{
-		switch(args.get(2))
+			if(args.get(2).equals(a.getLabel()))
+				{
+				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(a);
+				event.getChannel().sendMessage(WordUtil.capitalize(a.name().replace("_", " ")) + " roll: " + roll).queue();
+				return;
+				}
+		}
+		for(Skill s : Skill.values())
 		{
-			case "str": a = Ability.STRENGTH; break;
-			case "int": a = Ability.INTELLIGENCE; break;
-			case "cha": a = Ability.CHARISMA; break;
-			case "wis": a = Ability.WISDOM; break;
-			case "con": a = Ability.CONSTITUTION; break;
-			case "dex":	a = Ability.DEXTERITY; break;
-		}
-		int roll = (int) (Math.random() * 20 + 1 + sheet.getAbilityModifier(a));
-		event.getChannel().sendMessage(
-				WordUtil.capitalize(a.name()) + " roll: " + roll).queue();
-		}
-		else
-		{
-			Skill solution = null;
-			for(Skill skill : skills)
-			{
-				if(skill.getLabel().equals(args.get(2)))
-					solution = skill;
-			}
-			int skillroll = (int)(Math.random() * 20 + 1 + sheet.getSkillModifier(solution));
-			event.getChannel().sendMessage(
-					WordUtil.capitalize(solution.name()) + " roll: " + skillroll).queue();
-		}
-		break;
-		
-		case "info":
-		String s = "";
-		for(Ability ab : Ability.values())
-		{
-			s += "**" + WordUtil.capitalize(ab.name()) + "**: " + "*" + sheet.getAbilityScore(ab) + "*" + " (*" + sheet.getAbilityModifier(ab) + "*)\n";
-		}
-		event.getChannel().sendMessage(sheet.getName() + ": " + sheet.getClasses() + "\n" + s).queue();
-		break;
+			if(args.get(2).equals(s.getLabel()))
+				{
+				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(s.getAbility());
+				event.getChannel().sendMessage(WordUtil.capitalize(s.name().replace("_", " ")) + " roll: " + roll).queue();
+				return;
+				}
 		}
 	}
-
+	}
 }

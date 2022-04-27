@@ -1,9 +1,16 @@
 package com.tempera.util;
 
 public class WordUtil {
-	public static String capitalize(String word) {
-		return Character.toUpperCase(word.charAt(0)) + 
-				word.toLowerCase().substring(1, word.length());
+	public static String capitalize(String str) {
+		str = str.toLowerCase();
+		StringBuilder builder = new StringBuilder();
+		String prefix = "";
+		for(String word : str.split(" ")) {
+			builder.append(prefix);
+			builder.append(word.substring(0,1).toUpperCase() + word.substring(1,word.length()));
+			prefix = " ";
+		}
+		return builder.toString();
 	}
 	
 	public static String formatModifier(int modifier) {

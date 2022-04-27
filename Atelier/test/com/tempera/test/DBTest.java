@@ -5,6 +5,7 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.database.AtelierDB;
+import com.tempera.atelier.dnd.types.character.classes.Rogue;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.util.WordUtil;
 
@@ -19,13 +20,13 @@ public class DBTest {
 	}
 	
 	public static void editDB(AtelierDB db) {
-		User user = db.getUser(171378138041942016l);
+		User user = db.getUser(529463250052448256l);
 		user.setLevel(PermissionLevel.ADMINISTRATOR);
 		
 		Sheet sheet = db.getSheet(user.getSheetId());
 		
-//		sheet.addClass(new Rogue());
-//		sheet.reload();
+		sheet.addClass(new Rogue());
+		sheet.reload();
 		
 		System.out.println("User: " + user);
 		System.out.println("Name: " + sheet.getName());
