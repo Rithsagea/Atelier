@@ -1,6 +1,6 @@
 package com.tempera.atelier.dnd.types.enums;
 
-public enum Skill implements Proficiency {
+public enum Skill {
 	ACROBATICS("acr", Ability.DEXTERITY),
 	ANIMAL_HANDLING("ani", Ability.WISDOM),
 	ARCANA("arc", Ability.INTELLIGENCE),

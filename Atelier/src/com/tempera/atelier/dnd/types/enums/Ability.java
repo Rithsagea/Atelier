@@ -2,7 +2,7 @@ package com.tempera.atelier.dnd.types.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public enum Ability implements Proficiency{
+public enum Ability {
 	STRENGTH("str"),
 	DEXTERITY("dex"),
 	CONSTITUTION("con"),
