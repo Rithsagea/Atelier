@@ -2,6 +2,7 @@ package com.tempera.atelier.discord;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,7 @@ public class MessageListener extends ListenerAdapter {
 			AtelierCommand command = reg.getCommand(args.get(0));
 			if(command != null && command.getLevel().ordinal() <= user.getLevel().ordinal()) {
 				logger.info("Received Command: " + command.getLabel() + " from " + author);
-				command.execute(user, args, event);
+				command.execute(user, Collections.unmodifiableList(args), event);
 			}
 		}
 		
@@ -86,7 +87,7 @@ public class MessageListener extends ListenerAdapter {
 				AtelierCommand command = cmd.getValue();
 				args.add(0, command.getLabel());
 				logger.info("Received Macro: " + command.getLabel() + " from " + author);
-				command.execute(user, args, event);
+				command.execute(user, Collections.unmodifiableList(args), event);
 			}
 		}
 	}
