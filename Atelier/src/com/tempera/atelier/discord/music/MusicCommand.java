@@ -100,6 +100,7 @@ public class MusicCommand implements AtelierCommand {
 			
 		case "sans":
 			audioHandler.loadTrack("https://www.youtube.com/watch?v=wDgQdr8ZkTw");
+			event.getChannel().sendMessage("bad time").queue();
 			break;
 		}
 	}
