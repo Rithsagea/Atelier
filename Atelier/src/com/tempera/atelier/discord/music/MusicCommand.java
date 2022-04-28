@@ -65,17 +65,17 @@ public class MusicCommand implements AtelierCommand {
 			break;
 		
 		case "queue":
-			int page = 1;
-			if (args.size() > 2) {
-				page = Integer.parseInt(args.get(2));
-			}
-
 			EmbedBuilder eb = new EmbedBuilder();
 			MessageBuilder bt = new MessageBuilder();
 			eb.setColor(Color.CYAN);
 			StringBuilder msg = new StringBuilder();
-			
 			int queueSize = audioHandler.getQueue().size();
+			int pageMax = (int)Math.ceil((double)queueSize / 10);
+			int page = 1;
+			if (args.size() > 2) {
+				page = Math.min(Integer.parseInt(args.get(2)), pageMax);
+			}
+			
 			for (int i = (page-1)*10; i < queueSize && i < page*10; i++) {
 				msg.append(String.format("`[%d]` - **%s**\n",
 						i + 1, 
@@ -89,12 +89,11 @@ public class MusicCommand implements AtelierCommand {
 			else {
 				eb.setTitle(queueSize + (queueSize > 1 ?" songs" :" song"));
 				eb.addField("Queue:", msg.toString(), true);
-				eb.appendDescription(String.format("Page %d of %d", page, (int)Math.ceil((double)queueSize / 10)));
+				eb.appendDescription(String.format("Page %d of %d", page, pageMax));
 				eb.setFooter(String.format("Displaying songs %d to %d out of %d", (page-1)*10+1,
 						Math.min(page*10, queueSize), queueSize));
 			}
 			
-
 			bt.setEmbeds(eb.build());
 			event.getChannel().sendMessage(bt.build()).queue();
 			break;
