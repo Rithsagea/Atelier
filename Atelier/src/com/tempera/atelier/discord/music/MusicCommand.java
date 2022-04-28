@@ -97,6 +97,10 @@ public class MusicCommand implements AtelierCommand {
 			bt.setEmbeds(eb.build());
 			event.getChannel().sendMessage(bt.build()).queue();
 			break;
+			
+		case "sans":
+			audioHandler.loadTrack("https://www.youtube.com/watch?v=wDgQdr8ZkTw");
+			break;
 		}
 	}
 
