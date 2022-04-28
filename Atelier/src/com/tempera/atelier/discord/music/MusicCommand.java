@@ -64,7 +64,7 @@ public class MusicCommand implements AtelierCommand {
 			audioHandler.loadTrack(args.get(2));
 			break;
 		
-		case "queue":
+		case "queue":{
 			EmbedBuilder eb = new EmbedBuilder();
 			MessageBuilder bt = new MessageBuilder();
 			eb.setColor(Color.CYAN);
@@ -96,6 +96,13 @@ public class MusicCommand implements AtelierCommand {
 			
 			bt.setEmbeds(eb.build());
 			event.getChannel().sendMessage(bt.build()).queue();
+		}
+			break;
+			
+		case "playing":
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.addField("Now playing:", audioHandler.getPlayingTrack().getInfo().title, true);
+			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 			break;
 			
 		case "sans":
