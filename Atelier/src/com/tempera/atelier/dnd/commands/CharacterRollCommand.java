@@ -2,10 +2,6 @@ package com.tempera.atelier.dnd.commands;
 
 import java.util.List;
 
-import com.tempera.atelier.AtelierBot;
-import com.tempera.atelier.discord.commands.AtelierCommand;
-import com.tempera.atelier.discord.commands.CommandRegistry;
-import com.tempera.atelier.discord.commands.GroupCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
