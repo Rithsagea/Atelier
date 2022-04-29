@@ -1,4 +1,4 @@
-package com.tempera.atelier.dnd;
+package com.tempera.atelier.dnd.commands;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.commands.AtelierCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
+import com.tempera.atelier.dnd.Sheet;
+import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.database.AtelierDB;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Skill;
