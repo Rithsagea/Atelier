@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.commands.AtelierCommand;
+import com.tempera.atelier.discord.commands.CommandRegistry;
+import com.tempera.atelier.discord.commands.GroupCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
@@ -15,12 +17,14 @@ import com.tempera.util.WordUtil;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterCommand implements AtelierCommand {
+public class CharacterCommand extends GroupCommand {
 	
 	private AtelierDB db;
 	
 	public CharacterCommand(AtelierBot bot) {
 		db = bot.getDatabase();
+		CommandRegistry registry = this.getCommandRegistry();
+		registry.registerCommand(new CharacterRollCommand(db));
 	}
 	
 	@Override
@@ -37,9 +41,8 @@ public class CharacterCommand implements AtelierCommand {
 	public PermissionLevel getLevel() {
 		return PermissionLevel.USER;
 	}
-
 	@Override
-	public void execute(User user, List<String> args, MessageReceivedEvent event) {
+	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = db.getSheet(user.getSheetId());
 		
 		if(args.size() <= 1) {
@@ -57,27 +60,5 @@ public class CharacterCommand implements AtelierCommand {
 			return;
 		}
 		
-		switch(args.get(1)) {
-		
-		case "roll":
-		for(Ability a : Ability.values())
-		{
-			if(args.get(2).equals(a.getLabel()))
-				{
-				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(a);
-				event.getChannel().sendMessage(WordUtil.capitalize(a.name().replace("_", " ")) + " roll: " + roll).queue();
-				return;
-				}
-		}
-		for(Skill s : Skill.values())
-		{
-			if(args.get(2).equals(s.getLabel()))
-				{
-				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(s.getAbility());
-				event.getChannel().sendMessage(WordUtil.capitalize(s.name().replace("_", " ")) + " roll: " + roll).queue();
-				return;
-				}
-		}
-	}
 	}
 }
