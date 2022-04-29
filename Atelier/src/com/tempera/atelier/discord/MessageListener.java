@@ -41,20 +41,20 @@ public class MessageListener extends ListenerAdapter {
 	}
 	
 	private Map<String, AtelierCommand> macroMap;
-	private AtelierCommand musicCommand;
-	private AtelierCommand characterCommand;
 	
 	private void registerCommands(AtelierBot bot) {
-		musicCommand = new MusicCommand(bot);
-		characterCommand = new CharacterCommand(bot);
+		AtelierCommand musicCommand = new MusicCommand(bot);
+		AtelierCommand characterCommand = new CharacterCommand(bot);
+		AtelierCommand waifuCommand = new WaifuCommand();
 		
 		macroMap = new HashMap<>();
 		
+		macroMap.put("w", waifuCommand);
 		macroMap.put("m", musicCommand);
 		macroMap.put("d", characterCommand);
 		
 		reg.registerCommand(new StopCommand(bot));
-		reg.registerCommand(new WaifuCommand());
+		reg.registerCommand(waifuCommand);
 		reg.registerCommand(musicCommand);
 		reg.registerCommand(characterCommand);
 	}

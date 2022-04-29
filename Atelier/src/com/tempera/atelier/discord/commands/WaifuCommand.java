@@ -3,6 +3,7 @@ package com.tempera.atelier.discord.commands;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.tempera.atelier.dnd.User;
 import com.tempera.util.NekoUtil;
@@ -14,15 +15,17 @@ public class WaifuCommand extends GroupCommand {
 
 	private class WaifuSubCommand implements AtelierCommand {
 
-		private String pictureType;
+		private String label;
+		private Supplier<String> urlSupplier;
 		
-		public WaifuSubCommand(String pictureType) {
-			this.pictureType = pictureType;
+		public WaifuSubCommand(String label, Supplier<String> urlSupplier) {
+			this.label = label;
+			this.urlSupplier = urlSupplier;
 		}
 		
 		@Override
 		public String getLabel() {
-			return pictureType;
+			return label;
 		}
 
 		@Override
@@ -37,20 +40,9 @@ public class WaifuCommand extends GroupCommand {
 
 		@Override
 		public void execute(User user, List<String> args, MessageReceivedEvent event) {
-			String url;
-			
-			switch(pictureType) {
-				case "cat": url = NekoUtil.getCat(); break;
-				case "dog": url = NekoUtil.getDog(); break;
-				case "catboy": url = NekoUtil.getCatboy(); break;
-				case "catgirl": url = NekoUtil.getCatgirl(); break;
-				case "foxgirl": url = NekoUtil.getFoxgirl(); break;
-				default: url = NekoUtil.getWaifu(); break;
-			}
-			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.CYAN);
-			eb.setImage(url);
+			eb.setImage(urlSupplier.get());
 			
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 		}
@@ -59,11 +51,11 @@ public class WaifuCommand extends GroupCommand {
 	public WaifuCommand() {
 		CommandRegistry registry = this.getCommandRegistry();
 		
-		registry.registerCommand(new WaifuSubCommand("cat"));
-		registry.registerCommand(new WaifuSubCommand("dog"));
-		registry.registerCommand(new WaifuSubCommand("catboy"));
-		registry.registerCommand(new WaifuSubCommand("catgirl"));
-		registry.registerCommand(new WaifuSubCommand("foxgirl"));
+		registry.registerCommand(new WaifuSubCommand("cat", NekoUtil::getCat));
+		registry.registerCommand(new WaifuSubCommand("dog", NekoUtil::getDog));
+		registry.registerCommand(new WaifuSubCommand("catboy", NekoUtil::getCatboy));
+		registry.registerCommand(new WaifuSubCommand("catgirl", NekoUtil::getCatgirl));
+		registry.registerCommand(new WaifuSubCommand("foxgirl", NekoUtil::getFoxgirl));
 	}
 	
 	@Override
@@ -83,7 +75,11 @@ public class WaifuCommand extends GroupCommand {
 
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.CYAN);
+		eb.setImage(NekoUtil.getWaifu());
 		
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 	
 }
