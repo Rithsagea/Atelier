@@ -23,6 +23,7 @@ public class CharacterCommand extends GroupCommand {
 		db = bot.getDatabase();
 		CommandRegistry registry = this.getCommandRegistry();
 		registry.registerCommand(new CharacterRollCommand(db));
+		registry.registerCommand(new CharacterInfoCommand(db));
 	}
 	
 	@Override

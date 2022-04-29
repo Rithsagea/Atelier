@@ -35,6 +35,11 @@ public class CharacterRollCommand extends CharacterSubCommand{
 
 	@Override
 	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
+		if(args.size() == 1)
+		{
+			event.getChannel().sendMessage("Invalid input").queue();
+			return;
+		}
 		for(Ability a : Ability.values())
 		{
 			if(args.get(1).equals(a.getLabel()))
@@ -53,5 +58,7 @@ public class CharacterRollCommand extends CharacterSubCommand{
 				return;
 				}
 		}
+		event.getChannel().sendMessage("Invalid input").queue();
+		return;
 	}	
 }
