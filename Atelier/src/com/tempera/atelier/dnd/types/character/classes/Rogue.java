@@ -1,7 +1,7 @@
 package com.tempera.atelier.dnd.types.character.classes;
 
 import com.tempera.atelier.dnd.types.character.CharacterClass;
-import com.tempera.atelier.dnd.types.character.attributes.ProficiencyFeature;
+import com.tempera.atelier.dnd.types.character.features.ProficiencyFeature;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Equipment;
 

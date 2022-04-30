@@ -1,4 +1,4 @@
-package com.tempera.atelier.dnd.types.character.attributes;
+package com.tempera.atelier.dnd.types.character.features;
 
 import java.util.HashSet;
 import java.util.Set;

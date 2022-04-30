@@ -26,8 +26,8 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.tempera.atelier.Config;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
-import com.tempera.atelier.dnd.types.character.attributes.ProficiencyFeature;
 import com.tempera.atelier.dnd.types.character.classes.Rogue;
+import com.tempera.atelier.dnd.types.character.features.ProficiencyFeature;
 import com.tempera.atelier.dnd.types.spread.PointBuySpread;
 
 public class AtelierDB {
