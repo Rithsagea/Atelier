@@ -9,11 +9,21 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class Dice {
+public class Dice implements Cloneable {
 	private TreeMap<Integer, Integer> dice;
 	
 	public Dice() {
 		dice = new TreeMap<>(Comparator.reverseOrder());
+	}
+	
+	public Dice(int count, int value) {
+		this();
+		
+		addDie(count, value);
+	}
+	
+	public Dice(Die die) {
+		this(die.getCount(), die.getValue());
 	}
 	
 	public void addDie(int count, int value) {
@@ -27,6 +37,12 @@ public class Dice {
 	
 	public void addDie(Die die) {
 		addDie(die.getCount(), die.getValue());
+	}
+	
+	public void addDice(Dice dice) {
+		for(int value : dice.getValues()) {
+			addDie(dice.getCount(value), value);
+		}
 	}
 	
 	public Set<Integer> getValues() {
@@ -50,6 +66,7 @@ public class Dice {
 		return roll(new Random());
 	}
 	
+	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		String prefix = "";
@@ -61,5 +78,14 @@ public class Dice {
 		}
 		
 		return builder.toString();
+	}
+	
+	@Override
+	public Dice clone() {
+		Dice dice = new Dice();
+		for(Entry<Integer, Integer> die : this.dice.entrySet())
+			dice.addDie(die.getValue(), die.getKey());
+		
+		return dice;
 	}
 }

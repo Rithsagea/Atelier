@@ -27,6 +27,7 @@ import com.tempera.atelier.Config;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.types.character.classes.Rogue;
+import com.tempera.atelier.dnd.types.character.features.HitPointFeature;
 import com.tempera.atelier.dnd.types.character.features.ProficiencyFeature;
 import com.tempera.atelier.dnd.types.spread.PointBuySpread;
 
@@ -87,7 +88,8 @@ public class AtelierDB {
 		
 		//attributes
 		mapper.registerSubtypes(
-				new NamedType(ProficiencyFeature.class, "feature-proficiency"));
+				new NamedType(ProficiencyFeature.class, "feature-proficiency"),
+				new NamedType(HitPointFeature.class, "feature-hit-points"));
 	}
 	
 	public void disconnect() {

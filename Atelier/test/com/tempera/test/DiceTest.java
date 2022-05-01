@@ -26,6 +26,7 @@ public class DiceTest {
 		
 		rand.setSeed(seed);
 		System.out.println(dice);
+		System.out.println(dice.clone());
 		System.out.println(dice.roll(rand));
 		rand.setSeed(seed);
 		System.out.println(dice.roll(rand).stream().mapToInt(Integer::intValue).sum());

@@ -5,11 +5,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Die {
 	private int value;
 	private int count;
 	
-	public Die(int count, int value) {
+	@JsonCreator
+	public Die(@JsonProperty("count") int count, @JsonProperty("value") int value) {
 		this.value = value;
 		this.count = count;
 	}

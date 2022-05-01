@@ -4,12 +4,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.rithsagea.util.event.Event;
+import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Equipment;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
-public class LoadProficiencyEvent<E> implements Event {
+public class LoadProficiencyEvent<E> extends LoadSheetEvent {
+	public LoadProficiencyEvent(Sheet sheet) {
+		super(sheet);
+	}
+	
 	private Set<E> proficiencies = new HashSet<>();
 	
 	public Set<E> getProficiencies() {
@@ -28,7 +32,21 @@ public class LoadProficiencyEvent<E> implements Event {
 		proficiencies.remove(proficiency);
 	}
 	
-	public static class LoadSavingProficiencyEvent extends LoadProficiencyEvent<Ability> { }
-	public static class LoadSkillProficiencyEvent extends LoadProficiencyEvent<Skill> { }
-	public static class LoadEquipmentProficiencyEvent extends LoadProficiencyEvent<Equipment> { }
+	public static class LoadSavingProficiencyEvent extends LoadProficiencyEvent<Ability> {
+		public LoadSavingProficiencyEvent(Sheet sheet) {
+			super(sheet);
+		}
+	}
+	
+	public static class LoadSkillProficiencyEvent extends LoadProficiencyEvent<Skill> {
+		public LoadSkillProficiencyEvent(Sheet sheet) {
+			super(sheet);
+		}
+	}
+	
+	public static class LoadEquipmentProficiencyEvent extends LoadProficiencyEvent<Equipment> {
+		public LoadEquipmentProficiencyEvent(Sheet sheet) {
+			super(sheet);
+		}
+	}
 }
