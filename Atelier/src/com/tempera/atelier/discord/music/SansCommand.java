@@ -1,6 +1,5 @@
 package com.tempera.atelier.discord.music;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.tempera.atelier.discord.commands.PermissionLevel;
@@ -8,20 +7,20 @@ import com.tempera.atelier.dnd.User;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class PlayCommand extends MusicSubCommand{
+public class SansCommand extends MusicSubCommand{
 
-	public PlayCommand(AtelierAudioManager audioManager) {
+	public SansCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
 	}
 
 	@Override
 	public String getLabel() {
-		return "play";
+		return "sans";
 	}
 
 	@Override
 	public List<String> getAliases() {
-		return Arrays.asList("m", "audio");
+		return null;
 	}
 
 	@Override
@@ -31,7 +30,7 @@ public class PlayCommand extends MusicSubCommand{
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		audioHandler.loadTrack(args.get(1));
+		audioHandler.loadTrack("https://www.youtube.com/watch?v=wDgQdr8ZkTw");
+		event.getChannel().sendMessage("bad time").queue();
 	}
-	
 }
