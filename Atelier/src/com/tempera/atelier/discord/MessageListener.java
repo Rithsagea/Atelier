@@ -49,7 +49,7 @@ public class MessageListener extends ListenerAdapter {
 	private void registerCommands(AtelierBot bot) {
 		AtelierCommand musicCommand = new MusicCommand(bot);
 		AtelierCommand characterCommand = new CharacterCommand(bot);
-		AtelierCommand waifuCommand = new WaifuCommand();
+		AtelierCommand waifuCommand = new WaifuCommand(bot);
 		
 		macroMap = new HashMap<>();
 		

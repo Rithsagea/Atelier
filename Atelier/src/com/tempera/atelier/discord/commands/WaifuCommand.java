@@ -5,10 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.tempera.atelier.AtelierBot;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.dnd.User;
 import com.tempera.util.NekoUtil;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class WaifuCommand extends GroupCommand {
@@ -48,7 +51,9 @@ public class WaifuCommand extends GroupCommand {
 		}
 	}
 	
-	public WaifuCommand() {
+	private MenuManager menuManager;
+	
+	public WaifuCommand(AtelierBot bot) {
 		CommandRegistry registry = this.getCommandRegistry();
 		
 		registry.registerCommand(new WaifuSubCommand("cat", NekoUtil::getCat));
@@ -56,6 +61,8 @@ public class WaifuCommand extends GroupCommand {
 		registry.registerCommand(new WaifuSubCommand("catboy", NekoUtil::getCatboy));
 		registry.registerCommand(new WaifuSubCommand("catgirl", NekoUtil::getCatgirl));
 		registry.registerCommand(new WaifuSubCommand("foxgirl", NekoUtil::getFoxgirl));
+		
+		menuManager = bot.getMenuManager();
 	}
 	
 	@Override
@@ -75,11 +82,16 @@ public class WaifuCommand extends GroupCommand {
 
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
-		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.CYAN);
-		eb.setImage(NekoUtil.getWaifu());
+//		EmbedBuilder eb = new EmbedBuilder();
+//		eb.setColor(Color.CYAN);
+//		eb.setImage(NekoUtil.getWaifu());
 		
-		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+		WaifuMenu menu = new WaifuMenu();
+		
+		event.getChannel().sendMessage("Pick a type of waifu").queue((Message message) -> {
+			menu.initialize(message);
+			menuManager.addMenu(message.getIdLong(), menu);
+		});
 	}
 	
 }
