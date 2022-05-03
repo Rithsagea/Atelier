@@ -8,7 +8,7 @@ public enum Skill implements Proficiency {
 	DECEPTION("dec", Ability.CHARISMA),
 	HISTORY("his", Ability.INTELLIGENCE),
 	INSIGHT("ins", Ability.WISDOM),
-	INTIMIDATION("int", Ability.CHARISMA),
+	INTIMIDATION("itm", Ability.CHARISMA),
 	INVESTIGATION("inv", Ability.INTELLIGENCE),
 	MEDICINE("med", Ability.WISDOM),
 	NATURE("nat", Ability.INTELLIGENCE),

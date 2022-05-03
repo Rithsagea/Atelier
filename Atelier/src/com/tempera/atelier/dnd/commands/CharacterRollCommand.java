@@ -11,6 +11,10 @@ import com.tempera.atelier.dnd.types.enums.Skill;
 import com.tempera.util.WordUtil;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
 public class CharacterRollCommand extends CharacterSubCommand{
 
@@ -35,9 +39,19 @@ public class CharacterRollCommand extends CharacterSubCommand{
 
 	@Override
 	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
+		Builder menu = SelectMenu.create("menu:roll")
+		.setPlaceholder("Choose what to roll for")
+		.setRequiredRange(1, 1);
+		for(Ability a : Ability.values())
+			menu.addOption(WordUtil.capitalize(a.name().replace("_", " ")), a.getLabel());
+		for(Skill s : Skill.values())
+			menu.addOption(WordUtil.capitalize(s.name().replace("_", " ")), s.getLabel());
+		SelectMenu m = menu.build();
+		
 		if(args.size() == 1)
 		{
-			event.getChannel().sendMessage("Invalid input").queue();
+			event.getChannel().sendMessage("Please select a valid input")
+			.setActionRow(m).queue();
 			return;
 		}
 		for(Ability a : Ability.values())
@@ -58,7 +72,7 @@ public class CharacterRollCommand extends CharacterSubCommand{
 				return;
 				}
 		}
-		event.getChannel().sendMessage("Invalid input").queue();
+		event.getChannel().sendMessage("Invalid input").setActionRow(m).queue();
 		return;
 	}	
 }
