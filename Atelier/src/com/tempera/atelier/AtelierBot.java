@@ -9,8 +9,8 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rithsagea.util.container.ContainerManager;
 import com.tempera.atelier.discord.LoginListener;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.MessageListener;
 import com.tempera.atelier.discord.commands.CommandRegistry;
 import com.tempera.atelier.discord.music.AtelierAudioManager;
@@ -31,7 +31,7 @@ public class AtelierBot {
 	
 	private AtelierAudioManager audioManager;
 	private CommandRegistry commandRegistry;
-	private ContainerManager containerManager;
+	private MenuManager menuManager;
 	
 	private boolean running;
 	
@@ -42,7 +42,7 @@ public class AtelierBot {
 		
 		db = new AtelierDB(config);
 		commandRegistry = new CommandRegistry();
-		containerManager = new ContainerManager();
+		menuManager = new MenuManager();
 		logger = LoggerFactory.getLogger("Atelier");
 		running = true;
 		
@@ -92,8 +92,8 @@ public class AtelierBot {
 		return audioManager;
 	}
 	
-	public ContainerManager getContainerManager() {
-		return containerManager;
+	public MenuManager getMenuManager() {
+		return menuManager;
 	}
 	
 	public void stop() {

@@ -21,6 +21,8 @@ import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.commands.CharacterCommand;
 import com.tempera.atelier.dnd.database.AtelierDB;
 
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -30,12 +32,14 @@ public class MessageListener extends ListenerAdapter {
 	private CommandRegistry reg;
 	private Config config;
 	private Logger logger;
+	private MenuManager menuManager;
 	
 	public MessageListener(AtelierBot bot) {
 		db = bot.getDatabase();
 		reg = bot.getCommandRegistry();
 		config = bot.getConfig();
 		logger = bot.getLogger();
+		menuManager = bot.getMenuManager();
 		
 		registerCommands(bot);
 	}
@@ -92,21 +96,26 @@ public class MessageListener extends ListenerAdapter {
 		}
 	}
 	
-//	@Override
-//	public void onButtonInteraction(ButtonInteractionEvent event) {
-//		AtelierMenu menu = menuManager.getMenu(event.getMessageIdLong());
-//		if(menu != null) menu.onButtonInteract(event);
-//		else {
-//			event.getMessage().editMessageComponents().queue();
-//		}
-//	}
-//	
-//	@Override
-//	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
-//		AtelierMenu menu = menuManager.getMenu(event.getMessageIdLong());
-//		if(menu != null) menu.onMenuSelect(event);
-//		else {
-//			event.getMessage().editMessageComponents().queue();
-//		}
-//	}
+	
+	//if the menu doesn't exist just nuke the components
+	
+	@Override
+	public void onButtonInteraction(ButtonInteractionEvent event) {
+		Menu m = menuManager.getMenu(event.getMessageIdLong());
+		if(m != null) {
+			m.onButtonInteract(event);
+		} else {
+			event.getMessage().editMessageComponents().queue();
+		}
+	}
+	
+	@Override
+	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+		Menu m = menuManager.getMenu(event.getMessageIdLong());
+		if(m != null) {
+			m.onSelectInteract(event);
+		} else {
+			event.getMessage().editMessageComponents().queue();
+		}
+	}
 }
