@@ -22,7 +22,7 @@ public class CharacterCommand extends GroupCommand {
 	public CharacterCommand(AtelierBot bot) {
 		db = bot.getDatabase();
 		CommandRegistry registry = this.getCommandRegistry();
-		registry.registerCommand(new CharacterRollCommand(db));
+		registry.registerCommand(new CharacterRollCommand(bot));
 		registry.registerCommand(new CharacterInfoCommand(db));
 	}
 	
