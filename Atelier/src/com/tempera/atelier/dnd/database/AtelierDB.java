@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.bson.UuidRepresentation;
 import org.mongojack.JacksonMongoCollection;
 import org.mongojack.ObjectMapperConfigurer;
+import org.reflections.Reflections;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -24,12 +25,9 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.tempera.atelier.Config;
+import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
-import com.tempera.atelier.dnd.types.character.classes.Rogue;
-import com.tempera.atelier.dnd.types.character.features.HitPointFeature;
-import com.tempera.atelier.dnd.types.character.features.ProficiencyFeature;
-import com.tempera.atelier.dnd.types.spread.PointBuySpread;
 
 public class AtelierDB {
 	
@@ -78,18 +76,9 @@ public class AtelierDB {
 	}
 	
 	private void registerSubtypes(ObjectMapper mapper) {
-		//ability spreads
-		mapper.registerSubtypes(
-				new NamedType(PointBuySpread.class, "pointBuy"));
-		
-		//character classes
-		mapper.registerSubtypes(
-				new NamedType(Rogue.class, "rogue"));
-		
-		//attributes
-		mapper.registerSubtypes(
-				new NamedType(ProficiencyFeature.class, "feature-proficiency"),
-				new NamedType(HitPointFeature.class, "feature-hit-points"));
+		for(Class<?> clazz : new Reflections("com.tempera.atelier.dnd.types").getTypesAnnotatedWith(IndexedItem.class)) {
+			mapper.registerSubtypes(new NamedType(clazz, clazz.getAnnotation(IndexedItem.class).value()));
+		}
 	}
 	
 	public void disconnect() {

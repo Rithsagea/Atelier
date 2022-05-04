@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.rithsagea.util.event.EventHandler;
+import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
@@ -13,6 +14,7 @@ import com.tempera.atelier.dnd.types.enums.Equipment;
 import com.tempera.atelier.dnd.types.enums.Proficiency;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
+@IndexedItem("feature-proficiencies")
 public class ProficiencyFeature implements Attribute {
 	private Set<Ability> savingProficiencies;
 	private Set<Skill> skillProficiencies;

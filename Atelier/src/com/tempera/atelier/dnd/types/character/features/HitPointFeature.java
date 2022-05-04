@@ -3,10 +3,12 @@ package com.tempera.atelier.dnd.types.character.features;
 import com.rithsagea.util.event.EventHandler;
 import com.rithsagea.util.rand.Dice;
 import com.rithsagea.util.rand.Die;
+import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 
+@IndexedItem("feature-hit-points")
 public class HitPointFeature implements Attribute {
 	
 	private Die hitDie;

@@ -1,11 +1,9 @@
 package com.tempera.atelier.discord.commands;
 
-import java.awt.Color;
-
 import com.tempera.atelier.discord.Menu;
+import com.tempera.util.EmbedUtil;
 import com.tempera.util.NekoUtil;
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
@@ -16,6 +14,7 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 public class WaifuMenu extends Menu {
 	
 	private String selectedWaifu = "waifu";
+	private String title = "Waifu";
 	
 	public WaifuMenu(Message message) {
 		super(message);
@@ -49,16 +48,13 @@ public class WaifuMenu extends Menu {
 			default: url = NekoUtil.getWaifu(); break;
 		}
 		
-		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.CYAN);
-		eb.setImage(url);
-		
-		event.replyEmbeds(eb.build()).queue();
+		event.replyEmbeds(EmbedUtil.getEmbed(url, title)).queue();
 	}
 
 	@Override
 	public void onSelectInteract(SelectMenuInteractionEvent event) {
 		selectedWaifu = event.getSelectedOptions().get(0).getValue();
+		title = event.getSelectedOptions().get(0).getLabel();
 		event.deferEdit().queue();
 	}
 
