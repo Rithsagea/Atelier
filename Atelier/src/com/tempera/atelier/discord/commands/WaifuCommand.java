@@ -86,11 +86,8 @@ public class WaifuCommand extends GroupCommand {
 //		eb.setColor(Color.CYAN);
 //		eb.setImage(NekoUtil.getWaifu());
 		
-		WaifuMenu menu = new WaifuMenu();
-		
 		event.getChannel().sendMessage("Pick a type of waifu").queue((Message message) -> {
-			menu.initialize(message);
-			menuManager.addMenu(message.getIdLong(), menu);
+			menuManager.addMenu(message.getIdLong(), new WaifuMenu(message));
 		});
 	}
 	

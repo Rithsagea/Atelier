@@ -13,12 +13,13 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 
-public class WaifuMenu implements Menu {
+public class WaifuMenu extends Menu {
 	
 	private String selectedWaifu = "waifu";
 	
-	@Override
-	public void initialize(Message message) {
+	public WaifuMenu(Message message) {
+		super(message);
+		
 		SelectMenu.Builder b = SelectMenu.create("waifuMenu");
 		b.setPlaceholder("Waifu Type");
 		b.addOption("Cat", "cat");
