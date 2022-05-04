@@ -14,7 +14,7 @@ import com.tempera.atelier.dnd.types.enums.Equipment;
 import com.tempera.atelier.dnd.types.enums.Proficiency;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
-@IndexedItem("feature_proficiencies")
+@IndexedItem("feature-proficiencies")
 public class ProficiencyFeature implements Attribute {
 	private Set<Ability> savingProficiencies;
 	private Set<Skill> skillProficiencies;
