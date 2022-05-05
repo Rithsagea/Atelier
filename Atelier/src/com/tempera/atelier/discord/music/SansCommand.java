@@ -30,7 +30,14 @@ public class SansCommand extends MusicSubCommand{
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		audioHandler.loadTrack("https://www.youtube.com/watch?v=wDgQdr8ZkTw");
-		event.getChannel().sendMessage("bad time").queue();
+		int times;
+		if (args.size() > 1)
+			times = Integer.parseInt(args.get(1));
+		else
+			times = 1;
+		for (int i = 0 ; i < times; i++) {
+			audioHandler.loadTrack("https://www.youtube.com/watch?v=wDgQdr8ZkTw");
+			event.getChannel().sendMessage("bad time").queue();
+		}
 	}
 }
