@@ -3,6 +3,7 @@ package com.tempera.atelier.discord.music;
 import java.util.Arrays;
 import java.util.List;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.User;
 
@@ -28,7 +29,7 @@ public class PlayCommand extends MusicSubCommand{
 	public PermissionLevel getLevel() {
 		return PermissionLevel.USER;
 	}
-
+	
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
 		audioHandler.loadTrack(args.get(1));

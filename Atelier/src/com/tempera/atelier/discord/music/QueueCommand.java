@@ -44,8 +44,8 @@ public class QueueCommand extends MusicSubCommand{
 		int pageMax = (int)Math.ceil((double)queueSize / 10);
 		int page = 1;
 		
-		if (args.size() > 2) {
-			page = Math.min(Integer.parseInt(args.get(2)), pageMax);
+		if (args.size() > 1) {
+			page = Math.min(Integer.parseInt(args.get(1)), pageMax);
 		}
 		
 		for (int i = (page-1)*10; i < queueSize && i < page*10; i++) {
