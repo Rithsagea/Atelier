@@ -49,6 +49,7 @@
             <configuration>
               <sources>
                 <source>lib</source>
+                <source>resources</source>
               </sources>
             </configuration>
           </execution>
