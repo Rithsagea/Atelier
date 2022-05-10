@@ -1,5 +1,6 @@
 package com.tempera.atelier.discord.music;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.tempera.atelier.discord.commands.GroupCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.User;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class MusicCommand extends GroupCommand {
@@ -58,6 +60,14 @@ public class MusicCommand extends GroupCommand {
 	
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
-		
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.ORANGE);
+		eb.setTitle("List of music commands:");
+		eb.addField("join", "Joins the user's current voice channel", true);
+		eb.addField("play [URL]", "Adds a song or playlist from a URL if possible", true);
+		eb.addField("playing / np", "Displays currently playing song", true);
+		eb.addField("queue", "Displays queued up songs", true);
+		eb.addField("sans", "bad time", true);
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 }
