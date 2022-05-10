@@ -32,9 +32,9 @@ public class PlayCommand extends MusicSubCommand{
 	
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
+		if (args.size() < 2)
+			event.getChannel().sendMessage("Missing URL!").queue();
 		audioHandler.loadTrack(args.get(1));
-		event.getChannel();
-	
 	}
 	
 }
