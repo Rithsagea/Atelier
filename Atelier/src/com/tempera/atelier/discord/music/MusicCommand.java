@@ -66,7 +66,7 @@ public class MusicCommand extends GroupCommand {
 		eb.addField("join", "Joins the user's current voice channel", true);
 		eb.addField("play [URL]", "Adds a song or playlist from a URL if possible", true);
 		eb.addField("playing / np", "Displays currently playing song", true);
-		eb.addField("queue", "Displays queued up songs", true);
+		eb.addField("queue [PAGE NUM]", "Displays queued up songs. Optional page number as a second argument.", true);
 		eb.addField("sans", "bad time", true);
 		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
