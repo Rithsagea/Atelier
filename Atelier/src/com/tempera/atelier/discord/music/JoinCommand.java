@@ -44,6 +44,8 @@ public class JoinCommand extends MusicSubCommand{
 		if(channel == null) return;
 		manager.setSendingHandler(audioHandler);
 		manager.openAudioConnection(channel);
+		
+		event.getChannel().sendMessage(String.format("Joined channel `[%s]`", channel.getName())).queue();
 	}
 
 }

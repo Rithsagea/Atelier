@@ -1,5 +1,6 @@
 package com.tempera.atelier.discord.music;
 
+import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -16,7 +17,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadResultHandler, AudioSendHandler {
 
@@ -24,10 +27,12 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	private AudioPlayerManager manager;
 	private AudioPlayer player;
 	private AudioFrame frame;
+	private MessageReceivedEvent event;
 	
-	public AtelierAudioHandler(AudioPlayerManager manager, AudioPlayer player) {
+	public AtelierAudioHandler(AudioPlayerManager manager, AudioPlayer player, MessageReceivedEvent event) {
 		this.manager = manager;
 		this.player = player;
+		this.event = event;
 		this.queue = new LinkedBlockingQueue<>();
 		
 		player.addListener(this);
@@ -90,22 +95,30 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	
 	@Override
 	public void trackLoaded(AudioTrack track) {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.GREEN);
+		eb.setTitle(String.format("Added - `%s`", track.getInfo().title));
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 		queue(track);
 	}
 
 	@Override
 	public void playlistLoaded(AudioPlaylist playlist) {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.GREEN);
+		eb.setTitle(String.format("Added %d songs", playlist.getTracks().size()));
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 		playlist.getTracks().forEach(this::queue);
 	}
 
 	@Override
 	public void noMatches() {
-		//TODO tell user we have nothing
+		event.getChannel().sendMessage("No matches!").queue();
 	}
 
 	@Override
 	public void loadFailed(FriendlyException exception) {
-		//TODO tell user stuff broke
+		event.getChannel().sendMessage("Something unexpected happened!").queue();
 	}
 
 }

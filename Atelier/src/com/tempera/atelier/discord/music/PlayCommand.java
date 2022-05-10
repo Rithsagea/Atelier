@@ -33,6 +33,8 @@ public class PlayCommand extends MusicSubCommand{
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
 		audioHandler.loadTrack(args.get(1));
+		event.getChannel();
+	
 	}
 	
 }

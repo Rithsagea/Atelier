@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class AtelierAudioManager {
 	private AudioPlayerManager playerManager;
@@ -24,9 +25,10 @@ public class AtelierAudioManager {
 		playerManager.shutdown();
 	}
 	
-	public AtelierAudioHandler getAudioHandler(Guild guild) {
+	public AtelierAudioHandler getAudioHandler(MessageReceivedEvent event) {
+		Guild guild = event.getGuild();
 		if(!audioHandlers.containsKey(guild)) {
-			audioHandlers.put(guild, new AtelierAudioHandler(playerManager, playerManager.createPlayer()));
+			audioHandlers.put(guild, new AtelierAudioHandler(playerManager, playerManager.createPlayer(), event));
 		}
 		
 		return audioHandlers.get(guild);

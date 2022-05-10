@@ -17,7 +17,7 @@ public abstract class MusicSubCommand implements AtelierCommand {
 	
 	@Override
 	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		execute(audioManager.getAudioHandler(event.getGuild()), user, args, event);
+		execute(audioManager.getAudioHandler(event), user, args, event);
 	}
 	
 	public abstract void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event);
