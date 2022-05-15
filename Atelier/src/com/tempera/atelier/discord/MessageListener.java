@@ -19,6 +19,7 @@ import com.tempera.atelier.discord.commands.WaifuCommand;
 import com.tempera.atelier.discord.music.MusicCommand;
 import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.commands.CharacterCommand;
+import com.tempera.atelier.dnd.commands.edit.EditCommand;
 import com.tempera.atelier.dnd.database.AtelierDB;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -50,17 +51,20 @@ public class MessageListener extends ListenerAdapter {
 		AtelierCommand musicCommand = new MusicCommand(bot);
 		AtelierCommand characterCommand = new CharacterCommand(bot);
 		AtelierCommand waifuCommand = new WaifuCommand(bot);
+		AtelierCommand editCommand = new EditCommand(bot);
 		
 		macroMap = new HashMap<>();
 		
 		macroMap.put("w", waifuCommand);
 		macroMap.put("m", musicCommand);
 		macroMap.put("d", characterCommand);
+		macroMap.put("e", editCommand);
 		
 		reg.registerCommand(new StopCommand(bot));
 		reg.registerCommand(waifuCommand);
 		reg.registerCommand(musicCommand);
 		reg.registerCommand(characterCommand);
+		reg.registerCommand(editCommand);
 	}
 	
 	@Override

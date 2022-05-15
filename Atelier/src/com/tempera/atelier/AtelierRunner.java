@@ -5,7 +5,5 @@ public class AtelierRunner {
 		AtelierBot bot = new AtelierBot("config.properties");
 		
 		bot.init();
-		
-		while(bot.isRunning());
 	}
 }

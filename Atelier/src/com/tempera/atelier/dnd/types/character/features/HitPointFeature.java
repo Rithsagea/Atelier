@@ -21,6 +21,11 @@ public class HitPointFeature implements Attribute {
 		this.hitDie = new Die(1, diceValue);
 	}
 	
+	@Override
+	public String getName() {
+		return "Hit Points";
+	}
+	
 	@EventHandler
 	public void onLoadHitPoints(LoadHitPointsEvent e) {
 		e.addHitDice(new Dice(hitDie));

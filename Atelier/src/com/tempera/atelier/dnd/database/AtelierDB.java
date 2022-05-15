@@ -9,6 +9,7 @@ import org.bson.UuidRepresentation;
 import org.mongojack.JacksonMongoCollection;
 import org.mongojack.ObjectMapperConfigurer;
 import org.reflections.Reflections;
+import org.reflections.util.ConfigurationBuilder;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -76,7 +77,11 @@ public class AtelierDB {
 	}
 	
 	private void registerSubtypes(ObjectMapper mapper) {
-		for(Class<?> clazz : new Reflections("com.tempera.atelier.dnd.types").getTypesAnnotatedWith(IndexedItem.class)) {
+		String basePackage = "";
+//		basePackage = "com.tempera.atelier.dnd.types";
+		ConfigurationBuilder cb = new ConfigurationBuilder()
+				.forPackage(basePackage);
+		for(Class<?> clazz : new Reflections(cb).getTypesAnnotatedWith(IndexedItem.class)) {
 			mapper.registerSubtypes(new NamedType(clazz, clazz.getAnnotation(IndexedItem.class).value()));
 		}
 	}

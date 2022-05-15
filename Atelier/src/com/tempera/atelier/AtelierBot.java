@@ -97,10 +97,12 @@ public class AtelierBot {
 	}
 	
 	public void stop() {
-		jda.shutdown();
+		running = false;
+		jda.shutdownNow();
 		audioManager.shutdown();
 		db.disconnect();
-		running = false;
+		
+		System.exit(0);
 	}
 		
 	public boolean isRunning() {

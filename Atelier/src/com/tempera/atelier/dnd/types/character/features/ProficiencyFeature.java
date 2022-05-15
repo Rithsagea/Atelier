@@ -36,6 +36,11 @@ public class ProficiencyFeature implements Attribute {
 		}
 	}
 	
+	@Override
+	public String getName() {
+		return "Proficiencies";
+	}
+	
 	@EventHandler
 	private void onLoadSavingProficiency(LoadSavingProficiencyEvent e) {
 		for(Ability ability : savingProficiencies) e.addProficiency(ability);
