@@ -4,19 +4,25 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
+import com.tempera.atelier.AtelierBot;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.User;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class QueueCommand extends MusicSubCommand{
 
-	public QueueCommand(AtelierAudioManager audioManager) {
-		super(audioManager);
+	private MenuManager buttons;
+	
+	public QueueCommand(AtelierBot bot) {
+		super(bot.getAudioManager());
+		buttons = bot.getMenuManager();
 	}
 
 	@Override
@@ -65,9 +71,12 @@ public class QueueCommand extends MusicSubCommand{
 			eb.setFooter(String.format("Displaying songs %d to %d out of %d", (page-1)*10+1,
 					Math.min(page*10, queueSize), queueSize));
 		}
-		
 		bt.setEmbeds(eb.build());
-		event.getChannel().sendMessage(bt.build()).queue();
+		
+		final int passPage = page;
+		event.getChannel().sendMessage(bt.build()).queue((Message message) -> {
+			buttons.addMenu(message.getIdLong(), new QButton(message, passPage));
+		});
 	}
 
 }
