@@ -55,27 +55,37 @@ public class CharacterRollCommand extends CharacterSubCommand{
 			});
 			return;
 		}
-		for(Ability a : Ability.values())
+		String s = calculate(args.get(1), sheet);
+		if(s != null)
 		{
-			if(args.get(1).equals(a.getLabel()))
-				{
-				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(a);
-				event.getChannel().sendMessage(WordUtil.capitalize(a.name().replace("_", " ")) + " roll: " + roll).queue();
-				return;
-				}
+			event.getChannel().sendMessage(s).queue();
+			return;
 		}
-		for(Skill s : Skill.values())
-		{
-			if(args.get(1).equals(s.getLabel()))
-				{
-				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(s.getAbility());
-				event.getChannel().sendMessage(WordUtil.capitalize(s.name().replace("_", " ")) + " roll: " + roll).queue();
-				return;
-				}
-		}
+		
 		event.getChannel().sendMessage("Invalid input").queue((Message message) -> {
 			menuManager.addMenu(message.getIdLong(), new CharacterMenu(message, sheet));
 		});
 		return;
+	}
+	
+	public static String calculate(String string, Sheet sheet)
+	{
+		for(Ability a : Ability.values())
+		{
+			if(string.equals(a.getLabel()))
+				{
+				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(a);
+				return WordUtil.capitalize(a.name().replace("_", " ")) + " roll: " + roll;
+				}
+		}
+		for(Skill s : Skill.values())
+		{
+			if(string.equals(s.getLabel()))
+				{
+				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(s.getAbility());
+				return WordUtil.capitalize(s.name().replace("_", " ")) + " roll: " + roll;
+				}
+		}
+		return null;
 	}
 }

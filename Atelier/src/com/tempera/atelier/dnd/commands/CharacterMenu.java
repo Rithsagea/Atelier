@@ -38,26 +38,8 @@ public class CharacterMenu extends Menu{
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		for(Ability a : Ability.values())
-		{
-			if(selected.equals(a.getLabel()))
-				{
-				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(a);
-				event.reply(WordUtil.capitalize(a.name().replace("_", " ")) + " roll: " + roll).queue();
-				return;
-				}
-		}
-		for(Skill s : Skill.values())
-		{
-			if(selected.equals(s.getLabel()))
-				{
-				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(s.getAbility());
-				event.reply(WordUtil.capitalize(s.name().replace("_", " ")) + " roll: " + roll).queue();
-				return;
-				}
-		}
-		
-		
+		String s = CharacterRollCommand.calculate(selected, sheet);
+		event.reply(s).queue();
 	}
 
 	@Override
