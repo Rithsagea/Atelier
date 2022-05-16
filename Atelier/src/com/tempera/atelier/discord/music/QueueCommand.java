@@ -39,7 +39,7 @@ public class QueueCommand extends MusicSubCommand{
 	public PermissionLevel getLevel() {
 		return PermissionLevel.USER;
 	}
-
+	
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
 		EmbedBuilder eb = new EmbedBuilder();
@@ -49,20 +49,23 @@ public class QueueCommand extends MusicSubCommand{
 		int queueSize = audioHandler.getQueue().size();
 		int pageMax = (int)Math.ceil((double)queueSize / 10);
 		int page = 1;
-		
+
 		if (args.size() > 1) {
 			page = Math.min(Integer.parseInt(args.get(1)), pageMax);
 		}
-		
+
 		for (int i = (page-1)*10; i < queueSize && i < page*10; i++) {
 			msg.append(String.format("`[%d]` - **%s**\n",
 					i + 1, 
 					audioHandler.getQueue().get(i).getInfo().title));
 		}
-	
+
 		if (msg.length() == 0) {
 			eb.setTitle("No songs in queue!");
 			bt.setActionRows(ActionRow.of(Button.success("asdf", "bad time")));
+			
+			bt.setEmbeds(eb.build());
+			event.getChannel().sendMessage(bt.build()).queue();
 		}
 		else {
 			eb.setTitle(queueSize + (queueSize > 1 ?" songs" :" song"));
@@ -70,13 +73,13 @@ public class QueueCommand extends MusicSubCommand{
 			eb.appendDescription(String.format("Page %d of %d", page, pageMax));
 			eb.setFooter(String.format("Displaying songs %d to %d out of %d", (page-1)*10+1,
 					Math.min(page*10, queueSize), queueSize));
+			
+			bt.setEmbeds(eb.build());
+			int passPage = page;
+			event.getChannel().sendMessage(bt.build()).queue((Message message) -> {
+				buttons.addMenu(message.getIdLong(), new QButton(message, passPage));
+			});
 		}
-		bt.setEmbeds(eb.build());
-		
-		final int passPage = page;
-		event.getChannel().sendMessage(bt.build()).queue((Message message) -> {
-			buttons.addMenu(message.getIdLong(), new QButton(message, passPage));
-		});
 	}
 
 }
