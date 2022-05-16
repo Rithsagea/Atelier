@@ -3,7 +3,6 @@ package com.tempera.atelier.discord.music;
 import java.util.Arrays;
 import java.util.List;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.User;
 

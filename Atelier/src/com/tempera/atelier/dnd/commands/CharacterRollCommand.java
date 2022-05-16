@@ -5,20 +5,14 @@ import java.util.List;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.commands.PermissionLevel;
-import com.tempera.atelier.discord.commands.WaifuMenu;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
-import com.tempera.atelier.dnd.database.AtelierDB;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Skill;
 import com.tempera.util.WordUtil;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
 public class CharacterRollCommand extends CharacterSubCommand{
 
