@@ -81,7 +81,7 @@ public class MessageListener extends ListenerAdapter {
 					message.substring(config.getCommandPrefix().length()).split(" ")));
 			
 			AtelierCommand command = reg.getCommand(args.get(0));
-			if(command != null && command.getLevel().ordinal() <= user.getLevel().ordinal()) {
+			if(command != null && command.getLevel().compareTo(user.getLevel()) <= 0) {
 				logger.info("Received Command: " + command.getLabel() + " from " + author);
 				command.execute(user, Collections.unmodifiableList(args), event);
 			}
@@ -93,6 +93,8 @@ public class MessageListener extends ListenerAdapter {
 						message.substring(config.getCommandPrefix().length() + cmd.getKey().length())
 						.split(" ")));
 				AtelierCommand command = cmd.getValue();
+				if(command.getLevel().compareTo(user.getLevel()) > 0) return;
+				
 				args.add(0, command.getLabel());
 				logger.info("Received Macro: " + command.getLabel() + " from " + author);
 				command.execute(user, Collections.unmodifiableList(args), event);
