@@ -27,6 +27,7 @@ public class DBTest {
 		
 		sheet.addClass(new Rogue());
 		sheet.reload();
+		sheet.setHitPoints(10000);
 		
 		System.out.println("User: " + user);
 		System.out.println("Name: " + sheet.getName());
