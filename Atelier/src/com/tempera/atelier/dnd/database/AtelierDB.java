@@ -77,7 +77,10 @@ public class AtelierDB {
 		
 		if(!OFFLINE_MODE) {
 			userCollection.find().forEach((User user) -> users.put(user.getId(), user));
-			sheetCollection.find().forEach((Sheet sheet) -> sheets.put(sheet.getId(), sheet));
+			sheetCollection.find().forEach((Sheet sheet) -> {
+				sheets.put(sheet.getId(), sheet);
+				sheet.reload();
+			});
 		}
 	}
 	
