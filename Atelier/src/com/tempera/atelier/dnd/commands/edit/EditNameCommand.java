@@ -2,27 +2,17 @@ package com.tempera.atelier.dnd.commands.edit;
 
 import java.util.List;
 
-import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.commands.AtelierCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
-import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
-import com.tempera.atelier.dnd.database.AtelierDB;
 
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class ListSheetCommand implements AtelierCommand {
+public class EditNameCommand implements AtelierCommand {
 
-	private AtelierDB db;
-	
-	public ListSheetCommand(AtelierBot bot) {
-		db = bot.getDatabase();
-	}
-	
 	@Override
 	public String getLabel() {
-		return "list";
+		return "name";
 	}
 
 	@Override
@@ -37,13 +27,13 @@ public class ListSheetCommand implements AtelierCommand {
 
 	@Override
 	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		MessageBuilder b = new MessageBuilder();
-		for(Sheet sheet : db.listSheets()) {
-			b.append(sheet);
-			b.append("\n");
+		if(args.size() >= 2) {
+			user.getSelectedSheet().setName(args.get(1));
+			event.getChannel().sendMessage("Set character's name to " + args.get(1)).queue();
+			return;
 		}
 		
-		event.getChannel().sendMessage(b.build()).queue();
+		event.getChannel().sendMessage("Character name: " + user.getSelectedSheet().getName()).queue();
 	}
 	
 }

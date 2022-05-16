@@ -74,6 +74,11 @@ public class AtelierDB {
 		
 		users = new HashMap<>();
 		sheets = new HashMap<>();
+		
+		if(!OFFLINE_MODE) {
+			userCollection.find().forEach((User user) -> users.put(user.getId(), user));
+			sheetCollection.find().forEach((Sheet sheet) -> sheets.put(sheet.getId(), sheet));
+		}
 	}
 	
 	private void registerSubtypes(ObjectMapper mapper) {
@@ -114,12 +119,6 @@ public class AtelierDB {
 	}
 	
 	public Collection<Sheet> listSheets() {
-		if(!OFFLINE_MODE) this.sheetCollection.find()
-			.forEach((Sheet sheet) -> {
-				if(!sheets.containsKey(sheet.getId()))
-					sheets.put(sheet.getId(), sheet);
-			});
-		
 		return sheets.values();
 	}
 	
@@ -156,6 +155,7 @@ public class AtelierDB {
 	}
 	
 	public void addSheet(Sheet sheet) {
+		updateSheet(sheet);
 		sheets.put(sheet.getId(), sheet);
 	}
 	

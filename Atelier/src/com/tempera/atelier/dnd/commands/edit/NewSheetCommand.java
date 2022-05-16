@@ -39,7 +39,7 @@ public class NewSheetCommand implements AtelierCommand {
 		Sheet sheet = new Sheet();
 		db.addSheet(sheet);
 		
-		event.getChannel().sendMessageFormat("Created new sheet id:[%s]", sheet.getId()).queue();
+		event.getChannel().sendMessageFormat("Created new sheet %s", sheet.getId()).queue();
 	}
 	
 }

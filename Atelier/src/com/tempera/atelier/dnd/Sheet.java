@@ -57,6 +57,11 @@ public class Sheet implements Listener {
 		this(UUID.randomUUID());
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("%s [%s]", name, id);
+	}
+	
 	//EVENT HANDLERS
 	
 	public void reload() {

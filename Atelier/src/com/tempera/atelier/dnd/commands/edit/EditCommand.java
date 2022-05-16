@@ -12,11 +12,14 @@ import com.tempera.atelier.dnd.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class EditCommand extends GroupCommand {
-
+	
 	public EditCommand(AtelierBot bot) {
 		CommandRegistry reg = getCommandRegistry();
 		reg.registerCommand(new ListSheetCommand(bot));
 		reg.registerCommand(new NewSheetCommand(bot));
+		reg.registerCommand(new SelectSheetCommand(bot));
+		
+		reg.registerCommand(new EditNameCommand());
 	}
 	
 	@Override
@@ -36,7 +39,7 @@ public class EditCommand extends GroupCommand {
 
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
-		event.getChannel().sendMessage("PCO is 100%").queue();
+		event.getChannel().sendMessage("Currently editing: " + user.getSelectedSheet()).queue();
 	}
 
 }

@@ -17,6 +17,8 @@ public class User {
 	
 	private PermissionLevel level;
 	
+	private transient Sheet selectedSheet;
+	
 	@JsonCreator
 	public User(@Id long id) {
 		this.id = id;
@@ -47,6 +49,10 @@ public class User {
 		return level;
 	}
 	
+	public Sheet getSelectedSheet() {
+		return selectedSheet;
+	}
+	
 	//MUTATORS
 	
 	public void setName(String name) {
@@ -59,5 +65,9 @@ public class User {
 	
 	public void setLevel(PermissionLevel level) {
 		this.level = level;
+	}
+	
+	public void setSelectedSheet(Sheet sheet) {
+		selectedSheet = sheet;
 	}
 }
