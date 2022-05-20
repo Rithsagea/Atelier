@@ -22,7 +22,7 @@ public class MusicCommand extends GroupCommand {
 		audioManager = bot.getAudioManager();
 		CommandRegistry registry = this.getCommandRegistry();
 		registry.registerCommand(new PlayCommand(audioManager));
-		registry.registerCommand(new QueueCommand(audioManager));
+		registry.registerCommand(new QueueCommand(bot));
 		registry.registerCommand(new JoinCommand(audioManager));
 		registry.registerCommand(new PlayingCommand(audioManager));
 		registry.registerCommand(new SansCommand(audioManager));
