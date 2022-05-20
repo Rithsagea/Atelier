@@ -21,16 +21,13 @@ public class QButton extends Menu{
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
 		event.deferEdit().queue();
-		if (event.getComponentId().equals("prev")) {
+		if (event.getComponentId().equals("prev")) 
 			queueMsg.setPage(queueMsg.getPage() - 1);
-			queueMsg.calcQueue();
-			queueMsg.send(event.getChannel());
-		}
-		else if (event.getComponentId().equals("next")) {
+		else if (event.getComponentId().equals("next")) 
 			queueMsg.setPage(queueMsg.getPage() + 1);
-			queueMsg.calcQueue();
-			queueMsg.send(event.getChannel());
-		}
+		
+		queueMsg.calcQueue();
+		queueMsg.send(event.getChannel());
 	}
 
 	@Override
