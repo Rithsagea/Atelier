@@ -1,7 +1,6 @@
 package com.tempera.atelier.discord.music;
 
 import com.tempera.atelier.discord.Menu;
-import com.tempera.atelier.discord.MenuManager;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -21,6 +20,7 @@ public class QButton extends Menu{
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
+		event.reply("").queue();
 		if (event.getComponentId().equals("prev")) {
 			queueMsg.setPage(queueMsg.getPage() - 1);
 			queueMsg.calcQueue();

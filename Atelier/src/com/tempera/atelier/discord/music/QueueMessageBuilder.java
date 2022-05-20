@@ -33,26 +33,23 @@ public class QueueMessageBuilder extends MessageBuilder {
 
 		page = Math.min(page, pageMax);
 
-		for (int i = (page-1)*10; i < queueSize && i < page*10; i++) {
-			msg.append(String.format("`[%d]` - **%s**\n",
-					i + 1, 
-					handler.getQueue().get(i).getInfo().title));
-		}
-
-		if (msg.length() == 0) {
-			eb.setTitle("No songs in queue!");
-			this.setActionRows(ActionRow.of(Button.success("asdf", "bad time")));
-			this.setEmbeds(eb.build());
-		}
-		else {
+		if (queueSize > 0) {
+			for (int i = (page-1)*10; i < queueSize && i < page*10; i++) {
+				msg.append(String.format("`[%d]` - **%s**\n",
+						i + 1, 
+						handler.getQueue().get(i).getInfo().title));
+			}
 			eb.setTitle(queueSize + (queueSize > 1 ?" songs" :" song"));
 			eb.addField("Queue:", msg.toString(), true);
 			eb.appendDescription(String.format("Page %d of %d", page, pageMax));
 			eb.setFooter(String.format("Displaying songs %d to %d out of %d", (page-1)*10+1,
 					Math.min(page*10, queueSize), queueSize));
-
-			this.setEmbeds(eb.build());
 		}
+		else {
+			eb.setTitle("No songs in queue!");
+			this.setActionRows(ActionRow.of(Button.success("asdf", "bad time")));
+		}
+		this.setEmbeds(eb.build());
 	}
 
 	public void setPage(int num) {
@@ -72,4 +69,5 @@ public class QueueMessageBuilder extends MessageBuilder {
 		else
 			channel.sendMessage(this.build()).queue();
 	}
+	
 }
