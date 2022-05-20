@@ -20,7 +20,7 @@ public class QButton extends Menu{
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		event.reply("").queue();
+		event.deferEdit().queue();
 		if (event.getComponentId().equals("prev")) {
 			queueMsg.setPage(queueMsg.getPage() - 1);
 			queueMsg.calcQueue();
