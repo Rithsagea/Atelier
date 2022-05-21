@@ -8,7 +8,7 @@ import com.tempera.atelier.dnd.types.enums.Ability;
 
 @IndexedItem("point-buy")
 public class PointBuySpread implements AbilitySpread {
-
+	
 	private Map<Ability, Integer> scores;
 	private int points;
 	
@@ -50,6 +50,23 @@ public class PointBuySpread implements AbilitySpread {
 	public int getBaseScore(Ability ability) {
 		if(!scores.containsKey(ability)) scores.put(ability, 8); // default value
 		return scores.get(ability);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("PointBuy: [");
+		String prefix = "";
+		for(Ability ability : Ability.values()) {
+			builder.append(prefix);
+			builder.append(getBaseScore(ability));
+			prefix = ", ";
+		}
+		builder.append("] [");
+		builder.append(points);
+		builder.append("]");
+		
+		return builder.toString();
 	}
 	
 	/**

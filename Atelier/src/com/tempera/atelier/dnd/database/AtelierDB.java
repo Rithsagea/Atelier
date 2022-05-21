@@ -45,6 +45,8 @@ public class AtelierDB {
 	private Map<Long, User> users;
 	private Map<UUID, Sheet> sheets;
 	
+	private TypeRegistry typeRegistry;
+	
 	public AtelierDB(Config config) {
 		MongoClientSettings settings = MongoClientSettings.builder()
 				.applyConnectionString(new ConnectionString(config.getDatabaseUrl()))
@@ -89,8 +91,14 @@ public class AtelierDB {
 //		basePackage = "com.tempera.atelier.dnd.types";
 		ConfigurationBuilder cb = new ConfigurationBuilder()
 				.forPackage(basePackage);
+		
+		typeRegistry = new TypeRegistry();
+		
 		for(Class<?> clazz : new Reflections(cb).getTypesAnnotatedWith(IndexedItem.class)) {
-			mapper.registerSubtypes(new NamedType(clazz, clazz.getAnnotation(IndexedItem.class).value()));
+			String id = clazz.getAnnotation(IndexedItem.class).value();
+			mapper.registerSubtypes(new NamedType(clazz, id));
+			
+			typeRegistry.registerType(id, clazz);
 		}
 	}
 	
@@ -172,5 +180,9 @@ public class AtelierDB {
 		for(Sheet sheet : sheets.values()) {
 			updateSheet(sheet);
 		}
+	}
+	
+	public TypeRegistry getTypeRegistry() {
+		return typeRegistry;
 	}
 }
