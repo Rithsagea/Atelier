@@ -10,7 +10,6 @@ import com.tempera.atelier.dnd.User;
 import com.tempera.util.EmbedUtil;
 import com.tempera.util.NekoUtil;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class WaifuCommand extends GroupCommand {
@@ -79,9 +78,7 @@ public class WaifuCommand extends GroupCommand {
 
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
-		event.getChannel().sendMessage("Pick a type of waifu").queue((Message message) -> {
-			menuManager.addMenu(message.getIdLong(), new WaifuMenu(message));
-		});
+		menuManager.addMenu(event.getChannel(), new WaifuMenu());
 	}
 	
 }

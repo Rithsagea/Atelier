@@ -4,20 +4,22 @@ import com.tempera.atelier.discord.Menu;
 import com.tempera.util.EmbedUtil;
 import com.tempera.util.NekoUtil;
 
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 public class WaifuMenu extends Menu {
 	
 	private String selectedWaifu = "waifu";
 	private String title = "Waifu";
 	
-	public WaifuMenu(Message message) {
-		super(message);
+	@Override
+	public MessageAction initialize(MessageChannel channel) {
+		MessageAction res = channel.sendMessage("Pick a type of waifu");
 		
 		SelectMenu.Builder b = SelectMenu.create("waifuMenu");
 		b.setPlaceholder("Waifu Type");
@@ -29,10 +31,11 @@ public class WaifuMenu extends Menu {
 		b.addOption("Foxgirl", "foxgirl");
 		b.setMaxValues(1);
 		
-		message.editMessageComponents(
+		res.setActionRows(
 				ActionRow.of(b.build()),
-				ActionRow.of(Button.primary("get", "Get")))
-			.queue();
+				ActionRow.of(Button.primary("get", "Get")));
+		
+		return res;
 	}
 	
 	@Override
@@ -57,5 +60,4 @@ public class WaifuMenu extends Menu {
 		title = event.getSelectedOptions().get(0).getLabel();
 		event.deferEdit().queue();
 	}
-
 }
