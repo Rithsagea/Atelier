@@ -2,19 +2,25 @@ package com.tempera.atelier.discord.music;
 
 import com.tempera.atelier.discord.Menu;
 
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 public class QButton extends Menu{
 
 	private QueueMessageBuilder queueMsg;
-
-	public QButton(Message message, QueueMessageBuilder msg) {
-		super(message);
-		message.editMessageComponents(ActionRow.of(Button.primary("prev", "Previous"), Button.primary("next", "Next"))).queue();
+	
+	@Override
+	public MessageAction initialize(MessageChannel channel) {
+		MessageAction res = channel.sendMessage("");
+		res.setActionRows(ActionRow.of(Button.primary("prev", "Previous"), Button.primary("next", "Next"))).queue();
+		return res;
+	}
+	
+	public QButton(QueueMessageBuilder msg) {
 		this.queueMsg = msg;
 	}
 
