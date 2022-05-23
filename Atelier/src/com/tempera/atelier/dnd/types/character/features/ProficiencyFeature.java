@@ -3,6 +3,7 @@ package com.tempera.atelier.dnd.types.character.features;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.rithsagea.util.choice.Choice;
 import com.rithsagea.util.event.EventHandler;
 import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
@@ -20,15 +21,21 @@ public class ProficiencyFeature implements Attribute {
 	private Set<Skill> skillProficiencies;
 	private Set<Equipment> equipmentProficiencies;
 	
+	private Choice<Skill> skillChoices;
+	
 	public ProficiencyFeature() {
+		skillChoices = new Choice<>();
+		
 		savingProficiencies = new HashSet<>();
 		skillProficiencies = new HashSet<>();
 		equipmentProficiencies = new HashSet<>();
 	}
 	
-	public ProficiencyFeature(Proficiency... proficiencies) {
+	public ProficiencyFeature(Choice<Skill> skills, Proficiency... proficiencies) {
 		this();
 	
+		skillChoices = skills;
+		
 		for(Proficiency p : proficiencies) {
 			if(p instanceof Ability) savingProficiencies.add((Ability) p);
 			if(p instanceof Skill) skillProficiencies.add((Skill) p);
