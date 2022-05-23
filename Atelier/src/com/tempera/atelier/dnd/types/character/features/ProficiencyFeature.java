@@ -16,8 +16,27 @@ import com.tempera.atelier.dnd.types.enums.Equipment;
 import com.tempera.atelier.dnd.types.enums.Proficiency;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
+
 @IndexedItem("feature-proficiencies")
 public class ProficiencyFeature implements Attribute {
+	private class ProficiencyMenu extends Menu {
+
+		@Override
+		public MessageAction initialize(MessageChannel channel) {
+			return channel.sendMessage("dummytext");
+		}
+
+		@Override
+		public void onButtonInteract(ButtonInteractionEvent event) { }
+
+		@Override
+		public void onSelectInteract(SelectMenuInteractionEvent event) { }
+	}
+	
 	private Set<Ability> savingProficiencies;
 	private Set<Skill> skillProficiencies;
 	private Set<Equipment> equipmentProficiencies;
@@ -66,6 +85,6 @@ public class ProficiencyFeature implements Attribute {
 
 	@Override
 	public Menu getMenu() {
-		return null;
+		return new ProficiencyMenu();
 	}
 }
