@@ -3,6 +3,7 @@ package com.tempera.atelier.dnd.types.character.features;
 import com.rithsagea.util.event.EventHandler;
 import com.rithsagea.util.rand.Dice;
 import com.rithsagea.util.rand.Die;
+import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
 import com.tempera.atelier.dnd.types.character.Attribute;
@@ -32,5 +33,10 @@ public class HitPointFeature implements Attribute {
 		
 		e.addMaxHitPoints(hitDie.getValue() + e.getSheet().getAbilityModifier(Ability.CONSTITUTION));
 		e.addMaxHitPoints((hitDie.getValue() / 2 + 1) * (hitDie.getCount() - 1));
+	}
+
+	@Override
+	public Menu getMenu() {
+		return null;
 	}
 }

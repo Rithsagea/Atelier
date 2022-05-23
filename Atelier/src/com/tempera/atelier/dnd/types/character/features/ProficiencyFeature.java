@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.rithsagea.util.choice.Choice;
 import com.rithsagea.util.event.EventHandler;
+import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
@@ -61,5 +62,10 @@ public class ProficiencyFeature implements Attribute {
 	@EventHandler
 	private void onLoadEquipmentProficiency(LoadEquipmentProficiencyEvent e) {
 		for(Equipment equip : equipmentProficiencies) e.addProficiency(equip);
+	}
+
+	@Override
+	public Menu getMenu() {
+		return null;
 	}
 }
