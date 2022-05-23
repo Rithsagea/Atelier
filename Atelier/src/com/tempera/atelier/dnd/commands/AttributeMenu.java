@@ -2,6 +2,7 @@ package com.tempera.atelier.dnd.commands;
 
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.Sheet;
+import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Skill;
 import com.tempera.util.WordUtil;
@@ -16,43 +17,39 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
-public class CharacterMenu extends Menu{
+public class AttributeMenu extends Menu{
 
 	private String selected = "";
 	private Sheet sheet;
-	public CharacterMenu(Message message , Sheet sheet) {
+	public AttributeMenu(MessageChannel channel, Sheet sheet) {
 		this.sheet = sheet;
-		Builder menu = SelectMenu.create("menu:roll")
-				.setPlaceholder("Choose what to roll for")
-				.setRequiredRange(1, 1);
-				for(Ability a : Ability.values())
-					menu.addOption(WordUtil.capitalize(a.name().replace("_", " ")), a.getLabel());
-				for(Skill s : Skill.values())
-					menu.addOption(WordUtil.capitalize(s.name().replace("_", " ")), s.getLabel());
-				SelectMenu m = menu.build();
-				message.editMessageComponents(
-						ActionRow.of(m),
-						ActionRow.of(Button.primary("get", "Get")))
-					.queue();
 	}
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		String s = CharacterRollCommand.calculate(selected, sheet);
-		event.reply(s).queue();
+		event.reply(selected).queue();
+		
 	}
 
 	@Override
 	public void onSelectInteract(SelectMenuInteractionEvent event) {
 		selected = event.getSelectedOptions().get(0).getValue();
 		event.deferEdit().queue();
-		
 	}
 
 	@Override
 	public MessageAction initialize(MessageChannel channel) {
-		// TODO Auto-generated method stub
-		return null;
+		MessageAction res = channel.sendMessage("Choose an attribute");
+		Builder menu = SelectMenu.create("menu:roll")
+				.setPlaceholder("Choose attribute")
+				.setRequiredRange(1, 1);
+				for(Attribute a : sheet.getClasses().get(0).getAttributes())
+					menu.addOption(WordUtil.capitalize(a.getName().replace("_", " ")), a.getName());
+				res.setActionRows(
+						ActionRow.of(menu.build()),
+						ActionRow.of(Button.primary("get", "Get")));
+		return res;
 	}
+	
 
 }

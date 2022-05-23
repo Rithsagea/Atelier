@@ -43,9 +43,10 @@ public class CharacterRollCommand extends CharacterSubCommand{
 		
 		if(args.size() == 1)
 		{
+			menuManager.addMenu(event.getChannel(), new CharacterMenu(message, sheet));
 			event.getChannel().sendMessage("Please select a valid input")
 			.queue((Message message) -> {
-				menuManager.addMenu(message.getIdLong(), new CharacterMenu(message, sheet));
+				menuManager.addMenu(event.getChannel(), new CharacterMenu(message, sheet));
 			});
 			return;
 		}
@@ -57,7 +58,7 @@ public class CharacterRollCommand extends CharacterSubCommand{
 		}
 		
 		event.getChannel().sendMessage("Invalid input").queue((Message message) -> {
-			menuManager.addMenu(message.getIdLong(), new CharacterMenu(message, sheet));
+			menuManager.addMenu(event.getChannel(), new CharacterMenu(message, sheet));
 		});
 		return;
 	}
