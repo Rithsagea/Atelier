@@ -6,6 +6,7 @@ import com.rithsagea.util.rand.Die;
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
+import com.tempera.atelier.dnd.events.character.LevelUpClassEvent;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 
@@ -53,6 +54,11 @@ public class HitPointFeature implements Attribute {
 		
 		e.addMaxHitPoints(hitDie.getValue() + e.getSheet().getAbilityModifier(Ability.CONSTITUTION));
 		e.addMaxHitPoints((hitDie.getValue() / 2 + 1) * (hitDie.getCount() - 1));
+	}
+	
+	@EventHandler
+	public void onLevelUp(LevelUpClassEvent e) {
+		hitDie = new Die(hitDie.getCount() + 1, hitDie.getValue());
 	}
 
 	@Override
