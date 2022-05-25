@@ -6,7 +6,9 @@ import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.commands.AtelierCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.User;
+import com.tempera.atelier.dnd.types.character.Attribute;
 
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class EditAttributeCommand implements AtelierCommand  {
@@ -33,6 +35,13 @@ public class EditAttributeCommand implements AtelierCommand  {
 	@Override
 	public void execute(User user, List<String> args, MessageReceivedEvent event) {
 		
+		MessageBuilder builder = new MessageBuilder();
+
+		for(Attribute attribute : user.getSelectedSheet().getAttributes()) {
+			builder.appendFormat("%s\n", attribute.getName());
+		}
+		
+		event.getChannel().sendMessage(builder.build()).queue();
 	}
 
 }
