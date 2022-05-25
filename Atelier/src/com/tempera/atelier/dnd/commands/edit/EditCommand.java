@@ -15,12 +15,10 @@ public class EditCommand extends GroupCommand {
 	
 	public EditCommand(AtelierBot bot) {
 		CommandRegistry reg = getCommandRegistry();
-		reg.registerCommand(new ListSheetCommand(bot));
-		reg.registerCommand(new NewSheetCommand(bot));
-		reg.registerCommand(new SelectSheetCommand(bot));
-		
+		reg.registerCommand(new EditSheetCommand(bot));
 		reg.registerCommand(new EditNameCommand());
 		reg.registerCommand(new EditStatCommand(bot));
+		reg.registerCommand(new EditAttributeCommand(bot));
 	}
 	
 	@Override
