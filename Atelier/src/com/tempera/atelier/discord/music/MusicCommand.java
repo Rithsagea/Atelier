@@ -25,6 +25,8 @@ public class MusicCommand extends GroupCommand {
 		registry.registerCommand(new QueueCommand(bot));
 		registry.registerCommand(new JoinCommand(audioManager));
 		registry.registerCommand(new PlayingCommand(audioManager));
+		registry.registerCommand(new SkipCommand(audioManager));
+		registry.registerCommand(new LoopCommand(audioManager));
 		registry.registerCommand(new SansCommand(audioManager));
 	}
 	
@@ -67,6 +69,7 @@ public class MusicCommand extends GroupCommand {
 		eb.addField("play [URL]", "Adds a song or playlist from a URL if possible", true);
 		eb.addField("playing / np", "Displays currently playing song", true);
 		eb.addField("queue [PAGE NUM]", "Displays queued up songs. Optional page number as a second argument.", true);
+		eb.addField("skip", "Skips the currently playing song", true);
 		eb.addField("sans", "bad time", true);
 		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}

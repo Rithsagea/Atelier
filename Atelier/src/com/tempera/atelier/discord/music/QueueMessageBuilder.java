@@ -61,11 +61,8 @@ public class QueueMessageBuilder extends MessageBuilder {
 	}
 
 	public void send(MessageChannel channel) {
-		if (handler.getQueue().size() > 10) {
-			channel.sendMessage(this.build()).queue((Message message) -> {
-				m.addMenu(message.getIdLong(), new QButton(message, this));
-			});
-		}
+		if (handler.getQueue().size() > 10) 
+			m.addMenu(channel, new QButton(this));
 		else
 			channel.sendMessage(this.build()).queue();
 	}

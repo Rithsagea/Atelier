@@ -1,6 +1,7 @@
 package com.tempera.atelier.dnd;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,8 @@ public class Sheet implements Listener {
 	private transient Set<Skill> skillProficiencies = new HashSet<>();
 	private transient Set<Equipment> equipmentProficiencies = new HashSet<>();
 	
+	private transient Set<Attribute> attributes = new HashSet<>();
+	
 	@JsonCreator
 	public Sheet(@Id UUID id) {
 		this.id = id;
@@ -67,9 +70,12 @@ public class Sheet implements Listener {
 	public void reload() {
 		eventBus.clearListeners();
 		eventBus.registerListener(this);
-		for(AbstractClass c : classes)
-			for(Attribute a : c.getAttributes())
+		for(AbstractClass c : classes) {
+			for(Attribute a : c.getAttributes()) {
 				eventBus.registerListener(a);
+				attributes.add(a);
+			}
+		}
 		
 		eventBus.submitEvent(new LoadSavingProficiencyEvent(this));
 		eventBus.submitEvent(new LoadSkillProficiencyEvent(this));
@@ -162,7 +168,11 @@ public class Sheet implements Listener {
 	}
 	
 	public List<AbstractClass> getClasses() {
-		return classes;
+		return Collections.unmodifiableList(classes);
+	}
+	
+	public Set<Attribute> getAttributes() {
+		return Collections.unmodifiableSet(attributes);
 	}
 	
 	//MUTATORS

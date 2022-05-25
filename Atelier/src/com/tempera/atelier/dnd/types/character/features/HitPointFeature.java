@@ -6,11 +6,32 @@ import com.rithsagea.util.rand.Die;
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
+import com.tempera.atelier.dnd.events.character.LevelUpClassEvent;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
+
 @IndexedItem("feature-hit-points")
 public class HitPointFeature implements Attribute {
+	
+	private class HitPointMenu extends Menu {
+
+		@Override
+		public MessageAction initialize(MessageChannel channel) {
+			return channel.sendMessage("dummytext");
+		}
+
+		@Override
+		public void onButtonInteract(ButtonInteractionEvent event) { }
+
+		@Override
+		public void onSelectInteract(SelectMenuInteractionEvent event) { }
+		
+	}
 	
 	private Die hitDie;
 	
@@ -34,9 +55,14 @@ public class HitPointFeature implements Attribute {
 		e.addMaxHitPoints(hitDie.getValue() + e.getSheet().getAbilityModifier(Ability.CONSTITUTION));
 		e.addMaxHitPoints((hitDie.getValue() / 2 + 1) * (hitDie.getCount() - 1));
 	}
+	
+	@EventHandler
+	public void onLevelUp(LevelUpClassEvent e) {
+		hitDie = new Die(hitDie.getCount() + 1, hitDie.getValue());
+	}
 
 	@Override
 	public Menu getMenu() {
-		return null;
+		return new HitPointMenu();
 	}
 }
