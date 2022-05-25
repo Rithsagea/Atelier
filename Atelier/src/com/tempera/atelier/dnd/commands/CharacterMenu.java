@@ -20,20 +20,9 @@ public class CharacterMenu extends Menu{
 
 	private String selected = "";
 	private Sheet sheet;
-	public CharacterMenu(Message message , Sheet sheet) {
+	public CharacterMenu(MessageChannel channel, Sheet sheet) {
 		this.sheet = sheet;
-		Builder menu = SelectMenu.create("menu:roll")
-				.setPlaceholder("Choose what to roll for")
-				.setRequiredRange(1, 1);
-				for(Ability a : Ability.values())
-					menu.addOption(WordUtil.capitalize(a.name().replace("_", " ")), a.getLabel());
-				for(Skill s : Skill.values())
-					menu.addOption(WordUtil.capitalize(s.name().replace("_", " ")), s.getLabel());
-				SelectMenu m = menu.build();
-				message.editMessageComponents(
-						ActionRow.of(m),
-						ActionRow.of(Button.primary("get", "Get")))
-					.queue();
+		
 	}
 
 	@Override
@@ -51,8 +40,19 @@ public class CharacterMenu extends Menu{
 
 	@Override
 	public MessageAction initialize(MessageChannel channel) {
-		// TODO Auto-generated method stub
-		return null;
+		MessageAction res = channel.sendMessage("Choose what to roll for");
+		Builder menu = SelectMenu.create("menu:roll")
+				.setPlaceholder("Choose what to roll for")
+				.setRequiredRange(1, 1);
+				for(Ability a : Ability.values())
+					menu.addOption(WordUtil.capitalize(a.name().replace("_", " ")), a.getLabel());
+				for(Skill s : Skill.values())
+					menu.addOption(WordUtil.capitalize(s.name().replace("_", " ")), s.getLabel());
+				SelectMenu m = menu.build();
+				res.setActionRows(
+						ActionRow.of(menu.build()),
+						ActionRow.of(Button.primary("get", "Get")));
+		return res;
 	}
 
 }
