@@ -13,7 +13,6 @@ public class CharacterInfoCommand extends CharacterSubCommand{
 
 	public CharacterInfoCommand(AtelierDB db) {
 		super(db);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -34,7 +33,6 @@ public class CharacterInfoCommand extends CharacterSubCommand{
 	@Override
 	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
 		event.getChannel().sendMessage(new InfoMessageBuilder(sheet).build()).queue();
-		
 	}
 
 }

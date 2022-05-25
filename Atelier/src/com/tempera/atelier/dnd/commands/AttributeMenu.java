@@ -3,11 +3,8 @@ package com.tempera.atelier.dnd.commands;
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.types.character.Attribute;
-import com.tempera.atelier.dnd.types.enums.Ability;
-import com.tempera.atelier.dnd.types.enums.Skill;
 import com.tempera.util.WordUtil;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
@@ -17,11 +14,12 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
-public class AttributeMenu extends Menu{
+public class AttributeMenu extends Menu {
 
 	private String selected = "";
 	private Sheet sheet;
-	public AttributeMenu(MessageChannel channel, Sheet sheet) {
+	
+	public AttributeMenu(Sheet sheet) {
 		this.sheet = sheet;
 	}
 

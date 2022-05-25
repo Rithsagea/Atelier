@@ -9,9 +9,7 @@ import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Skill;
-import com.tempera.util.WordUtil;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CharacterRollCommand extends CharacterSubCommand{
@@ -41,45 +39,28 @@ public class CharacterRollCommand extends CharacterSubCommand{
 	@Override
 	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
 		
-		if(args.size() == 1)
-		{
-			event.getChannel().sendMessage("Please select a valid input")
-			.queue((Message message) -> {
-				menuManager.addMenu(event.getChannel(), new CharacterMenu(event.getChannel(), sheet));
-			});
-			return;
-		}
-		String s = calculate(args.get(1), sheet);
-		if(s != null)
-		{
-			event.getChannel().sendMessage(s).queue();
+		if(args.size() == 1) {
+			menuManager.addMenu(event.getChannel(), new CharacterMenu(event.getChannel(), sheet));
 			return;
 		}
 		
-		event.getChannel().sendMessage("Invalid input").queue((Message message) -> {
-			menuManager.addMenu(event.getChannel(), new CharacterMenu(event.getChannel(), sheet));
-		});
-		return;
+		event.getChannel().sendMessage(roll(args.get(1), sheet)).queue();
 	}
 	
-	public static String calculate(String string, Sheet sheet)
+	public static String roll(String stat, Sheet sheet)
 	{
-		for(Ability a : Ability.values())
-		{
-			if(string.equals(a.getLabel()))
-				{
-				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(a);
-				return WordUtil.capitalize(a.name().replace("_", " ")) + " roll: " + roll;
-				}
+		Ability a = Ability.fromLabel(stat);
+		if(a != null) {
+			int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(a);
+			return String.format("%s roll: %d", a, roll);
 		}
-		for(Skill s : Skill.values())
-		{
-			if(string.equals(s.getLabel()))
-				{
-				int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(s.getAbility());
-				return WordUtil.capitalize(s.name().replace("_", " ")) + " roll: " + roll;
-				}
+		
+		Skill s = Skill.fromLabel(stat);
+		if(s != null) {
+			int roll = (int) (Math.random() * 20 + 1) + sheet.getSkillModifier(s);
+			return String.format("%s roll: %d", s, roll);
 		}
-		return null;
+		
+		return "Invalid Stat!";
 	}
 }

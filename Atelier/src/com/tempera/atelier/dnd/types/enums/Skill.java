@@ -1,5 +1,10 @@
 package com.tempera.atelier.dnd.types.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.tempera.util.WordUtil;
+
 public enum Skill implements Proficiency {
 	ACROBATICS("acr", Ability.DEXTERITY),
 	ANIMAL_HANDLING("ani", Ability.WISDOM),
@@ -20,6 +25,18 @@ public enum Skill implements Proficiency {
 	STEALTH("ste", Ability.DEXTERITY),
 	SURVIVAL("sur", Ability.WISDOM);
 	
+	private static Map<String, Skill> labelMap;
+	static {
+		labelMap = new HashMap<>();
+		for(Skill skill : Skill.values()) {
+			labelMap.put(skill.getLabel(), skill);
+		}
+	}
+	
+	public static Skill fromLabel(String label) {
+		return labelMap.get(label);
+	}
+	
 	private final String label;
 	private final Ability ability;
 	
@@ -34,5 +51,10 @@ public enum Skill implements Proficiency {
 	
 	public Ability getAbility() {
 		return ability;
+	}
+	
+	@Override
+	public String toString() {
+		return WordUtil.capitalize(name().replace("_", " "));
 	}
 }

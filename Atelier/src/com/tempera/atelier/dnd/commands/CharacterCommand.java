@@ -10,8 +10,6 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.database.AtelierDB;
-import com.tempera.atelier.dnd.types.enums.Ability;
-import com.tempera.util.WordUtil;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -21,6 +19,7 @@ public class CharacterCommand extends GroupCommand {
 	
 	public CharacterCommand(AtelierBot bot) {
 		db = bot.getDatabase();
+		
 		CommandRegistry registry = this.getCommandRegistry();
 		registry.registerCommand(new CharacterRollCommand(bot));
 		registry.registerCommand(new CharacterInfoCommand(db));
@@ -41,10 +40,10 @@ public class CharacterCommand extends GroupCommand {
 	public PermissionLevel getLevel() {
 		return PermissionLevel.USER;
 	}
+	
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = db.getSheet(user.getSheetId());
 		event.getChannel().sendMessage(new InfoMessageBuilder(sheet).build()).queue();
-		return;
 	}
 }

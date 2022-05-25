@@ -3,7 +3,7 @@ package com.tempera.atelier.dnd.types.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.tempera.util.WordUtil;
 
 public enum Ability implements Proficiency {
 	STRENGTH("str"),
@@ -31,22 +31,12 @@ public enum Ability implements Proficiency {
 		this.label = label;
 	}
 	
-	
 	public String getLabel() {
 		return label;
 	}
 	
-	 //TODO delete this when people are done formatting older versions
-	@JsonCreator
-	public static Ability creator(String label) {
-		try {
-			return valueOf(label);
-		} catch(IllegalArgumentException e) {
-			for(Ability a : values())
-				if(a.getLabel().equals(label))
-					return a;
-		}
-		
-		return null;
+	@Override
+	public String toString() {
+		return WordUtil.capitalize(name().replace("_", " "));
 	}
 }
