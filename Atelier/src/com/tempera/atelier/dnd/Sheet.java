@@ -1,9 +1,13 @@
 package com.tempera.atelier.dnd;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
@@ -48,7 +52,7 @@ public class Sheet implements Listener {
 	private transient Set<Skill> skillProficiencies = new HashSet<>();
 	private transient Set<Equipment> equipmentProficiencies = new HashSet<>();
 	
-	private transient Set<Attribute> attributes = new HashSet<>();
+	private transient Map<String, Attribute> attributes = new HashMap<>();
 	
 	@JsonCreator
 	public Sheet(@Id UUID id) {
@@ -71,9 +75,11 @@ public class Sheet implements Listener {
 		eventBus.clearListeners();
 		eventBus.registerListener(this);
 		for(AbstractClass c : classes) {
-			for(Attribute a : c.getAttributes()) {
-				eventBus.registerListener(a);
-				attributes.add(a);
+			
+			
+			for(Entry<String, Attribute> entry : c.getAttributeMap().entrySet()) {
+				eventBus.registerListener(entry.getValue());
+				attributes.put(entry.getKey(), entry.getValue()); //TODO add class id to identifier
 			}
 		}
 		
@@ -171,8 +177,16 @@ public class Sheet implements Listener {
 		return Collections.unmodifiableList(classes);
 	}
 	
-	public Set<Attribute> getAttributes() {
-		return Collections.unmodifiableSet(attributes);
+	public Attribute getAttribute(String id) {
+		return attributes.get(id);
+	}
+	
+	public Collection<Attribute> getAttributes() {
+		return attributes.values();
+	}
+	
+	public Map<String, Attribute> getAttributeMap() {
+		return Collections.unmodifiableMap(attributes);
 	}
 	
 	//MUTATORS

@@ -18,7 +18,6 @@ public class EditCommand extends GroupCommand {
 		reg.registerCommand(new EditSheetCommand(bot));
 		reg.registerCommand(new EditNameCommand());
 		reg.registerCommand(new EditStatCommand(bot));
-		reg.registerCommand(new EditAttributeCommand(bot));
 	}
 	
 	@Override

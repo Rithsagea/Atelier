@@ -1,5 +1,6 @@
 package com.tempera.atelier.dnd.commands;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.tempera.atelier.AtelierBot;
@@ -16,6 +17,7 @@ public class CharacterAttributeCommand extends CharacterSubCommand{
 	
 	public CharacterAttributeCommand(AtelierBot bot) {
 		super(bot.getDatabase());
+		
 		menuManager = bot.getMenuManager();
 	}
 
@@ -26,7 +28,7 @@ public class CharacterAttributeCommand extends CharacterSubCommand{
 
 	@Override
 	public List<String> getAliases() {
-		return null;
+		return Arrays.asList("a");
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class CharacterAttributeCommand extends CharacterSubCommand{
 
 	@Override
 	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
-		menuManager.addMenu(event.getChannel(), new AttributeMenu(sheet));
+		menuManager.addMenu(event.getChannel(), new CharacterAttributeMenu(sheet, menuManager));
 	}
 
 }

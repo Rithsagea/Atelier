@@ -35,9 +35,9 @@ public class InfoMessageBuilder extends MessageBuilder{
 		
 		b.setLength(0);
 		prefix = "";
-		for(Attribute a : sheet.getClasses().get(0).getAttributes()) {
+		for(Attribute a : sheet.getAttributes()) {
 			b.append(prefix);
-			b.append(prefix + a.getName());
+			b.append(a.getName());
 			prefix = "\n";
 		}
 		eb.addField("Attributes", b.toString(), false);

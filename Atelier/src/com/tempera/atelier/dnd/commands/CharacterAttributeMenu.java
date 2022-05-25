@@ -1,9 +1,11 @@
 package com.tempera.atelier.dnd.commands;
 
+import java.util.Map.Entry;
+
 import com.tempera.atelier.discord.Menu;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.dnd.Sheet;
-import com.tempera.atelier.dnd.types.enums.Ability;
-import com.tempera.atelier.dnd.types.enums.Skill;
+import com.tempera.atelier.dnd.types.character.Attribute;
 
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -14,18 +16,22 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
-public class CharacterMenu extends Menu {
+public class CharacterAttributeMenu extends Menu {
 
-	private String selected = "";
+	private String selected;
 	private Sheet sheet;
 	
-	public CharacterMenu(MessageChannel channel, Sheet sheet) {
+	private MenuManager menuManager;
+	
+	public CharacterAttributeMenu(Sheet sheet, MenuManager menuManager) {
 		this.sheet = sheet;
+		this.menuManager = menuManager;
 	}
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		event.reply(CharacterRollCommand.roll(selected, sheet)).queue();
+		event.deferEdit().queue();
+		menuManager.addMenu(event.getChannel(), sheet.getAttribute(selected).getMenu());
 	}
 
 	@Override
@@ -36,21 +42,17 @@ public class CharacterMenu extends Menu {
 
 	@Override
 	public MessageAction initialize(MessageChannel channel) {
-		MessageAction res = channel.sendMessage("Choose a stat to roll for:");
-		Builder menu = SelectMenu.create("roll")
-				.setPlaceholder("Choose a stat...")
+		MessageAction res = channel.sendMessage("Choose an attribute");
+		Builder menu = SelectMenu.create("menu:roll")
+				.setPlaceholder("Choose attribute")
 				.setRequiredRange(1, 1);
-		
-		for(Ability a : Ability.values())
-			menu.addOption(a.toString(), a.getLabel());
-		for(Skill s : Skill.values())
-			menu.addOption(s.toString(), s.getLabel());
-		
-		res.setActionRows(
-				ActionRow.of(menu.build()),
-				ActionRow.of(Button.primary("get", "Get")));
-		
+				for(Entry<String, Attribute> entry : sheet.getAttributeMap().entrySet())
+					menu.addOption(entry.getValue().getName(), entry.getKey());
+				res.setActionRows(
+						ActionRow.of(menu.build()),
+						ActionRow.of(Button.primary("get", "Get")));
 		return res;
 	}
+	
 
 }

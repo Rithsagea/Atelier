@@ -40,7 +40,7 @@ public class CharacterRollCommand extends CharacterSubCommand{
 	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
 		
 		if(args.size() == 1) {
-			menuManager.addMenu(event.getChannel(), new CharacterMenu(event.getChannel(), sheet));
+			menuManager.addMenu(event.getChannel(), new CharacterRollMenu(event.getChannel(), sheet));
 			return;
 		}
 		

@@ -17,6 +17,8 @@ public class Rogue extends CharacterClass {
 	}
 	
 	public Rogue(boolean multiclass) {
+		super("rogue", "Rogue");
+		
 		if(multiclass) {
 			
 		} else {
@@ -35,10 +37,5 @@ public class Rogue extends CharacterClass {
 			
 			addAttribute("hit-points", new HitPointFeature(8));
 		}
-	}
-	
-	@Override
-	public String getName() {
-		return "Rogue";
 	}
 }
