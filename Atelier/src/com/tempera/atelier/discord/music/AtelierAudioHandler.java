@@ -30,17 +30,25 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	private AudioPlayer player;
 	private AudioFrame frame;
 	private MessageChannel channel;
+	private boolean looping;
 	
 	public AtelierAudioHandler(AudioPlayerManager manager, AudioPlayer player, MessageReceivedEvent event) {
 		this.manager = manager;
 		this.player = player;
 		this.queue = new LinkedBlockingQueue<>();
+		this.looping = false;
 		
 		channel = event.getChannel();
 		
 		player.addListener(this);
 	}
 	
+	
+	public boolean toggleLoop() {
+		if (looping)
+			return looping = false;
+		return looping = true;
+	}
 	public void loadTrack(String identifier) {
 		manager.loadItem(identifier, this);
 	}
@@ -67,6 +75,8 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+		if (looping)
+			this.loadTrack(track.getIdentifier());
 		if(endReason.mayStartNext) {
 			nextTrack();
 		}
