@@ -31,7 +31,7 @@ public class SkipCommand extends MusicSubCommand{
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		if (audioHandler.getQueue().size() > 0) {
+		if (audioHandler.getPlayingTrack() != null) {
 			event.getChannel().sendMessage(String.format("Skipping `%s`!", audioHandler.getPlayingTrack().getInfo().title)).queue();
 			audioHandler.nextTrack();
 		}
