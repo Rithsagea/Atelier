@@ -12,11 +12,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class QueueCommand extends MusicSubCommand{
 
-	private MenuManager buttons;
+	private MenuManager menuManager;
 
 	public QueueCommand(AtelierBot bot) {
 		super(bot.getAudioManager());
-		buttons = bot.getMenuManager();
+		menuManager = bot.getMenuManager();
 	}
 
 	@Override
@@ -36,13 +36,9 @@ public class QueueCommand extends MusicSubCommand{
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		int page = 1;
-		if (args.size() > 1) {
-			page = Math.min(Integer.parseInt(args.get(1)), (int)Math.ceil((double)audioHandler.getQueue().size() / 10));
-		}
+		int page = args.size() <= 1 ? 1 : Math.min(Integer.parseInt(args.get(1)), (int) Math.ceil(audioHandler.getQueue().size() / 10d));
 		
-		QueueMessageBuilder msg = new QueueMessageBuilder(audioHandler, page, event.getMessage(), buttons);
-		msg.send(event.getChannel());
+		menuManager.addMenu(event.getChannel(), new QueueMenu(audioHandler, menuManager, page));
 	}
 
 }

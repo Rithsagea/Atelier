@@ -2,10 +2,11 @@ package com.tempera.atelier.discord.music;
 
 import java.awt.Color;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.stream.Collectors;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -19,6 +20,7 @@ import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadResultHandler, AudioSendHandler {
@@ -27,13 +29,14 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	private AudioPlayerManager manager;
 	private AudioPlayer player;
 	private AudioFrame frame;
-	private MessageReceivedEvent event;
+	private MessageChannel channel;
 	
 	public AtelierAudioHandler(AudioPlayerManager manager, AudioPlayer player, MessageReceivedEvent event) {
 		this.manager = manager;
 		this.player = player;
-		this.event = event;
 		this.queue = new LinkedBlockingQueue<>();
+		
+		channel = event.getChannel();
 		
 		player.addListener(this);
 	}
@@ -57,7 +60,7 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	}
 	
 	public List<AudioTrack> getQueue() {
-		return queue.stream().collect(Collectors.toList());
+		return Collections.unmodifiableList(new ArrayList<>(queue));
 	}
 	
 	/// AUDIO EVENT ADAPTER
@@ -69,9 +72,7 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 		}
 	}
 	
-	
 	/// AUDIO SEND HANDLER
-	
 	
 	@Override
 	public boolean canProvide() {
@@ -98,7 +99,8 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.GREEN);
 		eb.setTitle(String.format("Added - `%s`", track.getInfo().title));
-		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
+		
 		queue(track);
 	}
 
@@ -107,18 +109,19 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.GREEN);
 		eb.setTitle(String.format("Added %d songs", playlist.getTracks().size()));
-		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+		channel.sendMessageEmbeds(eb.build()).queue();
+		
 		playlist.getTracks().forEach(this::queue);
 	}
 
 	@Override
 	public void noMatches() {
-		event.getChannel().sendMessage("No matches!").queue();
+		channel.sendMessage("No matches!").queue();
 	}
 
 	@Override
 	public void loadFailed(FriendlyException exception) {
-		event.getChannel().sendMessage("Something unexpected happened!").queue();
+		channel.sendMessage("Something unexpected happened!").queue();
 	}
 
 }

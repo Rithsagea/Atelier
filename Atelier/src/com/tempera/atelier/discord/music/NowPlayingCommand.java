@@ -12,19 +12,19 @@ import com.tempera.atelier.dnd.User;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class PlayingCommand extends MusicSubCommand{
+public class NowPlayingCommand extends MusicSubCommand{
 
-	public PlayingCommand(AtelierAudioManager audioManager) {
+	public NowPlayingCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
 	}
 
 	public String getLabel() {
-		return "playing";
+		return "nowplaying";
 	}
 
 	@Override
 	public List<String> getAliases() {
-		return Arrays.asList("m", "audio", "np");
+		return Arrays.asList("np");
 	}
 
 	@Override

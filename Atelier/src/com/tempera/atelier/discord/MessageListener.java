@@ -75,6 +75,8 @@ public class MessageListener extends ListenerAdapter {
 		User user = db.getUser(author.getIdLong());
 		user.setName(author.getName());
 		
+		//Command Logic goes below
+		if(event.getAuthor().isBot()) return;
 		if(message.startsWith(config.getCommandPrefix())) {
 			
 			List<String> args = new ArrayList<String>(Arrays.asList(
