@@ -32,15 +32,16 @@ public class QueueMessageBuilder extends MessageBuilder {
 			eb.appendDescription(String.format("Page %d of %d", page, pageMax));
 			eb.setFooter(String.format("Displaying songs %d to %d out of %d", (page-1)*10+1,
 					Math.min(page*10, queueSize), queueSize));
+			setActionRows(ActionRow.of(
+					Button.primary("prev", "Previous"),
+					Button.primary("next", "Next")));
 		}
 		else {
 			eb.setTitle("No songs in queue!");
+			setActionRows(ActionRow.of(
+					Button.success("ha", "bad time")));
 		}
 		
 		setEmbeds(eb.build());
-		
-		setActionRows(ActionRow.of(
-				Button.primary("prev", "Previous"),
-				Button.primary("next", "Next")));
 	}
 }

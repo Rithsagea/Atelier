@@ -16,7 +16,7 @@ public class LoopCommand extends MusicSubCommand{
 
 	@Override
 	public String getLabel() {
-		return "Loop";
+		return "loop";
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class LoopCommand extends MusicSubCommand{
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		
+		event.getChannel().sendMessage(audioHandler.toggleLoop() ? "Loop enabled." : "Loop disabled.").queue();
 	}
 
 }
