@@ -20,11 +20,12 @@ public class DBTest {
 	}
 	
 	public static void editDB(AtelierDB db) {
-		User user = db.getUser(529463250052448256l);
+		User user = db.getUser(171378138041942016l);
 		user.setLevel(PermissionLevel.ADMINISTRATOR);
 		
 		Sheet sheet = db.getSheet(user.getSheetId());
 		
+		sheet.clearClasses();
 		sheet.addClass(new Rogue());
 		sheet.reload();
 		sheet.setHitPoints(10000);
