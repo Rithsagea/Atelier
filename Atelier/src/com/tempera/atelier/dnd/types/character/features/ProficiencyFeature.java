@@ -1,5 +1,6 @@
 package com.tempera.atelier.dnd.types.character.features;
 
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,19 +35,44 @@ public class ProficiencyFeature implements Attribute {
 			EmbedBuilder embed = new EmbedBuilder();
 			StringBuilder content = new StringBuilder();
 			SelectMenu.Builder select = SelectMenu.create("skills")
-					.setRequiredRange(1, skillChoices.getCount());
+					.setRequiredRange(0, skillChoices.getCount())
+					.setPlaceholder(String.format("Choose %d skills...", skillChoices.getCount()));
+			String prefix = "";
 			
-			content.append(String.format("**Choose %d from**\n", skillChoices.getCount()));
+			embed.setTitle("**" + getName() + "**");
+			embed.setColor(Color.BLUE);
+			
+			for(Ability ability : savingProficiencies) {
+				content.append(prefix);
+				content.append(ability);
+				prefix = ", ";
+			}
+			embed.addField("**Saving**", content.toString(), true);
+			
+			content.setLength(0);
+			content.append(String.format("Choose %d from: ", skillChoices.getCount()));
+			prefix = "";
 			for(int x = 0; x < skillChoices.getChoices().size(); x++) {
-				content.append(String.format(skillChoices.isSelected(x) ? "__%s__\n" : "%s\n", skillChoices.getChoice(x)));
+				content.append(prefix);
+				content.append(String.format(skillChoices.isSelected(x) ? "__%s__" : "%s", skillChoices.getChoice(x)));
+				prefix = ", ";
 				select.addOption(skillChoices.getChoices().get(x).toString(), Integer.toString(x));
 			}
-			embed.addField("**" + getName() + "**", content.toString(), true);
+			embed.addField("**Skills**", content.toString(), true);
 			
 			select.setDefaultValues(skillChoices.getSelected()
 					.stream()
 					.map(s -> Integer.toString(s))
 					.collect(Collectors.toList()));
+			
+			content.setLength(0);
+			prefix = "";
+			for(Equipment equipment : equipmentProficiencies) {
+				content.append(prefix);
+				content.append(equipment);
+				prefix = ", ";
+			}
+			embed.addField("**Equipment**", content.toString(), false);
 			
 			setEmbeds(embed.build());
 			setActionRows(ActionRow.of(select.build()));
