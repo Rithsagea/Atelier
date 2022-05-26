@@ -35,20 +35,7 @@ public class JoinCommand extends MusicSubCommand{
 	
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		if(event.getAuthor().isBot()) return;
-		
-		Guild guild = event.getGuild();
-		AudioManager manager = guild.getAudioManager();
-		GuildVoiceState state = event.getMember().getVoiceState();
-		if(state == null) return;
-		
-		AudioChannel channel = state.getChannel();
-		if(channel == null) return;
-		
-		manager.setSendingHandler(audioHandler);
-		manager.openAudioConnection(channel);
-		
-		event.getChannel().sendMessage(String.format("Joined channel `[%s]`", channel.getName())).queue();
+		audioHandler.joinVc(event);
 	}
 
 }
