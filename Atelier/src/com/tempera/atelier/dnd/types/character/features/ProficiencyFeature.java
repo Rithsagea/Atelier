@@ -2,6 +2,7 @@ package com.tempera.atelier.dnd.types.character.features;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.rithsagea.util.choice.Choice;
 import com.rithsagea.util.event.EventHandler;
@@ -16,25 +17,61 @@ import com.tempera.atelier.dnd.types.enums.Equipment;
 import com.tempera.atelier.dnd.types.enums.Proficiency;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 @IndexedItem("feature-proficiencies")
 public class ProficiencyFeature implements Attribute {
+	private class ProficiencyMessageBuilder extends MessageBuilder {
+		public ProficiencyMessageBuilder() {
+			EmbedBuilder embed = new EmbedBuilder();
+			StringBuilder content = new StringBuilder();
+			SelectMenu.Builder select = SelectMenu.create("skills")
+					.setRequiredRange(1, skillChoices.getCount());
+			
+			content.append(String.format("**Choose %d from**\n", skillChoices.getCount()));
+			for(int x = 0; x < skillChoices.getChoices().size(); x++) {
+				content.append(String.format(skillChoices.isSelected(x) ? "__%s__\n" : "%s\n", skillChoices.getChoice(x)));
+				select.addOption(skillChoices.getChoices().get(x).toString(), Integer.toString(x));
+			}
+			embed.addField("**" + getName() + "**", content.toString(), true);
+			
+			select.setDefaultValues(skillChoices.getSelected()
+					.stream()
+					.map(s -> Integer.toString(s))
+					.collect(Collectors.toList()));
+			
+			setEmbeds(embed.build());
+			setActionRows(ActionRow.of(select.build()));
+		}
+	}
+	
 	private class ProficiencyMenu extends Menu {
 
 		@Override
 		public MessageAction initialize(MessageChannel channel) {
-			return channel.sendMessage("dummytext");
+			return channel.sendMessage(new ProficiencyMessageBuilder().build());
 		}
 
 		@Override
 		public void onButtonInteract(ButtonInteractionEvent event) { }
 
 		@Override
-		public void onSelectInteract(SelectMenuInteractionEvent event) { }
+		public void onSelectInteract(SelectMenuInteractionEvent event) {
+			skillChoices.clear();
+			for(SelectOption option : event.getSelectedOptions()) {
+				skillChoices.selectChoice(Integer.parseInt(option.getValue()));
+			}
+			
+			event.editMessage(new ProficiencyMessageBuilder().build()).queue();
+		}
 	}
 	
 	private Set<Ability> savingProficiencies;
