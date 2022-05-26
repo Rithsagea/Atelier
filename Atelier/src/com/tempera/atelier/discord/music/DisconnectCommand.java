@@ -43,7 +43,7 @@ public class DisconnectCommand extends MusicSubCommand{
 			event.getChannel().sendMessage("Not in a voice channel!").queue(); return;
 		}
 		manager.closeAudioConnection();
-		event.getChannel().sendMessage(String.format("Left channel `[%s]`", state.getChannel().getName())).queue();
+		event.getChannel().sendMessage(String.format("Disconnected from channel `[%s]`", state.getChannel().getName())).queue();
 	}
 
 }
