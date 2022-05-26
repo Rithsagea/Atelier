@@ -3,10 +3,9 @@ package com.tempera.atelier.discord.music;
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.discord.MenuManager;
 
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 public class QueueMenu extends Menu {
 
@@ -21,8 +20,8 @@ public class QueueMenu extends Menu {
 	}
 	
 	@Override
-	public MessageAction initialize(MessageChannel channel) {
-		return channel.sendMessage(new QueueMessageBuilder(audioHandler, menuManager, page).build());
+	public Message initialize() {
+		return new QueueMessageBuilder(audioHandler, menuManager, page).build();
 	}
 
 	@Override

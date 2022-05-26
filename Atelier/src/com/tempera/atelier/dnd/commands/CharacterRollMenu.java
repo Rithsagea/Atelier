@@ -5,6 +5,8 @@ import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
@@ -12,7 +14,6 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 public class CharacterRollMenu extends Menu {
 
@@ -35,8 +36,8 @@ public class CharacterRollMenu extends Menu {
 	}
 
 	@Override
-	public MessageAction initialize(MessageChannel channel) {
-		MessageAction res = channel.sendMessage("Choose a stat to roll for:");
+	public Message initialize() {
+		MessageBuilder res = new MessageBuilder("Choose a stat to roll for:");
 		Builder menu = SelectMenu.create("roll")
 				.setPlaceholder("Choose a stat...")
 				.setRequiredRange(1, 1);
@@ -50,7 +51,7 @@ public class CharacterRollMenu extends Menu {
 				ActionRow.of(menu.build()),
 				ActionRow.of(Button.primary("get", "Get")));
 		
-		return res;
+		return res.build();
 	}
 
 }

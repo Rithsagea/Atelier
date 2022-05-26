@@ -10,10 +10,10 @@ import com.tempera.atelier.dnd.events.character.LevelUpClassEvent;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 @IndexedItem("feature-hit-points")
 public class HitPointFeature implements Attribute {
@@ -21,8 +21,8 @@ public class HitPointFeature implements Attribute {
 	private class HitPointMenu extends Menu {
 
 		@Override
-		public MessageAction initialize(MessageChannel channel) {
-			return channel.sendMessage("dummytext");
+		public Message initialize() {
+			return new MessageBuilder("hi").build();
 		}
 
 		@Override

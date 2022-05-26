@@ -7,14 +7,14 @@ import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.types.character.Attribute;
 
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 public class CharacterAttributeMenu extends Menu {
 
@@ -41,8 +41,8 @@ public class CharacterAttributeMenu extends Menu {
 	}
 
 	@Override
-	public MessageAction initialize(MessageChannel channel) {
-		MessageAction res = channel.sendMessage("Choose an attribute");
+	public Message initialize() {
+		MessageBuilder res = new MessageBuilder("Choose an attribute");
 		Builder menu = SelectMenu.create("menu:roll")
 				.setPlaceholder("Choose attribute")
 				.setRequiredRange(1, 1);
@@ -51,7 +51,7 @@ public class CharacterAttributeMenu extends Menu {
 				res.setActionRows(
 						ActionRow.of(menu.build()),
 						ActionRow.of(Button.primary("get", "Get")));
-		return res;
+		return res.build();
 	}
 	
 

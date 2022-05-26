@@ -4,13 +4,13 @@ import com.tempera.atelier.discord.Menu;
 import com.tempera.util.EmbedUtil;
 import com.tempera.util.NekoUtil;
 
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 public class WaifuMenu extends Menu {
 	
@@ -18,8 +18,8 @@ public class WaifuMenu extends Menu {
 	private String title = "Waifu";
 	
 	@Override
-	public MessageAction initialize(MessageChannel channel) {
-		MessageAction res = channel.sendMessage("Pick a type of waifu");
+	public Message initialize() {
+		MessageBuilder res = new MessageBuilder("Pick a type of waifu");
 		
 		SelectMenu.Builder b = SelectMenu.create("waifuMenu");
 		b.setPlaceholder("Waifu Type");
@@ -35,7 +35,7 @@ public class WaifuMenu extends Menu {
 				ActionRow.of(b.build()),
 				ActionRow.of(Button.primary("get", "Get")));
 		
-		return res;
+		return res.build();
 	}
 	
 	@Override

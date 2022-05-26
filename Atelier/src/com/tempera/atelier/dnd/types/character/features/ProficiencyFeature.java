@@ -20,13 +20,12 @@ import com.tempera.atelier.dnd.types.enums.Skill;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 @IndexedItem("feature-proficiencies")
 public class ProficiencyFeature implements Attribute {
@@ -82,8 +81,8 @@ public class ProficiencyFeature implements Attribute {
 	private class ProficiencyMenu extends Menu {
 
 		@Override
-		public MessageAction initialize(MessageChannel channel) {
-			return channel.sendMessage(new ProficiencyMessageBuilder().build());
+		public Message initialize() {
+			return new ProficiencyMessageBuilder().build();
 		}
 
 		@Override

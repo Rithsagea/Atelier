@@ -13,7 +13,7 @@ public class MenuManager {
 	}
 	
 	public void addMenu(MessageChannel channel, Menu menu) {
-		menu.initialize(channel).queue(m -> {
+		channel.sendMessage(menu.initialize()).queue(m -> {
 			menus.put(m.getIdLong(), menu);
 		});
 	}
