@@ -1,15 +1,20 @@
 package com.tempera.atelier.dnd.types.character.features;
 
+import java.awt.Color;
+
 import com.rithsagea.util.event.EventHandler;
 import com.rithsagea.util.rand.Dice;
 import com.rithsagea.util.rand.Die;
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.IndexedItem;
+import com.tempera.atelier.dnd.events.LoadClassEvent;
 import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
 import com.tempera.atelier.dnd.events.character.LevelUpClassEvent;
+import com.tempera.atelier.dnd.types.character.AbstractClass;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -22,7 +27,25 @@ public class HitPointFeature implements Attribute {
 
 		@Override
 		public Message initialize() {
-			return new MessageBuilder("hi").build();
+			MessageBuilder msg = new MessageBuilder();
+			EmbedBuilder embed = new EmbedBuilder();
+			StringBuilder content = new StringBuilder();
+			
+			content.append(String.format("**Hit Dice**: %s\n", hitDie));
+			content.append(String.format("**Hit Points at 1st Level**: %d + %s modifier\n", 
+					hitDie.getValue(),
+					Ability.CONSTITUTION));
+			content.append(String.format("**Hit Points at Higher Levels**: %s (or %s) + your %s modifier per %s level after 1st\n", 
+					hitDie, hitDie.getValue() / 2 + 1, Ability.CONSTITUTION,
+					"Class"));
+			
+			embed.setTitle("**" + getName() + "**");
+			embed.setDescription(content);
+			embed.setColor(Color.GREEN);
+			
+			msg.setEmbeds(embed.build());
+			
+			return msg.build();
 		}
 
 		@Override
@@ -59,6 +82,11 @@ public class HitPointFeature implements Attribute {
 	@EventHandler
 	public void onLevelUp(LevelUpClassEvent e) {
 		hitDie = new Die(hitDie.getCount() + 1, hitDie.getValue());
+	}
+	
+	@EventHandler
+	public void onLoadClass(LoadClassEvent event) {
+		AbstractClass c = event.getCharacterClass();
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.tempera.atelier.dnd.IndexedItem;
 import com.tempera.atelier.dnd.types.character.CharacterClass;
 import com.tempera.atelier.dnd.types.character.features.HitPointFeature;
 import com.tempera.atelier.dnd.types.character.features.ProficiencyFeature;
+import com.tempera.atelier.dnd.types.character.features.StartingEquipmentFeature;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Equipment;
 import com.tempera.atelier.dnd.types.enums.Skill;
@@ -36,6 +37,8 @@ public class Rogue extends CharacterClass {
 					Ability.DEXTERITY, Ability.INTELLIGENCE));
 			
 			addAttribute("hit-points", new HitPointFeature(8));
+			
+			addAttribute("starting-equipment", new StartingEquipmentFeature());
 		}
 	}
 }

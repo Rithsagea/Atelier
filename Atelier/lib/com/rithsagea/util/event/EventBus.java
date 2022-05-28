@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.rithsagea.util.DataUtil;
+
 public class EventBus {
 	private static class Handler implements Comparable<Handler> {
 		public int priority;
@@ -40,7 +42,7 @@ public class EventBus {
 	}
 	
 	public void registerListener(Listener listener) {
-		for(Method method : listener.getClass().getDeclaredMethods()) {
+		for(Method method : DataUtil.getMethods(listener.getClass())) {
 			if(method.getParameterCount() == 1) {
 				Parameter p = method.getParameters()[0];
 				EventHandler ann = method.getAnnotation(EventHandler.class);
@@ -59,7 +61,7 @@ public class EventBus {
 	
 	public void unregisterListener(Listener listener) {
 		if(listener == null) return;
-		for(Method method : listener.getClass().getMethods()) {
+		for(Method method : DataUtil.getMethods(listener.getClass())) {
 			if(method.getParameterCount() == 1) {
 				Parameter p = method.getParameters()[0];
 				Class<?> type = p.getType();

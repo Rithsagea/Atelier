@@ -4,17 +4,26 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.rithsagea.util.event.EventBus;
+import com.rithsagea.util.event.EventHandler;
+import com.tempera.atelier.dnd.events.LoadClassEvent;
+import com.tempera.atelier.dnd.events.LoadSheetEvent;
+
 public abstract class CharacterClass implements AbstractClass {
 	
 	private Map<String, Attribute> attributes = new HashMap<>();
 	private int level = 1;
 	
-	private final String id;
-	private final String name;
+	private transient final String id;
+	private transient final String name;
+	
+	private transient EventBus eventBus;
 	
 	public CharacterClass(String id, String name) {
 		this.id = id;
 		this.name = name;
+		
+		eventBus = new EventBus();
 	}
 	
 	protected void addAttribute(String key, Attribute attribute) {
@@ -48,5 +57,12 @@ public abstract class CharacterClass implements AbstractClass {
 	@Override
 	public String toString() {
 		return getName() + " " + level;
+	}
+	
+	@EventHandler
+	public void onLoadSheet(LoadSheetEvent event) {
+		eventBus.clearListeners();
+		attributes.values().forEach(eventBus::registerListener);
+		eventBus.submitEvent(new LoadClassEvent(this));
 	}
 }

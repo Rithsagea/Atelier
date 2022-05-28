@@ -24,6 +24,7 @@ import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
+import com.tempera.atelier.dnd.events.LoadSheetEvent;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
@@ -74,14 +75,16 @@ public class Sheet implements Listener {
 	public void reload() {
 		eventBus.clearListeners();
 		eventBus.registerListener(this);
+		
 		for(AbstractClass c : classes) {
-			
-			
+			eventBus.registerListener(c);
 			for(Entry<String, Attribute> entry : c.getAttributeMap().entrySet()) {
 				eventBus.registerListener(entry.getValue());
-				attributes.put(entry.getKey(), entry.getValue()); //TODO add class id to identifier
+				attributes.put(entry.getKey(), entry.getValue());
 			}
 		}
+		
+		eventBus.submitEvent(new LoadSheetEvent(this));
 		
 		eventBus.submitEvent(new LoadSavingProficiencyEvent(this));
 		eventBus.submitEvent(new LoadSkillProficiencyEvent(this));
