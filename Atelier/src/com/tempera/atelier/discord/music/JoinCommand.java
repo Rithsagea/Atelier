@@ -1,16 +1,11 @@
 package com.tempera.atelier.discord.music;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.User;
 
-import net.dv8tion.jda.api.entities.AudioChannel;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 public class JoinCommand extends MusicSubCommand{
 
@@ -25,7 +20,7 @@ public class JoinCommand extends MusicSubCommand{
 
 	@Override
 	public List<String> getAliases() {
-		return Arrays.asList("m", "audio");
+		return null;
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.tempera.atelier.discord.music;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.tempera.atelier.discord.commands.PermissionLevel;
@@ -21,7 +20,7 @@ public class LoopCommand extends MusicSubCommand{
 
 	@Override
 	public List<String> getAliases() {
-		return Arrays.asList("m", "audio");
+		return null;
 	}
 
 	@Override
