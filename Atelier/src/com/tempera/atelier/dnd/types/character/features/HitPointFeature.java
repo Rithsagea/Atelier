@@ -84,8 +84,9 @@ public class HitPointFeature implements Attribute {
 		hitDie = new Die(hitDie.getCount() + 1, hitDie.getValue());
 	}
 	
+	//TODO this will be useful
 	@EventHandler
-	public void onLoadClass(LoadClassEvent event) {
+	private void onLoadClass(LoadClassEvent event) {
 		AbstractClass c = event.getCharacterClass();
 	}
 

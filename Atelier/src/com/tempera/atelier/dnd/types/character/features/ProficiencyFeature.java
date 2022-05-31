@@ -132,17 +132,17 @@ public class ProficiencyFeature implements Attribute {
 	
 	@EventHandler
 	private void onLoadSavingProficiency(LoadSavingProficiencyEvent e) {
-		for(Ability ability : savingProficiencies) e.addProficiency(ability);
+		savingProficiencies.forEach(e::addProficiency);
 	}
 	
 	@EventHandler
 	private void onLoadSkillProficiency(LoadSkillProficiencyEvent e) {
-		for(Skill skill : skillProficiencies) e.addProficiency(skill);
+		skillProficiencies.forEach(e::addProficiency);
 	}
 	
 	@EventHandler
 	private void onLoadEquipmentProficiency(LoadEquipmentProficiencyEvent e) {
-		for(Equipment equip : equipmentProficiencies) e.addProficiency(equip);
+		equipmentProficiencies.forEach(e::addProficiency);
 	}
 
 	@Override
