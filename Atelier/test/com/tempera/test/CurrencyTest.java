@@ -5,10 +5,10 @@ import com.tempera.atelier.dnd.types.enums.Currency.Price;
 
 public class CurrencyTest {
 	public static void main(String[] args) {
-		System.out.println(new Price(Currency.COPPER, 10000));
-		System.out.println(new Price(Currency.COPPER, 1000));
-		System.out.println(new Price(Currency.COPPER, 100));
-		System.out.println(new Price(Currency.COPPER, 10));
-		System.out.println(new Price(Currency.COPPER, 1));
+		System.out.println(new Price(10000, Currency.COPPER));
+		System.out.println(new Price(1000, Currency.COPPER));
+		System.out.println(new Price(100,Currency.COPPER));
+		System.out.println(new Price(10, Currency.COPPER));
+		System.out.println(new Price(1, Currency.COPPER));
 	}
 }

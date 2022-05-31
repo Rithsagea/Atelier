@@ -42,7 +42,7 @@ public enum Currency {
 			for(Currency c : CURRENCY_PRIORITY) {
 				value = convert(currency, c, quantity);
 				if(value == Math.rint(value)) {
-					this.currency = GOLD;
+					this.currency = c;
 					this.quantity = (int) value;
 					return;
 				}
