@@ -32,28 +32,20 @@ public enum Currency {
 		private final Currency currency;
 		private final int quantity;
 		
-		public Price(Currency currency, int quantity) {
+		private static final Currency[] CURRENCY_PRIORITY = {
+				GOLD, SILVER, COPPER
+		};
+		
+		public Price(int quantity, Currency currency) {
 			double value;
 			
-			value = convert(currency, GOLD, quantity);
-			if(value == Math.rint(value)) {
-				this.currency = GOLD;
-				this.quantity = (int) value;
-				return;
-			}
-			
-			value = convert(currency, SILVER, quantity);
-			if(value == Math.rint(value)) {
-				this.currency = SILVER;
-				this.quantity = (int) value;
-				return;
-			}
-			
-			value = convert(currency, COPPER, quantity);
-			if(value == Math.rint(value)) {
-				this.currency = COPPER;
-				this.quantity = (int) value;
-				return;
+			for(Currency c : CURRENCY_PRIORITY) {
+				value = convert(currency, c, quantity);
+				if(value == Math.rint(value)) {
+					this.currency = GOLD;
+					this.quantity = (int) value;
+					return;
+				}
 			}
 			
 			this.currency = currency;
