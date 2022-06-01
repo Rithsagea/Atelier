@@ -1,6 +1,6 @@
 package com.tempera.atelier.dnd.types.equipment.weapons;
 
-import com.tempera.atelier.dnd.IndexedItem;
+import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.enums.Currency;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;

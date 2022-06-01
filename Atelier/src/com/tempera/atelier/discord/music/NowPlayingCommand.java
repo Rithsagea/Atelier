@@ -6,8 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
+import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.PermissionLevel;
-import com.tempera.atelier.dnd.User;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

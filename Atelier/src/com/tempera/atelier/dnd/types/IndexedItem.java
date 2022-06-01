@@ -1,4 +1,4 @@
-package com.tempera.atelier.dnd;
+package com.tempera.atelier.dnd.types;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

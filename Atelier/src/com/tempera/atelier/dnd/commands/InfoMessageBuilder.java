@@ -2,7 +2,7 @@ package com.tempera.atelier.dnd.commands;
 
 import java.awt.Color;
 
-import com.tempera.atelier.dnd.Sheet;
+import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 

@@ -1,7 +1,7 @@
 package com.tempera.atelier.dnd.commands;
 
 import com.tempera.atelier.discord.Menu;
-import com.tempera.atelier.dnd.Sheet;
+import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Skill;
 

@@ -1,7 +1,7 @@
 package com.tempera.atelier.dnd.types.character.classes;
 
 import com.rithsagea.util.choice.Choice;
-import com.tempera.atelier.dnd.IndexedItem;
+import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.character.CharacterClass;
 import com.tempera.atelier.dnd.types.character.features.HitPointFeature;
 import com.tempera.atelier.dnd.types.character.features.ProficiencyFeature;

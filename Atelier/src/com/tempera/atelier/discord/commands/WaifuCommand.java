@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.MenuManager;
-import com.tempera.atelier.dnd.User;
+import com.tempera.atelier.discord.User;
 import com.tempera.util.EmbedUtil;
 import com.tempera.util.NekoUtil;
 

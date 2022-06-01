@@ -3,13 +3,13 @@ package com.tempera.atelier.dnd.commands.edit;
 import java.util.List;
 
 import com.tempera.atelier.AtelierBot;
+import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.BaseCommand;
 import com.tempera.atelier.discord.commands.CommandRegistry;
 import com.tempera.atelier.discord.commands.GroupCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
-import com.tempera.atelier.dnd.Sheet;
-import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.database.TypeRegistry;
+import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.spread.AbilitySpread;
 import com.tempera.atelier.dnd.types.spread.PointBuySpread;

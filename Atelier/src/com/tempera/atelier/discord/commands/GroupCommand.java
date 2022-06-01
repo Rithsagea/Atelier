@@ -2,7 +2,7 @@ package com.tempera.atelier.discord.commands;
 
 import java.util.List;
 
-import com.tempera.atelier.dnd.User;
+import com.tempera.atelier.discord.User;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

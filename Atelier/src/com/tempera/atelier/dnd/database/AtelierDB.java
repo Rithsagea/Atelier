@@ -26,9 +26,9 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.tempera.atelier.Config;
-import com.tempera.atelier.dnd.IndexedItem;
-import com.tempera.atelier.dnd.Sheet;
-import com.tempera.atelier.dnd.User;
+import com.tempera.atelier.discord.User;
+import com.tempera.atelier.dnd.types.IndexedItem;
+import com.tempera.atelier.dnd.types.Sheet;
 
 public class AtelierDB {
 	

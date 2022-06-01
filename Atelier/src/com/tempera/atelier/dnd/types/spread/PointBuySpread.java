@@ -3,7 +3,7 @@ package com.tempera.atelier.dnd.types.spread;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tempera.atelier.dnd.IndexedItem;
+import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.enums.Ability;
 
 @IndexedItem("point-buy")

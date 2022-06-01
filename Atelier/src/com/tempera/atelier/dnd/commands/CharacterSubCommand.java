@@ -2,10 +2,10 @@ package com.tempera.atelier.dnd.commands;
 
 import java.util.List;
 
+import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.AtelierCommand;
-import com.tempera.atelier.dnd.Sheet;
-import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.database.AtelierDB;
+import com.tempera.atelier.dnd.types.Sheet;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

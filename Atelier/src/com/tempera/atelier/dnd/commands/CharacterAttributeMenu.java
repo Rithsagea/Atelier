@@ -4,7 +4,7 @@ import java.util.Map.Entry;
 
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.discord.MenuManager;
-import com.tempera.atelier.dnd.Sheet;
+import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.character.Attribute;
 
 import net.dv8tion.jda.api.MessageBuilder;

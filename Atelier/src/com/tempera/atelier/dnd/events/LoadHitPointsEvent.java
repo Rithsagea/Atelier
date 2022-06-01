@@ -1,7 +1,7 @@
 package com.tempera.atelier.dnd.events;
 
 import com.rithsagea.util.rand.Dice;
-import com.tempera.atelier.dnd.Sheet;
+import com.tempera.atelier.dnd.types.Sheet;
 
 public class LoadHitPointsEvent extends LoadSheetEvent {
 	private Dice hitDice;

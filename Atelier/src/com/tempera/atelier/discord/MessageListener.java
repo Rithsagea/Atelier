@@ -17,7 +17,6 @@ import com.tempera.atelier.discord.commands.CommandRegistry;
 import com.tempera.atelier.discord.commands.StopCommand;
 import com.tempera.atelier.discord.commands.WaifuCommand;
 import com.tempera.atelier.discord.music.MusicCommand;
-import com.tempera.atelier.dnd.User;
 import com.tempera.atelier.dnd.commands.CharacterCommand;
 import com.tempera.atelier.dnd.commands.edit.EditCommand;
 import com.tempera.atelier.dnd.database.AtelierDB;

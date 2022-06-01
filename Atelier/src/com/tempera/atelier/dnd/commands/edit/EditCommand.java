@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
+import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.CommandRegistry;
 import com.tempera.atelier.discord.commands.GroupCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
-import com.tempera.atelier.dnd.User;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
