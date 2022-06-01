@@ -30,8 +30,8 @@ public class Rogue extends CharacterClass {
 							Skill.PERCEPTION, Skill.PERFORMANCE, Skill.PERSUASION,
 							Skill.SLEIGHT_OF_HAND, Skill.STEALTH),
 					
-					EquipmentType.LIGHT_ARMOR, EquipmentType.SIMPLE_WEAPONS, EquipmentType.HAND_CROSSBOWS,
-					EquipmentType.LONGSWORDS, EquipmentType.RAPIERS, EquipmentType.SHORTSWORDS,
+					EquipmentType.LIGHT_ARMOR, EquipmentType.SIMPLE_WEAPON, EquipmentType.HAND_CROSSBOW,
+					EquipmentType.LONGSWORD, EquipmentType.RAPIER, EquipmentType.SHORTSWORD,
 					EquipmentType.THIEVES_TOOLS,
 					
 					Ability.DEXTERITY, Ability.INTELLIGENCE));

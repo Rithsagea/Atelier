@@ -8,7 +8,7 @@ public abstract class Weapon extends BaseItem {
 	public Weapon(String name, String description, String source, Price price, int weight) {
 		super(name, description, source, price, weight);
 		
-		addCategories(EquipmentType.WEAPONS);
+		addCategories(EquipmentType.WEAPON);
 	}
 
 	@Override
