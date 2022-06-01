@@ -5,11 +5,11 @@ import com.tempera.util.WordUtil;
 public enum EquipmentType implements Proficiency {
 	LIGHT_ARMOR,
 	
-	WEAPONS,
-	SIMPLE_WEAPONS,
+	WEAPON,
+	SIMPLE_WEAPON,
 	MARTIAL_WEAPON,
 	MELEE_WEAPON,
-	
+	RANGE,
 	HAND_CROSSBOWS,
 	LONGSWORDS,
 	RAPIERS,
