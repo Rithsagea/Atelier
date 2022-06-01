@@ -7,7 +7,7 @@ import java.util.Set;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 
-public abstract class BaseEquipment implements Equipment {
+public abstract class BaseItem implements Item {
 
 	private Set<EquipmentType> categories;
 	
@@ -17,12 +17,16 @@ public abstract class BaseEquipment implements Equipment {
 	private Price price;
 	private int weight;
 	
-	public BaseEquipment(String name, String description, String source, Price price, int weight) {
+	private int amount;
+	
+	public BaseItem(String name, String description, String source, Price price, int weight) {
 		this.name = name;
 		this.description = description;
 		this.source = source;
 		this.price = price;
 		this.weight = weight;
+		
+		this.amount = 1;
 		
 		this.categories = new HashSet<>(); 
 	}
@@ -52,13 +56,34 @@ public abstract class BaseEquipment implements Equipment {
 	}
 
 	@Override
-	public int getWeight() {
+	public int getUnitWeight() {
 		return weight;
 	}
 	
 	@Override
 	public Set<EquipmentType> getCategories() {
 		return Collections.unmodifiableSet(categories);
+	}
+	
+	@Override
+	public int getAmount() {
+		return amount;
+	}
+	
+	@Override
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+	
+	@Override
+	public boolean isStackable(Item item) {
+		return getClass().equals(item.getClass());
+	}
+	
+	@Override
+	public void stack(Item item) {
+		amount += item.getAmount();
+		item.setAmount(0);
 	}
 
 }

@@ -7,7 +7,7 @@ import com.tempera.atelier.dnd.types.enums.Currency.Price;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property="type")
-public interface Equipment {
+public interface Item {
 	
 	public String getType();
 	public String getName();
@@ -15,7 +15,12 @@ public interface Equipment {
 	public String getSource();
 	
 	public Price getPrice();
-	public int getWeight();
+	public int getUnitWeight();
 	
 	public Set<EquipmentType> getCategories();
+	
+	public int getAmount();
+	public void setAmount(int amount);
+	public boolean isStackable(Item equipment);
+	public void stack(Item equipment);
 }

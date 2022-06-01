@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.tempera.atelier.dnd.types.character.AbstractClass;
-import com.tempera.atelier.dnd.types.equipment.Equipment;
+import com.tempera.atelier.dnd.types.equipment.Item;
 import com.tempera.atelier.dnd.types.spread.AbilitySpread;
 
 public class TypeRegistry {
@@ -19,7 +19,7 @@ public class TypeRegistry {
 		
 		addSupertype(AbilitySpread.class);
 		addSupertype(AbstractClass.class);
-		addSupertype(Equipment.class);
+		addSupertype(Item.class);
 	}
 	
 	private void addSupertype(Class<?> clazz) {

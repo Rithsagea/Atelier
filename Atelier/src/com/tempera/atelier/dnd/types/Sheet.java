@@ -30,6 +30,7 @@ import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.enums.Skill;
+import com.tempera.atelier.dnd.types.equipment.Inventory;
 import com.tempera.atelier.dnd.types.spread.AbilitySpread;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -46,6 +47,7 @@ public class Sheet implements Listener {
 	private transient Dice hitDice;
 	
 	private List<AbstractClass> classes = new ArrayList<>();
+	private Inventory inventory = new Inventory();
 	
 	private transient EventBus eventBus = new EventBus();
 	
@@ -190,6 +192,10 @@ public class Sheet implements Listener {
 	
 	public Map<String, Attribute> getAttributeMap() {
 		return Collections.unmodifiableMap(attributes);
+	}
+	
+	public Inventory getInventory() {
+		return inventory;
 	}
 	
 	//MUTATORS
