@@ -28,7 +28,7 @@ import com.tempera.atelier.dnd.events.LoadSheetEvent;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
-import com.tempera.atelier.dnd.types.enums.Equipment;
+import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.enums.Skill;
 import com.tempera.atelier.dnd.types.spread.AbilitySpread;
 
@@ -51,7 +51,7 @@ public class Sheet implements Listener {
 	
 	private transient Set<Ability> savingProficiencies = new HashSet<>();
 	private transient Set<Skill> skillProficiencies = new HashSet<>();
-	private transient Set<Equipment> equipmentProficiencies = new HashSet<>();
+	private transient Set<EquipmentType> equipmentProficiencies = new HashSet<>();
 	
 	private transient Map<String, Attribute> attributes = new HashMap<>();
 	
@@ -160,7 +160,7 @@ public class Sheet implements Listener {
 		return skillProficiencies.contains(skill);
 	}
 	
-	public boolean hasEquipmentProficiency(Equipment equipment) {
+	public boolean hasEquipmentProficiency(EquipmentType equipment) {
 		return equipmentProficiencies.contains(equipment);
 	}
 	

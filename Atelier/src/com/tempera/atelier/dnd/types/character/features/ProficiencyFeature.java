@@ -14,7 +14,7 @@ import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiency
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
-import com.tempera.atelier.dnd.types.enums.Equipment;
+import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.enums.Proficiency;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
@@ -66,7 +66,7 @@ public class ProficiencyFeature implements Attribute {
 			
 			content.setLength(0);
 			prefix = "";
-			for(Equipment equipment : equipmentProficiencies) {
+			for(EquipmentType equipment : equipmentProficiencies) {
 				content.append(prefix);
 				content.append(equipment);
 				prefix = ", ";
@@ -101,7 +101,7 @@ public class ProficiencyFeature implements Attribute {
 	
 	private Set<Ability> savingProficiencies;
 	private Set<Skill> skillProficiencies;
-	private Set<Equipment> equipmentProficiencies;
+	private Set<EquipmentType> equipmentProficiencies;
 	
 	private Choice<Skill> skillChoices;
 	
@@ -121,7 +121,7 @@ public class ProficiencyFeature implements Attribute {
 		for(Proficiency p : proficiencies) {
 			if(p instanceof Ability) savingProficiencies.add((Ability) p);
 			if(p instanceof Skill) skillProficiencies.add((Skill) p);
-			if(p instanceof Equipment) equipmentProficiencies.add((Equipment) p);
+			if(p instanceof EquipmentType) equipmentProficiencies.add((EquipmentType) p);
 		}
 	}
 	

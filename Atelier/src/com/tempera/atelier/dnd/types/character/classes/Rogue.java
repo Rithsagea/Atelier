@@ -7,7 +7,7 @@ import com.tempera.atelier.dnd.types.character.features.HitPointFeature;
 import com.tempera.atelier.dnd.types.character.features.ProficiencyFeature;
 import com.tempera.atelier.dnd.types.character.features.StartingEquipmentFeature;
 import com.tempera.atelier.dnd.types.enums.Ability;
-import com.tempera.atelier.dnd.types.enums.Equipment;
+import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
 @IndexedItem("rogue")
@@ -30,9 +30,9 @@ public class Rogue extends CharacterClass {
 							Skill.PERCEPTION, Skill.PERFORMANCE, Skill.PERSUASION,
 							Skill.SLEIGHT_OF_HAND, Skill.STEALTH),
 					
-					Equipment.LIGHT_ARMOR, Equipment.SIMPLE_WEAPONS, Equipment.HAND_CROSSBOWS,
-					Equipment.LONGSWORDS, Equipment.RAPIERS, Equipment.SHORTSWORDS,
-					Equipment.THIEVES_TOOLS,
+					EquipmentType.LIGHT_ARMOR, EquipmentType.SIMPLE_WEAPONS, EquipmentType.HAND_CROSSBOWS,
+					EquipmentType.LONGSWORDS, EquipmentType.RAPIERS, EquipmentType.SHORTSWORDS,
+					EquipmentType.THIEVES_TOOLS,
 					
 					Ability.DEXTERITY, Ability.INTELLIGENCE));
 			

@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
-import com.tempera.atelier.dnd.types.enums.EquipmentCategory;
+import com.tempera.atelier.dnd.types.enums.EquipmentType;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property="type")
 public interface Equipment {
@@ -17,5 +17,5 @@ public interface Equipment {
 	public Price getPrice();
 	public int getWeight();
 	
-	public Set<EquipmentCategory> getCategories();
+	public Set<EquipmentType> getCategories();
 }

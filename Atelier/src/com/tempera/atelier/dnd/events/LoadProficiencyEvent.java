@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.tempera.atelier.dnd.Sheet;
 import com.tempera.atelier.dnd.types.enums.Ability;
-import com.tempera.atelier.dnd.types.enums.Equipment;
+import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
 public class LoadProficiencyEvent<E> extends LoadSheetEvent {
@@ -44,7 +44,7 @@ public class LoadProficiencyEvent<E> extends LoadSheetEvent {
 		}
 	}
 	
-	public static class LoadEquipmentProficiencyEvent extends LoadProficiencyEvent<Equipment> {
+	public static class LoadEquipmentProficiencyEvent extends LoadProficiencyEvent<EquipmentType> {
 		public LoadEquipmentProficiencyEvent(Sheet sheet) {
 			super(sheet);
 		}
