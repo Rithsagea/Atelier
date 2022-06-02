@@ -14,18 +14,19 @@ import com.tempera.atelier.dnd.types.Sheet;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CharacterCommand extends GroupCommand {
-	
+
 	private AtelierDB db;
-	
+
 	public CharacterCommand(AtelierBot bot) {
 		db = bot.getDatabase();
-		
+
 		CommandRegistry registry = this.getCommandRegistry();
 		registry.registerCommand(new CharacterRollCommand(bot));
 		registry.registerCommand(new CharacterInfoCommand(db));
 		registry.registerCommand(new CharacterAttributeCommand(bot));
+		registry.registerCommand(new CharacterInventoryCommand(bot));
 	}
-	
+
 	@Override
 	public String getLabel() {
 		return "character";
@@ -40,7 +41,7 @@ public class CharacterCommand extends GroupCommand {
 	public PermissionLevel getLevel() {
 		return PermissionLevel.USER;
 	}
-	
+
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = db.getSheet(user.getSheetId());
