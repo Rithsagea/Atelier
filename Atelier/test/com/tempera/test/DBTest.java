@@ -16,39 +16,37 @@ public class DBTest {
 	public static void main(String[] args) {
 		Config config = new Config("config.properties");
 		AtelierDB db = new AtelierDB(config);
-		
+
 		editDB(db);
-		
+
 		db.save();
 	}
-	
+
 	public static void editDB(AtelierDB db) {
-		User user = db.getUser(171378138041942016l);
+		User user = db.getUser(529463250052448256l);
 		user.setLevel(PermissionLevel.ADMINISTRATOR);
-		
+
 		Sheet sheet = db.getSheet(user.getSheetId());
-		
+
 		sheet.clearClasses();
 		sheet.addClass(new Rogue());
 		sheet.reload();
 		sheet.setHitPoints(10000);
-		
+
 		Inventory inventory = sheet.getInventory();
-		
+
 		inventory.addItem(new PHBLeatherArmor());
 		inventory.addItem(new PHBDagger());
 		inventory.addItem(new PHBLeatherArmor());
 		inventory.addItem(new PHBDagger());
 		inventory.addItem(new PHBLeatherArmor());
 		inventory.addItem(new PHBDagger());
-		
+
 		System.out.println("User: " + user);
 		System.out.println("Name: " + sheet.getName());
-		for(Ability a : Ability.values()) {
-			System.out.printf("%s%s: %d [%s]\n",
-					sheet.hasSavingProficiency(a) ? "*" : "",
-					WordUtil.capitalize(a.name()),
-					sheet.getAbilityScore(a), 
+		for (Ability a : Ability.values()) {
+			System.out.printf("%s%s: %d [%s]\n", sheet.hasSavingProficiency(a) ? "*" : "",
+					WordUtil.capitalize(a.name()), sheet.getAbilityScore(a),
 					WordUtil.formatModifier(sheet.getAbilityModifier(a)));
 		}
 	}
