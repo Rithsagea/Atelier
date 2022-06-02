@@ -26,14 +26,21 @@ public class EditNameCommand implements AtelierCommand {
 	}
 
 	@Override
-	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		if(args.size() >= 2) {
-			user.getSelectedSheet().setName(args.get(1));
-			event.getChannel().sendMessage("Set character's name to " + args.get(1)).queue();
+	public void execute(User user, List<String> args,
+		MessageReceivedEvent event) {
+		if (args.size() >= 2) {
+			user.getSelectedSheet()
+				.setName(args.get(1));
+			event.getChannel()
+				.sendMessage("Set character's name to " + args.get(1))
+				.queue();
 			return;
 		}
-		
-		event.getChannel().sendMessage("Character name: " + user.getSelectedSheet().getName()).queue();
+
+		event.getChannel()
+			.sendMessage("Character name: " + user.getSelectedSheet()
+				.getName())
+			.queue();
 	}
-	
+
 }

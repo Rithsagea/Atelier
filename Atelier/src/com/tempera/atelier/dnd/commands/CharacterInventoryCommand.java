@@ -37,8 +37,10 @@ public class CharacterInventoryCommand extends CharacterSubCommand {
 	}
 
 	@Override
-	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
-		menuManager.addMenu(event.getChannel(), new CharacterInventoryMenu(sheet));
+	public void execute(Sheet sheet, User user, List<String> args,
+		MessageReceivedEvent event) {
+		menuManager.addMenu(event.getChannel(),
+			new CharacterInventoryMenu(sheet));
 	}
 
 }

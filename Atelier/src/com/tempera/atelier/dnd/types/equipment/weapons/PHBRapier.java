@@ -11,9 +11,9 @@ public class PHBRapier extends Weapon {
 
 	public PHBRapier() {
 		super("Rapier", null,
-				"PHB, page 149. Available in the SRD and the Basic Rules.",
-				new Price(25, Currency.GOLD), 2);
-		
+			"PHB, page 149. Available in the SRD and the Basic Rules.",
+			new Price(25, Currency.GOLD), 2);
+
 		addCategories(EquipmentType.MARTIAL_WEAPON, EquipmentType.MELEE_WEAPON);
 	}
 }

@@ -13,24 +13,25 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class AtelierAudioManager {
 	private AudioPlayerManager playerManager;
 	private Map<Guild, AtelierAudioHandler> audioHandlers;
-	
+
 	public AtelierAudioManager() {
 		playerManager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(playerManager);
-		
+
 		audioHandlers = new HashMap<>();
 	}
-	
+
 	public void shutdown() {
 		playerManager.shutdown();
 	}
-	
+
 	public AtelierAudioHandler getAudioHandler(MessageReceivedEvent event) {
 		Guild guild = event.getGuild();
-		if(!audioHandlers.containsKey(guild)) {
-			audioHandlers.put(guild, new AtelierAudioHandler(playerManager, playerManager.createPlayer(), event));
+		if (!audioHandlers.containsKey(guild)) {
+			audioHandlers.put(guild, new AtelierAudioHandler(playerManager,
+				playerManager.createPlayer(), event));
 		}
-		
+
 		return audioHandlers.get(guild);
 	}
 }

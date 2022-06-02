@@ -10,9 +10,9 @@ import com.tempera.atelier.dnd.types.equipment.Weapon;
 public class PHBShortsword extends Weapon {
 	public PHBShortsword() {
 		super("shortsword", null,
-				"Source: PHB, page 149. Available in the SRD and the Basic Rules.",
-				new Price(2, Currency.GOLD), 2);
-		
+			"Source: PHB, page 149. Available in the SRD and the Basic Rules.",
+			new Price(2, Currency.GOLD), 2);
+
 		addCategories(EquipmentType.MARTIAL_WEAPON, EquipmentType.MELEE_WEAPON);
 	}
 }

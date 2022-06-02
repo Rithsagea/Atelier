@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class CharacterRollCommand extends CharacterSubCommand {
 
 	private MenuManager menuManager;
-	
+
 	public CharacterRollCommand(AtelierBot bot) {
 		super(bot.getDatabase());
 		menuManager = bot.getMenuManager();
@@ -37,30 +37,35 @@ public class CharacterRollCommand extends CharacterSubCommand {
 	}
 
 	@Override
-	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
-		
-		if(args.size() == 1) {
-			menuManager.addMenu(event.getChannel(), new CharacterRollMenu(event.getChannel(), sheet));
+	public void execute(Sheet sheet, User user, List<String> args,
+		MessageReceivedEvent event) {
+
+		if (args.size() == 1) {
+			menuManager.addMenu(event.getChannel(),
+				new CharacterRollMenu(event.getChannel(), sheet));
 			return;
 		}
-		
-		event.getChannel().sendMessage(roll(args.get(1), sheet)).queue();
+
+		event.getChannel()
+			.sendMessage(roll(args.get(1), sheet))
+			.queue();
 	}
-	
-	public static String roll(String stat, Sheet sheet)
-	{
+
+	public static String roll(String stat, Sheet sheet) {
 		Ability a = Ability.fromLabel(stat);
-		if(a != null) {
-			int roll = (int) (Math.random() * 20 + 1) + sheet.getAbilityModifier(a);
+		if (a != null) {
+			int roll = (int) (Math.random() * 20 + 1)
+				+ sheet.getAbilityModifier(a);
 			return String.format("%s roll: %d", a, roll);
 		}
-		
+
 		Skill s = Skill.fromLabel(stat);
-		if(s != null) {
-			int roll = (int) (Math.random() * 20 + 1) + sheet.getSkillModifier(s);
+		if (s != null) {
+			int roll = (int) (Math.random() * 20 + 1)
+				+ sheet.getSkillModifier(s);
 			return String.format("%s roll: %d", s, roll);
 		}
-		
+
 		return "Invalid Stat!";
 	}
 }

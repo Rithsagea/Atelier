@@ -7,7 +7,7 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class SkipCommand extends MusicSubCommand{
+public class SkipCommand extends MusicSubCommand {
 
 	public SkipCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
@@ -29,13 +29,19 @@ public class SkipCommand extends MusicSubCommand{
 	}
 
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, User user,
+		List<String> args, MessageReceivedEvent event) {
 		if (audioHandler.getPlayingTrack() != null) {
-			event.getChannel().sendMessage(String.format("Skipping `%s`!", audioHandler.getPlayingTrack().getInfo().title)).queue();
+			event.getChannel()
+				.sendMessage(String.format("Skipping `%s`!",
+					audioHandler.getPlayingTrack()
+						.getInfo().title))
+				.queue();
 			audioHandler.nextTrack();
-		}
-		else
-			event.getChannel().sendMessage("No song to skip!").queue();
+		} else
+			event.getChannel()
+				.sendMessage("No song to skip!")
+				.queue();
 	}
 
 }

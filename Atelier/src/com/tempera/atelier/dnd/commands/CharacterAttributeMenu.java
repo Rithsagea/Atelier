@@ -20,9 +20,9 @@ public class CharacterAttributeMenu implements Menu {
 
 	private String selected;
 	private Sheet sheet;
-	
+
 	private MenuManager menuManager;
-	
+
 	public CharacterAttributeMenu(Sheet sheet, MenuManager menuManager) {
 		this.sheet = sheet;
 		this.menuManager = menuManager;
@@ -30,29 +30,34 @@ public class CharacterAttributeMenu implements Menu {
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		event.deferEdit().queue();
-		menuManager.addMenu(event.getChannel(), sheet.getAttribute(selected).getMenu());
+		event.deferEdit()
+			.queue();
+		menuManager.addMenu(event.getChannel(), sheet.getAttribute(selected)
+			.getMenu());
 	}
 
 	@Override
 	public void onSelectInteract(SelectMenuInteractionEvent event) {
-		selected = event.getSelectedOptions().get(0).getValue();
-		event.deferEdit().queue();
+		selected = event.getSelectedOptions()
+			.get(0)
+			.getValue();
+		event.deferEdit()
+			.queue();
 	}
 
 	@Override
 	public Message initialize() {
 		MessageBuilder res = new MessageBuilder("Choose an attribute");
 		Builder menu = SelectMenu.create("menu:roll")
-				.setPlaceholder("Choose attribute")
-				.setRequiredRange(1, 1);
-				for(Entry<String, Attribute> entry : sheet.getAttributeMap().entrySet())
-					menu.addOption(entry.getValue().getName(), entry.getKey());
-				res.setActionRows(
-						ActionRow.of(menu.build()),
-						ActionRow.of(Button.primary("get", "Get")));
+			.setPlaceholder("Choose attribute")
+			.setRequiredRange(1, 1);
+		for (Entry<String, Attribute> entry : sheet.getAttributeMap()
+			.entrySet())
+			menu.addOption(entry.getValue()
+				.getName(), entry.getKey());
+		res.setActionRows(ActionRow.of(menu.build()),
+			ActionRow.of(Button.primary("get", "Get")));
 		return res.build();
 	}
-	
 
 }

@@ -28,7 +28,8 @@ public class CharacterInventoryMenu implements Menu {
 
 		eb.setColor(new Color(165, 42, 42));
 		eb.setTitle("Inventory");
-		List<Item> items = sheet.getInventory().getContents();
+		List<Item> items = sheet.getInventory()
+			.getContents();
 		for (Item item : items) {
 			eb.appendDescription(item.getName() + "\n");
 		}

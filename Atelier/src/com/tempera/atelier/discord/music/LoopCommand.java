@@ -7,7 +7,7 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class LoopCommand extends MusicSubCommand{
+public class LoopCommand extends MusicSubCommand {
 
 	public LoopCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
@@ -29,8 +29,12 @@ public class LoopCommand extends MusicSubCommand{
 	}
 
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		event.getChannel().sendMessage(audioHandler.toggleLoop() ? "Loop enabled." : "Loop disabled.").queue();
+	public void execute(AtelierAudioHandler audioHandler, User user,
+		List<String> args, MessageReceivedEvent event) {
+		event.getChannel()
+			.sendMessage(
+				audioHandler.toggleLoop() ? "Loop enabled." : "Loop disabled.")
+			.queue();
 	}
 
 }

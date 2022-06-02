@@ -19,38 +19,41 @@ public class CharacterRollMenu implements Menu {
 
 	private String selected = "";
 	private Sheet sheet;
-	
+
 	public CharacterRollMenu(MessageChannel channel, Sheet sheet) {
 		this.sheet = sheet;
 	}
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		event.reply(CharacterRollCommand.roll(selected, sheet)).queue();
+		event.reply(CharacterRollCommand.roll(selected, sheet))
+			.queue();
 	}
 
 	@Override
 	public void onSelectInteract(SelectMenuInteractionEvent event) {
-		selected = event.getSelectedOptions().get(0).getValue();
-		event.deferEdit().queue();
+		selected = event.getSelectedOptions()
+			.get(0)
+			.getValue();
+		event.deferEdit()
+			.queue();
 	}
 
 	@Override
 	public Message initialize() {
 		MessageBuilder res = new MessageBuilder("Choose a stat to roll for:");
 		Builder menu = SelectMenu.create("roll")
-				.setPlaceholder("Choose a stat...")
-				.setRequiredRange(1, 1);
-		
-		for(Ability a : Ability.values())
+			.setPlaceholder("Choose a stat...")
+			.setRequiredRange(1, 1);
+
+		for (Ability a : Ability.values())
 			menu.addOption(a.toString(), a.getLabel());
-		for(Skill s : Skill.values())
+		for (Skill s : Skill.values())
 			menu.addOption(s.toString(), s.getLabel());
-		
-		res.setActionRows(
-				ActionRow.of(menu.build()),
-				ActionRow.of(Button.primary("get", "Get")));
-		
+
+		res.setActionRows(ActionRow.of(menu.build()),
+			ActionRow.of(Button.primary("get", "Get")));
+
 		return res.build();
 	}
 

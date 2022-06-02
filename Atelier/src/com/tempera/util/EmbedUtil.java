@@ -8,7 +8,7 @@ public class EmbedUtil {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setTitle(title);
 		eb.setImage(url);
-		
+
 		return eb.build();
 	}
 }

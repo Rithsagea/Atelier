@@ -34,10 +34,15 @@ public class QueueCommand extends MusicSubCommand {
 	}
 
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		int page = args.size() <= 1 ? 1 : Math.min(Integer.parseInt(args.get(1)), (int) Math.ceil(audioHandler.getQueue().size() / 10d));
-		
-		menuManager.addMenu(event.getChannel(), new QueueMenu(audioHandler, menuManager, page));
+	public void execute(AtelierAudioHandler audioHandler, User user,
+		List<String> args, MessageReceivedEvent event) {
+		int page = args.size() <= 1 ? 1
+			: Math.min(Integer.parseInt(args.get(1)),
+				(int) Math.ceil(audioHandler.getQueue()
+					.size() / 10d));
+
+		menuManager.addMenu(event.getChannel(),
+			new QueueMenu(audioHandler, menuManager, page));
 	}
 
 }

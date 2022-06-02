@@ -7,7 +7,7 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class JoinCommand extends MusicSubCommand{
+public class JoinCommand extends MusicSubCommand {
 
 	public JoinCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
@@ -27,9 +27,10 @@ public class JoinCommand extends MusicSubCommand{
 	public PermissionLevel getLevel() {
 		return PermissionLevel.USER;
 	}
-	
+
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, User user,
+		List<String> args, MessageReceivedEvent event) {
 		audioHandler.joinVc(event);
 	}
 

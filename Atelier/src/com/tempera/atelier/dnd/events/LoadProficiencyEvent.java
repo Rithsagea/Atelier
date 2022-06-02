@@ -13,38 +13,41 @@ public class LoadProficiencyEvent<E> extends LoadSheetEvent {
 	public LoadProficiencyEvent(Sheet sheet) {
 		super(sheet);
 	}
-	
+
 	private Set<E> proficiencies = new HashSet<>();
-	
+
 	public Set<E> getProficiencies() {
 		return Collections.unmodifiableSet(proficiencies);
 	}
-	
+
 	public boolean hasProficiency(E proficiency) {
 		return proficiencies.contains(proficiency);
 	}
-	
+
 	public void addProficiency(E proficiency) {
 		proficiencies.add(proficiency);
 	}
-	
+
 	public void removeProficiency(E proficiency) {
 		proficiencies.remove(proficiency);
 	}
-	
-	public static class LoadSavingProficiencyEvent extends LoadProficiencyEvent<Ability> {
+
+	public static class LoadSavingProficiencyEvent
+		extends LoadProficiencyEvent<Ability> {
 		public LoadSavingProficiencyEvent(Sheet sheet) {
 			super(sheet);
 		}
 	}
-	
-	public static class LoadSkillProficiencyEvent extends LoadProficiencyEvent<Skill> {
+
+	public static class LoadSkillProficiencyEvent
+		extends LoadProficiencyEvent<Skill> {
 		public LoadSkillProficiencyEvent(Sheet sheet) {
 			super(sheet);
 		}
 	}
-	
-	public static class LoadEquipmentProficiencyEvent extends LoadProficiencyEvent<EquipmentType> {
+
+	public static class LoadEquipmentProficiencyEvent
+		extends LoadProficiencyEvent<EquipmentType> {
 		public LoadEquipmentProficiencyEvent(Sheet sheet) {
 			super(sheet);
 		}

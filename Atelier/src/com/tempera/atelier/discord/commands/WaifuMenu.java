@@ -13,14 +13,14 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 
 public class WaifuMenu implements Menu {
-	
+
 	private String selectedWaifu = "waifu";
 	private String title = "Waifu";
-	
+
 	@Override
 	public Message initialize() {
 		MessageBuilder res = new MessageBuilder("Pick a type of waifu");
-		
+
 		SelectMenu.Builder b = SelectMenu.create("waifuMenu");
 		b.setPlaceholder("Waifu Type");
 		b.addOption("Cat", "cat");
@@ -30,34 +30,51 @@ public class WaifuMenu implements Menu {
 		b.addOption("Catgirl", "catgirl");
 		b.addOption("Foxgirl", "foxgirl");
 		b.setMaxValues(1);
-		
-		res.setActionRows(
-				ActionRow.of(b.build()),
-				ActionRow.of(Button.primary("get", "Get")));
-		
+
+		res.setActionRows(ActionRow.of(b.build()),
+			ActionRow.of(Button.primary("get", "Get")));
+
 		return res.build();
 	}
-	
+
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
 		String url;
-		
-		switch(selectedWaifu) {
-			case "cat": url = NekoUtil.getCat(); break;
-			case "dog": url = NekoUtil.getDog(); break;
-			case "catboy": url = NekoUtil.getCatboy(); break;
-			case "catgirl": url = NekoUtil.getCatgirl(); break;
-			case "foxgirl": url = NekoUtil.getFoxgirl(); break;
-			default: url = NekoUtil.getWaifu(); break;
+
+		switch (selectedWaifu) {
+		case "cat":
+			url = NekoUtil.getCat();
+			break;
+		case "dog":
+			url = NekoUtil.getDog();
+			break;
+		case "catboy":
+			url = NekoUtil.getCatboy();
+			break;
+		case "catgirl":
+			url = NekoUtil.getCatgirl();
+			break;
+		case "foxgirl":
+			url = NekoUtil.getFoxgirl();
+			break;
+		default:
+			url = NekoUtil.getWaifu();
+			break;
 		}
-		
-		event.replyEmbeds(EmbedUtil.getEmbed(url, title)).queue();
+
+		event.replyEmbeds(EmbedUtil.getEmbed(url, title))
+			.queue();
 	}
 
 	@Override
 	public void onSelectInteract(SelectMenuInteractionEvent event) {
-		selectedWaifu = event.getSelectedOptions().get(0).getValue();
-		title = event.getSelectedOptions().get(0).getLabel();
-		event.deferEdit().queue();
+		selectedWaifu = event.getSelectedOptions()
+			.get(0)
+			.getValue();
+		title = event.getSelectedOptions()
+			.get(0)
+			.getLabel();
+		event.deferEdit()
+			.queue();
 	}
 }

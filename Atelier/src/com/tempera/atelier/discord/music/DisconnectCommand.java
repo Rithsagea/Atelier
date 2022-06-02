@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-public class DisconnectCommand extends MusicSubCommand{
+public class DisconnectCommand extends MusicSubCommand {
 
 	public DisconnectCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
@@ -32,17 +32,29 @@ public class DisconnectCommand extends MusicSubCommand{
 	}
 
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		if(event.getAuthor().isBot()) return;
-		
-		AudioManager manager = event.getGuild().getAudioManager();
-		GuildVoiceState state = event.getMember().getVoiceState();
-		
-		if(!manager.isConnected()) {
-			event.getChannel().sendMessage("Not in a voice channel!").queue(); return;
+	public void execute(AtelierAudioHandler audioHandler, User user,
+		List<String> args, MessageReceivedEvent event) {
+		if (event.getAuthor()
+			.isBot())
+			return;
+
+		AudioManager manager = event.getGuild()
+			.getAudioManager();
+		GuildVoiceState state = event.getMember()
+			.getVoiceState();
+
+		if (!manager.isConnected()) {
+			event.getChannel()
+				.sendMessage("Not in a voice channel!")
+				.queue();
+			return;
 		}
 		manager.closeAudioConnection();
-		event.getChannel().sendMessage(String.format("Disconnected from channel `[%s]`", state.getChannel().getName())).queue();
+		event.getChannel()
+			.sendMessage(String.format("Disconnected from channel `[%s]`",
+				state.getChannel()
+					.getName()))
+			.queue();
 	}
 
 }

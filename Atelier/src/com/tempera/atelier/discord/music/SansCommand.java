@@ -7,7 +7,7 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class SansCommand extends MusicSubCommand{
+public class SansCommand extends MusicSubCommand {
 
 	public SansCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
@@ -29,13 +29,17 @@ public class SansCommand extends MusicSubCommand{
 	}
 
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, User user,
+		List<String> args, MessageReceivedEvent event) {
 		int times = 1;
 		if (args.size() > 1)
 			times = Integer.parseInt(args.get(1));
-		for (int i = 0 ; i < times; i++) {
-			audioHandler.loadTrack("https://www.youtube.com/watch?v=wDgQdr8ZkTw");
-			event.getChannel().sendMessage("bad time").queue();
+		for (int i = 0; i < times; i++) {
+			audioHandler
+				.loadTrack("https://www.youtube.com/watch?v=wDgQdr8ZkTw");
+			event.getChannel()
+				.sendMessage("bad time")
+				.queue();
 		}
 	}
 }

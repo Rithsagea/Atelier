@@ -12,14 +12,14 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class EditCommand extends GroupCommand {
-	
+
 	public EditCommand(AtelierBot bot) {
 		CommandRegistry reg = getCommandRegistry();
 		reg.registerCommand(new EditSheetCommand(bot));
 		reg.registerCommand(new EditNameCommand());
 		reg.registerCommand(new EditStatCommand(bot));
 	}
-	
+
 	@Override
 	public String getLabel() {
 		return "edit";
@@ -36,8 +36,11 @@ public class EditCommand extends GroupCommand {
 	}
 
 	@Override
-	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
-		event.getChannel().sendMessage("Currently editing: " + user.getSelectedSheet()).queue();
+	public void executeDefault(User user, List<String> args,
+		MessageReceivedEvent event) {
+		event.getChannel()
+			.sendMessage("Currently editing: " + user.getSelectedSheet())
+			.queue();
 	}
 
 }

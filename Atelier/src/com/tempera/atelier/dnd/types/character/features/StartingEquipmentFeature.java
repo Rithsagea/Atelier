@@ -42,8 +42,8 @@ public class StartingEquipmentFeature implements Attribute {
 	@SafeVarargs
 	public StartingEquipmentFeature(List<EquipmentOption>... options) {
 		this.options = Stream.of(options)
-				.map(Collections::unmodifiableList)
-				.collect(Collectors.toList());
+			.map(Collections::unmodifiableList)
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -63,7 +63,8 @@ public class StartingEquipmentFeature implements Attribute {
 			EmbedBuilder eb = new EmbedBuilder();
 
 			eb.setTitle("Starting Equipment");
-			eb.appendDescription("You start with the following items, plus anything provided by your background.");
+			eb.appendDescription(
+				"You start with the following items, plus anything provided by your background.");
 			eb.appendDescription("\n\n");
 			eb.appendDescription("Lorem Ipsum");
 

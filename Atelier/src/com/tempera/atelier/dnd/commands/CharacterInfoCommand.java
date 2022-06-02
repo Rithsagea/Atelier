@@ -9,7 +9,7 @@ import com.tempera.atelier.dnd.types.Sheet;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterInfoCommand extends CharacterSubCommand{
+public class CharacterInfoCommand extends CharacterSubCommand {
 
 	public CharacterInfoCommand(AtelierDB db) {
 		super(db);
@@ -31,8 +31,11 @@ public class CharacterInfoCommand extends CharacterSubCommand{
 	}
 
 	@Override
-	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
-		event.getChannel().sendMessage(new CharacterInfoMessageBuilder(sheet).build()).queue();
+	public void execute(Sheet sheet, User user, List<String> args,
+		MessageReceivedEvent event) {
+		event.getChannel()
+			.sendMessage(new CharacterInfoMessageBuilder(sheet).build())
+			.queue();
 	}
 
 }

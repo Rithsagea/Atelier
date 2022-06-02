@@ -21,39 +21,39 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
 public class AtelierBot {
-	
+
 	private AtelierDB db;
 	private Config config;
-	
+
 	private Logger logger;
 	private JDA jda;
 	private ScheduledExecutorService scheduler;
-	
+
 	private AtelierAudioManager audioManager;
 	private CommandRegistry commandRegistry;
 	private MenuManager menuManager;
-	
+
 	private boolean running;
-	
+
 	public AtelierBot(String configPath) {
 		System.setProperty("http.agent", "Chrome");
-		
+
 		this.config = new Config(configPath);
-		
+
 		db = new AtelierDB(config);
 		commandRegistry = new CommandRegistry();
 		menuManager = new MenuManager();
 		logger = LoggerFactory.getLogger("Atelier");
 		running = true;
-		
+
 		scheduler = Executors.newScheduledThreadPool(10);
-		
+
 		audioManager = new AtelierAudioManager();
 	}
-	
+
 	public void init() {
 		logger.info("Initializing Atelier");
-		
+
 		JDABuilder builder = JDABuilder.createDefault(config.getDiscordToken());
 		try {
 			jda = builder.build();
@@ -61,50 +61,51 @@ public class AtelierBot {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
+
 		registerTasks();
-		
+
 		jda.addEventListener(new LoginListener(this));
 		jda.addEventListener(new MessageListener(this));
 	}
-	
+
 	private void registerTasks() {
-		scheduler.scheduleAtFixedRate(new DBSaveTask(db), 15, 300, TimeUnit.SECONDS);
+		scheduler.scheduleAtFixedRate(new DBSaveTask(db), 15, 300,
+			TimeUnit.SECONDS);
 	}
-	
+
 	public Config getConfig() {
 		return config;
 	}
-	
+
 	public Logger getLogger() {
 		return logger;
 	}
-	
+
 	public AtelierDB getDatabase() {
 		return db;
 	}
-	
+
 	public CommandRegistry getCommandRegistry() {
 		return commandRegistry;
 	}
-	
+
 	public AtelierAudioManager getAudioManager() {
 		return audioManager;
 	}
-	
+
 	public MenuManager getMenuManager() {
 		return menuManager;
 	}
-	
+
 	public void stop() {
 		running = false;
 		jda.shutdownNow();
 		audioManager.shutdown();
 		db.disconnect();
-		
+
 		System.exit(0);
 	}
-		
+
 	public boolean isRunning() {
 		return running;
 	}

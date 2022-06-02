@@ -16,11 +16,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class MusicCommand extends GroupCommand {
 
 	private AtelierAudioManager audioManager;
-	
+
 	public MusicCommand(AtelierBot bot) {
 		audioManager = bot.getAudioManager();
 		CommandRegistry registry = this.getCommandRegistry();
-		
+
 		registry.registerCommand(new PlayCommand(audioManager));
 		registry.registerCommand(new QueueCommand(bot));
 		registry.registerCommand(new JoinCommand(audioManager));
@@ -31,7 +31,7 @@ public class MusicCommand extends GroupCommand {
 		registry.registerCommand(new DisconnectCommand(audioManager));
 		registry.registerCommand(new SansCommand(audioManager));
 	}
-	
+
 	@Override
 	public String getLabel() {
 		return "music";
@@ -46,20 +46,26 @@ public class MusicCommand extends GroupCommand {
 	public PermissionLevel getLevel() {
 		return PermissionLevel.USER;
 	}
-	
+
 	@Override
-	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
+	public void executeDefault(User user, List<String> args,
+		MessageReceivedEvent event) {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.ORANGE);
 		eb.setTitle("List of music commands:");
 		eb.addField("join", "Joins the user's current voice channel", true);
 		eb.addField("dc / disconnect", "Disconnects from voice channels", true);
-		eb.addField("play [URL]", "Adds a song or playlist from a URL if possible", true);
+		eb.addField("play [URL]",
+			"Adds a song or playlist from a URL if possible", true);
 		eb.addField("playing / np", "Displays currently playing song", true);
-		eb.addField("queue [PAGE NUM]", "Displays queued up songs. Optional page number as a second argument.", true);
+		eb.addField("queue [PAGE NUM]",
+			"Displays queued up songs. Optional page number as a second argument.",
+			true);
 		eb.addField("skip", "Skips the currently playing song", true);
 		eb.addField("loop", "Toggles looping for all songs in queue", true);
 		eb.addField("sans", "bad time", true);
-		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+		event.getChannel()
+			.sendMessageEmbeds(eb.build())
+			.queue();
 	}
 }

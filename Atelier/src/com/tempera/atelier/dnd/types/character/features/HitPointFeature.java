@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEve
 
 @IndexedItem("feature-hit-points")
 public class HitPointFeature implements Attribute {
-	
+
 	private class HitPointMenu implements Menu {
 
 		@Override
@@ -30,61 +30,66 @@ public class HitPointFeature implements Attribute {
 			MessageBuilder msg = new MessageBuilder();
 			EmbedBuilder embed = new EmbedBuilder();
 			StringBuilder content = new StringBuilder();
-			
+
 			content.append(String.format("**Hit Dice**: %s\n", hitDie));
-			content.append(String.format("**Hit Points at 1st Level**: %d + %s modifier\n", 
-					hitDie.getValue(),
-					Ability.CONSTITUTION));
-			content.append(String.format("**Hit Points at Higher Levels**: %s (or %s) + your %s modifier per %s level after 1st\n", 
-					hitDie, hitDie.getValue() / 2 + 1, Ability.CONSTITUTION,
-					"Class"));
-			
+			content.append(
+				String.format("**Hit Points at 1st Level**: %d + %s modifier\n",
+					hitDie.getValue(), Ability.CONSTITUTION));
+			content.append(String.format(
+				"**Hit Points at Higher Levels**: %s (or %s) + your %s modifier per %s level after 1st\n",
+				hitDie, hitDie.getValue() / 2 + 1, Ability.CONSTITUTION,
+				"Class"));
+
 			embed.setTitle("**" + getName() + "**");
 			embed.setDescription(content);
 			embed.setColor(Color.GREEN);
-			
+
 			msg.setEmbeds(embed.build());
-			
+
 			return msg.build();
 		}
 
 		@Override
-		public void onButtonInteract(ButtonInteractionEvent event) { }
+		public void onButtonInteract(ButtonInteractionEvent event) {
+		}
 
 		@Override
-		public void onSelectInteract(SelectMenuInteractionEvent event) { }
-		
+		public void onSelectInteract(SelectMenuInteractionEvent event) {
+		}
+
 	}
-	
+
 	private Die hitDie;
-	
+
 	public HitPointFeature() {
 		this(8);
 	}
-	
+
 	public HitPointFeature(int diceValue) {
 		this.hitDie = new Die(1, diceValue);
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Hit Points";
 	}
-	
+
 	@EventHandler
 	public void onLoadHitPoints(LoadHitPointsEvent e) {
 		e.addHitDice(new Dice(hitDie));
-		
-		e.addMaxHitPoints(hitDie.getValue() + e.getSheet().getAbilityModifier(Ability.CONSTITUTION));
-		e.addMaxHitPoints((hitDie.getValue() / 2 + 1) * (hitDie.getCount() - 1));
+
+		e.addMaxHitPoints(hitDie.getValue() + e.getSheet()
+			.getAbilityModifier(Ability.CONSTITUTION));
+		e.addMaxHitPoints(
+			(hitDie.getValue() / 2 + 1) * (hitDie.getCount() - 1));
 	}
-	
+
 	@EventHandler
 	public void onLevelUp(LevelUpClassEvent e) {
 		hitDie = new Die(hitDie.getCount() + 1, hitDie.getValue());
 	}
-	
-	//TODO this will be useful
+
+	// TODO this will be useful
 	@EventHandler
 	private void onLoadClass(LoadClassEvent event) {
 		AbstractClass c = event.getCharacterClass();

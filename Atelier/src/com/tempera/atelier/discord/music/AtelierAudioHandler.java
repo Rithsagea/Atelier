@@ -27,7 +27,8 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadResultHandler, AudioSendHandler {
+public class AtelierAudioHandler extends AudioEventAdapter
+	implements AudioLoadResultHandler, AudioSendHandler {
 
 	private BlockingQueue<AudioTrack> queue;
 	private AudioPlayerManager manager;
@@ -36,7 +37,8 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	private MessageChannel channel;
 	private boolean looping;
 
-	public AtelierAudioHandler(AudioPlayerManager manager, AudioPlayer player, MessageReceivedEvent event) {
+	public AtelierAudioHandler(AudioPlayerManager manager, AudioPlayer player,
+		MessageReceivedEvent event) {
 		this.manager = manager;
 		this.player = player;
 		this.queue = new LinkedBlockingQueue<>();
@@ -47,28 +49,39 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 		player.addListener(this);
 	}
 
-
 	public boolean toggleLoop() {
 		if (looping)
 			return looping = false;
 		return looping = true;
 	}
-	
+
 	public AudioChannel joinVc(MessageReceivedEvent event) {
-		if(event.getAuthor().isBot()) return null;
-		
+		if (event.getAuthor()
+			.isBot())
+			return null;
+
 		Guild guild = event.getGuild();
 		AudioManager manager = guild.getAudioManager();
-		GuildVoiceState state = event.getMember().getVoiceState();
-		if(state == null) return null;
-		
+		GuildVoiceState state = event.getMember()
+			.getVoiceState();
+		if (state == null)
+			return null;
+
 		AudioChannel channel = state.getChannel();
-		if(channel == null) { event.getChannel().sendMessage("Not in a voice channel!").queue(); return null;}
-		
+		if (channel == null) {
+			event.getChannel()
+				.sendMessage("Not in a voice channel!")
+				.queue();
+			return null;
+		}
+
 		manager.setSendingHandler(this);
 		manager.openAudioConnection(channel);
-		
-		event.getChannel().sendMessage(String.format("Joined channel `[%s]`", channel.getName())).queue();
+
+		event.getChannel()
+			.sendMessage(
+				String.format("Joined channel `[%s]`", channel.getName()))
+			.queue();
 		return channel;
 	}
 
@@ -77,7 +90,7 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	}
 
 	public void queue(AudioTrack track) {
-		if(!player.startTrack(track, true)) {
+		if (!player.startTrack(track, true)) {
 			queue.offer(track);
 		}
 	}
@@ -97,10 +110,11 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	/// AUDIO EVENT ADAPTER
 
 	@Override
-	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+	public void onTrackEnd(AudioPlayer player, AudioTrack track,
+		AudioTrackEndReason endReason) {
 		if (looping)
 			this.loadTrack(track.getIdentifier());
-		if(endReason.mayStartNext) {
+		if (endReason.mayStartNext) {
 			nextTrack();
 		}
 	}
@@ -123,17 +137,16 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 		return true;
 	}
 
-
 	/// AUDIO LOAD RESULT HANDLER
-
 
 	@Override
 	public void trackLoaded(AudioTrack track) {
-		if(!looping) {
+		if (!looping) {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.GREEN);
 			eb.setTitle(String.format("Added - `%s`", track.getInfo().title));
-			channel.sendMessageEmbeds(eb.build()).queue();
+			channel.sendMessageEmbeds(eb.build())
+				.queue();
 		}
 
 		queue(track);
@@ -143,20 +156,25 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 	public void playlistLoaded(AudioPlaylist playlist) {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.GREEN);
-		eb.setTitle(String.format("Added %d songs", playlist.getTracks().size()));
-		channel.sendMessageEmbeds(eb.build()).queue();
+		eb.setTitle(String.format("Added %d songs", playlist.getTracks()
+			.size()));
+		channel.sendMessageEmbeds(eb.build())
+			.queue();
 
-		playlist.getTracks().forEach(this::queue);
+		playlist.getTracks()
+			.forEach(this::queue);
 	}
 
 	@Override
 	public void noMatches() {
-		channel.sendMessage("No matches!").queue();
+		channel.sendMessage("No matches!")
+			.queue();
 	}
 
 	@Override
 	public void loadFailed(FriendlyException exception) {
-		channel.sendMessage("Something unexpected happened!").queue();
+		channel.sendMessage("Something unexpected happened!")
+			.queue();
 	}
 
 }

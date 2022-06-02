@@ -12,7 +12,7 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class NowPlayingCommand extends MusicSubCommand{
+public class NowPlayingCommand extends MusicSubCommand {
 
 	public NowPlayingCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
@@ -33,29 +33,35 @@ public class NowPlayingCommand extends MusicSubCommand{
 	}
 
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, User user,
+		List<String> args, MessageReceivedEvent event) {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.WHITE);
 		if (audioHandler.getPlayingTrack() != null) {
-			eb.addField("Now playing:", audioHandler.getPlayingTrack().getInfo().title, true);
+			eb.addField("Now playing:", audioHandler.getPlayingTrack()
+				.getInfo().title, true);
 
 			LocalTime cur = LocalTime.MIN;
 			LocalTime dur = LocalTime.MIN;
-			cur = cur.plusSeconds(audioHandler.getPlayingTrack().getPosition()/1000);
-			dur = dur.plusSeconds(audioHandler.getPlayingTrack().getInfo().length/1000);
+			cur = cur.plusSeconds(audioHandler.getPlayingTrack()
+				.getPosition() / 1000);
+			dur = dur.plusSeconds(audioHandler.getPlayingTrack()
+				.getInfo().length / 1000);
 			if (dur.getHour() > 0) {
-				eb.setFooter(String.format("%s out of %s",cur.format(DateTimeFormatter.ofPattern("HH:mm:ss")), 
-						dur.format(DateTimeFormatter.ofPattern("HH:mm:ss"))));
+				eb.setFooter(String.format("%s out of %s",
+					cur.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+					dur.format(DateTimeFormatter.ofPattern("HH:mm:ss"))));
+			} else {
+				eb.setFooter(String.format("%s out of %s",
+					cur.format(DateTimeFormatter.ofPattern("mm:ss")),
+					dur.format(DateTimeFormatter.ofPattern("mm:ss"))));
 			}
-			else {
-				eb.setFooter(String.format("%s out of %s",cur.format(DateTimeFormatter.ofPattern("mm:ss")), 
-						dur.format(DateTimeFormatter.ofPattern("mm:ss"))));
-			}
-		}
-		else {
+		} else {
 			eb.setTitle("No songs playing!");
 		}
 
-		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+		event.getChannel()
+			.sendMessageEmbeds(eb.build())
+			.queue();
 	}
 }

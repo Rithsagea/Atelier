@@ -12,16 +12,18 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public abstract class CharacterSubCommand implements AtelierCommand {
 
 	private AtelierDB db;
-	
+
 	public CharacterSubCommand(AtelierDB db) {
 		this.db = db;
 	}
-	
+
 	@Override
-	public void execute(User user, List<String> args, MessageReceivedEvent event) {
+	public void execute(User user, List<String> args,
+		MessageReceivedEvent event) {
 		execute(db.getSheet(user.getSheetId()), user, args, event);
 	}
-	
-	public abstract void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event);
+
+	public abstract void execute(Sheet sheet, User user, List<String> args,
+		MessageReceivedEvent event);
 
 }

@@ -7,7 +7,7 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class PlayCommand extends MusicSubCommand{
+public class PlayCommand extends MusicSubCommand {
 
 	public PlayCommand(AtelierAudioManager audioManager) {
 		super(audioManager);
@@ -27,15 +27,19 @@ public class PlayCommand extends MusicSubCommand{
 	public PermissionLevel getLevel() {
 		return PermissionLevel.USER;
 	}
-	
+
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, User user,
+		List<String> args, MessageReceivedEvent event) {
 		if (args.size() < 2)
-			event.getChannel().sendMessage("Missing URL!").queue();
+			event.getChannel()
+				.sendMessage("Missing URL!")
+				.queue();
 		else {
-			if (audioHandler.joinVc(event) == null) return;
+			if (audioHandler.joinVc(event) == null)
+				return;
 			audioHandler.loadTrack(args.get(1));
 		}
 	}
-	
+
 }

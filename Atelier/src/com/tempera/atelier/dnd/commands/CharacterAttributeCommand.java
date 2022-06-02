@@ -11,13 +11,13 @@ import com.tempera.atelier.dnd.types.Sheet;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterAttributeCommand extends CharacterSubCommand{
+public class CharacterAttributeCommand extends CharacterSubCommand {
 
 	private MenuManager menuManager;
-	
+
 	public CharacterAttributeCommand(AtelierBot bot) {
 		super(bot.getDatabase());
-		
+
 		menuManager = bot.getMenuManager();
 	}
 
@@ -37,8 +37,10 @@ public class CharacterAttributeCommand extends CharacterSubCommand{
 	}
 
 	@Override
-	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
-		menuManager.addMenu(event.getChannel(), new CharacterAttributeMenu(sheet, menuManager));
+	public void execute(Sheet sheet, User user, List<String> args,
+		MessageReceivedEvent event) {
+		menuManager.addMenu(event.getChannel(),
+			new CharacterAttributeMenu(sheet, menuManager));
 	}
 
 }

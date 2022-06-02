@@ -34,50 +34,57 @@ public class ProficiencyFeature implements Attribute {
 			EmbedBuilder embed = new EmbedBuilder();
 			StringBuilder content = new StringBuilder();
 			SelectMenu.Builder select = SelectMenu.create("skills")
-					.setRequiredRange(0, skillChoices.getCount())
-					.setPlaceholder(String.format("Choose %d skills...", skillChoices.getCount()));
+				.setRequiredRange(0, skillChoices.getCount())
+				.setPlaceholder(String.format("Choose %d skills...",
+					skillChoices.getCount()));
 			String prefix = "";
-			
+
 			embed.setTitle("**" + getName() + "**");
 			embed.setColor(Color.BLUE);
-			
-			for(Ability ability : savingProficiencies) {
+
+			for (Ability ability : savingProficiencies) {
 				content.append(prefix);
 				content.append(ability);
 				prefix = ", ";
 			}
 			embed.addField("**Saving**", content.toString(), true);
-			
+
 			content.setLength(0);
-			content.append(String.format("Choose %d from: ", skillChoices.getCount()));
+			content.append(
+				String.format("Choose %d from: ", skillChoices.getCount()));
 			prefix = "";
-			for(int x = 0; x < skillChoices.getChoices().size(); x++) {
+			for (int x = 0; x < skillChoices.getChoices()
+				.size(); x++) {
 				content.append(prefix);
-				content.append(String.format(skillChoices.isSelected(x) ? "__%s__" : "%s", skillChoices.getChoice(x)));
+				content.append(
+					String.format(skillChoices.isSelected(x) ? "__%s__" : "%s",
+						skillChoices.getChoice(x)));
 				prefix = ", ";
-				select.addOption(skillChoices.getChoices().get(x).toString(), Integer.toString(x));
+				select.addOption(skillChoices.getChoices()
+					.get(x)
+					.toString(), Integer.toString(x));
 			}
 			embed.addField("**Skills**", content.toString(), true);
-			
+
 			select.setDefaultValues(skillChoices.getSelected()
-					.stream()
-					.map(s -> Integer.toString(s))
-					.collect(Collectors.toList()));
-			
+				.stream()
+				.map(s -> Integer.toString(s))
+				.collect(Collectors.toList()));
+
 			content.setLength(0);
 			prefix = "";
-			for(EquipmentType equipment : equipmentProficiencies) {
+			for (EquipmentType equipment : equipmentProficiencies) {
 				content.append(prefix);
 				content.append(equipment);
 				prefix = ", ";
 			}
 			embed.addField("**Equipment**", content.toString(), false);
-			
+
 			setEmbeds(embed.build());
 			setActionRows(ActionRow.of(select.build()));
 		}
 	}
-	
+
 	private class ProficiencyMenu implements Menu {
 
 		@Override
@@ -86,60 +93,66 @@ public class ProficiencyFeature implements Attribute {
 		}
 
 		@Override
-		public void onButtonInteract(ButtonInteractionEvent event) { }
+		public void onButtonInteract(ButtonInteractionEvent event) {
+		}
 
 		@Override
 		public void onSelectInteract(SelectMenuInteractionEvent event) {
 			skillChoices.clear();
-			for(SelectOption option : event.getSelectedOptions()) {
+			for (SelectOption option : event.getSelectedOptions()) {
 				skillChoices.selectChoice(Integer.parseInt(option.getValue()));
 			}
-			
-			event.editMessage(new ProficiencyMessageBuilder().build()).queue();
+
+			event.editMessage(new ProficiencyMessageBuilder().build())
+				.queue();
 		}
 	}
-	
+
 	private Set<Ability> savingProficiencies;
 	private Set<Skill> skillProficiencies;
 	private Set<EquipmentType> equipmentProficiencies;
-	
+
 	private Choice<Skill> skillChoices;
-	
+
 	public ProficiencyFeature() {
 		skillChoices = new Choice<>();
-		
+
 		savingProficiencies = new HashSet<>();
 		skillProficiencies = new HashSet<>();
 		equipmentProficiencies = new HashSet<>();
 	}
-	
-	public ProficiencyFeature(Choice<Skill> skills, Proficiency... proficiencies) {
+
+	public ProficiencyFeature(Choice<Skill> skills,
+		Proficiency... proficiencies) {
 		this();
-	
+
 		skillChoices = skills;
-		
-		for(Proficiency p : proficiencies) {
-			if(p instanceof Ability) savingProficiencies.add((Ability) p);
-			if(p instanceof Skill) skillProficiencies.add((Skill) p);
-			if(p instanceof EquipmentType) equipmentProficiencies.add((EquipmentType) p);
+
+		for (Proficiency p : proficiencies) {
+			if (p instanceof Ability)
+				savingProficiencies.add((Ability) p);
+			if (p instanceof Skill)
+				skillProficiencies.add((Skill) p);
+			if (p instanceof EquipmentType)
+				equipmentProficiencies.add((EquipmentType) p);
 		}
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Proficiencies";
 	}
-	
+
 	@EventHandler
 	private void onLoadSavingProficiency(LoadSavingProficiencyEvent e) {
 		savingProficiencies.forEach(e::addProficiency);
 	}
-	
+
 	@EventHandler
 	private void onLoadSkillProficiency(LoadSkillProficiencyEvent e) {
 		skillProficiencies.forEach(e::addProficiency);
 	}
-	
+
 	@EventHandler
 	private void onLoadEquipmentProficiency(LoadEquipmentProficiencyEvent e) {
 		equipmentProficiencies.forEach(e::addProficiency);
