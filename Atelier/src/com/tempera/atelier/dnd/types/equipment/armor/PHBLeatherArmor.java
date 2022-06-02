@@ -1,9 +1,11 @@
 package com.tempera.atelier.dnd.types.equipment.armor;
 
+import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.enums.Currency;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
 import com.tempera.atelier.dnd.types.equipment.Armor;
 
+@IndexedItem("phb-leather-armor")
 public class PHBLeatherArmor extends Armor {
 
 	public PHBLeatherArmor() {

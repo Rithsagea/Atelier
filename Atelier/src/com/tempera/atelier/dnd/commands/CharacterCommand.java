@@ -44,6 +44,6 @@ public class CharacterCommand extends GroupCommand {
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = db.getSheet(user.getSheetId());
-		event.getChannel().sendMessage(new InfoMessageBuilder(sheet).build()).queue();
+		event.getChannel().sendMessage(new CharacterInfoMessageBuilder(sheet).build()).queue();
 	}
 }

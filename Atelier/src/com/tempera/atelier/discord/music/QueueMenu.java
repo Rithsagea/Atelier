@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 
-public class QueueMenu extends Menu {
+public class QueueMenu implements Menu {
 
 	private AtelierAudioHandler audioHandler;
 	private MenuManager menuManager;

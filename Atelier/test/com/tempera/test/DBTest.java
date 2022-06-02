@@ -7,6 +7,9 @@ import com.tempera.atelier.dnd.database.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.character.classes.Rogue;
 import com.tempera.atelier.dnd.types.enums.Ability;
+import com.tempera.atelier.dnd.types.equipment.Inventory;
+import com.tempera.atelier.dnd.types.equipment.armor.PHBLeatherArmor;
+import com.tempera.atelier.dnd.types.equipment.weapons.PHBDagger;
 import com.tempera.util.WordUtil;
 
 public class DBTest {
@@ -29,6 +32,15 @@ public class DBTest {
 		sheet.addClass(new Rogue());
 		sheet.reload();
 		sheet.setHitPoints(10000);
+		
+		Inventory inventory = sheet.getInventory();
+		
+		inventory.addItem(new PHBLeatherArmor());
+		inventory.addItem(new PHBDagger());
+		inventory.addItem(new PHBLeatherArmor());
+		inventory.addItem(new PHBDagger());
+		inventory.addItem(new PHBLeatherArmor());
+		inventory.addItem(new PHBDagger());
 		
 		System.out.println("User: " + user);
 		System.out.println("Name: " + sheet.getName());

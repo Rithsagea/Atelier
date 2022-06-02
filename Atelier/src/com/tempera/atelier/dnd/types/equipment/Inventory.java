@@ -16,6 +16,14 @@ public class Inventory {
 	}
 	
 	public void addItem(Item item) {
+		for(int i = 0; i < contents.size(); i++) {
+			if(item.isStackable(contents.get(i))) {
+				item.stack(contents.get(i));
+				contents.set(i, item);
+				return;
+			}
+		}
+		
 		int nextFree = contents.indexOf(null);
 		if(nextFree == -1) contents.add(item);
 		else contents.set(nextFree, item);

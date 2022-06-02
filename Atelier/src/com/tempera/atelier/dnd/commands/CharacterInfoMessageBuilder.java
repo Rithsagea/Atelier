@@ -9,9 +9,9 @@ import com.tempera.atelier.dnd.types.enums.Ability;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 
-public class InfoMessageBuilder extends MessageBuilder{
+public class CharacterInfoMessageBuilder extends MessageBuilder {
 	
-	public InfoMessageBuilder(Sheet sheet) {
+	public CharacterInfoMessageBuilder(Sheet sheet) {
 		StringBuilder b = new StringBuilder();
 		EmbedBuilder eb = new EmbedBuilder();
 		String prefix;

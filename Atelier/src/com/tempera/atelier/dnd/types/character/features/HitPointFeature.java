@@ -23,7 +23,7 @@ import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEve
 @IndexedItem("feature-hit-points")
 public class HitPointFeature implements Attribute {
 	
-	private class HitPointMenu extends Menu {
+	private class HitPointMenu implements Menu {
 
 		@Override
 		public Message initialize() {

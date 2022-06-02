@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 
-public class WaifuMenu extends Menu {
+public class WaifuMenu implements Menu {
 	
 	private String selectedWaifu = "waifu";
 	private String title = "Waifu";
