@@ -19,7 +19,7 @@ public interface Item {
 
 	public Price getPrice();
 
-	public int getUnitWeight();
+	public double getUnitWeight();
 
 	public Set<EquipmentType> getCategories();
 

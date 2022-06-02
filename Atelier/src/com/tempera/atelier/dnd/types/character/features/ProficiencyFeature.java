@@ -109,7 +109,6 @@ public class ProficiencyFeature implements Attribute {
 	}
 
 	private Set<Ability> savingProficiencies;
-	private Set<Skill> skillProficiencies;
 	private Set<EquipmentType> equipmentProficiencies;
 
 	private Choice<Skill> skillChoices;
@@ -118,7 +117,6 @@ public class ProficiencyFeature implements Attribute {
 		skillChoices = new Choice<>();
 
 		savingProficiencies = new HashSet<>();
-		skillProficiencies = new HashSet<>();
 		equipmentProficiencies = new HashSet<>();
 	}
 
@@ -131,8 +129,6 @@ public class ProficiencyFeature implements Attribute {
 		for (Proficiency p : proficiencies) {
 			if (p instanceof Ability)
 				savingProficiencies.add((Ability) p);
-			if (p instanceof Skill)
-				skillProficiencies.add((Skill) p);
 			if (p instanceof EquipmentType)
 				equipmentProficiencies.add((EquipmentType) p);
 		}
@@ -150,7 +146,7 @@ public class ProficiencyFeature implements Attribute {
 
 	@EventHandler
 	private void onLoadSkillProficiency(LoadSkillProficiencyEvent e) {
-		skillProficiencies.forEach(e::addProficiency);
+		skillChoices.getChoices().forEach(e::addProficiency);
 	}
 
 	@EventHandler

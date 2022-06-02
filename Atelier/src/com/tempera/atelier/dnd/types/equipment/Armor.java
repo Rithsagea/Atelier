@@ -6,7 +6,7 @@ import com.tempera.atelier.dnd.types.enums.EquipmentType;
 public abstract class Armor extends BaseItem {
 
 	public Armor(String name, String description, String source, Price price,
-		int weight) {
+		double weight) {
 		super(name, description, source, price, weight);
 
 		addCategories(EquipmentType.ARMOR);

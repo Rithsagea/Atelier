@@ -15,12 +15,12 @@ public abstract class BaseItem implements Item {
 	private transient String description;
 	private transient String source;
 	private transient Price price;
-	private transient int weight;
+	private transient double weight;
 
 	private int amount;
 
 	public BaseItem(String name, String description, String source, Price price,
-		int weight) {
+		double weight) {
 		this.name = name;
 		this.description = description;
 		this.source = source;
@@ -57,7 +57,7 @@ public abstract class BaseItem implements Item {
 	}
 
 	@Override
-	public int getUnitWeight() {
+	public double getUnitWeight() {
 		return weight;
 	}
 

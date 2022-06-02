@@ -14,7 +14,11 @@ public class PHBDagger extends Weapon {
 			"PHB, page 149. Available in the SRD and the Basic Rules.",
 			new Price(2, Currency.GOLD), 1);
 		addCategories(EquipmentType.MARTIAL_WEAPON, EquipmentType.MELEE_WEAPON);
+	}
 
+	public PHBDagger(int amount) {
+		this();
+		setAmount(amount);
 	}
 
 }

@@ -9,6 +9,7 @@ import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.equipment.Item;
+import com.tempera.util.WordUtil;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -19,26 +20,33 @@ import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEve
 @IndexedItem("feature-starting-equipment")
 public class StartingEquipmentFeature implements Attribute {
 
-	public class EquipmentOption {
+	public static class EquipmentOption {
 		private String name;
-		private Item item;
+		private Item[] items;
 
-		public EquipmentOption(String name, Item item) {
+		public EquipmentOption() {
+			
+		}
+		public EquipmentOption(String name, Item... items) {
 			this.name = name;
-			this.item = item;
+			this.items = items;
 		}
 
 		public String getName() {
 			return name;
 		}
 
-		public Item getItem() {
-			return item;
+		public Item[] getItems() {
+			return items;
 		}
 	}
 
 	private List<List<EquipmentOption>> options;
 
+	public StartingEquipmentFeature() {
+		this.options = Collections.emptyList();
+	}
+	
 	@SafeVarargs
 	public StartingEquipmentFeature(List<EquipmentOption>... options) {
 		this.options = Stream.of(options)
@@ -66,7 +74,22 @@ public class StartingEquipmentFeature implements Attribute {
 			eb.appendDescription(
 				"You start with the following items, plus anything provided by your background.");
 			eb.appendDescription("\n\n");
-			eb.appendDescription("Lorem Ipsum");
+			for(List<EquipmentOption> option : options) {
+				eb.appendDescription(WordUtil.BULLET_POINT);
+				eb.appendDescription("\t");
+				if(option.size() == 1) {
+					eb.appendDescription(option.get(0).getName());
+				} else {
+					String prefix = "";
+					for(int i = 0; i < option.size(); i++) {
+						eb.appendDescription(prefix);
+						eb.appendDescription(String.format("(%c) %s", 
+							'a' + i, option.get(i).getName()));
+						prefix = " or ";
+					}
+				}
+				eb.appendDescription("\n");
+			}
 
 			mb.setEmbeds(eb.build());
 

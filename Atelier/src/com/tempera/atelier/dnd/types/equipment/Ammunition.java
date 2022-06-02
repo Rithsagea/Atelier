@@ -6,7 +6,7 @@ import com.tempera.atelier.dnd.types.enums.EquipmentType;
 public class Ammunition extends BaseItem {
 
 	public Ammunition(String name, String description, String source,
-		Price price, int weight) {
+		Price price, double weight) {
 		super(name, description, source, price, weight);
 		addCategories(EquipmentType.AMMUNITION);
 	}
