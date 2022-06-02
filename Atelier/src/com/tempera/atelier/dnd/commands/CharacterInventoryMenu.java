@@ -12,10 +12,15 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
 public class CharacterInventoryMenu implements Menu {
 
 	private Sheet sheet;
+	private String selected;
 
 	public CharacterInventoryMenu(Sheet sheet) {
 		this.sheet = sheet;
@@ -35,17 +40,22 @@ public class CharacterInventoryMenu implements Menu {
 		}
 
 		mb.setEmbeds(eb.build());
+		Builder menu = SelectMenu.create("menu:roll").setPlaceholder("Choose an item").setRequiredRange(1, 1);
+		for (int i = 0; i < items.size(); i++)
+			menu.addOption(items.get(i).getName(), "" + i);
+		mb.setActionRows(ActionRow.of(menu.build()), ActionRow.of(Button.primary("get", "Get")));
 		return mb.build();
 	}
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-
+		event.reply((Message) sheet.getInventory().getContents().get(Integer.parseInt(selected)));
 	}
 
 	@Override
 	public void onSelectInteract(SelectMenuInteractionEvent event) {
-
+		selected = event.getSelectedOptions().get(0).getValue();
+		event.deferEdit().queue();
 	}
 
 }

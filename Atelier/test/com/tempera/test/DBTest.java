@@ -23,7 +23,7 @@ public class DBTest {
 	}
 
 	public static void editDB(AtelierDB db) {
-		User user = db.getUser(171378138041942016l);
+		User user = db.getUser(529463250052448256l);
 		user.setLevel(PermissionLevel.ADMINISTRATOR);
 
 		Sheet sheet = db.getSheet(user.getSheetId());
@@ -45,6 +45,10 @@ public class DBTest {
 		System.out.println("User: " + user);
 		System.out.println("Name: " + sheet.getName());
 		for (Ability a : Ability.values()) {
+			System.out.printf("%s%s: %d [%s]\n",
+				sheet.hasSavingProficiency(a) ? "*" : "",
+				WordUtil.capitalize(a.name()), sheet.getAbilityScore(a),
+				WordUtil.formatModifier(sheet.getAbilityModifier(a)));
 			System.out.printf("%s%s: %d [%s]\n",
 				sheet.hasSavingProficiency(a) ? "*" : "",
 				WordUtil.capitalize(a.name()), sheet.getAbilityScore(a),
