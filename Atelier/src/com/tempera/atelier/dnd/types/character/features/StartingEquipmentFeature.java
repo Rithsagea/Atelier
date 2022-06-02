@@ -1,8 +1,10 @@
 package com.tempera.atelier.dnd.types.character.features;
 
 import com.tempera.atelier.discord.Menu;
+import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.character.Attribute;
 
+@IndexedItem("feature-starting-equipment")
 public class StartingEquipmentFeature implements Attribute {
 
 	@Override
@@ -12,7 +14,6 @@ public class StartingEquipmentFeature implements Attribute {
 
 	@Override
 	public Menu getMenu() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

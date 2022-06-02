@@ -9,13 +9,13 @@ import com.tempera.atelier.dnd.types.enums.EquipmentType;
 
 public abstract class BaseItem implements Item {
 
-	private Set<EquipmentType> categories;
+	private transient Set<EquipmentType> categories;
 	
-	private String name;
-	private String description;
-	private String source;
-	private Price price;
-	private int weight;
+	private transient String name;
+	private transient String description;
+	private transient String source;
+	private transient Price price;
+	private transient int weight;
 	
 	private int amount;
 	
@@ -83,7 +83,6 @@ public abstract class BaseItem implements Item {
 	@Override
 	public void stack(Item item) {
 		amount += item.getAmount();
-		item.setAmount(0);
 	}
 
 }
