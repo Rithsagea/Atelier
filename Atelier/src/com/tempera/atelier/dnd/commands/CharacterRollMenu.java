@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
-public class CharacterRollMenu extends Menu {
+public class CharacterRollMenu implements Menu {
 
 	private String selected = "";
 	private Sheet sheet;

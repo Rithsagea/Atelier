@@ -9,7 +9,7 @@ import com.tempera.atelier.discord.commands.PermissionLevel;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class QueueCommand extends MusicSubCommand{
+public class QueueCommand extends MusicSubCommand {
 
 	private MenuManager menuManager;
 

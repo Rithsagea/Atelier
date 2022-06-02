@@ -32,7 +32,7 @@ public class CharacterInfoCommand extends CharacterSubCommand{
 
 	@Override
 	public void execute(Sheet sheet, User user, List<String> args, MessageReceivedEvent event) {
-		event.getChannel().sendMessage(new InfoMessageBuilder(sheet).build()).queue();
+		event.getChannel().sendMessage(new CharacterInfoMessageBuilder(sheet).build()).queue();
 	}
 
 }

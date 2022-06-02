@@ -4,10 +4,10 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 
-public abstract class Menu {
+public interface Menu {
 	
-	public abstract Message initialize();
+	public Message initialize();
 	
-	public abstract void onButtonInteract(ButtonInteractionEvent event);
-	public abstract void onSelectInteract(SelectMenuInteractionEvent event);
+	public void onButtonInteract(ButtonInteractionEvent event);
+	public void onSelectInteract(SelectMenuInteractionEvent event);
 }

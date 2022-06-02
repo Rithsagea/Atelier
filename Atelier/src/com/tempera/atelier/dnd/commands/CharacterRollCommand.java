@@ -12,7 +12,7 @@ import com.tempera.atelier.dnd.types.enums.Skill;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterRollCommand extends CharacterSubCommand{
+public class CharacterRollCommand extends CharacterSubCommand {
 
 	private MenuManager menuManager;
 	

@@ -78,7 +78,7 @@ public class ProficiencyFeature implements Attribute {
 		}
 	}
 	
-	private class ProficiencyMenu extends Menu {
+	private class ProficiencyMenu implements Menu {
 
 		@Override
 		public Message initialize() {
