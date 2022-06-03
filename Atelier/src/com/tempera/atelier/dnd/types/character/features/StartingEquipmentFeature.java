@@ -1,14 +1,18 @@
 package com.tempera.atelier.dnd.types.character.features;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.character.Attribute;
 import com.tempera.atelier.dnd.types.equipment.Item;
+import com.tempera.util.ColorUtil;
 import com.tempera.util.WordUtil;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -16,42 +20,56 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
 @IndexedItem("feature-starting-equipment")
 public class StartingEquipmentFeature implements Attribute {
 
 	public static class EquipmentOption {
 		private String name;
-		private Item[] items;
+		private List<Item> items;
 
 		public EquipmentOption() {
 			
 		}
+
 		public EquipmentOption(String name, Item... items) {
 			this.name = name;
-			this.items = items;
+			this.items = Arrays.asList(items);
 		}
 
 		public String getName() {
 			return name;
 		}
 
-		public Item[] getItems() {
+		public List<Item> getItems() {
 			return items;
 		}
 	}
 
+	private List<Integer> selectedOptions;
 	private List<List<EquipmentOption>> options;
 
 	public StartingEquipmentFeature() {
+		this.selectedOptions = Collections.emptyList();
 		this.options = Collections.emptyList();
 	}
-	
+
 	@SafeVarargs
 	public StartingEquipmentFeature(List<EquipmentOption>... options) {
 		this.options = Stream.of(options)
 			.map(Collections::unmodifiableList)
 			.collect(Collectors.toList());
+
+		this.selectedOptions = new ArrayList<>(
+			Collections.nCopies(options.length, -1));
+		for (int x = 0; x < options.length; x++) {
+			if (options[x].size() <= 1)
+				this.selectedOptions.set(x, 0);
+		}
 	}
 
 	@Override
@@ -64,36 +82,68 @@ public class StartingEquipmentFeature implements Attribute {
 		return new StartingEquipmentMenu();
 	}
 
-	private class StartingEquipmentMenu implements Menu {
-		@Override
-		public Message initialize() {
-			MessageBuilder mb = new MessageBuilder();
+	private class StartingEquipmentMessageBuilder extends MessageBuilder {
+		public StartingEquipmentMessageBuilder() {
 			EmbedBuilder eb = new EmbedBuilder();
 
+			eb.setColor(ColorUtil.BROWN);
 			eb.setTitle("Starting Equipment");
-			eb.appendDescription(
-				"You start with the following items, plus anything provided by your background.");
+			eb.appendDescription("You start with the following items, plus anything provided by your background.");
 			eb.appendDescription("\n\n");
-			for(List<EquipmentOption> option : options) {
+
+			List<ActionRow> actionRows = new ArrayList<>();
+			for (int i = 0; i < options.size(); i++) {
+				List<EquipmentOption> option = options.get(i);
+
 				eb.appendDescription(WordUtil.BULLET_POINT);
 				eb.appendDescription("\t");
-				if(option.size() == 1) {
-					eb.appendDescription(option.get(0).getName());
+				if (option.size() == 1) {
+					eb.appendDescription(String.format("__%s__", option.get(0).getName()));
 				} else {
 					String prefix = "";
-					for(int i = 0; i < option.size(); i++) {
+					for (int j = 0; j < option.size(); j++) {
 						eb.appendDescription(prefix);
-						eb.appendDescription(String.format("(%c) %s", 
-							'a' + i, option.get(i).getName()));
+						eb.appendDescription(String.format(
+							selectedOptions.get(i) == j ? "__(%c) %s__"
+								: "(%c) %s",
+							'a' + j, option.get(j)
+								.getName()));
 						prefix = " or ";
 					}
 				}
 				eb.appendDescription("\n");
+
+				if (options.get(i)
+					.size() <= 1)
+					continue;
+				Builder sb = SelectMenu.create(Integer.toString(i));
+
+				for (int j = 0; j < options.get(i)
+					.size(); j++) {
+					sb.addOption(String.format("(%c) %s", 'a' + j,
+						options.get(i)
+							.get(j)
+							.getName()),
+						Integer.toString(j));
+				}
+				if (selectedOptions.get(i) != -1)
+					sb.setDefaultValues(DataUtil
+						.list(Integer.toString(selectedOptions.get(i))));
+
+				actionRows.add(ActionRow.of(sb.build()));
 			}
+			actionRows.add(ActionRow.of(Button.primary("claim", "Claim")));
 
-			mb.setEmbeds(eb.build());
+			setEmbeds(eb.build());
+			setActionRows(actionRows);
 
-			return mb.build();
+		}
+	}
+
+	private class StartingEquipmentMenu implements Menu {
+		@Override
+		public Message initialize() {
+			return new StartingEquipmentMessageBuilder().build();
 		}
 
 		@Override
@@ -103,7 +153,12 @@ public class StartingEquipmentFeature implements Attribute {
 
 		@Override
 		public void onSelectInteract(SelectMenuInteractionEvent event) {
-
+			selectedOptions.set(Integer.parseInt(event.getComponentId()),
+				Integer.parseInt(event.getSelectedOptions()
+					.get(0)
+					.getValue()));
+			event.editMessage(new StartingEquipmentMessageBuilder().build())
+				.queue();
 		}
 	}
 }

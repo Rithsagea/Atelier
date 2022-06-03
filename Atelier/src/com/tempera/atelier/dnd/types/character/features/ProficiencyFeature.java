@@ -29,6 +29,57 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 
 @IndexedItem("feature-proficiencies")
 public class ProficiencyFeature implements Attribute {
+	private Set<Ability> savingProficiencies;
+	private Set<EquipmentType> equipmentProficiencies;
+
+	private Choice<Skill> skillChoices;
+
+	public ProficiencyFeature() {
+		skillChoices = new Choice<>();
+
+		savingProficiencies = new HashSet<>();
+		equipmentProficiencies = new HashSet<>();
+	}
+
+	public ProficiencyFeature(Choice<Skill> skills,
+		Proficiency... proficiencies) {
+		this();
+
+		skillChoices = skills;
+
+		for (Proficiency p : proficiencies) {
+			if (p instanceof Ability)
+				savingProficiencies.add((Ability) p);
+			if (p instanceof EquipmentType)
+				equipmentProficiencies.add((EquipmentType) p);
+		}
+	}
+
+	@Override
+	public String getName() {
+		return "Proficiencies";
+	}
+
+	@EventHandler
+	private void onLoadSavingProficiency(LoadSavingProficiencyEvent e) {
+		savingProficiencies.forEach(e::addProficiency);
+	}
+
+	@EventHandler
+	private void onLoadSkillProficiency(LoadSkillProficiencyEvent e) {
+		skillChoices.getChoices().forEach(e::addProficiency);
+	}
+
+	@EventHandler
+	private void onLoadEquipmentProficiency(LoadEquipmentProficiencyEvent e) {
+		equipmentProficiencies.forEach(e::addProficiency);
+	}
+
+	@Override
+	public Menu getMenu() {
+		return new ProficiencyMenu();
+	}
+
 	private class ProficiencyMessageBuilder extends MessageBuilder {
 		public ProficiencyMessageBuilder() {
 			EmbedBuilder embed = new EmbedBuilder();
@@ -108,54 +159,4 @@ public class ProficiencyFeature implements Attribute {
 		}
 	}
 
-	private Set<Ability> savingProficiencies;
-	private Set<EquipmentType> equipmentProficiencies;
-
-	private Choice<Skill> skillChoices;
-
-	public ProficiencyFeature() {
-		skillChoices = new Choice<>();
-
-		savingProficiencies = new HashSet<>();
-		equipmentProficiencies = new HashSet<>();
-	}
-
-	public ProficiencyFeature(Choice<Skill> skills,
-		Proficiency... proficiencies) {
-		this();
-
-		skillChoices = skills;
-
-		for (Proficiency p : proficiencies) {
-			if (p instanceof Ability)
-				savingProficiencies.add((Ability) p);
-			if (p instanceof EquipmentType)
-				equipmentProficiencies.add((EquipmentType) p);
-		}
-	}
-
-	@Override
-	public String getName() {
-		return "Proficiencies";
-	}
-
-	@EventHandler
-	private void onLoadSavingProficiency(LoadSavingProficiencyEvent e) {
-		savingProficiencies.forEach(e::addProficiency);
-	}
-
-	@EventHandler
-	private void onLoadSkillProficiency(LoadSkillProficiencyEvent e) {
-		skillChoices.getChoices().forEach(e::addProficiency);
-	}
-
-	@EventHandler
-	private void onLoadEquipmentProficiency(LoadEquipmentProficiencyEvent e) {
-		equipmentProficiencies.forEach(e::addProficiency);
-	}
-
-	@Override
-	public Menu getMenu() {
-		return new ProficiencyMenu();
-	}
 }

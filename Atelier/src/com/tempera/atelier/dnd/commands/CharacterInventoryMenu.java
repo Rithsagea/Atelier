@@ -1,11 +1,11 @@
 package com.tempera.atelier.dnd.commands;
 
-import java.awt.Color;
 import java.util.List;
 
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.equipment.Item;
+import com.tempera.util.ColorUtil;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -32,7 +32,7 @@ public class CharacterInventoryMenu implements Menu {
 		EmbedBuilder eb = new EmbedBuilder();
 		int number = 0;
 
-		eb.setColor(new Color(165, 42, 42));
+		eb.setColor(ColorUtil.BROWN);
 		eb.setTitle("Inventory");
 		List<Item> items = sheet.getInventory()
 			.getContents();
