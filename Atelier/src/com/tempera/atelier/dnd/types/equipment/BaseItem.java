@@ -85,5 +85,12 @@ public abstract class BaseItem implements Item {
 	public void stack(Item item) {
 		amount += item.getAmount();
 	}
+	
+	@Override
+	public String toString()
+	{
+		return name + " x" + amount;
+		
+	}
 
 }

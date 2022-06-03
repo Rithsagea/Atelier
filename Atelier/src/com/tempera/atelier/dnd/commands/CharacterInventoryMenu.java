@@ -30,26 +30,31 @@ public class CharacterInventoryMenu implements Menu {
 	public Message initialize() {
 		MessageBuilder mb = new MessageBuilder();
 		EmbedBuilder eb = new EmbedBuilder();
+		int number = 0;
 
 		eb.setColor(new Color(165, 42, 42));
 		eb.setTitle("Inventory");
 		List<Item> items = sheet.getInventory()
 			.getContents();
 		for (Item item : items) {
-			eb.appendDescription(item.getName() + "\n");
+			eb.appendDescription("[" + number +"] " + item + "\n");
+			number++;
 		}
 
 		mb.setEmbeds(eb.build());
 		Builder menu = SelectMenu.create("menu:roll").setPlaceholder("Choose an item").setRequiredRange(1, 1);
 		for (int i = 0; i < items.size(); i++)
-			menu.addOption(items.get(i).getName(), "" + i);
+			menu.addOption("[" + i + "] "+ items.get(i), "" + i);
 		mb.setActionRows(ActionRow.of(menu.build()), ActionRow.of(Button.primary("get", "Get")));
 		return mb.build();
 	}
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		event.reply((Message) sheet.getInventory().getContents().get(Integer.parseInt(selected)));
+		event.reply(sheet
+			.getInventory()
+			.getContents()
+			.get(Integer.parseInt(selected)).getName()).queue();
 	}
 
 	@Override
