@@ -32,9 +32,7 @@ public class StartingEquipmentFeature implements Attribute {
 		private String name;
 		private List<Item> items;
 
-		public EquipmentOption() {
-			
-		}
+		public EquipmentOption() { }
 
 		public EquipmentOption(String name, Item... items) {
 			this.name = name;
@@ -103,11 +101,9 @@ public class StartingEquipmentFeature implements Attribute {
 					String prefix = "";
 					for (int j = 0; j < option.size(); j++) {
 						eb.appendDescription(prefix);
-						eb.appendDescription(String.format(
-							selectedOptions.get(i) == j ? "__(%c) %s__"
-								: "(%c) %s",
-							'a' + j, option.get(j)
-								.getName()));
+						eb.appendDescription(String.format(selectedOptions.get(i) == j 
+							? "__(%c) %s__" : "(%c) %s",
+							'a' + j, option.get(j).getName()));
 						prefix = " or ";
 					}
 				}
@@ -118,17 +114,13 @@ public class StartingEquipmentFeature implements Attribute {
 					continue;
 				Builder sb = SelectMenu.create(Integer.toString(i));
 
-				for (int j = 0; j < options.get(i)
-					.size(); j++) {
+				for (int j = 0; j < options.get(i).size(); j++) {
 					sb.addOption(String.format("(%c) %s", 'a' + j,
-						options.get(i)
-							.get(j)
-							.getName()),
+						options.get(i).get(j).getName()),
 						Integer.toString(j));
 				}
 				if (selectedOptions.get(i) != -1)
-					sb.setDefaultValues(DataUtil
-						.list(Integer.toString(selectedOptions.get(i))));
+					sb.setDefaultValues(DataUtil.list(Integer.toString(selectedOptions.get(i))));
 
 				actionRows.add(ActionRow.of(sb.build()));
 			}
