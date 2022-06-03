@@ -30,7 +30,10 @@ public class EventBus {
 
 		@Override
 		public int compareTo(Handler h) {
+			if(h.priority != priority)
 			return h.priority - priority;
+			
+			return method.toString().compareTo(h.method.toString());
 		}
 	}
 
@@ -50,13 +53,11 @@ public class EventBus {
 					if (!Event.class.isAssignableFrom(type))
 						continue;
 					method.setAccessible(true);
-					Handler handler = new Handler(ann.priority(), method,
-						listener);
+					Handler handler = new Handler(ann.priority(), method, listener);
 
 					if (!listenerMap.containsKey(type))
 						listenerMap.put(type, new TreeSet<>());
-					listenerMap.get(type)
-						.add(handler);
+					listenerMap.get(type).add(handler);
 				}
 			}
 		}

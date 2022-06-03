@@ -80,8 +80,7 @@ public class Sheet implements Listener {
 
 		for (AbstractClass c : classes) {
 			eventBus.registerListener(c);
-			for (Entry<String, Attribute> entry : c.getAttributeMap()
-				.entrySet()) {
+			for (Entry<String, Attribute> entry : c.getAttributeMap().entrySet()) {
 				eventBus.registerListener(entry.getValue());
 				attributes.put(entry.getKey(), entry.getValue());
 			}

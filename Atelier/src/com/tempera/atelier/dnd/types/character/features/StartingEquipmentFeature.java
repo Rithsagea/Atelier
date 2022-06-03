@@ -8,9 +8,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.rithsagea.util.DataUtil;
+import com.rithsagea.util.event.EventHandler;
 import com.tempera.atelier.discord.Menu;
+import com.tempera.atelier.dnd.events.LoadSheetEvent;
 import com.tempera.atelier.dnd.types.IndexedItem;
+import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.character.Attribute;
+import com.tempera.atelier.dnd.types.equipment.Inventory;
 import com.tempera.atelier.dnd.types.equipment.Item;
 import com.tempera.util.ColorUtil;
 import com.tempera.util.WordUtil;
@@ -50,10 +54,14 @@ public class StartingEquipmentFeature implements Attribute {
 
 	private List<Integer> selectedOptions;
 	private List<List<EquipmentOption>> options;
+	private boolean isClaimed = false;
 
+	private transient Sheet sheet;
+	
 	public StartingEquipmentFeature() {
 		this.selectedOptions = Collections.emptyList();
 		this.options = Collections.emptyList();
+		isClaimed = false;
 	}
 
 	@SafeVarargs
@@ -80,6 +88,11 @@ public class StartingEquipmentFeature implements Attribute {
 		return new StartingEquipmentMenu();
 	}
 
+	@EventHandler
+	private void onLoadSheet(LoadSheetEvent event) {
+		this.sheet = event.getSheet();
+	}
+	
 	private class StartingEquipmentMessageBuilder extends MessageBuilder {
 		public StartingEquipmentMessageBuilder() {
 			EmbedBuilder eb = new EmbedBuilder();
@@ -124,7 +137,9 @@ public class StartingEquipmentFeature implements Attribute {
 
 				actionRows.add(ActionRow.of(sb.build()));
 			}
-			actionRows.add(ActionRow.of(Button.primary("claim", "Claim")));
+			actionRows.add(ActionRow.of(
+				isClaimed ? Button.primary("claim", "Claim").asDisabled() :
+					Button.primary("claim", "Claim").asEnabled()));
 
 			setEmbeds(eb.build());
 			setActionRows(actionRows);
@@ -140,17 +155,27 @@ public class StartingEquipmentFeature implements Attribute {
 
 		@Override
 		public void onButtonInteract(ButtonInteractionEvent event) {
-
+			for(int selected : selectedOptions) {
+				if(selected == -1) {
+					event.reply("Please select equipment for each option").queue();
+					return;
+				}
+			}
+			
+			if(!isClaimed) {
+				isClaimed = true;
+				Inventory inventory = sheet.getInventory();
+				for(int x = 0; x < options.size(); x++) {
+					options.get(x).get(selectedOptions.get(x)).getItems().forEach(inventory::addItem);
+				}
+			}
 		}
 
 		@Override
 		public void onSelectInteract(SelectMenuInteractionEvent event) {
 			selectedOptions.set(Integer.parseInt(event.getComponentId()),
-				Integer.parseInt(event.getSelectedOptions()
-					.get(0)
-					.getValue()));
-			event.editMessage(new StartingEquipmentMessageBuilder().build())
-				.queue();
+				Integer.parseInt(event.getSelectedOptions().get(0).getValue()));
+			event.editMessage(new StartingEquipmentMessageBuilder().build()).queue();
 		}
 	}
 }
