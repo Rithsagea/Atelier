@@ -14,7 +14,7 @@ public interface AbstractClass extends Listener {
 
 	public int getLevel();
 
-	public Map<String, Attribute> getAttributeMap();
+	public Map<String, CharacterAttribute> getAttributeMap();
 
 	// TODO multiclassing flag somewhere
 }

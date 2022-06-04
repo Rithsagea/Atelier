@@ -11,7 +11,7 @@ import com.tempera.atelier.dnd.events.LoadSheetEvent;
 
 public abstract class CharacterClass implements AbstractClass {
 
-	private Map<String, Attribute> attributes = new HashMap<>();
+	private Map<String, CharacterAttribute> attributes = new HashMap<>();
 	private int level = 1;
 
 	private transient final String id;
@@ -26,11 +26,11 @@ public abstract class CharacterClass implements AbstractClass {
 		eventBus = new EventBus();
 	}
 
-	protected void addAttribute(String key, Attribute attribute) {
+	protected void addAttribute(String key, CharacterAttribute attribute) {
 		attributes.put(id + "." + key, attribute);
 	}
 
-	protected Attribute removeAttribute(String key) {
+	protected CharacterAttribute removeAttribute(String key) {
 		return attributes.remove(id + "." + key);
 	}
 
@@ -50,7 +50,7 @@ public abstract class CharacterClass implements AbstractClass {
 	}
 
 	@Override
-	public Map<String, Attribute> getAttributeMap() {
+	public Map<String, CharacterAttribute> getAttributeMap() {
 		return Collections.unmodifiableMap(attributes);
 	}
 

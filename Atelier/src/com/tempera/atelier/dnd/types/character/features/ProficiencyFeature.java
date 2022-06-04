@@ -12,7 +12,7 @@ import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficie
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
 import com.tempera.atelier.dnd.types.IndexedItem;
-import com.tempera.atelier.dnd.types.character.Attribute;
+import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.enums.Proficiency;
@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 
 @IndexedItem("feature-proficiencies")
-public class ProficiencyFeature implements Attribute {
+public class ProficiencyFeature implements CharacterAttribute {
 	private Set<Ability> savingProficiencies;
 	private Set<EquipmentType> equipmentProficiencies;
 

@@ -11,7 +11,7 @@ import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
 import com.tempera.atelier.dnd.events.character.LevelUpClassEvent;
 import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
-import com.tempera.atelier.dnd.types.character.Attribute;
+import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -21,7 +21,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 
 @IndexedItem("feature-hit-points")
-public class HitPointFeature implements Attribute {
+public class HitPointFeature implements CharacterAttribute {
 
 	private class HitPointMenu implements Menu {
 

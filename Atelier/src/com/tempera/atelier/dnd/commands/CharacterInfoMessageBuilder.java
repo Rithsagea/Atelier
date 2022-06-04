@@ -3,7 +3,7 @@ package com.tempera.atelier.dnd.commands;
 import java.awt.Color;
 
 import com.tempera.atelier.dnd.types.Sheet;
-import com.tempera.atelier.dnd.types.character.Attribute;
+import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -38,7 +38,7 @@ public class CharacterInfoMessageBuilder extends MessageBuilder {
 
 		b.setLength(0);
 		prefix = "";
-		for (Attribute a : sheet.getAttributes()) {
+		for (CharacterAttribute a : sheet.getAttributes()) {
 			b.append(prefix);
 			b.append(a.getName());
 			prefix = "\n";

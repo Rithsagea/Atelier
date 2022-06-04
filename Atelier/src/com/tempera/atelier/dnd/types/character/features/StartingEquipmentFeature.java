@@ -13,7 +13,7 @@ import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.events.LoadSheetEvent;
 import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.Sheet;
-import com.tempera.atelier.dnd.types.character.Attribute;
+import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 import com.tempera.atelier.dnd.types.equipment.Inventory;
 import com.tempera.atelier.dnd.types.equipment.Item;
 import com.tempera.util.ColorUtil;
@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
 @IndexedItem("feature-starting-equipment")
-public class StartingEquipmentFeature implements Attribute {
+public class StartingEquipmentFeature implements CharacterAttribute {
 
 	public static class EquipmentOption {
 		private String name;

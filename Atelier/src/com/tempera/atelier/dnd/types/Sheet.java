@@ -26,7 +26,7 @@ import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiency
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadSheetEvent;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
-import com.tempera.atelier.dnd.types.character.Attribute;
+import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.enums.Skill;
@@ -55,7 +55,7 @@ public class Sheet implements Listener {
 	private transient Set<Skill> skillProficiencies = new HashSet<>();
 	private transient Set<EquipmentType> equipmentProficiencies = new HashSet<>();
 
-	private transient Map<String, Attribute> attributes = new HashMap<>();
+	private transient Map<String, CharacterAttribute> attributes = new HashMap<>();
 
 	@JsonCreator
 	public Sheet(@Id UUID id) {
@@ -80,7 +80,7 @@ public class Sheet implements Listener {
 
 		for (AbstractClass c : classes) {
 			eventBus.registerListener(c);
-			for (Entry<String, Attribute> entry : c.getAttributeMap().entrySet()) {
+			for (Entry<String, CharacterAttribute> entry : c.getAttributeMap().entrySet()) {
 				eventBus.registerListener(entry.getValue());
 				attributes.put(entry.getKey(), entry.getValue());
 			}
@@ -182,15 +182,15 @@ public class Sheet implements Listener {
 		return Collections.unmodifiableList(classes);
 	}
 
-	public Attribute getAttribute(String id) {
+	public CharacterAttribute getAttribute(String id) {
 		return attributes.get(id);
 	}
 
-	public Collection<Attribute> getAttributes() {
+	public Collection<CharacterAttribute> getAttributes() {
 		return attributes.values();
 	}
 
-	public Map<String, Attribute> getAttributeMap() {
+	public Map<String, CharacterAttribute> getAttributeMap() {
 		return Collections.unmodifiableMap(attributes);
 	}
 

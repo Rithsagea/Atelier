@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.dnd.types.Sheet;
-import com.tempera.atelier.dnd.types.character.Attribute;
+import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -51,7 +51,7 @@ public class CharacterAttributeMenu implements Menu {
 		Builder menu = SelectMenu.create("menu:roll")
 			.setPlaceholder("Choose attribute")
 			.setRequiredRange(1, 1);
-		for (Entry<String, Attribute> entry : sheet.getAttributeMap()
+		for (Entry<String, CharacterAttribute> entry : sheet.getAttributeMap()
 			.entrySet())
 			menu.addOption(entry.getValue()
 				.getName(), entry.getKey());
