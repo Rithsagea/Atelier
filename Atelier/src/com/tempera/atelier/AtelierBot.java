@@ -14,8 +14,8 @@ import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.MessageListener;
 import com.tempera.atelier.discord.commands.CommandRegistry;
 import com.tempera.atelier.discord.music.AtelierAudioManager;
-import com.tempera.atelier.dnd.database.AtelierDB;
-import com.tempera.atelier.dnd.database.DBSaveTask;
+import com.tempera.atelier.dnd.types.AtelierDB;
+import com.tempera.atelier.dnd.types.DBSaveTask;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

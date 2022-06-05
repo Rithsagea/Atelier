@@ -1,4 +1,4 @@
-package com.tempera.atelier.dnd.database;
+package com.tempera.atelier.dnd.types;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,8 +27,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.tempera.atelier.Config;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.dnd.types.IndexedItem;
-import com.tempera.atelier.dnd.types.Sheet;
 
 public class AtelierDB {
 

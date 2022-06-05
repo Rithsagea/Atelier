@@ -3,6 +3,7 @@ package com.tempera.atelier.dnd.commands;
 import java.util.List;
 
 import com.tempera.atelier.discord.Menu;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.equipment.Item;
 import com.tempera.util.ColorUtil;
@@ -20,9 +21,12 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder
 public class CharacterInventoryMenu implements Menu {
 
 	private Sheet sheet;
+	private MenuManager menuManager;
+	
 	private String selected;
 
-	public CharacterInventoryMenu(Sheet sheet) {
+	public CharacterInventoryMenu(Sheet sheet, MenuManager menuManager) {
+		this.menuManager = menuManager;
 		this.sheet = sheet;
 	}
 
@@ -51,10 +55,10 @@ public class CharacterInventoryMenu implements Menu {
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		event.reply(sheet
-			.getInventory()
-			.getContents()
-			.get(Integer.parseInt(selected)).getName()).queue();
+		event.deferEdit().queue();
+		
+		Item item = sheet.getInventory().getContents().get(Integer.parseInt(selected));
+		menuManager.addMenu(event.getChannel(), item.getMenu());
 	}
 
 	@Override

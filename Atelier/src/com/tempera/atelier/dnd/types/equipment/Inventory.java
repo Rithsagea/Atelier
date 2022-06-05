@@ -18,8 +18,7 @@ public class Inventory {
 	public void addItem(Item item) {
 		for (int i = 0; i < contents.size(); i++) {
 			if (item.isStackable(contents.get(i))) {
-				item.stack(contents.get(i));
-				contents.set(i, item);
+				contents.get(i).setAmount(item.getAmount() + contents.get(i).getAmount());
 				return;
 			}
 		}

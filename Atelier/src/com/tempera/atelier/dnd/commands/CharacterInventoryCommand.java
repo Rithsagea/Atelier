@@ -40,7 +40,7 @@ public class CharacterInventoryCommand extends CharacterSubCommand {
 	public void execute(Sheet sheet, User user, List<String> args,
 		MessageReceivedEvent event) {
 		menuManager.addMenu(event.getChannel(),
-			new CharacterInventoryMenu(sheet));
+			new CharacterInventoryMenu(sheet, menuManager));
 	}
 
 }

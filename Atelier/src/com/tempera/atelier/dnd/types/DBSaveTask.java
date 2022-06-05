@@ -1,4 +1,4 @@
-package com.tempera.atelier.dnd.database;
+package com.tempera.atelier.dnd.types;
 
 import com.tempera.atelier.AtelierTask;
 

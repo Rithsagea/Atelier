@@ -3,7 +3,7 @@ package com.tempera.test;
 import com.tempera.atelier.Config;
 import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.PermissionLevel;
-import com.tempera.atelier.dnd.database.AtelierDB;
+import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.character.classes.Rogue;
 import com.tempera.atelier.dnd.types.enums.Ability;

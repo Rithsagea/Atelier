@@ -19,7 +19,7 @@ import com.tempera.atelier.discord.commands.WaifuCommand;
 import com.tempera.atelier.discord.music.MusicCommand;
 import com.tempera.atelier.dnd.commands.CharacterCommand;
 import com.tempera.atelier.dnd.commands.edit.EditCommand;
-import com.tempera.atelier.dnd.database.AtelierDB;
+import com.tempera.atelier.dnd.types.AtelierDB;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
