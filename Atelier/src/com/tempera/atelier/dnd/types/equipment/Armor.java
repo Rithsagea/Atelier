@@ -3,7 +3,7 @@ package com.tempera.atelier.dnd.types.equipment;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 
-public abstract class Armor extends BaseItem {
+public class Armor extends BaseItem {
 
 	public Armor(String name, String description, String source, Price price,
 		double weight) {
@@ -14,6 +14,6 @@ public abstract class Armor extends BaseItem {
 
 	@Override
 	public final String getType() {
-		return "armor";
+		return "Armor";
 	}
 }

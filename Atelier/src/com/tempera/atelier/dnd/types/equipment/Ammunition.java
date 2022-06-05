@@ -13,7 +13,7 @@ public class Ammunition extends BaseItem {
 
 	@Override
 	public String getType() {
-		return "ammunition";
+		return "Ammunition";
 	}
 
 }

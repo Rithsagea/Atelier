@@ -13,7 +13,7 @@ public class Tools extends BaseItem {
 
 	@Override
 	public String getType() {
-		return "tools";
+		return "Tools";
 	}
 
 }
