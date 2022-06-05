@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tempera.atelier.dnd.types.IndexedItem;
 
-@IndexedItem("attribute-source")
+@IndexedItem("source")
 public class SourceAttribute implements ItemAttribute {
 
 	private String source;

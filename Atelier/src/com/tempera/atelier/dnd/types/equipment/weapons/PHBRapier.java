@@ -5,6 +5,7 @@ import com.tempera.atelier.dnd.types.enums.Currency;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.equipment.Weapon;
+import com.tempera.atelier.dnd.types.equipment.attributes.FinesseAttribute;
 
 @IndexedItem("phb-rapier")
 public class PHBRapier extends Weapon {
@@ -15,5 +16,6 @@ public class PHBRapier extends Weapon {
 			new Price(25, Currency.GOLD), 2);
 
 		addCategories(EquipmentType.MARTIAL_WEAPON, EquipmentType.MELEE_WEAPON);
+		addAttributes(new FinesseAttribute());
 	}
 }

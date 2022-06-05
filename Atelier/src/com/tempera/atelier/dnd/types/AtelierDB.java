@@ -47,14 +47,12 @@ public class AtelierDB {
 
 	public AtelierDB(Config config) {
 		MongoClientSettings settings = MongoClientSettings.builder()
-			.applyConnectionString(
-				new ConnectionString(config.getDatabaseUrl()))
+			.applyConnectionString(new ConnectionString(config.getDatabaseUrl()))
 			.uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
 			.build();
 
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			false);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
 		mapper.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);

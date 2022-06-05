@@ -168,7 +168,11 @@ public class StartingEquipmentFeature implements CharacterAttribute {
 				for(int x = 0; x < options.size(); x++) {
 					options.get(x).get(selectedOptions.get(x)).getItems().forEach(inventory::addItem);
 				}
+				
+				event.reply("Succesfully claimed starting equipment!").queue();
 			}
+			
+			event.reply("Starting equipment has already been claimed!").queue();
 		}
 
 		@Override

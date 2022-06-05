@@ -5,6 +5,8 @@ import com.tempera.atelier.dnd.types.enums.Currency;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.equipment.Weapon;
+import com.tempera.atelier.dnd.types.equipment.attributes.FinesseAttribute;
+import com.tempera.atelier.dnd.types.equipment.attributes.LightAttribute;
 
 @IndexedItem("phb-shortsword")
 public class PHBShortsword extends Weapon {
@@ -14,5 +16,6 @@ public class PHBShortsword extends Weapon {
 			new Price(2, Currency.GOLD), 2);
 
 		addCategories(EquipmentType.MARTIAL_WEAPON, EquipmentType.MELEE_WEAPON);
+		addAttributes(new FinesseAttribute(), new LightAttribute());
 	}
 }

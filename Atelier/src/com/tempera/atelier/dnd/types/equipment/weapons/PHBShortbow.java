@@ -5,6 +5,9 @@ import com.tempera.atelier.dnd.types.enums.Currency;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.equipment.Weapon;
+import com.tempera.atelier.dnd.types.equipment.attributes.AmmunitionAttribute;
+import com.tempera.atelier.dnd.types.equipment.attributes.RangeAttribute;
+import com.tempera.atelier.dnd.types.equipment.attributes.TwoHandedAttribute;
 
 @IndexedItem("phb-shortbow")
 public class PHBShortbow extends Weapon {
@@ -13,8 +16,9 @@ public class PHBShortbow extends Weapon {
 		super("Shortbow", null,
 			"PHB, page 149. Available in the SRD and the Basic Rules.",
 			new Price(25, Currency.GOLD), 2);
-		addCategories(EquipmentType.RANGE, EquipmentType.WEAPON,
-			EquipmentType.SIMPLE_WEAPON);
+
+		addCategories(EquipmentType.SIMPLE_WEAPON);
+		addAttributes(new RangeAttribute(), new AmmunitionAttribute(), new TwoHandedAttribute());
 	}
 
 }

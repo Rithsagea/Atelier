@@ -25,7 +25,7 @@ public abstract class BaseItem implements Item {
 	private transient Price price;
 	private transient double weight;
 
-	private Set<ItemAttribute> attributes;
+	private transient Set<ItemAttribute> attributes;
 	private int amount;
 
 	public BaseItem(String name, String description, String source, Price price,
