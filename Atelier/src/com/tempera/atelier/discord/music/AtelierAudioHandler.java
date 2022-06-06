@@ -148,6 +148,8 @@ public class AtelierAudioHandler extends AudioEventAdapter
 			channel.sendMessageEmbeds(eb.build())
 				.queue();
 		}
+		else
+			channel.sendMessage("Sent song to end of queue").queue();
 
 		queue(track);
 	}
