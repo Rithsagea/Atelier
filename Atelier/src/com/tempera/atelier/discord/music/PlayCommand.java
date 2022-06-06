@@ -36,8 +36,9 @@ public class PlayCommand extends MusicSubCommand {
 				.sendMessage("Missing URL!")
 				.queue();
 		else {
-			if (audioHandler.joinVc(event) == null)
-				return;
+			if (!event.getGuild().getAudioManager().isConnected())
+				if (audioHandler.joinVc(event) == null)
+					return;
 			audioHandler.loadTrack(args.get(1));
 		}
 	}

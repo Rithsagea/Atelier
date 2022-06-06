@@ -74,7 +74,7 @@ public class AtelierAudioHandler extends AudioEventAdapter
 				.queue();
 			return null;
 		}
-
+		
 		manager.setSendingHandler(this);
 		manager.openAudioConnection(channel);
 
