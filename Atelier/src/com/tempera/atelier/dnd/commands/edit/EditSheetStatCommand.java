@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class EditSheetStatCommand extends EditSheetGroupCommand {
 
-	private class TypeStat extends EditSheetSubCommand {
+	private class TypeStat extends EditSheetBaseCommand {
 
 		private TypeRegistry typeRegistry;
 
@@ -49,7 +49,7 @@ public class EditSheetStatCommand extends EditSheetGroupCommand {
 
 	}
 
-	private class SetStat extends EditSheetSubCommand {
+	private class SetStat extends EditSheetBaseCommand {
 
 		public SetStat(AtelierBot bot) {
 			super(bot, "set", null, PermissionLevel.ADMINISTRATOR);

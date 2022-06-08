@@ -7,25 +7,25 @@ import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.BaseCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
-import com.tempera.atelier.dnd.types.Sheet;
+import com.tempera.atelier.dnd.types.Campaign;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public abstract class EditSheetSubCommand extends BaseCommand {
+public abstract class EditCampaignBaseCommand extends BaseCommand {
 	
 	private AtelierDB db;
 	
-	public EditSheetSubCommand(AtelierBot bot, String label, List<String> aliases, PermissionLevel level) {
+	public EditCampaignBaseCommand(AtelierBot bot, String label, List<String> aliases, PermissionLevel level) {
 		super(label, aliases, level);
+		
 		db = bot.getDatabase();
 	}
 
 	@Override
 	public final void execute(User user, List<String> args, MessageReceivedEvent event) {
-		Sheet sheet = db.getSheet(user.getSelectedSheetId());
-		if(sheet != null) execute(user, sheet, args, event);
-		else event.getChannel().sendMessage("Please select a sheet to edit").queue();
+		Campaign campaign = db.getCampaign(user.getSelectedCampaignId());
+		execute(user, campaign, args, event);
 	}
-	
-	public abstract void execute(User user, Sheet sheet, List<String> args, MessageReceivedEvent event);
+
+	public abstract void execute(User user, Campaign campaign, List<String> args, MessageReceivedEvent event);
 }

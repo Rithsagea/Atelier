@@ -6,6 +6,7 @@ import org.mongojack.Id;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.tempera.atelier.discord.commands.PermissionLevel;
+import com.tempera.atelier.dnd.types.Campaign;
 import com.tempera.atelier.dnd.types.Sheet;
 
 public class User {
@@ -19,6 +20,7 @@ public class User {
 	private PermissionLevel level;
 
 	private UUID selectedSheetId;
+	private UUID selectedCampaignId;
 
 	@JsonCreator
 	public User(@Id long id) {
@@ -53,6 +55,10 @@ public class User {
 	public UUID getSelectedSheetId() {
 		return selectedSheetId;
 	}
+	
+	public UUID getSelectedCampaignId() {
+		return selectedCampaignId;
+	}
 
 	// MUTATORS
 
@@ -70,5 +76,9 @@ public class User {
 
 	public void setSelectedSheet(Sheet sheet) {
 		selectedSheetId = sheet.getId();
+	}
+	
+	public void setSelectedCampaign(Campaign campaign) {
+		selectedCampaignId = campaign.getId();
 	}
 }

@@ -27,26 +27,23 @@ public class EditSheetCommand extends EditSheetGroupCommand {
 		}
 
 		@Override
-		public void execute(User user, List<String> args,
-			MessageReceivedEvent event) {
+		public void execute(User user, List<String> args, MessageReceivedEvent event) {
 			MessageBuilder b = new MessageBuilder();
 			for (Sheet sheet : db.listSheets()) {
 				b.append(sheet);
 				b.append("\n");
 			}
 
-			event.getChannel()
-				.sendMessage(b.build())
-				.queue();
+			event.getChannel().sendMessage(b.build()).queue();
 		}
 
 	}
 
-	private class NameSheet extends EditSheetSubCommand {
+	private class NameSheet extends EditSheetBaseCommand {
 		public NameSheet(AtelierBot bot) {
 			super(bot, "name", null, PermissionLevel.ADMINISTRATOR);
 		}
-		
+
 		@Override
 		public void execute(User user, Sheet sheet, List<String> args, MessageReceivedEvent event) {
 			if (args.size() >= 2) {
@@ -58,7 +55,7 @@ public class EditSheetCommand extends EditSheetGroupCommand {
 			event.getChannel().sendMessage("Character name: " + sheet.getName()).queue();
 		}
 	}
-	
+
 	private class NewSheet extends BaseCommand {
 
 		private AtelierDB db;
@@ -69,14 +66,11 @@ public class EditSheetCommand extends EditSheetGroupCommand {
 		}
 
 		@Override
-		public void execute(User user, List<String> args,
-			MessageReceivedEvent event) {
+		public void execute(User user, List<String> args, MessageReceivedEvent event) {
 			Sheet sheet = new Sheet();
 			db.addSheet(sheet);
 
-			event.getChannel()
-				.sendMessageFormat("Created new sheet %s", sheet.getId())
-				.queue();
+			event.getChannel().sendMessageFormat("Created new sheet %s", sheet.getId()).queue();
 		}
 	}
 
@@ -89,12 +83,9 @@ public class EditSheetCommand extends EditSheetGroupCommand {
 		}
 
 		@Override
-		public void execute(User user, List<String> args,
-			MessageReceivedEvent event) {
+		public void execute(User user, List<String> args, MessageReceivedEvent event) {
 			if (args.size() < 2) {
-				event.getChannel()
-					.sendMessage("Specify a valid sheet id")
-					.queue();
+				event.getChannel().sendMessage("Specify a valid sheet id").queue();
 				return;
 			}
 
@@ -103,32 +94,28 @@ public class EditSheetCommand extends EditSheetGroupCommand {
 			try {
 				id = UUID.fromString(args.get(1));
 			} catch (IllegalArgumentException e) {
-				event.getChannel()
-					.sendMessage("Invalid id format")
-					.queue();
+				event.getChannel().sendMessage("Invalid id format").queue();
 				return;
 			}
 
 			Sheet sheet = db.getSheet(id);
 			if (sheet != null) {
 				user.setSelectedSheet(sheet);
-				event.getChannel()
-					.sendMessage("Selected sheet: " + sheet)
-					.queue();
+				event.getChannel().sendMessage("Selected sheet: " + sheet).queue();
 				return;
 			}
 		}
 	}
-	
+
 	public EditSheetCommand(AtelierBot bot) {
 		super(bot, "sheet", DataUtil.list("s"), PermissionLevel.ADMINISTRATOR);
-		
+
 		CommandRegistry reg = getCommandRegistry();
 		reg.registerCommand(new ListSheet(bot));
 		reg.registerCommand(new NameSheet(bot));
 		reg.registerCommand(new NewSheet(bot));
 		reg.registerCommand(new SelectSheet(bot));
-		
+
 		reg.registerCommand(new EditSheetStatCommand(bot));
 	}
 
