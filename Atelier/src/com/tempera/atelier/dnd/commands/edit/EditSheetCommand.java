@@ -3,11 +3,11 @@ package com.tempera.atelier.dnd.commands.edit;
 import java.util.List;
 import java.util.UUID;
 
+import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.BaseCommand;
 import com.tempera.atelier.discord.commands.CommandRegistry;
-import com.tempera.atelier.discord.commands.GroupCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
@@ -15,7 +15,7 @@ import com.tempera.atelier.dnd.types.Sheet;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class EditSheetCommand extends GroupCommand {
+public class EditSheetCommand extends EditSheetGroupCommand {
 
 	private class ListSheet extends BaseCommand {
 
@@ -42,6 +42,23 @@ public class EditSheetCommand extends GroupCommand {
 
 	}
 
+	private class NameSheet extends EditSheetSubCommand {
+		public NameSheet(AtelierBot bot) {
+			super(bot, "name", null, PermissionLevel.ADMINISTRATOR);
+		}
+		
+		@Override
+		public void execute(User user, Sheet sheet, List<String> args, MessageReceivedEvent event) {
+			if (args.size() >= 2) {
+				sheet.setName(args.get(1));
+				event.getChannel().sendMessage("Set character's name to " + args.get(1)).queue();
+				return;
+			}
+
+			event.getChannel().sendMessage("Character name: " + sheet.getName()).queue();
+		}
+	}
+	
 	private class NewSheet extends BaseCommand {
 
 		private AtelierDB db;
@@ -102,12 +119,17 @@ public class EditSheetCommand extends GroupCommand {
 			}
 		}
 	}
-
+	
 	public EditSheetCommand(AtelierBot bot) {
+		super(bot);
+		
 		CommandRegistry reg = getCommandRegistry();
 		reg.registerCommand(new ListSheet(bot));
+		reg.registerCommand(new NameSheet(bot));
 		reg.registerCommand(new NewSheet(bot));
 		reg.registerCommand(new SelectSheet(bot));
+		
+		reg.registerCommand(new EditSheetStatCommand(bot));
 	}
 
 	@Override
@@ -117,7 +139,7 @@ public class EditSheetCommand extends GroupCommand {
 
 	@Override
 	public List<String> getAliases() {
-		return null;
+		return DataUtil.list("s");
 	}
 
 	@Override
@@ -126,9 +148,8 @@ public class EditSheetCommand extends GroupCommand {
 	}
 
 	@Override
-	public void executeDefault(User user, List<String> args,
-		MessageReceivedEvent event) {
-
+	public void executeDefault(User user, Sheet sheet, List<String> args, MessageReceivedEvent event) {
+		event.getChannel().sendMessage("Currently editing: " + sheet).queue();
 	}
 
 }

@@ -18,7 +18,7 @@ public class User {
 
 	private PermissionLevel level;
 
-	private transient Sheet selectedSheet;
+	private UUID selectedSheetId;
 
 	@JsonCreator
 	public User(@Id long id) {
@@ -50,8 +50,8 @@ public class User {
 		return level;
 	}
 
-	public Sheet getSelectedSheet() {
-		return selectedSheet;
+	public UUID getSelectedSheetId() {
+		return selectedSheetId;
 	}
 
 	// MUTATORS
@@ -69,6 +69,6 @@ public class User {
 	}
 
 	public void setSelectedSheet(Sheet sheet) {
-		selectedSheet = sheet;
+		selectedSheetId = sheet.getId();
 	}
 }

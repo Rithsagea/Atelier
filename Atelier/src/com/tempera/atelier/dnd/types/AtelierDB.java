@@ -79,6 +79,7 @@ public class AtelierDB {
 
 		users = new HashMap<>();
 		sheets = new HashMap<>();
+		campaigns = new HashMap<>();
 
 		if (!OFFLINE_MODE) {
 			userCollection.find().forEach((User user) -> users.put(user.getId(), user));

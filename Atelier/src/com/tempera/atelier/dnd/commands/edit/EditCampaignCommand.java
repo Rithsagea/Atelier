@@ -2,31 +2,27 @@ package com.tempera.atelier.dnd.commands.edit;
 
 import java.util.List;
 
-import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.CommandRegistry;
 import com.tempera.atelier.discord.commands.GroupCommand;
 import com.tempera.atelier.discord.commands.PermissionLevel;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class EditCommand extends GroupCommand {
+public class EditCampaignCommand extends GroupCommand {
 
-	public EditCommand(AtelierBot bot) {
-		CommandRegistry reg = getCommandRegistry();
-		reg.registerCommand(new EditSheetCommand(bot));
-		reg.registerCommand(new EditCampaignCommand(bot));
+	public EditCampaignCommand(AtelierBot bot) {
+		
 	}
-
+	
 	@Override
 	public String getLabel() {
-		return "edit";
+		return "campaign";
 	}
 
 	@Override
 	public List<String> getAliases() {
-		return DataUtil.list("e");
+		return null;
 	}
 
 	@Override
