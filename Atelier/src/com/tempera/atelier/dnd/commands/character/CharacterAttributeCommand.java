@@ -1,28 +1,34 @@
-package com.tempera.atelier.dnd.commands;
+package com.tempera.atelier.dnd.commands.character;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.tempera.atelier.AtelierBot;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.PermissionLevel;
-import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterInfoCommand extends CharacterSubCommand {
+public class CharacterAttributeCommand extends CharacterSubCommand {
 
-	public CharacterInfoCommand(AtelierDB db) {
-		super(db);
+	private MenuManager menuManager;
+
+	public CharacterAttributeCommand(AtelierBot bot) {
+		super(bot.getDatabase());
+
+		menuManager = bot.getMenuManager();
 	}
 
 	@Override
 	public String getLabel() {
-		return "info";
+		return "attribute";
 	}
 
 	@Override
 	public List<String> getAliases() {
-		return null;
+		return Arrays.asList("a");
 	}
 
 	@Override
@@ -33,9 +39,8 @@ public class CharacterInfoCommand extends CharacterSubCommand {
 	@Override
 	public void execute(Sheet sheet, User user, List<String> args,
 		MessageReceivedEvent event) {
-		event.getChannel()
-			.sendMessage(new CharacterInfoMessageBuilder(sheet).build())
-			.queue();
+		menuManager.addMenu(event.getChannel(),
+			new CharacterAttributeMenu(sheet, menuManager));
 	}
 
 }

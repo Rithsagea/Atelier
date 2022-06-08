@@ -1,4 +1,4 @@
-package com.tempera.atelier.dnd.commands;
+package com.tempera.atelier.dnd.commands.character;
 
 import java.util.Arrays;
 import java.util.List;

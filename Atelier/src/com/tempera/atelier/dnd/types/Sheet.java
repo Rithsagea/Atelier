@@ -44,7 +44,7 @@ public class Sheet implements Listener {
 
 	private int hitPoints;
 	private int maxHitPoints;
-	private transient Dice hitDice;
+	private transient Dice hitDice = new Dice();
 
 	private List<AbstractClass> classes = new ArrayList<>();
 	private Inventory inventory = new Inventory();
@@ -60,7 +60,6 @@ public class Sheet implements Listener {
 	@JsonCreator
 	public Sheet(@Id UUID id) {
 		this.id = id;
-		hitDice = new Dice();
 	}
 
 	public Sheet() {
