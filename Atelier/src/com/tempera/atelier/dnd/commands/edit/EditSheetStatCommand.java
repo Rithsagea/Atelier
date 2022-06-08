@@ -79,26 +79,11 @@ public class EditSheetStatCommand extends EditSheetGroupCommand {
 	}
 
 	public EditSheetStatCommand(AtelierBot bot) {
-		super(bot);
+		super(bot, "stat", null, PermissionLevel.ADMINISTRATOR);
 		
 		CommandRegistry reg = getCommandRegistry();
 		reg.registerCommand(new TypeStat(bot));
 		reg.registerCommand(new SetStat(bot));
-	}
-
-	@Override
-	public String getLabel() {
-		return "stat";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return null;
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.ADMINISTRATOR;
 	}
 
 	@Override

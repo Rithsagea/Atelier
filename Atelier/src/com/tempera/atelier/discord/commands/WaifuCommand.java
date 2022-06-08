@@ -1,9 +1,9 @@
 package com.tempera.atelier.discord.commands;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.User;
@@ -54,37 +54,19 @@ public class WaifuCommand extends GroupCommand {
 	private MenuManager menuManager;
 
 	public WaifuCommand(AtelierBot bot) {
+		super("waifu", DataUtil.list("w"), PermissionLevel.USER);
+		
 		CommandRegistry registry = this.getCommandRegistry();
 
-		registry.registerCommand(
-			new WaifuSubCommand("cat", "Cat", NekoUtil::getCat));
-		registry.registerCommand(
-			new WaifuSubCommand("dog", "Dog", NekoUtil::getDog));
-		registry.registerCommand(
-			new WaifuSubCommand("catboy", "Catboy", NekoUtil::getCatboy));
-		registry.registerCommand(
-			new WaifuSubCommand("catgirl", "Catgirl", NekoUtil::getCatgirl));
-		registry.registerCommand(
-			new WaifuSubCommand("foxgirl", "Foxgirl", NekoUtil::getFoxgirl));
+		registry.registerCommand(new WaifuSubCommand("cat", "Cat", NekoUtil::getCat));
+		registry.registerCommand(new WaifuSubCommand("dog", "Dog", NekoUtil::getDog));
+		registry.registerCommand(new WaifuSubCommand("catboy", "Catboy", NekoUtil::getCatboy));
+		registry.registerCommand(new WaifuSubCommand("catgirl", "Catgirl", NekoUtil::getCatgirl));
+		registry.registerCommand(new WaifuSubCommand("foxgirl", "Foxgirl", NekoUtil::getFoxgirl));
 
 		menuManager = bot.getMenuManager();
 	}
-
-	@Override
-	public String getLabel() {
-		return "waifu";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return Arrays.asList("w");
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
-	}
-
+	
 	@Override
 	public void executeDefault(User user, List<String> args,
 		MessageReceivedEvent event) {

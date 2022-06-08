@@ -11,21 +11,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CampaignCommand extends GroupCommand {
 
-	@Override
-	public String getLabel() {
-		return "campaign";
+	public CampaignCommand() {
+		super("campaign", DataUtil.list("c"), PermissionLevel.ADMINISTRATOR);
 	}
-
-	@Override
-	public List<String> getAliases() {
-		return DataUtil.list("c");
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.ADMINISTRATOR;
-	}
-
+	
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		event.getChannel().sendMessage("I am alive").queue();

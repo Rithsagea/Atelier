@@ -14,29 +14,14 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class EditCommand extends GroupCommand {
 
 	public EditCommand(AtelierBot bot) {
+		super("edit", DataUtil.list("e"), PermissionLevel.ADMINISTRATOR);
+		
 		CommandRegistry reg = getCommandRegistry();
 		reg.registerCommand(new EditSheetCommand(bot));
 		reg.registerCommand(new EditCampaignCommand(bot));
 	}
-
+	
 	@Override
-	public String getLabel() {
-		return "edit";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return DataUtil.list("e");
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.ADMINISTRATOR;
-	}
-
-	@Override
-	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
-		
-	}
+	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) { }
 
 }

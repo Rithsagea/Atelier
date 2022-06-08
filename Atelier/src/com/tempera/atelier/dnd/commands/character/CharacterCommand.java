@@ -1,8 +1,8 @@
 package com.tempera.atelier.dnd.commands.character;
 
-import java.util.Arrays;
 import java.util.List;
 
+import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.CommandRegistry;
@@ -18,6 +18,8 @@ public class CharacterCommand extends GroupCommand {
 	private AtelierDB db;
 
 	public CharacterCommand(AtelierBot bot) {
+		super("character", DataUtil.list("char", "dnd"), PermissionLevel.USER);
+		
 		db = bot.getDatabase();
 
 		CommandRegistry registry = this.getCommandRegistry();
@@ -28,26 +30,8 @@ public class CharacterCommand extends GroupCommand {
 	}
 
 	@Override
-	public String getLabel() {
-		return "character";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return Arrays.asList("char", "dnd");
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
-	}
-
-	@Override
-	public void executeDefault(User user, List<String> args,
-		MessageReceivedEvent event) {
+	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = db.getSheet(user.getSheetId());
-		event.getChannel()
-			.sendMessage(new CharacterInfoMessageBuilder(sheet).build())
-			.queue();
+		event.getChannel().sendMessage(new CharacterInfoMessageBuilder(sheet).build()).queue();
 	}
 }

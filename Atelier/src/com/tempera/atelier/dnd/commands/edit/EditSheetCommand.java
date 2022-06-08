@@ -121,7 +121,7 @@ public class EditSheetCommand extends EditSheetGroupCommand {
 	}
 	
 	public EditSheetCommand(AtelierBot bot) {
-		super(bot);
+		super(bot, "sheet", DataUtil.list("s"), PermissionLevel.ADMINISTRATOR);
 		
 		CommandRegistry reg = getCommandRegistry();
 		reg.registerCommand(new ListSheet(bot));
@@ -130,21 +130,6 @@ public class EditSheetCommand extends EditSheetGroupCommand {
 		reg.registerCommand(new SelectSheet(bot));
 		
 		reg.registerCommand(new EditSheetStatCommand(bot));
-	}
-
-	@Override
-	public String getLabel() {
-		return "sheet";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return DataUtil.list("s");
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.ADMINISTRATOR;
 	}
 
 	@Override
