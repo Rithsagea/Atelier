@@ -17,6 +17,7 @@ import com.tempera.atelier.discord.commands.CommandRegistry;
 import com.tempera.atelier.discord.commands.StopCommand;
 import com.tempera.atelier.discord.commands.WaifuCommand;
 import com.tempera.atelier.discord.music.MusicCommand;
+import com.tempera.atelier.dnd.commands.campaign.CampaignCommand;
 import com.tempera.atelier.dnd.commands.character.CharacterCommand;
 import com.tempera.atelier.dnd.commands.edit.EditCommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
@@ -49,6 +50,7 @@ public class MessageListener extends ListenerAdapter {
 	private void registerCommands(AtelierBot bot) {
 		AtelierCommand musicCommand = new MusicCommand(bot);
 		AtelierCommand characterCommand = new CharacterCommand(bot);
+		AtelierCommand campaignCommand = new CampaignCommand(bot);
 		AtelierCommand waifuCommand = new WaifuCommand(bot);
 		AtelierCommand editCommand = new EditCommand(bot);
 
@@ -57,12 +59,14 @@ public class MessageListener extends ListenerAdapter {
 		macroMap.put("w", waifuCommand);
 		macroMap.put("m", musicCommand);
 		macroMap.put("d", characterCommand);
+		macroMap.put("c", campaignCommand);
 		macroMap.put("e", editCommand);
 
 		reg.registerCommand(new StopCommand(bot));
 		reg.registerCommand(waifuCommand);
 		reg.registerCommand(musicCommand);
 		reg.registerCommand(characterCommand);
+		reg.registerCommand(campaignCommand);
 		reg.registerCommand(editCommand);
 	}
 

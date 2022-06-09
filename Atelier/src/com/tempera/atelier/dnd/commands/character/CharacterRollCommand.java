@@ -12,28 +12,13 @@ import com.tempera.atelier.dnd.types.enums.Skill;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterRollCommand extends CharacterSubCommand {
+public class CharacterRollCommand extends CharacterBaseCommand {
 
 	private MenuManager menuManager;
 
 	public CharacterRollCommand(AtelierBot bot) {
-		super(bot.getDatabase());
+		super(bot, "roll", null, PermissionLevel.USER);
 		menuManager = bot.getMenuManager();
-	}
-
-	@Override
-	public String getLabel() {
-		return "roll";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return null;
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
 	}
 
 	@Override
@@ -41,14 +26,11 @@ public class CharacterRollCommand extends CharacterSubCommand {
 		MessageReceivedEvent event) {
 
 		if (args.size() == 1) {
-			menuManager.addMenu(event.getChannel(),
-				new CharacterRollMenu(event.getChannel(), sheet));
+			menuManager.addMenu(event.getChannel(), new CharacterRollMenu(event.getChannel(), sheet));
 			return;
 		}
 
-		event.getChannel()
-			.sendMessage(roll(args.get(1), sheet))
-			.queue();
+		event.getChannel().sendMessage(roll(args.get(1), sheet)).queue();
 	}
 
 	public static String roll(String stat, Sheet sheet) {

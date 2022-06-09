@@ -100,7 +100,7 @@ public class EditSheetCommand extends EditSheetGroupCommand {
 
 			Sheet sheet = db.getSheet(id);
 			if (sheet != null) {
-				user.setSelectedSheet(sheet);
+				user.setEditingSheet(sheet);
 				event.getChannel().sendMessage("Selected sheet: " + sheet).queue();
 				return;
 			}

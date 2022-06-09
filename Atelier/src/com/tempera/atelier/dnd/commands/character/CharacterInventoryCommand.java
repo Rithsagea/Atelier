@@ -1,8 +1,8 @@
 package com.tempera.atelier.dnd.commands.character;
 
-import java.util.Arrays;
 import java.util.List;
 
+import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.User;
@@ -11,29 +11,14 @@ import com.tempera.atelier.dnd.types.Sheet;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CharacterInventoryCommand extends CharacterSubCommand {
+public class CharacterInventoryCommand extends CharacterBaseCommand {
 
 	private MenuManager menuManager;
 
 	public CharacterInventoryCommand(AtelierBot bot) {
-		super(bot.getDatabase());
+		super(bot, "inventory", DataUtil.list("i"), PermissionLevel.USER);
 
 		menuManager = bot.getMenuManager();
-	}
-
-	@Override
-	public String getLabel() {
-		return "inventory";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return Arrays.asList("i");
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
 	}
 
 	@Override

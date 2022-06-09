@@ -20,8 +20,6 @@ public abstract class EditSheetGroupCommand extends GroupCommand {
 		db = bot.getDatabase();
 	}
 	
-	public abstract void executeDefault(User user, Sheet sheet, List<String> args, MessageReceivedEvent event);
-	
 	@Override
 	public final void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
 		Sheet sheet = db.getSheet(user.getSelectedSheetId());
@@ -29,4 +27,5 @@ public abstract class EditSheetGroupCommand extends GroupCommand {
 		else event.getChannel().sendMessage("Please select a sheet to edit").queue();
 	}
 	
+	public abstract void executeDefault(User user, Sheet sheet, List<String> args, MessageReceivedEvent event);
 }

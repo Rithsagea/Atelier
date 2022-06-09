@@ -20,8 +20,8 @@ public class CharacterInfoMessageBuilder extends MessageBuilder {
 		eb.setTitle("Character Info");
 
 		b.append("Name: " + sheet.getName() + "\n");
-		b.append("Class: " + sheet.getClasses()
-			.get(0));
+		if(sheet.getClasses().size() > 0)
+			b.append("Class: " + sheet.getClasses().get(0));
 		eb.addField("Info", b.toString(), false);
 
 		b.setLength(0);
@@ -29,8 +29,7 @@ public class CharacterInfoMessageBuilder extends MessageBuilder {
 		for (Ability a : Ability.values()) {
 			b.append(prefix);
 			b.append(String.format(
-				sheet.hasSavingProficiency(a) ? "__%s: %s [%d]__"
-					: "%s: %s [%d]",
+				sheet.hasSavingProficiency(a) ? "__%s: %s [%d]__" : "%s: %s [%d]",
 				a, sheet.getAbilityScore(a), sheet.getAbilityModifier(a)));
 			prefix = "\n";
 		}
@@ -43,7 +42,8 @@ public class CharacterInfoMessageBuilder extends MessageBuilder {
 			b.append(a.getName());
 			prefix = "\n";
 		}
-		eb.addField("Attributes", b.toString(), false);
+		if(sheet.getAttributes().size() > 0)
+			eb.addField("Attributes", b.toString(), false);
 
 		setEmbeds(eb.build());
 	}

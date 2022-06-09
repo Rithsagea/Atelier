@@ -8,8 +8,7 @@ public abstract class BaseCommand implements AtelierCommand {
 	private List<String> aliases;
 	private PermissionLevel level;
 
-	public BaseCommand(String label, List<String> aliases,
-		PermissionLevel level) {
+	public BaseCommand(String label, List<String> aliases, PermissionLevel level) {
 		this.label = label;
 		this.aliases = aliases;
 		this.level = level;

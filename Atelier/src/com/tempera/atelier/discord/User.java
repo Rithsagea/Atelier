@@ -16,11 +16,12 @@ public class User {
 
 	private String name;
 	private UUID sheetId;
+	private UUID campaignId;
 
 	private PermissionLevel level;
 
-	private UUID selectedSheetId;
-	private UUID selectedCampaignId;
+	private UUID editingSheetId;
+	private UUID editingCampaignId;
 
 	@JsonCreator
 	public User(@Id long id) {
@@ -48,16 +49,20 @@ public class User {
 		return sheetId;
 	}
 
+	public UUID getCampaignId() {
+		return campaignId;
+	}
+	
 	public PermissionLevel getLevel() {
 		return level;
 	}
 
 	public UUID getSelectedSheetId() {
-		return selectedSheetId;
+		return editingSheetId;
 	}
 	
 	public UUID getSelectedCampaignId() {
-		return selectedCampaignId;
+		return editingCampaignId;
 	}
 
 	// MUTATORS
@@ -66,19 +71,23 @@ public class User {
 		this.name = name;
 	}
 
-	public void setSheetId(UUID id) {
-		sheetId = id;
+	public void setSheet(Sheet sheet) {
+		sheetId = sheet.getId();
 	}
 
+	public void setCampaign(Campaign campaign) {
+		campaignId = campaign.getId();
+	}
+	
 	public void setLevel(PermissionLevel level) {
 		this.level = level;
 	}
 
-	public void setSelectedSheet(Sheet sheet) {
-		selectedSheetId = sheet.getId();
+	public void setEditingSheet(Sheet sheet) {
+		editingSheetId = sheet.getId();
 	}
 	
-	public void setSelectedCampaign(Campaign campaign) {
-		selectedCampaignId = campaign.getId();
+	public void setEditingCampaign(Campaign campaign) {
+		editingCampaignId = campaign.getId();
 	}
 }
