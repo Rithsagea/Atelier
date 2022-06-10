@@ -1,5 +1,7 @@
 package com.tempera.atelier.discord;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 
 import org.mongojack.Id;
@@ -22,7 +24,9 @@ public class User {
 
 	private UUID editingSheetId;
 	private UUID editingCampaignId;
-
+	
+	private Set<UUID> sheets;
+	
 	@JsonCreator
 	public User(@Id long id) {
 		this.id = id;
@@ -64,6 +68,10 @@ public class User {
 	public UUID getSelectedCampaignId() {
 		return editingCampaignId;
 	}
+	
+	public Set<UUID> getSheets() {
+		return Collections.unmodifiableSet(sheets);
+	}
 
 	// MUTATORS
 
@@ -89,5 +97,13 @@ public class User {
 	
 	public void setEditingCampaign(Campaign campaign) {
 		editingCampaignId = campaign.getId();
+	}
+	
+	public void addSheet(Sheet sheet) {
+		sheets.add(sheet.getId());
+	}
+	
+	public boolean removeSheet(Sheet sheet) {
+		return sheets.remove(sheet.getId());
 	}
 }

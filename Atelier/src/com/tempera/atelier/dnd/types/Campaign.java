@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public class Campaign {
 	@Id
 	private final UUID id;
-	private Set<Sheet> sheets = new HashSet<>();
+	private Set<UUID> sheets = new HashSet<>();
 
 	private String name;
 
@@ -35,7 +35,7 @@ public class Campaign {
 		return id;
 	}
 
-	public Set<Sheet> getSheets() {
+	public Set<UUID> getSheets() {
 		return Collections.unmodifiableSet(sheets);
 	}
 
@@ -45,11 +45,11 @@ public class Campaign {
 
 	// MUTATORS
 	public void addSheet(Sheet sheet) {
-		sheets.add(sheet);
+		sheets.add(sheet.getId());
 	}
 
 	public void removeSheet(Sheet sheet) {
-		sheets.remove(sheet);
+		sheets.remove(sheet.getId());
 	}
 
 	public void setName(String name) {
