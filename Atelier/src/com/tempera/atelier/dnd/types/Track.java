@@ -36,7 +36,7 @@ public class Track {
 		return id;
 	}
 	
-	public Set<AudioTrack> getSheets() {
+	public Set<AudioTrack> getTracks() {
 		return Collections.unmodifiableSet(tracks);
 	}
 }
