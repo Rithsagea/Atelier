@@ -29,9 +29,10 @@ public class MusicCommand extends GroupCommand {
 		registry.registerCommand(new LoopCommand(audioManager));
 		registry.registerCommand(new NowPlayingCommand(audioManager));
 		registry.registerCommand(new SkipCommand(audioManager));
-		registry.registerCommand(new LoopCommand(audioManager));
 		registry.registerCommand(new DisconnectCommand(audioManager));
 		registry.registerCommand(new SansCommand(audioManager));
+		registry.registerCommand(new ListTrackCommand(bot));
+		registry.registerCommand(new NewTrackCommand(bot));
 	}
 
 	@Override

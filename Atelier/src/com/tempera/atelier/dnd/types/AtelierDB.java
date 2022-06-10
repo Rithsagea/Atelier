@@ -38,12 +38,14 @@ public class AtelierDB {
 	private MongoCollection<User> userCollection;
 	private MongoCollection<Sheet> sheetCollection;
 	private MongoCollection<Campaign> campaignCollection;
+	private MongoCollection<Track> atelierTrack;
 
 	private ReplaceOptions replaceUpsertOption;
 
 	private Map<Long, User> users;
 	private Map<UUID, Sheet> sheets;
 	private Map<UUID, Campaign> campaigns;
+	private Map<UUID, Track> tracks;
 
 	private TypeRegistry typeRegistry;
 
@@ -74,12 +76,16 @@ public class AtelierDB {
 		campaignCollection = JacksonMongoCollection.builder()
 			.withObjectMapper(mapper)
 			.build(db.getCollection("campaigns", Campaign.class), Campaign.class, UuidRepresentation.JAVA_LEGACY);
+		atelierTrack = JacksonMongoCollection.builder()
+			.withObjectMapper(mapper)
+			.build(db.getCollection("tracks", Track.class), Track.class, UuidRepresentation.JAVA_LEGACY);
 
 		replaceUpsertOption = new ReplaceOptions().upsert(true);
 
 		users = new HashMap<>();
 		sheets = new HashMap<>();
 		campaigns = new HashMap<>();
+		tracks = new HashMap<>();
 
 		if (!OFFLINE_MODE) {
 			userCollection.find().forEach((User user) -> users.put(user.getId(), user));
@@ -89,6 +95,8 @@ public class AtelierDB {
 			});
 			campaignCollection.find().forEach((Campaign campaign) -> 
 				campaigns.put(campaign.getId(), campaign));
+			atelierTrack.find().forEach((Track track) ->
+				tracks.put(track.getId(), track));
 		}
 	}
 
@@ -126,6 +134,11 @@ public class AtelierDB {
 		campaignCollection.replaceOne(Filters.eq("_id", campaign.getId()), campaign, replaceUpsertOption);
 	}
 
+	private void updateTrack(Track track) {
+		if(OFFLINE_MODE) return;
+		atelierTrack.replaceOne(Filters.eq("_id", track.getId()), track, replaceUpsertOption);
+	}
+	
 	public Collection<Sheet> listSheets() {
 		return sheets.values();
 	}
@@ -134,6 +147,10 @@ public class AtelierDB {
 		return campaigns.values();
 	}
 
+	public Collection<Track> listTracks(){
+		return tracks.values();
+	}
+	
 	public User getUser(long id) {
 		User user = users.get(id);
 		if (user == null) {
@@ -162,12 +179,22 @@ public class AtelierDB {
 		campaigns.put(campaign.getId(), campaign);
 	}
 
+	public Track getTrack(UUID id) {
+		return tracks.get(id);
+	}
+	
+	public void addTrack(Track track) {
+		updateTrack(track);
+		tracks.put(track.getId(), track);
+	}
+	
 	public void save() {
 		if (OFFLINE_MODE) return;
 
 		users.values().forEach(this::updateUser);
 		sheets.values().forEach(this::updateSheet);
 		campaigns.values().forEach(this::updateCampaign);
+		tracks.values().forEach(this::updateTrack);
 	}
 
 	public TypeRegistry getTypeRegistry() {
