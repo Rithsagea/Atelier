@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.mongojack.Id;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.tempera.atelier.discord.commands.PermissionLevel;
+import com.tempera.atelier.discord.lcommands.PermissionLevel;
 import com.tempera.atelier.dnd.types.Campaign;
 import com.tempera.atelier.dnd.types.Sheet;
 

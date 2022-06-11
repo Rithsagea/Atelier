@@ -1,6 +1,7 @@
-package com.tempera.atelier.discord;
+package com.tempera.atelier.discord.commands;
 
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.utils.data.DataObject;
 
 public abstract class SlashBaseCommand implements SlashAbstractCommand {
@@ -25,6 +26,10 @@ public abstract class SlashBaseCommand implements SlashAbstractCommand {
 	
 	@Override
 	public final DataObject getData() {
-		return Commands.slash(label, description).toData();
+		SlashCommandData data = Commands.slash(label, description);
+		addOptions(data);
+		return data.toData();
 	}
+	
+	public abstract void addOptions(SlashCommandData data);
 }

@@ -3,7 +3,7 @@ package com.tempera.atelier.discord.music;
 import java.util.List;
 
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.AtelierCommand;
+import com.tempera.atelier.discord.lcommands.AtelierCommand;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

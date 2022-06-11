@@ -12,11 +12,11 @@ import org.slf4j.Logger;
 
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.Config;
-import com.tempera.atelier.discord.commands.AtelierCommand;
-import com.tempera.atelier.discord.commands.CommandRegistry;
+import com.tempera.atelier.discord.commands.SlashCommandRegistry;
 import com.tempera.atelier.discord.commands.SlashWaifuCommand;
 import com.tempera.atelier.discord.commands.StopCommand;
-import com.tempera.atelier.discord.commands.WaifuCommand;
+import com.tempera.atelier.discord.lcommands.AtelierCommand;
+import com.tempera.atelier.discord.lcommands.CommandRegistry;
 import com.tempera.atelier.discord.music.MusicCommand;
 import com.tempera.atelier.dnd.commands.campaign.CampaignCommand;
 import com.tempera.atelier.dnd.commands.character.CharacterCommand;
@@ -26,6 +26,7 @@ import com.tempera.atelier.dnd.types.AtelierDB;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
@@ -61,23 +62,20 @@ public class MessageListener extends ListenerAdapter {
 
 	private void registerCommands(AtelierBot bot) {
 		reg.registerCommand(new SlashWaifuCommand());
+		reg.registerCommand(new StopCommand(bot));
 		
 		AtelierCommand musicCommand = new MusicCommand(bot);
 		AtelierCommand characterCommand = new CharacterCommand(bot);
 		AtelierCommand campaignCommand = new CampaignCommand(bot);
-		AtelierCommand waifuCommand = new WaifuCommand(bot);
 		AtelierCommand editCommand = new EditCommand(bot);
 
 		macroMap = new HashMap<>();
 
-		macroMap.put("w", waifuCommand);
 		macroMap.put("m", musicCommand);
 		macroMap.put("d", characterCommand);
 		macroMap.put("c", campaignCommand);
 		macroMap.put("e", editCommand);
 
-		toBeDeletedCommandRegistry.registerCommand(new StopCommand(bot));
-		toBeDeletedCommandRegistry.registerCommand(waifuCommand);
 		toBeDeletedCommandRegistry.registerCommand(musicCommand);
 		toBeDeletedCommandRegistry.registerCommand(characterCommand);
 		toBeDeletedCommandRegistry.registerCommand(campaignCommand);
@@ -104,9 +102,20 @@ public class MessageListener extends ListenerAdapter {
 		User user = db.getUser(author.getIdLong());
 		user.setName(author.getName());
 		
-		SlashAbstractCommand command = reg.getCommand(event.getName());
-		command.execute(user, event);
+		reg.getCommand(event.getName()).execute(user, event);
 	}
+	
+	@Override
+	public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event) {
+		if(event.getUser().isBot()) return;
+		
+		net.dv8tion.jda.api.entities.User author = event.getUser();
+		User user = db.getUser(author.getIdLong());
+		user.setName(author.getName());
+		
+		reg.getCommand(event.getName()).complete(event);
+	}
+
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {

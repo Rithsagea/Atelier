@@ -4,11 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class MenuManager {
+	private static final MenuManager INSTANCE = new MenuManager();
+	public static MenuManager getInstance() {
+		return INSTANCE;
+	}
+	
 	private Map<Long, Menu> menus;
 
-	public MenuManager() {
+	private MenuManager() {
 		menus = new HashMap<>();
 	}
 
@@ -17,6 +23,10 @@ public class MenuManager {
 			.queue(m -> {
 				menus.put(m.getIdLong(), menu);
 			});
+	}
+	
+	public void addMenu(SlashCommandInteractionEvent event, Menu menu) {
+		event.reply(menu.initialize()).queue();
 	}
 
 	public Menu getMenu(long id) {

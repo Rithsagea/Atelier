@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.PermissionLevel;
+import com.tempera.atelier.discord.lcommands.PermissionLevel;
 
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

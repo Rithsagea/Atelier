@@ -1,43 +1,34 @@
 package com.tempera.atelier.discord.commands;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-public class StopCommand implements AtelierCommand {
+public class StopCommand extends SlashBaseCommand {
 
 	private AtelierBot bot;
 
 	public StopCommand(AtelierBot bot) {
+		super("stop", "Stops the bot");
+		
 		this.bot = bot;
 	}
 
 	@Override
-	public String getLabel() {
-		return "stop";
+	public void execute(User user, SlashCommandInteractionEvent event) {
+		event.reply("Stopping AtelierBot!").setEphemeral(true).queue(m -> bot.stop());
 	}
 
 	@Override
-	public List<String> getAliases() {
-		return Arrays.asList("quit", "exit");
+	public void complete(CommandAutoCompleteInteractionEvent event) {
+		
 	}
 
 	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.ADMINISTRATOR;
-	}
-
-	@Override
-	public void execute(User user, List<String> args,
-		MessageReceivedEvent event) {
-		event.getChannel()
-			.sendMessage("Stopping AtelierBot!")
-			.queue((m) -> {
-				bot.stop();
-			});
+	public void addOptions(SlashCommandData data) {
+		
 	}
 }

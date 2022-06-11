@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.tempera.atelier.discord.LoginListener;
 import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.MessageListener;
-import com.tempera.atelier.discord.commands.CommandRegistry;
+import com.tempera.atelier.discord.lcommands.CommandRegistry;
 import com.tempera.atelier.discord.music.AtelierAudioManager;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.DBSaveTask;
@@ -42,7 +42,7 @@ public class AtelierBot {
 
 		db = new AtelierDB(config);
 		commandRegistry = new CommandRegistry();
-		menuManager = new MenuManager();
+		menuManager = MenuManager.getInstance();
 		logger = LoggerFactory.getLogger("Atelier");
 		running = true;
 

@@ -1,4 +1,4 @@
-package com.tempera.atelier.discord.commands;
+package com.tempera.atelier.discord.lcommands;
 
 import java.util.List;
 
@@ -13,6 +13,5 @@ public interface AtelierCommand {
 
 	public PermissionLevel getLevel();
 
-	public void execute(User user, List<String> args,
-		MessageReceivedEvent event);
+	public void execute(User user, List<String> args, MessageReceivedEvent event);
 }

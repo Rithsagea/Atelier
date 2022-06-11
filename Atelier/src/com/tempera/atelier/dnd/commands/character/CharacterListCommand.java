@@ -6,8 +6,8 @@ import java.util.UUID;
 import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.BaseCommand;
-import com.tempera.atelier.discord.commands.PermissionLevel;
+import com.tempera.atelier.discord.lcommands.BaseCommand;
+import com.tempera.atelier.discord.lcommands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
 
 import net.dv8tion.jda.api.MessageBuilder;

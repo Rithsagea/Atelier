@@ -1,4 +1,4 @@
-package com.tempera.atelier.discord.commands;
+package com.tempera.atelier.discord.lcommands;
 
 import java.util.List;
 
