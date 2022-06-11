@@ -1,7 +1,7 @@
 package com.tempera.atelier.discord.music;
 
-import com.tempera.atelier.discord.Menu;
-import com.tempera.atelier.discord.MenuManager;
+import com.tempera.atelier.aaagarbage.Menu;
+import com.tempera.atelier.aaagarbage.MenuManager;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;

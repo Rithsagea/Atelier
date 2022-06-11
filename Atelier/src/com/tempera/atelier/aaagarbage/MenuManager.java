@@ -1,4 +1,4 @@
-package com.tempera.atelier.discord;
+package com.tempera.atelier.aaagarbage;
 
 import java.util.HashMap;
 import java.util.Map;

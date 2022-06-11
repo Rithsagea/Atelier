@@ -9,9 +9,10 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tempera.atelier.aaagarbage.MenuManager;
 import com.tempera.atelier.discord.LoginListener;
-import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.MessageListener;
+import com.tempera.atelier.discord.SlashCommandListener;
 import com.tempera.atelier.discord.acommands.CommandRegistry;
 import com.tempera.atelier.discord.music.AtelierAudioManager;
 import com.tempera.atelier.dnd.types.AtelierDB;
@@ -38,7 +39,7 @@ public class AtelierBot {
 	public AtelierBot(String configPath) {
 		System.setProperty("http.agent", "Chrome");
 
-		this.config = new Config(configPath);
+		this.config = Config.init(configPath);
 
 		db = AtelierDB.init(config);
 		commandRegistry = new CommandRegistry();
@@ -66,6 +67,7 @@ public class AtelierBot {
 
 		jda.addEventListener(new LoginListener(this));
 		jda.addEventListener(new MessageListener(this));
+		jda.addEventListener(new SlashCommandListener(this));
 	}
 
 	private void registerTasks() {

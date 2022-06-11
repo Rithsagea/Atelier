@@ -10,5 +10,7 @@ public class SlashCharacterCommand extends SlashGroupCommand {
 		registerSubcommand(new SlashCharacterListCommand());
 		registerSubcommand(new SlashCharacterInfoCommand());
 		registerSubcommand(new SlashCharacterSelectCommand());
+		
+		registerSubcommand(new SlashCharacterAttributeCommand());
 	}
 }

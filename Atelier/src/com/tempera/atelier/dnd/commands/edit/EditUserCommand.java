@@ -50,7 +50,7 @@ public class EditUserCommand extends EditUserGroupCommand {
 
 	@Override
 	public void executeDefault(User user, User target, List<String> args, MessageReceivedEvent event) {
-		Sheet sheet = target == null ? null : db.getSheet(target.getSheet());
+		Sheet sheet = target == null ? null : target.getSheet();
 		Campaign campaign = target == null ? null : db.getCampaign(target.getCampaignId());
 		event.getChannel().sendMessage(
 				String.format("Viewing: %s\nLevel: %s\nSheet: %s\nCampaign: %s", target, target.getLevel(), sheet, campaign)).queue();

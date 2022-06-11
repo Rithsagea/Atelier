@@ -19,7 +19,6 @@ public class LoginListener extends ListenerAdapter {
 	@Override
 	public void onGuildReady(GuildReadyEvent event) {
 		Guild guild = event.getGuild();
-		logger.info("Initialized Guild: " + guild.getName() + " ["
-			+ guild.getIdLong() + "]");
+		logger.info("Initialized Guild: " + guild.getName() + " [" + guild.getIdLong() + "]");
 	}
 }

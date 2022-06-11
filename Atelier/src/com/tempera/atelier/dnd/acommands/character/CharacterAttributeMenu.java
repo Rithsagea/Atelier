@@ -2,8 +2,8 @@ package com.tempera.atelier.dnd.acommands.character;
 
 import java.util.Map.Entry;
 
-import com.tempera.atelier.discord.Menu;
-import com.tempera.atelier.discord.MenuManager;
+import com.tempera.atelier.aaagarbage.Menu;
+import com.tempera.atelier.aaagarbage.MenuManager;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 

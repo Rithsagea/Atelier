@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.rithsagea.util.choice.Choice;
 import com.rithsagea.util.event.EventHandler;
-import com.tempera.atelier.discord.Menu;
+import com.tempera.atelier.aaagarbage.Menu;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;

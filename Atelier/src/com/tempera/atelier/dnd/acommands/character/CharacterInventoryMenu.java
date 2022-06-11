@@ -2,8 +2,8 @@ package com.tempera.atelier.dnd.acommands.character;
 
 import java.util.List;
 
-import com.tempera.atelier.discord.Menu;
-import com.tempera.atelier.discord.MenuManager;
+import com.tempera.atelier.aaagarbage.Menu;
+import com.tempera.atelier.aaagarbage.MenuManager;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.equipment.Item;
 import com.tempera.util.ColorUtil;

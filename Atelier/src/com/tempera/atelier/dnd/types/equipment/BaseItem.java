@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
+import com.tempera.atelier.aaagarbage.Menu;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.equipment.attributes.ItemAttribute;
 import com.tempera.atelier.dnd.types.equipment.attributes.SourceAttribute;

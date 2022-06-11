@@ -2,7 +2,7 @@ package com.tempera.atelier.discord.music;
 
 import java.awt.Color;
 
-import com.tempera.atelier.discord.MenuManager;
+import com.tempera.atelier.aaagarbage.MenuManager;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;

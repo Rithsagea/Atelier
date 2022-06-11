@@ -8,6 +8,17 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Config {
+	
+	private static Config INSTANCE;
+	public static Config init(String configPath) {
+		if(INSTANCE == null) INSTANCE = new Config(configPath);
+		return INSTANCE;
+	}
+	
+	public static Config getInstance() {
+		return INSTANCE;
+	}
+	
 	private File configFile;
 	private Properties prop;
 
@@ -19,7 +30,7 @@ public class Config {
 	//to be deleted ???
 	private static final String COMMAND_PREFIX = "commandPrefix";
 	
-	public Config(String configPath) {
+	private Config(String configPath) {
 		configFile = new File(configPath);
 		prop = new Properties();
 

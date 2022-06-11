@@ -11,7 +11,7 @@ import com.tempera.util.WordUtil;
 
 public class DBTest {
 	public static void main(String[] args) {
-		Config config = new Config("config.properties");
+		Config config = Config.init("config.properties");
 		AtelierDB db = AtelierDB.init(config);
 
 		editDB(db);
@@ -23,7 +23,7 @@ public class DBTest {
 		User user = db.getUser(171378138041942016l);
 		user.setLevel(PermissionLevel.ADMINISTRATOR);
 
-		Sheet sheet = db.getSheet(user.getSheet());
+		Sheet sheet = user.getSheet();
 
 		sheet.clearClasses();
 		sheet.addClass(new Rogue());
