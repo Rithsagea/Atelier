@@ -12,14 +12,15 @@ import org.slf4j.Logger;
 
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.Config;
+import com.tempera.atelier.discord.acommands.AtelierCommand;
+import com.tempera.atelier.discord.acommands.CommandRegistry;
 import com.tempera.atelier.discord.commands.SlashCommandRegistry;
-import com.tempera.atelier.discord.commands.SlashWaifuCommand;
 import com.tempera.atelier.discord.commands.StopCommand;
-import com.tempera.atelier.discord.lcommands.AtelierCommand;
-import com.tempera.atelier.discord.lcommands.CommandRegistry;
+import com.tempera.atelier.discord.commands.WaifuCommand;
+import com.tempera.atelier.discord.commands.character.SlashCharacterCommand;
 import com.tempera.atelier.discord.music.MusicCommand;
+import com.tempera.atelier.dnd.acommands.character.CharacterCommand;
 import com.tempera.atelier.dnd.commands.campaign.CampaignCommand;
-import com.tempera.atelier.dnd.commands.character.CharacterCommand;
 import com.tempera.atelier.dnd.commands.edit.EditCommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
 
@@ -32,7 +33,6 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 public class MessageListener extends ListenerAdapter {
 
@@ -61,8 +61,10 @@ public class MessageListener extends ListenerAdapter {
 	private Map<String, AtelierCommand> macroMap;
 
 	private void registerCommands(AtelierBot bot) {
-		reg.registerCommand(new SlashWaifuCommand());
+		reg.registerCommand(new WaifuCommand());
 		reg.registerCommand(new StopCommand(bot));
+		
+		reg.registerCommand(new SlashCharacterCommand());
 		
 		AtelierCommand musicCommand = new MusicCommand(bot);
 		AtelierCommand characterCommand = new CharacterCommand(bot);
@@ -85,11 +87,10 @@ public class MessageListener extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		Guild guild = jda.getGuildById(config.getTestingGuildId());
-		reg.getCommands().stream()
-			.map(cmd->cmd.getData())
-			.map(CommandData::fromData)
-			.map(guild::upsertCommand)
-			.forEach(a -> a.queue());
+//		reg.getCommands().stream()
+//			.map(cmd->cmd.getData())
+//			.map(guild::upsertCommand)
+//			.forEach(a -> a.queue());
 		
 		//TODO global commands here
 	}
@@ -113,7 +114,7 @@ public class MessageListener extends ListenerAdapter {
 		User user = db.getUser(author.getIdLong());
 		user.setName(author.getName());
 		
-		reg.getCommand(event.getName()).complete(event);
+		reg.getCommand(event.getName()).complete(user, event);
 	}
 
 	
@@ -168,9 +169,7 @@ public class MessageListener extends ListenerAdapter {
 		if (m != null) {
 			m.onButtonInteract(event);
 		} else {
-			event.getMessage()
-				.editMessageComponents()
-				.queue();
+			event.getMessage().editMessageComponents().queue();
 		}
 	}
 

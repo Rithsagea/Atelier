@@ -1,14 +1,15 @@
 package com.tempera.atelier.discord;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.mongojack.Id;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.tempera.atelier.discord.lcommands.PermissionLevel;
+import com.tempera.atelier.discord.acommands.PermissionLevel;
+import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Campaign;
 import com.tempera.atelier.dnd.types.Sheet;
 
@@ -54,8 +55,8 @@ public class User {
 		return String.format("<@%d>", id);
 	}
 
-	public UUID getSheetId() {
-		return sheetId;
+	public Sheet getSheet() {
+		return AtelierDB.getInstance().getSheet(sheetId);
 	}
 
 	public UUID getCampaignId() {
@@ -74,8 +75,9 @@ public class User {
 		return editingCampaignId;
 	}
 	
-	public Set<UUID> getSheets() {
-		return Collections.unmodifiableSet(sheets);
+	public Set<Sheet> getSheets() {
+		AtelierDB db = AtelierDB.getInstance();
+		return sheets.stream().map(db::getSheet).collect(Collectors.toSet());
 	}
 
 	// MUTATORS

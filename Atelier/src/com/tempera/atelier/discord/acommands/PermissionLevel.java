@@ -1,4 +1,4 @@
-package com.tempera.atelier.discord.lcommands;
+package com.tempera.atelier.discord.acommands;
 
 public enum PermissionLevel {
 	USER, ADMINISTRATOR;

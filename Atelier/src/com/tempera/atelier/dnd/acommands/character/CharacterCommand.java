@@ -1,13 +1,14 @@
-package com.tempera.atelier.dnd.commands.character;
+package com.tempera.atelier.dnd.acommands.character;
 
 import java.util.List;
 
 import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.lcommands.CommandRegistry;
-import com.tempera.atelier.discord.lcommands.GroupCommand;
-import com.tempera.atelier.discord.lcommands.PermissionLevel;
+import com.tempera.atelier.discord.acommands.CommandRegistry;
+import com.tempera.atelier.discord.acommands.GroupCommand;
+import com.tempera.atelier.discord.acommands.PermissionLevel;
+import com.tempera.atelier.discord.commands.character.CharacterInfoMessageBuilder;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
 
@@ -24,16 +25,13 @@ public class CharacterCommand extends GroupCommand {
 
 		CommandRegistry registry = this.getCommandRegistry();
 		registry.registerCommand(new CharacterRollCommand(bot));
-		registry.registerCommand(new CharacterInfoCommand(bot));
 		registry.registerCommand(new CharacterAttributeCommand(bot));
 		registry.registerCommand(new CharacterInventoryCommand(bot));
-		registry.registerCommand(new CharacterSelectCommand(bot));
-		registry.registerCommand(new CharacterListCommand(bot));
 	}
 
 	@Override
 	public void executeDefault(User user, List<String> args, MessageReceivedEvent event) {
-		Sheet sheet = db.getSheet(user.getSheetId());
+		Sheet sheet = user.getSheet();
 		event.getChannel().sendMessage(new CharacterInfoMessageBuilder(sheet).build()).queue();
 	}
 }

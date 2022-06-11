@@ -30,6 +30,16 @@ import com.tempera.atelier.discord.User;
 
 public class AtelierDB {
 
+	private static AtelierDB INSTANCE;
+	public static AtelierDB init(Config config) {
+		if(INSTANCE == null) INSTANCE = new AtelierDB(config);
+		return INSTANCE;
+	}
+	
+	public static AtelierDB getInstance() {
+		return INSTANCE;
+	}
+	
 	private static final boolean OFFLINE_MODE = false;
 
 	private MongoClient client;
@@ -49,7 +59,7 @@ public class AtelierDB {
 
 	private TypeRegistry typeRegistry;
 
-	public AtelierDB(Config config) {
+	private AtelierDB(Config config) {
 		MongoClientSettings settings = MongoClientSettings.builder()
 			.applyConnectionString(new ConnectionString(config.getDatabaseUrl()))
 			.uuidRepresentation(UuidRepresentation.JAVA_LEGACY)

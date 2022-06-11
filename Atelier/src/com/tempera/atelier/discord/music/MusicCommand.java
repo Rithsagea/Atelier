@@ -6,9 +6,9 @@ import java.util.List;
 import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.lcommands.CommandRegistry;
-import com.tempera.atelier.discord.lcommands.GroupCommand;
-import com.tempera.atelier.discord.lcommands.PermissionLevel;
+import com.tempera.atelier.discord.acommands.CommandRegistry;
+import com.tempera.atelier.discord.acommands.GroupCommand;
+import com.tempera.atelier.discord.acommands.PermissionLevel;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

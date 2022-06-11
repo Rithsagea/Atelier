@@ -1,4 +1,4 @@
-package com.tempera.atelier.dnd.commands.character;
+package com.tempera.atelier.discord.commands.character;
 
 import java.awt.Color;
 
@@ -22,7 +22,7 @@ public class CharacterInfoMessageBuilder extends MessageBuilder {
 		b.append("Name: " + sheet.getName() + "\n");
 		if(sheet.getClasses().size() > 0)
 			b.append("Class: " + sheet.getClasses().get(0));
-		eb.addField("Info", b.toString(), false);
+		eb.addField("Info", b.toString(), true);
 
 		b.setLength(0);
 		prefix = "";
@@ -33,7 +33,7 @@ public class CharacterInfoMessageBuilder extends MessageBuilder {
 				a, sheet.getAbilityScore(a), sheet.getAbilityModifier(a)));
 			prefix = "\n";
 		}
-		eb.addField("Abilities", b.toString(), false);
+		eb.addField("Abilities", b.toString(), true);
 
 		b.setLength(0);
 		prefix = "";
@@ -43,7 +43,7 @@ public class CharacterInfoMessageBuilder extends MessageBuilder {
 			prefix = "\n";
 		}
 		if(sheet.getAttributes().size() > 0)
-			eb.addField("Attributes", b.toString(), false);
+			eb.addField("Attributes", b.toString(), true);
 
 		setEmbeds(eb.build());
 	}

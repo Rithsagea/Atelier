@@ -6,8 +6,8 @@ import java.util.UUID;
 import com.rithsagea.util.DataUtil;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.lcommands.CommandRegistry;
-import com.tempera.atelier.discord.lcommands.PermissionLevel;
+import com.tempera.atelier.discord.acommands.CommandRegistry;
+import com.tempera.atelier.discord.acommands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Campaign;
 import com.tempera.atelier.dnd.types.Sheet;
@@ -50,7 +50,7 @@ public class EditUserCommand extends EditUserGroupCommand {
 
 	@Override
 	public void executeDefault(User user, User target, List<String> args, MessageReceivedEvent event) {
-		Sheet sheet = target == null ? null : db.getSheet(target.getSheetId());
+		Sheet sheet = target == null ? null : db.getSheet(target.getSheet());
 		Campaign campaign = target == null ? null : db.getCampaign(target.getCampaignId());
 		event.getChannel().sendMessage(
 				String.format("Viewing: %s\nLevel: %s\nSheet: %s\nCampaign: %s", target, target.getLevel(), sheet, campaign)).queue();

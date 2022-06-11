@@ -2,7 +2,7 @@ package com.tempera.test;
 
 import com.tempera.atelier.Config;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.lcommands.PermissionLevel;
+import com.tempera.atelier.discord.acommands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.character.classes.Rogue;
@@ -12,7 +12,7 @@ import com.tempera.util.WordUtil;
 public class DBTest {
 	public static void main(String[] args) {
 		Config config = new Config("config.properties");
-		AtelierDB db = new AtelierDB(config);
+		AtelierDB db = AtelierDB.init(config);
 
 		editDB(db);
 
@@ -23,7 +23,7 @@ public class DBTest {
 		User user = db.getUser(171378138041942016l);
 		user.setLevel(PermissionLevel.ADMINISTRATOR);
 
-		Sheet sheet = db.getSheet(user.getSheetId());
+		Sheet sheet = db.getSheet(user.getSheet());
 
 		sheet.clearClasses();
 		sheet.addClass(new Rogue());

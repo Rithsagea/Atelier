@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.lcommands.GroupCommand;
-import com.tempera.atelier.discord.lcommands.PermissionLevel;
+import com.tempera.atelier.discord.acommands.GroupCommand;
+import com.tempera.atelier.discord.acommands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
 

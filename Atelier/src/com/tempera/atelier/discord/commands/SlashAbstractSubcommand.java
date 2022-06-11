@@ -4,12 +4,12 @@ import com.tempera.atelier.discord.User;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public interface SlashAbstractCommand {
+public interface SlashAbstractSubcommand {
 	public String getName();
 	public String getDescription();
-	public CommandData getData();
+	public SubcommandData getData();
 	
 	public void execute(User user, SlashCommandInteractionEvent event);
 	public void complete(User user, CommandAutoCompleteInteractionEvent event);

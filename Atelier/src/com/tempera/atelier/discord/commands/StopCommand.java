@@ -5,7 +5,6 @@ import com.tempera.atelier.discord.User;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class StopCommand extends SlashBaseCommand {
 
@@ -23,12 +22,7 @@ public class StopCommand extends SlashBaseCommand {
 	}
 
 	@Override
-	public void complete(CommandAutoCompleteInteractionEvent event) {
-		
-	}
-
-	@Override
-	public void addOptions(SlashCommandData data) {
+	public void complete(User user, CommandAutoCompleteInteractionEvent event) {
 		
 	}
 }

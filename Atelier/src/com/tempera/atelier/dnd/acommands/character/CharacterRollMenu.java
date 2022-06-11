@@ -1,4 +1,4 @@
-package com.tempera.atelier.dnd.commands.character;
+package com.tempera.atelier.dnd.acommands.character;
 
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.types.Sheet;

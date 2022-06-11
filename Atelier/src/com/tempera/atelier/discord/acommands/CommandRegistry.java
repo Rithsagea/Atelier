@@ -1,4 +1,4 @@
-package com.tempera.atelier.discord.lcommands;
+package com.tempera.atelier.discord.acommands;
 
 import java.util.HashMap;
 import java.util.Map;
