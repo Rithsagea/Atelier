@@ -14,6 +14,7 @@ import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.Config;
 import com.tempera.atelier.discord.commands.AtelierCommand;
 import com.tempera.atelier.discord.commands.CommandRegistry;
+import com.tempera.atelier.discord.commands.SlashWaifuCommand;
 import com.tempera.atelier.discord.commands.StopCommand;
 import com.tempera.atelier.discord.commands.WaifuCommand;
 import com.tempera.atelier.discord.music.MusicCommand;
@@ -22,32 +23,45 @@ import com.tempera.atelier.dnd.commands.character.CharacterCommand;
 import com.tempera.atelier.dnd.commands.edit.EditCommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
 
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 public class MessageListener extends ListenerAdapter {
 
 	private AtelierDB db;
-	private CommandRegistry reg;
+	private CommandRegistry toBeDeletedCommandRegistry;
 	private Config config;
 	private Logger logger;
 	private MenuManager menuManager;
+	
+	private SlashCommandRegistry reg = new SlashCommandRegistry();
+	
+	private JDA jda;
 
 	public MessageListener(AtelierBot bot) {
 		db = bot.getDatabase();
-		reg = bot.getCommandRegistry();
+		toBeDeletedCommandRegistry = bot.getCommandRegistry();
 		config = bot.getConfig();
 		logger = bot.getLogger();
 		menuManager = bot.getMenuManager();
-
+		
+		jda = bot.getJda();
+		
 		registerCommands(bot);
 	}
 
 	private Map<String, AtelierCommand> macroMap;
 
 	private void registerCommands(AtelierBot bot) {
+		reg.registerCommand(new SlashWaifuCommand());
+		
 		AtelierCommand musicCommand = new MusicCommand(bot);
 		AtelierCommand characterCommand = new CharacterCommand(bot);
 		AtelierCommand campaignCommand = new CampaignCommand(bot);
@@ -62,52 +76,67 @@ public class MessageListener extends ListenerAdapter {
 		macroMap.put("c", campaignCommand);
 		macroMap.put("e", editCommand);
 
-		reg.registerCommand(new StopCommand(bot));
-		reg.registerCommand(waifuCommand);
-		reg.registerCommand(musicCommand);
-		reg.registerCommand(characterCommand);
-		reg.registerCommand(campaignCommand);
-		reg.registerCommand(editCommand);
+		toBeDeletedCommandRegistry.registerCommand(new StopCommand(bot));
+		toBeDeletedCommandRegistry.registerCommand(waifuCommand);
+		toBeDeletedCommandRegistry.registerCommand(musicCommand);
+		toBeDeletedCommandRegistry.registerCommand(characterCommand);
+		toBeDeletedCommandRegistry.registerCommand(campaignCommand);
+		toBeDeletedCommandRegistry.registerCommand(editCommand);
+	}
+	
+	@Override
+	public void onReady(ReadyEvent event) {
+		Guild guild = jda.getGuildById(config.getTestingGuildId());
+		reg.getCommands().stream()
+			.map(cmd->cmd.getData())
+			.map(CommandData::fromData)
+			.map(guild::upsertCommand)
+			.forEach(a -> a.queue());
+		
+		//TODO global commands here
 	}
 
 	@Override
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+		if(event.getUser().isBot()) return;
+		
+		net.dv8tion.jda.api.entities.User author = event.getUser();
+		User user = db.getUser(author.getIdLong());
+		user.setName(author.getName());
+		
+		SlashAbstractCommand command = reg.getCommand(event.getName());
+		command.execute(user, event);
+	}
+	
+	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		String message = event.getMessage()
-			.getContentRaw();
+		String message = event.getMessage().getContentRaw();
 		net.dv8tion.jda.api.entities.User author = event.getAuthor();
 
 		User user = db.getUser(author.getIdLong());
 		user.setName(author.getName());
 
 		// Command Logic goes below
-		if (event.getAuthor()
-			.isBot())
+		if (event.getAuthor().isBot())
 			return;
 		if (message.startsWith(config.getCommandPrefix())) {
 
 			List<String> args = new ArrayList<String>(Arrays.asList(message
-				.substring(config.getCommandPrefix()
-					.length())
-				.split(" ")));
+				.substring(config.getCommandPrefix().length()).split(" ")));
 
-			AtelierCommand command = reg.getCommand(args.get(0));
+			AtelierCommand command = toBeDeletedCommandRegistry.getCommand(args.get(0));
 			if (command != null && command.getLevel()
 				.compareTo(user.getLevel()) <= 0) {
-				logger.info("Received Command: " + command.getLabel() + " from "
-					+ author);
-				command.execute(user, Collections.unmodifiableList(args),
-					event);
+				logger.info("Received Command: " + command.getLabel() + " from " + author);
+				command.execute(user, Collections.unmodifiableList(args), event);
 			}
 		}
 
 		for (Entry<String, AtelierCommand> cmd : macroMap.entrySet()) {
 			if (message.startsWith(cmd.getKey() + config.getCommandPrefix())) {
 				List<String> args = new ArrayList<String>(Arrays.asList(message
-					.substring(config.getCommandPrefix()
-						.length()
-						+ cmd.getKey()
-							.length())
-					.split(" ")));
+					.substring(config.getCommandPrefix().length()
+						+ cmd.getKey().length()).split(" ")));
 				AtelierCommand command = cmd.getValue();
 				if (command.getLevel()
 					.compareTo(user.getLevel()) > 0)

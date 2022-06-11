@@ -14,8 +14,11 @@ public class Config {
 	private static final String DB_URL_KEY = "databaseUrl";
 	private static final String DB_NAME = "databaseName";
 	private static final String DISCORD_TOKEN = "discordToken";
+	private static final String TESTING_GUILD_ID = "testingGuildId";
+	
+	//to be deleted ???
 	private static final String COMMAND_PREFIX = "commandPrefix";
-
+	
 	public Config(String configPath) {
 		configFile = new File(configPath);
 		prop = new Properties();
@@ -32,6 +35,7 @@ public class Config {
 		setDefault(DB_URL_KEY, "");
 		setDefault(DB_NAME, "atelier");
 		setDefault(DISCORD_TOKEN, "");
+		setDefault(TESTING_GUILD_ID, "-1");
 		setDefault(COMMAND_PREFIX, "!");
 		save();
 	}
@@ -70,6 +74,10 @@ public class Config {
 
 	public String getDiscordToken() {
 		return prop.getProperty(DISCORD_TOKEN);
+	}
+	
+	public String getTestingGuildId() {
+		return prop.getProperty(TESTING_GUILD_ID);
 	}
 
 	public String getCommandPrefix() {

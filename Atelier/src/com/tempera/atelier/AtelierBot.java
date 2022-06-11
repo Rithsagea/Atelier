@@ -80,6 +80,10 @@ public class AtelierBot {
 	public Logger getLogger() {
 		return logger;
 	}
+	
+	public JDA getJda() {
+		return jda;
+	}
 
 	public AtelierDB getDatabase() {
 		return db;
