@@ -28,6 +28,7 @@ public class CharacterCommand extends GroupCommand {
 		registry.registerCommand(new CharacterAttributeCommand(bot));
 		registry.registerCommand(new CharacterInventoryCommand(bot));
 		registry.registerCommand(new CharacterSelectCommand(bot));
+		registry.registerCommand(new CharacterListCommand(bot));
 	}
 
 	@Override

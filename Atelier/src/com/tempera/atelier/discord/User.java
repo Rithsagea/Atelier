@@ -1,6 +1,7 @@
 package com.tempera.atelier.discord;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ public class User {
 	private UUID editingSheetId;
 	private UUID editingCampaignId;
 	
-	private Set<UUID> sheets;
+	private Set<UUID> sheets = new HashSet<>();
 	
 	@JsonCreator
 	public User(@Id long id) {
@@ -47,6 +48,10 @@ public class User {
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getTag() {
+		return String.format("<@%d>", id);
 	}
 
 	public UUID getSheetId() {
