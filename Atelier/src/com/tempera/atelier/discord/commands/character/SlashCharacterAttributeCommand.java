@@ -3,6 +3,7 @@ package com.tempera.atelier.discord.commands.character;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tempera.atelier.discord.SlashMenuManager;
 import com.tempera.atelier.discord.User;
 import com.tempera.atelier.discord.commands.SlashBaseSubcommand;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
@@ -32,7 +33,7 @@ public class SlashCharacterAttributeCommand extends SlashBaseSubcommand {
 					.filter(a -> a.getName().equals(attributeInfo[1]))
 					.findFirst().get();
 			
-			event.reply(attribute.toString()).setEphemeral(true).queue();
+			SlashMenuManager.getInstance().addMenu(attribute.getMenu(), true, event);
 		} else {
 			event.reply(new CharacterAttributeMessageBuilder(user.getSheet()).build()).setEphemeral(true).queue();
 		}

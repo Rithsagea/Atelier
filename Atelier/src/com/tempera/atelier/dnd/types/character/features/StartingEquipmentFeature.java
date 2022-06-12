@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import com.rithsagea.util.DataUtil;
 import com.rithsagea.util.event.EventHandler;
-import com.tempera.atelier.aaagarbage.Menu;
+import com.tempera.atelier.discord.SlashMenu;
 import com.tempera.atelier.dnd.events.LoadSheetEvent;
 import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.Sheet;
@@ -84,7 +84,7 @@ public class StartingEquipmentFeature implements CharacterAttribute {
 	}
 
 	@Override
-	public Menu getMenu() {
+	public SlashMenu getMenu() {
 		return new StartingEquipmentMenu();
 	}
 
@@ -147,7 +147,7 @@ public class StartingEquipmentFeature implements CharacterAttribute {
 		}
 	}
 
-	private class StartingEquipmentMenu implements Menu {
+	private class StartingEquipmentMenu implements SlashMenu {
 		@Override
 		public Message initialize() {
 			return new StartingEquipmentMessageBuilder().build();
@@ -157,7 +157,7 @@ public class StartingEquipmentFeature implements CharacterAttribute {
 		public void onButtonInteract(ButtonInteractionEvent event) {
 			for(int selected : selectedOptions) {
 				if(selected == -1) {
-					event.reply("Please select equipment for each option").queue();
+					event.reply("Please select equipment for each option").setEphemeral(true).queue();
 					return;
 				}
 			}
@@ -169,16 +169,17 @@ public class StartingEquipmentFeature implements CharacterAttribute {
 					options.get(x).get(selectedOptions.get(x)).getItems().forEach(inventory::addItem);
 				}
 				
-				event.reply("Succesfully claimed starting equipment!").queue();
+				event.reply("Succesfully claimed starting equipment!").setEphemeral(true).queue();
 			}
 			
-			event.reply("Starting equipment has already been claimed!").queue();
+			event.reply("Starting equipment has already been claimed!").setEphemeral(true).queue();
 		}
 
 		@Override
 		public void onSelectInteract(SelectMenuInteractionEvent event) {
 			selectedOptions.set(Integer.parseInt(event.getComponentId()),
 				Integer.parseInt(event.getSelectedOptions().get(0).getValue()));
+			
 			event.editMessage(new StartingEquipmentMessageBuilder().build()).queue();
 		}
 	}

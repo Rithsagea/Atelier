@@ -1,6 +1,7 @@
 package com.rithsagea.util;
 
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -76,5 +77,27 @@ public class DataUtil {
 	private static Object methodKey(Method m) {
 		return Arrays.asList(m.getName(),
 			MethodType.methodType(m.getReturnType(), m.getParameterTypes()));
+	}
+
+	public static Object getField(Object object, String fieldName) {
+		try {
+			Field field = null;
+			Class<?> clazz = object.getClass();
+			while(field == null) {
+				try {
+					field = clazz.getDeclaredField(fieldName);
+					break;
+				} catch(NoSuchFieldException e) {
+					clazz = clazz.getSuperclass();
+				}
+			}
+			
+			field.setAccessible(true);
+			return field.get(object);
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

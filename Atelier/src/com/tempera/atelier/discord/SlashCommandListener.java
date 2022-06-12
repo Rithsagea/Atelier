@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class SlashCommandListener extends ListenerAdapter {
@@ -20,6 +22,7 @@ public class SlashCommandListener extends ListenerAdapter {
 	private AtelierBot bot;
 	private AtelierDB db = AtelierDB.getInstance();
 	private Config config = Config.getInstance();
+	private SlashMenuManager menus = SlashMenuManager.getInstance();
 	
 	public SlashCommandListener(AtelierBot bot) {
 		this.bot = bot;
@@ -65,5 +68,18 @@ public class SlashCommandListener extends ListenerAdapter {
 		user.setName(author.getName());
 		
 		reg.getCommand(event.getName()).complete(user, event);
+	}
+
+	
+	@Override
+	public void onButtonInteraction(ButtonInteractionEvent event) {
+		SlashMenu menu = menus.getMenu(event.getMessageIdLong());
+		if(menu != null) menu.onButtonInteract(event);
+	}
+	
+	@Override
+	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+		SlashMenu menu = menus.getMenu(event.getMessageIdLong());
+		if(menu != null) menu.onSelectInteract(event);
 	}
 }

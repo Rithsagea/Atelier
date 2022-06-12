@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.rithsagea.util.choice.Choice;
 import com.rithsagea.util.event.EventHandler;
-import com.tempera.atelier.aaagarbage.Menu;
+import com.tempera.atelier.discord.SlashMenu;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
@@ -76,7 +76,7 @@ public class ProficiencyFeature implements CharacterAttribute {
 	}
 
 	@Override
-	public Menu getMenu() {
+	public SlashMenu getMenu() {
 		return new ProficiencyMenu();
 	}
 
@@ -101,14 +101,12 @@ public class ProficiencyFeature implements CharacterAttribute {
 			embed.addField("**Saving**", content.toString(), true);
 
 			content.setLength(0);
-			content.append(
-				String.format("Choose %d from: ", skillChoices.getCount()));
+			content.append(String.format("Choose %d from: ", skillChoices.getCount()));
 			prefix = "";
 			for (int x = 0; x < skillChoices.getChoices()
 				.size(); x++) {
 				content.append(prefix);
-				content.append(
-					String.format(skillChoices.isSelected(x) ? "__%s__" : "%s",
+				content.append(String.format(skillChoices.isSelected(x) ? "__%s__" : "%s",
 						skillChoices.getChoice(x)));
 				prefix = ", ";
 				select.addOption(skillChoices.getChoices()
@@ -136,7 +134,7 @@ public class ProficiencyFeature implements CharacterAttribute {
 		}
 	}
 
-	private class ProficiencyMenu implements Menu {
+	private class ProficiencyMenu implements SlashMenu {
 
 		@Override
 		public Message initialize() {
@@ -153,9 +151,8 @@ public class ProficiencyFeature implements CharacterAttribute {
 			for (SelectOption option : event.getSelectedOptions()) {
 				skillChoices.selectChoice(Integer.parseInt(option.getValue()));
 			}
-
-			event.editMessage(new ProficiencyMessageBuilder().build())
-				.queue();
+			
+			event.editMessage(new ProficiencyMessageBuilder().build()).queue();
 		}
 	}
 

@@ -118,7 +118,7 @@ public class MessageListener extends ListenerAdapter {
 		if (m != null) {
 			m.onButtonInteract(event);
 		} else {
-			event.getMessage().editMessageComponents().queue();
+//			event.getMessage().editMessageComponents().queue();
 		}
 	}
 
@@ -128,9 +128,7 @@ public class MessageListener extends ListenerAdapter {
 		if (m != null) {
 			m.onSelectInteract(event);
 		} else {
-			event.getMessage()
-				.editMessageComponents()
-				.queue();
+//			event.getMessage().editMessageComponents().queue();
 		}
 	}
 }
