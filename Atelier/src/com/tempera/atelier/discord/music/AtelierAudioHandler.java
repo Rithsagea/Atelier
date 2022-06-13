@@ -54,7 +54,11 @@ public class AtelierAudioHandler extends AudioEventAdapter
 			return looping = false;
 		return looping = true;
 	}
-
+	
+	public AudioPlayerManager getManager() {
+		return manager;
+	}
+	
 	public AudioChannel joinVc(MessageReceivedEvent event) {
 		if (event.getAuthor()
 			.isBot())

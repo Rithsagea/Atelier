@@ -36,6 +36,10 @@ public class Track {
 		return id;
 	}
 	
+	public String toString() {
+		return String.format("%s", id);
+	}
+	
 	public Set<AudioTrack> getTracks() {
 		return Collections.unmodifiableSet(tracks);
 	}
