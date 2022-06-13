@@ -3,8 +3,8 @@ package com.tempera.atelier.dnd.types.equipment;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.tempera.atelier.discord.SlashMenu;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
-import com.tempera.atelier.aaagarbage.Menu;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.equipment.attributes.ItemAttribute;
 
@@ -25,5 +25,5 @@ public interface Item {
 	public void setAmount(int amount);
 	public boolean isStackable(Item equipment);
 	
-	public Menu getMenu();
+	public SlashMenu getMenu();
 }

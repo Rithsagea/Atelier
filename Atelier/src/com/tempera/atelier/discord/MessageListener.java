@@ -17,7 +17,6 @@ import com.tempera.atelier.aaagarbage.MenuManager;
 import com.tempera.atelier.discord.acommands.AtelierCommand;
 import com.tempera.atelier.discord.acommands.CommandRegistry;
 import com.tempera.atelier.discord.music.MusicCommand;
-import com.tempera.atelier.dnd.acommands.character.CharacterCommand;
 import com.tempera.atelier.dnd.commands.campaign.CampaignCommand;
 import com.tempera.atelier.dnd.commands.edit.EditCommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
@@ -49,19 +48,16 @@ public class MessageListener extends ListenerAdapter {
 
 	private void registerCommands(AtelierBot bot) {
 		AtelierCommand musicCommand = new MusicCommand(bot);
-		AtelierCommand characterCommand = new CharacterCommand(bot);
 		AtelierCommand campaignCommand = new CampaignCommand(bot);
 		AtelierCommand editCommand = new EditCommand(bot);
 
 		macroMap = new HashMap<>();
 
 		macroMap.put("m", musicCommand);
-		macroMap.put("d", characterCommand);
 		macroMap.put("c", campaignCommand);
 		macroMap.put("e", editCommand);
 
 		toBeDeletedCommandRegistry.registerCommand(musicCommand);
-		toBeDeletedCommandRegistry.registerCommand(characterCommand);
 		toBeDeletedCommandRegistry.registerCommand(campaignCommand);
 		toBeDeletedCommandRegistry.registerCommand(editCommand);
 	}

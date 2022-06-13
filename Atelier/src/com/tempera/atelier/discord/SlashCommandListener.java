@@ -5,7 +5,7 @@ import com.tempera.atelier.Config;
 import com.tempera.atelier.discord.commands.SlashCommandRegistry;
 import com.tempera.atelier.discord.commands.StopCommand;
 import com.tempera.atelier.discord.commands.WaifuCommand;
-import com.tempera.atelier.discord.commands.character.SlashCharacterCommand;
+import com.tempera.atelier.discord.commands.character.CharacterCommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
 
 import net.dv8tion.jda.api.entities.Guild;
@@ -34,16 +34,16 @@ public class SlashCommandListener extends ListenerAdapter {
 		reg.registerCommand(new WaifuCommand());
 		reg.registerCommand(new StopCommand(bot));
 		
-		reg.registerCommand(new SlashCharacterCommand());
+		reg.registerCommand(new CharacterCommand());
 	}
 	
 	@Override
 	public void onReady(ReadyEvent event) {
 		Guild guild = event.getJDA().getGuildById(config.getTestingGuildId());
-//		reg.getCommands().stream()
-//			.map(cmd->cmd.getData())
-//			.map(guild::upsertCommand)
-//			.forEach(a -> a.queue());
+		reg.getCommands().stream()
+			.map(cmd->cmd.getData())
+			.map(guild::upsertCommand)
+			.forEach(a -> a.queue());
 		
 		//TODO global commands here
 	}

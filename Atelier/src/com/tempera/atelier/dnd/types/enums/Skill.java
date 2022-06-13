@@ -22,12 +22,13 @@ public enum Skill implements Proficiency {
 	static {
 		labelMap = new HashMap<>();
 		for (Skill skill : Skill.values()) {
-			labelMap.put(skill.getLabel(), skill);
+			labelMap.put(skill.toString(), skill);
+//			labelMap.put(skill.getLabel(), skill);
 		}
 	}
 
-	public static Skill fromLabel(String label) {
-		return labelMap.get(label);
+	public static Skill fromString(String str) {
+		return labelMap.get(str);
 	}
 
 	private final String label;

@@ -1,9 +1,9 @@
-package com.tempera.atelier.dnd.acommands.character;
+package com.tempera.atelier.discord.commands.character;
 
 import java.util.List;
 
-import com.tempera.atelier.aaagarbage.Menu;
-import com.tempera.atelier.aaagarbage.MenuManager;
+import com.tempera.atelier.discord.SlashMenu;
+import com.tempera.atelier.discord.SlashMenuManager;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.equipment.Item;
 import com.tempera.util.ColorUtil;
@@ -18,15 +18,13 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
-public class CharacterInventoryMenu implements Menu {
+public class CharacterInventoryMenu implements SlashMenu {
 
 	private Sheet sheet;
-	private MenuManager menuManager;
 	
 	private String selected;
 
-	public CharacterInventoryMenu(Sheet sheet, MenuManager menuManager) {
-		this.menuManager = menuManager;
+	public CharacterInventoryMenu(Sheet sheet) {
 		this.sheet = sheet;
 	}
 
@@ -55,16 +53,14 @@ public class CharacterInventoryMenu implements Menu {
 
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
-		event.deferEdit().queue();
-		
 		Item item = sheet.getInventory().getContents().get(Integer.parseInt(selected));
-		menuManager.addMenu(event.getChannel(), item.getMenu());
+		SlashMenuManager.getInstance().addMenu(item.getMenu(), true, event);
 	}
 
 	@Override
 	public void onSelectInteract(SelectMenuInteractionEvent event) {
-		selected = event.getSelectedOptions().get(0).getValue();
 		event.deferEdit().queue();
+		selected = event.getSelectedOptions().get(0).getValue();
 	}
 
 }

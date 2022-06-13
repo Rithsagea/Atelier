@@ -3,7 +3,7 @@ package com.tempera.atelier.discord;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 
 public class SlashMenuManager {
 	private static final SlashMenuManager INSTANCE = new SlashMenuManager();
@@ -17,7 +17,7 @@ public class SlashMenuManager {
 		
 	}
 	
-	public void addMenu(SlashMenu menu, boolean ephemeral, SlashCommandInteractionEvent event) {
+	public void addMenu(SlashMenu menu, boolean ephemeral, IReplyCallback event) {
 		event.deferReply(ephemeral).queue(hook ->
 			hook.editOriginal(menu.initialize())
 			.queue(msg -> menus.put(msg.getIdLong(), menu)));

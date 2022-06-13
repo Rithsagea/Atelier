@@ -13,12 +13,13 @@ public enum Ability implements Proficiency {
 	static {
 		labelMap = new HashMap<>();
 		for (Ability ability : Ability.values()) {
-			labelMap.put(ability.getLabel(), ability);
+//			labelMap.put(ability.getLabel(), ability);
+			labelMap.put(ability.toString(), ability);
 		}
 	}
 
-	public static Ability fromLabel(String label) {
-		return labelMap.get(label);
+	public static Ability fromString(String str) {
+		return labelMap.get(str);
 	}
 
 	private String label;

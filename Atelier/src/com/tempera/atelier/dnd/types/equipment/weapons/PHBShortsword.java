@@ -11,7 +11,7 @@ import com.tempera.atelier.dnd.types.equipment.attributes.LightAttribute;
 @IndexedItem("phb-shortsword")
 public class PHBShortsword extends Weapon {
 	public PHBShortsword() {
-		super("shortsword", null,
+		super("Shortsword", null,
 			"Source: PHB, page 149. Available in the SRD and the Basic Rules.",
 			new Price(2, Currency.GOLD), 2);
 

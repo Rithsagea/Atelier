@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.tempera.atelier.discord.SlashMenu;
 import com.tempera.atelier.dnd.types.enums.Currency.Price;
-import com.tempera.atelier.aaagarbage.Menu;
 import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.equipment.attributes.ItemAttribute;
 import com.tempera.atelier.dnd.types.equipment.attributes.SourceAttribute;
@@ -101,7 +101,7 @@ public abstract class BaseItem implements Item {
 		return name + " x " + amount;
 	}
 	
-	private class BaseItemMenu implements Menu {
+	private class BaseItemMenu implements SlashMenu {
 
 		@Override
 		public Message initialize() {
@@ -131,7 +131,7 @@ public abstract class BaseItem implements Item {
 	}
 	
 	@Override
-	public Menu getMenu() {
+	public SlashMenu getMenu() {
 		return new BaseItemMenu();
 	}
 

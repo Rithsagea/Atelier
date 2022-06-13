@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 public abstract class SlashGroupCommand extends SlashBaseCommand {
 
 	private Map<String, SlashAbstractSubcommand> subcommands = new HashMap<>();
+	private Map<String, SlashAbstractSubcommandGroup> groups = new HashMap<>();
 	
 	public SlashGroupCommand(String name, String description) {
 		super(name, description);
@@ -21,6 +22,10 @@ public abstract class SlashGroupCommand extends SlashBaseCommand {
 
 	protected void registerSubcommand(SlashAbstractSubcommand cmd) {
 		subcommands.put(cmd.getName(), cmd);
+	}
+	
+	protected void registerSubcommandGroup(SlashAbstractSubcommandGroup group) {
+		groups.put(group.getName(), group);
 	}
 	
 	@Override
@@ -32,7 +37,8 @@ public abstract class SlashGroupCommand extends SlashBaseCommand {
 			SlashAbstractSubcommand cmd = subcommands.get(name);
 			if(cmd != null) cmd.execute(user, event);
 		} else {
-			//TODO: group commands
+			SlashAbstractSubcommandGroup cmd = groups.get(group);
+			if(cmd != null) cmd.execute(user, event);
 		}
 	}
 	
@@ -45,7 +51,8 @@ public abstract class SlashGroupCommand extends SlashBaseCommand {
 			SlashAbstractSubcommand cmd = subcommands.get(name);
 			if(cmd != null) cmd.complete(user, event);
 		} else {
-			//TODO: group commands
+			SlashAbstractSubcommandGroup cmd = groups.get(group);
+			if(cmd != null) cmd.complete(user, event);
 		}
 	}
 	
@@ -54,6 +61,7 @@ public abstract class SlashGroupCommand extends SlashBaseCommand {
 		SlashCommandData data = (SlashCommandData) super.getData();
 		
 		data.addSubcommands(subcommands.values().stream().map(cmd -> cmd.getData()).collect(Collectors.toList()));
+		data.addSubcommandGroups(groups.values().stream().map(cmd -> cmd.getData()).collect(Collectors.toList()));
 		
 		return data;
 	}

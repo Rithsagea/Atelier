@@ -61,7 +61,7 @@ public class EditSheetStatCommand extends EditSheetGroupCommand {
 
 			if (spread instanceof PointBuySpread) {
 				PointBuySpread s = (PointBuySpread) spread;
-				Ability a = Ability.fromLabel(args.get(1));
+				Ability a = Ability.fromString(args.get(1));
 				int value = Integer.parseInt(args.get(2));
 
 				if (s.setScore(a, value)) {

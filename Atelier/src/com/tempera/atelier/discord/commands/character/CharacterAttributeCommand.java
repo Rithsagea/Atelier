@@ -9,14 +9,15 @@ import com.tempera.atelier.discord.commands.SlashBaseSubcommand;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
 import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class SlashCharacterAttributeCommand extends SlashBaseSubcommand {
+public class CharacterAttributeCommand extends SlashBaseSubcommand {
 
-	public SlashCharacterAttributeCommand() {
+	public CharacterAttributeCommand() {
 		super("attribute", "Gets the character's attribute information");
 	}
 
@@ -35,7 +36,8 @@ public class SlashCharacterAttributeCommand extends SlashBaseSubcommand {
 			
 			SlashMenuManager.getInstance().addMenu(attribute.getMenu(), true, event);
 		} else {
-			event.reply(new CharacterAttributeMessageBuilder(user.getSheet()).build()).setEphemeral(true).queue();
+			Message message = new CharacterAttributeMessageBuilder(user.getSheet()).build();
+			event.deferReply(true).queue(hook -> hook.editOriginal(message).queue());
 		}
 	}
 

@@ -13,9 +13,9 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class SlashCharacterSelectCommand extends SlashBaseSubcommand {
+public class CharacterSelectCommand extends SlashBaseSubcommand {
 
-	public SlashCharacterSelectCommand() {
+	public CharacterSelectCommand() {
 		super("select", "Selects a character sheet");
 	}
 
