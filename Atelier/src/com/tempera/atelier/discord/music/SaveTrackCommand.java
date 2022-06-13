@@ -16,17 +16,17 @@ import com.tempera.atelier.dnd.types.Track;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class AddTrackCommand extends MusicSubCommand{
+public class SaveTrackCommand extends MusicSubCommand{
 	private AtelierDB db;
 
-	public AddTrackCommand(AtelierBot bot) {
+	public SaveTrackCommand(AtelierBot bot) {
 		super(bot.getAudioManager());
 		db = bot.getDatabase();
 	}
 
 	@Override
 	public String getLabel() {
-		return "add";
+		return "save";
 	}
 
 	@Override

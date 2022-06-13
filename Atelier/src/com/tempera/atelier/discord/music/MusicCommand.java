@@ -33,7 +33,7 @@ public class MusicCommand extends GroupCommand {
 		registry.registerCommand(new SansCommand(audioManager));
 		registry.registerCommand(new ListTrackCommand(bot));
 		registry.registerCommand(new NewTrackCommand(bot));
-		registry.registerCommand(new AddTrackCommand(bot));
+		registry.registerCommand(new SaveTrackCommand(bot));
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class MusicCommand extends GroupCommand {
 		eb.addField("join", "Joins the user's current voice channel", true);
 		eb.addField("dc / disconnect", "Disconnects from voice channels", true);
 		eb.addField("play [URL]", "Adds a song or playlist from a URL if possible", true);
-		eb.addField("playing / np", "Displays currently playing song", true);
+		eb.addField("nowplaying / np", "Displays currently playing song", true);
 		eb.addField("queue [PAGE NUM]", "Displays queued up songs. Optional page number as a second argument.", true);
 		eb.addField("skip", "Skips the currently playing song", true);
 		eb.addField("loop", "Toggles looping for all songs in queue", true);
