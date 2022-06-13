@@ -33,7 +33,7 @@ public class MusicCommand extends GroupCommand {
 		registry.registerCommand(new SansCommand(audioManager));
 		registry.registerCommand(new ListTrackCommand(bot));
 		registry.registerCommand(new NewTrackCommand(bot));
-		registry.registerCommand((new AddTrackCommand(bot)));
+		registry.registerCommand(new AddTrackCommand(bot));
 	}
 
 	@Override
