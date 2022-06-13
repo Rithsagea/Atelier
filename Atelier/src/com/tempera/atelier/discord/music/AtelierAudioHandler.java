@@ -43,12 +43,19 @@ public class AtelierAudioHandler extends AudioEventAdapter
 		this.player = player;
 		this.queue = new LinkedBlockingQueue<>();
 		this.looping = false;
-
 		channel = event.getChannel();
 
 		player.addListener(this);
 	}
 
+	public void setPausedState(boolean set) {
+		player.setPaused(set);
+	}
+	
+	public boolean getPauseState() {
+		return player.isPaused();
+	}
+	
 	public boolean toggleLoop() {
 		if (looping)
 			return looping = false;

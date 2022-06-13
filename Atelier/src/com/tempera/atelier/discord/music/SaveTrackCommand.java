@@ -43,11 +43,7 @@ public class SaveTrackCommand extends MusicSubCommand{
 	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
 		AudioPlayerManager manager = audioHandler.getManager();
 		if (args.size() < 2) {
-			event.getChannel().sendMessage("Specify a valid track id").queue();
-			return;
-		}
-		if (args.size() < 3) {
-			event.getChannel().sendMessage("Missing song parameter").queue();
+			event.getChannel().sendMessage("Format: save [Track ID] [SongURL]").queue();
 			return;
 		}
 
@@ -72,6 +68,8 @@ public class SaveTrackCommand extends MusicSubCommand{
 			@Override
 			public void playlistLoaded(AudioPlaylist playlist) {
 				playlist.getTracks().forEach(t::addTrack);
+				event.getChannel().sendMessage("Saved playlist")
+				.queue();
 			}
 
 			@Override

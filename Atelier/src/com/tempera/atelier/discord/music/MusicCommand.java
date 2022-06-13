@@ -27,10 +27,12 @@ public class MusicCommand extends GroupCommand {
 		registry.registerCommand(new QueueCommand(bot));
 		registry.registerCommand(new JoinCommand(audioManager));
 		registry.registerCommand(new LoopCommand(audioManager));
+		registry.registerCommand(new TogglePauseCommand(audioManager));
 		registry.registerCommand(new NowPlayingCommand(audioManager));
 		registry.registerCommand(new SkipCommand(audioManager));
 		registry.registerCommand(new DisconnectCommand(audioManager));
 		registry.registerCommand(new SansCommand(audioManager));
+		registry.registerCommand(new SansListCommand(audioManager));
 		registry.registerCommand(new ListTrackCommand(bot));
 		registry.registerCommand(new NewTrackCommand(bot));
 		registry.registerCommand(new SaveTrackCommand(bot));
@@ -50,6 +52,7 @@ public class MusicCommand extends GroupCommand {
 		eb.addField("skip", "Skips the currently playing song", true);
 		eb.addField("loop", "Toggles looping for all songs in queue", true);
 		eb.addField("sans", "bad time", true);
+		eb.addField("sanss", "more bad times", true);
 		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 }
