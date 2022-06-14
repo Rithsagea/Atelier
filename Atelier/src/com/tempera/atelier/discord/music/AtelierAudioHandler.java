@@ -24,7 +24,7 @@ import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class AtelierAudioHandler extends AudioEventAdapter
@@ -37,23 +37,18 @@ public class AtelierAudioHandler extends AudioEventAdapter
 	private MessageChannel channel;
 	private boolean looping;
 
-	public AtelierAudioHandler(AudioPlayerManager manager, AudioPlayer player,
-		MessageReceivedEvent event) {
+	public AtelierAudioHandler(AudioPlayerManager manager, AudioPlayer player, MessageChannel channel) {
 		this.manager = manager;
 		this.player = player;
 		this.queue = new LinkedBlockingQueue<>();
 		this.looping = false;
-		channel = event.getChannel();
+		this.channel = channel;
 
 		player.addListener(this);
 	}
 
 	public void setPausedState(boolean set) {
 		player.setPaused(set);
-	}
-	
-	public boolean getPauseState() {
-		return player.isPaused();
 	}
 	
 	public boolean toggleLoop() {
@@ -66,11 +61,7 @@ public class AtelierAudioHandler extends AudioEventAdapter
 		return manager;
 	}
 	
-	public AudioChannel joinVc(MessageReceivedEvent event) {
-		if (event.getAuthor()
-			.isBot())
-			return null;
-
+	public AudioChannel joinVc(SlashCommandInteractionEvent event) {
 		Guild guild = event.getGuild();
 		AudioManager manager = guild.getAudioManager();
 		GuildVoiceState state = event.getMember()

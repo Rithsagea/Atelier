@@ -3,38 +3,21 @@ package com.tempera.atelier.discord.music;
 import java.awt.Color;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
 
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class NowPlayingCommand extends MusicSubCommand {
 
 	public NowPlayingCommand(AtelierAudioManager audioManager) {
-		super(audioManager);
-	}
-
-	public String getLabel() {
-		return "nowplaying";
+		super(audioManager, "nowplaying", "Displays currently playing track");
 	}
 
 	@Override
-	public List<String> getAliases() {
-		return Arrays.asList("np");
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
-	}
-
-	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user,
-		List<String> args, MessageReceivedEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.WHITE);
 		if (audioHandler.getPlayingTrack() != null) {
@@ -60,8 +43,14 @@ public class NowPlayingCommand extends MusicSubCommand {
 			eb.setTitle("No songs playing!");
 		}
 
-		event.getChannel()
-			.sendMessageEmbeds(eb.build())
+		event.replyEmbeds(eb.build())
 			.queue();
 	}
+
+	@Override
+	public void complete(User user, CommandAutoCompleteInteractionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

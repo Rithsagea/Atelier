@@ -11,7 +11,7 @@ public class SaveTrackCommand extends MusicSubCommand{
 	private AtelierDB db;
 
 	public SaveTrackCommand(AtelierBot bot) {
-		super(bot.getAudioManager(), "", "");
+		super(bot.getAudioManager(), "null2", "null2");
 		db = bot.getDatabase();
 	}
 

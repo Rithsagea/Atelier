@@ -1,46 +1,32 @@
 package com.tempera.atelier.discord.music;
 
-import java.util.List;
-
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 public class PlayCommand extends MusicSubCommand {
-
+	
 	public PlayCommand(AtelierAudioManager audioManager) {
-		super(audioManager);
+		super(audioManager, "play", "Adds a song or playlist to queue");
 	}
 
 	@Override
-	public String getLabel() {
-		return "play";
+	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+		if (!event.getGuild().getAudioManager().isConnected())
+			if (audioHandler.joinVc(event) == null)
+				return;
+			audioHandler.loadTrack(event.getOption("url").getAsString());
 	}
 
 	@Override
-	public List<String> getAliases() {
-		return null;
+	public void addOptions(SubcommandData data) {
+		data.addOption(OptionType.STRING, "url", "The song URL to play", true, false);
 	}
-
+	
 	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
-	}
-
-	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user,
-		List<String> args, MessageReceivedEvent event) {
-		if (args.size() < 2)
-			event.getChannel()
-				.sendMessage("Missing URL!")
-				.queue();
-		else {
-			if (!event.getGuild().getAudioManager().isConnected())
-				if (audioHandler.joinVc(event) == null)
-					return;
-			audioHandler.loadTrack(args.get(1));
-		}
-	}
+	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}
 
 }

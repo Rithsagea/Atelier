@@ -1,40 +1,24 @@
 package com.tempera.atelier.discord.music;
 
-import java.util.List;
-
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class LoopCommand extends MusicSubCommand {
 
 	public LoopCommand(AtelierAudioManager audioManager) {
-		super(audioManager);
+		super(audioManager, "loop", "Turns loop on and off");
 	}
 
 	@Override
-	public String getLabel() {
-		return "loop";
+	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+		event.reply(
+			audioHandler.toggleLoop() ? "Loop enabled." : "Loop disabled.")
+		.queue();
 	}
 
 	@Override
-	public List<String> getAliases() {
-		return null;
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
-	}
-
-	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user,
-		List<String> args, MessageReceivedEvent event) {
-		event.getChannel()
-			.sendMessage(
-				audioHandler.toggleLoop() ? "Loop enabled." : "Loop disabled.")
-			.queue();
-	}
+	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}
 
 }

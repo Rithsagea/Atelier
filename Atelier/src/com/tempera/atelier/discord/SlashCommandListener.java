@@ -6,6 +6,7 @@ import com.tempera.atelier.discord.commands.SlashCommandRegistry;
 import com.tempera.atelier.discord.commands.StopCommand;
 import com.tempera.atelier.discord.commands.WaifuCommand;
 import com.tempera.atelier.discord.commands.character.CharacterCommand;
+import com.tempera.atelier.discord.music.MusicCommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
 
 import net.dv8tion.jda.api.entities.Guild;
@@ -33,7 +34,7 @@ public class SlashCommandListener extends ListenerAdapter {
 	private void registerCommands() {
 		reg.registerCommand(new WaifuCommand());
 		reg.registerCommand(new StopCommand(bot));
-		
+		reg.registerCommand(new MusicCommand(bot));
 		reg.registerCommand(new CharacterCommand());
 	}
 	

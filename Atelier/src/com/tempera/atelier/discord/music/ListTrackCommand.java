@@ -13,7 +13,7 @@ public class ListTrackCommand extends MusicSubCommand{
 	private AtelierDB db;
 	
 	public ListTrackCommand(AtelierBot bot) {
-		super(bot.getAudioManager() , "", "");
+		super(bot.getAudioManager() , "null3", "null3");
 		db = bot.getDatabase();
 	}
 

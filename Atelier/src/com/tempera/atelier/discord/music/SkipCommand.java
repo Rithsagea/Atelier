@@ -1,36 +1,18 @@
 package com.tempera.atelier.discord.music;
 
-import java.util.List;
-
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class SkipCommand extends MusicSubCommand {
 
 	public SkipCommand(AtelierAudioManager audioManager) {
-		super(audioManager);
+		super(audioManager, "skip", "Skips the currently playing track");
 	}
-
+	
 	@Override
-	public String getLabel() {
-		return "skip";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return null;
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
-	}
-
-	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user,
-		List<String> args, MessageReceivedEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
 		if (audioHandler.getPlayingTrack() != null) {
 			event.getChannel()
 				.sendMessage(String.format("Skipping `%s`!",
@@ -43,5 +25,7 @@ public class SkipCommand extends MusicSubCommand {
 				.sendMessage("No song to skip!")
 				.queue();
 	}
-
+	
+	@Override
+	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}
 }

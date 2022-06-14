@@ -1,45 +1,36 @@
 package com.tempera.atelier.discord.music;
 
-import java.util.List;
-
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 public class SansCommand extends MusicSubCommand {
 
 	public SansCommand(AtelierAudioManager audioManager) {
-		super(audioManager);
+		super(audioManager, "sans", "bad time");
 	}
 
 	@Override
-	public String getLabel() {
-		return "sans";
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return null;
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.USER;
-	}
-
-	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user,
-		List<String> args, MessageReceivedEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
 		int times = 1;
-		if (args.size() > 1)
-			times = Integer.parseInt(args.get(1));
+		if (event.getOption("time") != null)
+			times = (int) event.getOption("time").getAsLong();
 		for (int i = 0; i < times; i++) {
 			audioHandler
 				.loadTrack("https://www.youtube.com/watch?v=wDgQdr8ZkTw");
-			event.getChannel()
-				.sendMessage("bad time")
+			event.reply("bad time")
 				.queue();
 		}
 	}
+	
+	@Override
+	public void addOptions(SubcommandData data) {
+		data.addOption(OptionType.INTEGER, "time", "The time", false, false);
+	}
+
+	@Override
+	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}
 }
