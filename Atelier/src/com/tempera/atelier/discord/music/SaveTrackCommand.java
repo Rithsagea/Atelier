@@ -1,47 +1,29 @@
 package com.tempera.atelier.discord.music;
 
-import java.util.List;
-import java.util.UUID;
-
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
-import com.tempera.atelier.dnd.types.Track;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class SaveTrackCommand extends MusicSubCommand{
 	private AtelierDB db;
 
 	public SaveTrackCommand(AtelierBot bot) {
-		super(bot.getAudioManager());
+		super(bot.getAudioManager(), "", "");
 		db = bot.getDatabase();
 	}
 
 	@Override
-	public String getLabel() {
-		return "save";
+	public void complete(User user, CommandAutoCompleteInteractionEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public List<String> getAliases() {
-		return null;
-	}
-
-	@Override
-	public PermissionLevel getLevel() {
-		return PermissionLevel.ADMINISTRATOR;
-	}
-
-	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, List<String> args, MessageReceivedEvent event) {
-		AudioPlayerManager manager = audioHandler.getManager();
+	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+	/**	AudioPlayerManager manager = audioHandler.getManager();
 		if (args.size() < 2) {
 			event.getChannel().sendMessage("Format: save [Track ID] [SongURL]").queue();
 			return;
@@ -79,7 +61,7 @@ public class SaveTrackCommand extends MusicSubCommand{
 
 			@Override
 			public void loadFailed(FriendlyException throwable) {}
-		});
+		});**/
 	}
 
 }
