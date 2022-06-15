@@ -27,8 +27,11 @@ public class SlashCommandListener extends ListenerAdapter {
 	
 	public SlashCommandListener(AtelierBot bot) {
 		this.bot = bot;
-		
 		registerCommands();
+	}
+	
+	public SlashCommandRegistry getRegistry() {
+		return reg;
 	}
 	
 	private void registerCommands() {
@@ -41,6 +44,7 @@ public class SlashCommandListener extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		Guild guild = event.getJDA().getGuildById(config.getTestingGuildId());
+		//remove all existing commands
 		reg.getCommands().stream()
 			.map(cmd->cmd.getData())
 			.map(guild::upsertCommand)
