@@ -14,8 +14,7 @@ public class SansListCommand extends MusicSubCommand{
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
 		audioHandler.loadTrack("https://www.youtube.com/playlist?list=PLTmmZZ44iAEeZPba3BYs4OR8BmSDQQhl7");
-		event.getChannel()
-		.sendMessage("birds are singing. flowers are blooming. on days like these kids like you...... should be burning in heck")
+		event.reply("birds are singing. flowers are blooming. on days like these kids like you...... should be burning in heck")
 		.queue();
 	}
 	

@@ -14,15 +14,13 @@ public class SkipCommand extends MusicSubCommand {
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
 		if (audioHandler.getPlayingTrack() != null) {
-			event.getChannel()
-				.sendMessage(String.format("Skipping `%s`!",
+			event.reply(String.format("Skipping `%s`!",
 					audioHandler.getPlayingTrack()
 						.getInfo().title))
 				.queue();
 			audioHandler.nextTrack();
 		} else
-			event.getChannel()
-				.sendMessage("No song to skip!")
+			event.reply("No song to skip!")
 				.queue();
 	}
 	

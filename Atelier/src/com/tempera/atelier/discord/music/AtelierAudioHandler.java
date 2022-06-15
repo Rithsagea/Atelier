@@ -71,8 +71,7 @@ public class AtelierAudioHandler extends AudioEventAdapter
 
 		AudioChannel channel = state.getChannel();
 		if (channel == null) {
-			event.getChannel()
-				.sendMessage("Not in a voice channel!")
+			event.reply("Not in a voice channel!")
 				.queue();
 			return null;
 		}
@@ -80,8 +79,7 @@ public class AtelierAudioHandler extends AudioEventAdapter
 		manager.setSendingHandler(this);
 		manager.openAudioConnection(channel);
 
-		event.getChannel()
-			.sendMessage(
+		event.reply(
 				String.format("Joined channel `[%s]`", channel.getName()))
 			.queue();
 		return channel;
