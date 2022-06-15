@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class LoopCommand extends MusicSubCommand {
 
 	public LoopCommand(AtelierAudioManager audioManager) {
-		super(audioManager, "loop", "Turns loop on and off");
+		super(audioManager, "loop", "Turns looping on and off");
 	}
 
 	@Override
