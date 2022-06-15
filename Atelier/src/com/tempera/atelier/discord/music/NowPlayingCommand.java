@@ -39,6 +39,9 @@ public class NowPlayingCommand extends MusicSubCommand {
 					cur.format(DateTimeFormatter.ofPattern("mm:ss")),
 					dur.format(DateTimeFormatter.ofPattern("mm:ss"))));
 			}
+			String url = audioHandler.getPlayingTrack().getInfo().uri;
+			eb.setImage(String.format("https://img.youtube.com/vi/%s/sddefault.jpg", 
+					url.substring(url.indexOf("v=") + 2)));
 		} else {
 			eb.setTitle("No songs playing!");
 		}

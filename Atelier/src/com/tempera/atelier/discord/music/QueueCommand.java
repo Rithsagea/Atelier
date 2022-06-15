@@ -29,7 +29,6 @@ public class QueueCommand extends MusicSubCommand {
 		}
 			menuManager.addMenu(event.getChannel(),
 				new QueueMenu(audioHandler, menuManager, page));
-		
 	}
 
 	@Override
