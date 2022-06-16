@@ -20,6 +20,7 @@ public class MusicCommand extends SlashGroupCommand {
 		registerSubcommand(new DisconnectCommand(audioManager));
 		registerSubcommand(new SansCommand(audioManager));
 		registerSubcommand(new SansListCommand(audioManager));
+		registerSubcommand(new ClearQueueCommand(audioManager));
 	}
 
 }

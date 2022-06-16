@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 public class ClearQueueCommand extends MusicSubCommand{
 
-	public ClearQueueCommand(AtelierAudioManager audioManager, String name, String description) {
+	public ClearQueueCommand(AtelierAudioManager audioManager) {
 		super(audioManager, "clear", "Empties the entire queue");
 	}
 
