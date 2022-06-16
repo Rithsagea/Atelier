@@ -17,9 +17,8 @@ public class ClearQueueCommand extends MusicSubCommand{
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
 		if (event.getOption("areyousure").getAsBoolean()) {
-			for (int i = 0; i < audioHandler.getQueue().size(); i++)
-				audioHandler.nextTrack();
-			event.reply("Clearing queue!");
+			audioHandler.clearQueue();
+			event.reply("Clearing queue!").queue();
 		}
 	}
 	
