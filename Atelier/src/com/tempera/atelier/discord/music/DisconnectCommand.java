@@ -21,14 +21,12 @@ public class DisconnectCommand extends MusicSubCommand {
 				.getVoiceState();
 
 			if (!manager.isConnected()) {
-				event.getChannel()
-					.sendMessage("Not in a voice channel!")
+				event.reply("Not in a voice channel!")
 					.queue();
 				return;
 			}
 			manager.closeAudioConnection();
-			event.getChannel()
-				.sendMessage(String.format("Disconnected from channel `[%s]`",
+			event.reply(String.format("Disconnected from channel `[%s]`",
 					state.getChannel()
 						.getName()))
 				.queue();
