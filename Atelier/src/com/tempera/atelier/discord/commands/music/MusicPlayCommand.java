@@ -15,11 +15,12 @@ public class MusicPlayCommand extends MusicSubCommand {
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+		String url = event.getOption("url").getAsString();
+		event.reply("Loading url: " + url).queue();
+		
 		if (!event.getGuild().getAudioManager().isConnected())
 			if (audioHandler.join(event) == null) return;
 		
-		String url = event.getOption("url").getAsString();
-		event.reply("Loading url: " + url).queue();
 		audioHandler.loadTrack(url);
 	}
 

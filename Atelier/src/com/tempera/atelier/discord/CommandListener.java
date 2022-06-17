@@ -1,5 +1,9 @@
 package com.tempera.atelier.discord;
 
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.Config;
 import com.tempera.atelier.discord.commands.AbstractCommand;
@@ -27,8 +31,11 @@ public class CommandListener extends ListenerAdapter {
 	private AtelierDB db = AtelierDB.getInstance();
 	private MenuManager menus = MenuManager.getInstance();
 	
+	private Logger log;
+	
 	public CommandListener(AtelierBot bot) {
 		this.bot = bot;
+		this.log = bot.getLogger();
 		registerCommands();
 	}
 	
@@ -39,30 +46,38 @@ public class CommandListener extends ListenerAdapter {
 	
 	private AbstractCommand waifuCommand;
 	private AbstractCommand musicCommand;
+	private AbstractCommand stopCommand;
+	private AbstractCommand characterCommand;
+	private AbstractCommand campaignCommand;
+	
 	private void registerCommands() {
 		waifuCommand = new WaifuCommand();
-		musicCommand = new MusicCommand();
+		musicCommand  = new MusicCommand();
+		stopCommand = new StopCommand(bot);
+		characterCommand = new CharacterCommand();
+		campaignCommand = new CampaignCommand();
 		
-		reg.registerCommand(new WaifuCommand());
-		reg.registerCommand(new StopCommand(bot));
-		reg.registerCommand(new MusicCommand());
-		reg.registerCommand(new CharacterCommand());
-		reg.registerCommand(new CampaignCommand());
+		reg.registerCommand(waifuCommand);
+		reg.registerCommand(musicCommand);
+		reg.registerCommand(stopCommand);
+		reg.registerCommand(characterCommand);
+		reg.registerCommand(campaignCommand);
 	}
 	
 	@Override
 	public void onReady(ReadyEvent event) {
 		//testing commands
 		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
-		reg.getCommands().stream()
-			.map(cmd->cmd.getData())
-			.map(guild::upsertCommand)
-			.forEach(a -> a.queue());
+//		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
+		Stream.of(stopCommand, characterCommand, campaignCommand)
+			.map(cmd -> guild.upsertCommand(cmd.getData()))
+			.forEach(cmd -> cmd.queue());
 		
 		//global commands
 		JDA jda = event.getJDA();
-		jda.upsertCommand(waifuCommand.getData()).queue();
-		jda.upsertCommand(musicCommand.getData()).queue();
+		Stream.of(waifuCommand, musicCommand)
+			.map(cmd -> jda.upsertCommand(cmd.getData()))
+			.forEach(cmd -> cmd.queue());
 	}
 	
 	@Override
@@ -72,6 +87,8 @@ public class CommandListener extends ListenerAdapter {
 		net.dv8tion.jda.api.entities.User author = event.getUser();
 		User user = db.getUser(author.getIdLong());
 		user.setName(author.getName());
+		
+		log.info(user + " used command: " + event.getCommandString());
 		
 		reg.getCommand(event.getName()).execute(user, event);
 	}
