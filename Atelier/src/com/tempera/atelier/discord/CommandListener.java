@@ -2,6 +2,7 @@ package com.tempera.atelier.discord;
 
 import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.Config;
+import com.tempera.atelier.discord.commands.AbstractCommand;
 import com.tempera.atelier.discord.commands.CommandRegistry;
 import com.tempera.atelier.discord.commands.StopCommand;
 import com.tempera.atelier.discord.commands.WaifuCommand;
@@ -10,6 +11,7 @@ import com.tempera.atelier.discord.commands.music.MusicCommand;
 import com.tempera.atelier.dnd.commands.campaign.CampaignCommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
 
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -23,7 +25,6 @@ public class CommandListener extends ListenerAdapter {
 	
 	private AtelierBot bot;
 	private AtelierDB db = AtelierDB.getInstance();
-	private Config config = Config.getInstance();
 	private MenuManager menus = MenuManager.getInstance();
 	
 	public CommandListener(AtelierBot bot) {
@@ -35,7 +36,13 @@ public class CommandListener extends ListenerAdapter {
 		return reg;
 	}
 	
+	
+	private AbstractCommand waifuCommand;
+	private AbstractCommand musicCommand;
 	private void registerCommands() {
+		waifuCommand = new WaifuCommand();
+		musicCommand = new MusicCommand();
+		
 		reg.registerCommand(new WaifuCommand());
 		reg.registerCommand(new StopCommand(bot));
 		reg.registerCommand(new MusicCommand());
@@ -45,14 +52,17 @@ public class CommandListener extends ListenerAdapter {
 	
 	@Override
 	public void onReady(ReadyEvent event) {
-		Guild guild = event.getJDA().getGuildById(config.getTestingGuildId());
-		//remove all existing commands
+		//testing commands
+		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
 		reg.getCommands().stream()
 			.map(cmd->cmd.getData())
 			.map(guild::upsertCommand)
 			.forEach(a -> a.queue());
 		
-		//TODO global commands here
+		//global commands
+		JDA jda = event.getJDA();
+		jda.upsertCommand(waifuCommand.getData()).queue();
+		jda.upsertCommand(musicCommand.getData()).queue();
 	}
 	
 	@Override

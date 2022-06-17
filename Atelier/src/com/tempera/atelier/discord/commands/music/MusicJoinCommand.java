@@ -13,6 +13,7 @@ public class MusicJoinCommand extends MusicSubCommand {
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+		event.deferReply();
 		audioHandler.join(event);
 	}
 

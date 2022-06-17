@@ -72,14 +72,16 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 
 		AudioChannel channel = state.getChannel();
 		if (channel == null) {
-			event.reply("Not in a voice channel!").queue();
+			if(!event.isAcknowledged()) event.reply("Not in a voice channel!").queue();
+			else event.getChannel().sendMessage("Not in a voice channel!").queue();
 			return null;
 		}
 		
 		manager.setSendingHandler(this);
 		manager.openAudioConnection(channel);
 
-		event.replyFormat("Joined channel `[%s]`", channel.getName()).queue();
+		if(!event.isAcknowledged()) event.replyFormat("Joined channel `[%s]`", channel.getName()).queue();
+		else event.getChannel().sendMessageFormat("Joined channel `[%s]`", channel.getName()).queue();
 		return channel;
 	}
 
