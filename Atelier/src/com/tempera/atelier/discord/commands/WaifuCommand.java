@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-public class WaifuCommand extends SlashBaseCommand {
+public class WaifuCommand extends BaseCommand {
 
 	public WaifuCommand() {
 		super("waifu", "Provides waifus for the degenerate masses");

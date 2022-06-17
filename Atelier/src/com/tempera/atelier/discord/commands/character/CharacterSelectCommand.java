@@ -4,7 +4,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.SlashBaseSubcommand;
+import com.tempera.atelier.discord.commands.BaseSubcommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
 
@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class CharacterSelectCommand extends SlashBaseSubcommand {
+public class CharacterSelectCommand extends BaseSubcommand {
 
 	public CharacterSelectCommand() {
 		super("select", "Selects a character sheet");

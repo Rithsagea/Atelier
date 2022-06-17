@@ -9,12 +9,10 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tempera.atelier.aaagarbage.MenuManager;
 import com.tempera.atelier.discord.LoginListener;
 import com.tempera.atelier.discord.MessageListener;
-import com.tempera.atelier.discord.SlashCommandListener;
-import com.tempera.atelier.discord.acommands.CommandRegistry;
-import com.tempera.atelier.discord.music.AtelierAudioManager;
+import com.tempera.atelier.discord.CommandListener;
+import com.tempera.atelier.discord.commands.music.AtelierAudioManager;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.DBSaveTask;
 
@@ -26,13 +24,9 @@ public class AtelierBot {
 	private AtelierDB db;
 	private Config config;
 
-	private Logger logger;
+	private Logger logger = LoggerFactory.getLogger("Atelier");
 	private JDA jda;
-	private ScheduledExecutorService scheduler;
-
-	private AtelierAudioManager audioManager;
-	private CommandRegistry commandRegistry;
-	private MenuManager menuManager;
+	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 
 	private boolean running;
 
@@ -40,19 +34,11 @@ public class AtelierBot {
 		System.setProperty("http.agent", "Chrome");
 
 		this.config = Config.init(configPath);
-
-		db = AtelierDB.init(config);
-		commandRegistry = new CommandRegistry();
-		menuManager = MenuManager.getInstance();
-		logger = LoggerFactory.getLogger("Atelier");
-		running = true;
-
-		scheduler = Executors.newScheduledThreadPool(10);
-
-		audioManager = new AtelierAudioManager();
+		this.db = AtelierDB.init(config);
 	}
 
 	public void init() {
+		running = true;
 		logger.info("Initializing Atelier");
 
 		JDABuilder builder = JDABuilder.createDefault(config.getDiscordToken());
@@ -66,13 +52,12 @@ public class AtelierBot {
 		registerTasks();
 
 		jda.addEventListener(new LoginListener(this));
-		jda.addEventListener(new MessageListener(this));
-		jda.addEventListener(new SlashCommandListener(this));
+		jda.addEventListener(new MessageListener());
+		jda.addEventListener(new CommandListener(this));
 	}
 
 	private void registerTasks() {
-		scheduler.scheduleAtFixedRate(new DBSaveTask(db), 15, 300,
-			TimeUnit.SECONDS);
+		scheduler.scheduleAtFixedRate(new DBSaveTask(db), 15, 300, TimeUnit.SECONDS);
 	}
 
 	public Config getConfig() {
@@ -87,26 +72,10 @@ public class AtelierBot {
 		return jda;
 	}
 
-	public AtelierDB getDatabase() {
-		return db;
-	}
-
-	public CommandRegistry getCommandRegistry() {
-		return commandRegistry;
-	}
-
-	public AtelierAudioManager getAudioManager() {
-		return audioManager;
-	}
-
-	public MenuManager getMenuManager() {
-		return menuManager;
-	}
-
 	public void stop() {
 		running = false;
 		jda.shutdownNow();
-		audioManager.shutdown();
+		AtelierAudioManager.getInstance().shutdown();
 		db.disconnect();
 
 		System.exit(0);

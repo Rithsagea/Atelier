@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import com.rithsagea.util.DataUtil;
 import com.rithsagea.util.event.EventHandler;
-import com.tempera.atelier.discord.SlashMenu;
+import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.events.LoadSheetEvent;
 import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.Sheet;
@@ -84,7 +84,7 @@ public class StartingEquipmentFeature implements CharacterAttribute {
 	}
 
 	@Override
-	public SlashMenu getMenu() {
+	public Menu getMenu() {
 		return new StartingEquipmentMenu();
 	}
 
@@ -147,7 +147,7 @@ public class StartingEquipmentFeature implements CharacterAttribute {
 		}
 	}
 
-	private class StartingEquipmentMenu implements SlashMenu {
+	private class StartingEquipmentMenu implements Menu {
 		@Override
 		public Message initialize() {
 			return new StartingEquipmentMessageBuilder().build();

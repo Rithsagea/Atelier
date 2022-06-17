@@ -2,7 +2,6 @@ package com.tempera.test;
 
 import com.tempera.atelier.Config;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.character.classes.Rogue;
@@ -21,7 +20,6 @@ public class DBTest {
 
 	public static void editDB(AtelierDB db) {
 		User user = db.getUser(171378138041942016l);
-		user.setLevel(PermissionLevel.ADMINISTRATOR);
 
 		Sheet sheet = user.getSheet();
 

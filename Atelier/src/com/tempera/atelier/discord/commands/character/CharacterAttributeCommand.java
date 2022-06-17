@@ -3,9 +3,9 @@ package com.tempera.atelier.discord.commands.character;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tempera.atelier.discord.SlashMenuManager;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.SlashBaseSubcommand;
+import com.tempera.atelier.discord.commands.BaseSubcommand;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
 import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 
@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class CharacterAttributeCommand extends SlashBaseSubcommand {
+public class CharacterAttributeCommand extends BaseSubcommand {
 
 	public CharacterAttributeCommand() {
 		super("attribute", "Gets the character's attribute information");
@@ -34,7 +34,7 @@ public class CharacterAttributeCommand extends SlashBaseSubcommand {
 					.filter(a -> a.getName().equals(attributeInfo[1]))
 					.findFirst().get();
 			
-			SlashMenuManager.getInstance().addMenu(attribute.getMenu(), true, event);
+			MenuManager.getInstance().addMenu(attribute.getMenu(), true, event);
 		} else {
 			Message message = new CharacterAttributeMessageBuilder(user.getSheet()).build();
 			event.deferReply(true).queue(hook -> hook.editOriginal(message).queue());

@@ -5,7 +5,7 @@ import java.awt.Color;
 import com.rithsagea.util.event.EventHandler;
 import com.rithsagea.util.rand.Dice;
 import com.rithsagea.util.rand.Die;
-import com.tempera.atelier.discord.SlashMenu;
+import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.events.LoadClassEvent;
 import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
 import com.tempera.atelier.dnd.events.character.LevelUpClassEvent;
@@ -23,7 +23,7 @@ import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEve
 @IndexedItem("feature-hit-points")
 public class HitPointFeature implements CharacterAttribute {
 
-	private class HitPointMenu implements SlashMenu {
+	private class HitPointMenu implements Menu {
 
 		@Override
 		public Message initialize() {
@@ -96,7 +96,7 @@ public class HitPointFeature implements CharacterAttribute {
 	}
 
 	@Override
-	public SlashMenu getMenu() {
+	public Menu getMenu() {
 		return new HitPointMenu();
 	}
 }

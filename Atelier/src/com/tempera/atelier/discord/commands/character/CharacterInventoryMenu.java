@@ -2,8 +2,8 @@ package com.tempera.atelier.discord.commands.character;
 
 import java.util.List;
 
-import com.tempera.atelier.discord.SlashMenu;
-import com.tempera.atelier.discord.SlashMenuManager;
+import com.tempera.atelier.discord.Menu;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.dnd.types.Sheet;
 import com.tempera.atelier.dnd.types.equipment.Item;
 import com.tempera.util.ColorUtil;
@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
-public class CharacterInventoryMenu implements SlashMenu {
+public class CharacterInventoryMenu implements Menu {
 
 	private Sheet sheet;
 	
@@ -54,7 +54,7 @@ public class CharacterInventoryMenu implements SlashMenu {
 	@Override
 	public void onButtonInteract(ButtonInteractionEvent event) {
 		Item item = sheet.getInventory().getContents().get(Integer.parseInt(selected));
-		SlashMenuManager.getInstance().addMenu(item.getMenu(), true, event);
+		MenuManager.getInstance().addMenu(item.getMenu(), true, event);
 	}
 
 	@Override

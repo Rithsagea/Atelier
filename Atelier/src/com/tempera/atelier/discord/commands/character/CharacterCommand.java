@@ -1,8 +1,8 @@
 package com.tempera.atelier.discord.commands.character;
 
-import com.tempera.atelier.discord.commands.SlashGroupCommand;
+import com.tempera.atelier.discord.commands.GroupCommand;
 
-public class CharacterCommand extends SlashGroupCommand {
+public class CharacterCommand extends GroupCommand {
 
 	public CharacterCommand() {
 		super("character", "General utility command for player characters");

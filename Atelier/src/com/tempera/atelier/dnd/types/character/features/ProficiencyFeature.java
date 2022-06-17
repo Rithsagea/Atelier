@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.rithsagea.util.choice.Choice;
 import com.rithsagea.util.event.EventHandler;
-import com.tempera.atelier.discord.SlashMenu;
+import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
@@ -76,7 +76,7 @@ public class ProficiencyFeature implements CharacterAttribute {
 	}
 
 	@Override
-	public SlashMenu getMenu() {
+	public Menu getMenu() {
 		return new ProficiencyMenu();
 	}
 
@@ -134,7 +134,7 @@ public class ProficiencyFeature implements CharacterAttribute {
 		}
 	}
 
-	private class ProficiencyMenu implements SlashMenu {
+	private class ProficiencyMenu implements Menu {
 
 		@Override
 		public Message initialize() {

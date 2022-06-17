@@ -6,7 +6,7 @@ import com.tempera.atelier.discord.User;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class StopCommand extends SlashBaseCommand {
+public class StopCommand extends BaseCommand {
 
 	private AtelierBot bot;
 

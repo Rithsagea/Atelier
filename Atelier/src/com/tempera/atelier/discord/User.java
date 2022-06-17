@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.mongojack.Id;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Campaign;
 import com.tempera.atelier.dnd.types.Sheet;
@@ -22,8 +21,6 @@ public class User {
 	private UUID sheetId;
 	private UUID campaignId;
 
-	private PermissionLevel level;
-
 	private UUID editingSheetId;
 	private UUID editingCampaignId;
 	
@@ -32,8 +29,6 @@ public class User {
 	@JsonCreator
 	public User(@Id long id) {
 		this.id = id;
-
-		level = PermissionLevel.USER;
 	}
 
 	@Override
@@ -59,12 +54,8 @@ public class User {
 		return AtelierDB.getInstance().getSheet(sheetId);
 	}
 
-	public UUID getCampaignId() {
-		return campaignId;
-	}
-	
-	public PermissionLevel getLevel() {
-		return level;
+	public Campaign getCampaign() {
+		return AtelierDB.getInstance().getCampaign(campaignId);
 	}
 
 	public UUID getSelectedSheetId() {
@@ -92,10 +83,6 @@ public class User {
 
 	public void setCampaign(Campaign campaign) {
 		campaignId = campaign.getId();
-	}
-	
-	public void setLevel(PermissionLevel level) {
-		this.level = level;
 	}
 
 	public void setEditingSheet(Sheet sheet) {

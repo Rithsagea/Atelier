@@ -1,37 +1,31 @@
 package com.tempera.atelier.dnd.commands.campaign;
 
-import java.util.List;
 import java.util.UUID;
 
-import com.tempera.atelier.AtelierBot;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.acommands.BaseCommand;
-import com.tempera.atelier.discord.acommands.PermissionLevel;
+import com.tempera.atelier.discord.commands.BaseSubcommand;
 import com.tempera.atelier.dnd.types.AtelierDB;
 import com.tempera.atelier.dnd.types.Campaign;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class CampaignSelectCommand extends BaseCommand {
+public class CampaignSelectCommand extends BaseSubcommand {
 	
-	private AtelierDB db;
+	private AtelierDB db = AtelierDB.getInstance();
 	
-	public CampaignSelectCommand(AtelierBot bot) {
-		super("select", null, PermissionLevel.USER);
-		db = bot.getDatabase();
+	public CampaignSelectCommand() {
+		super("select", "selects a campaign to join");
 	}
 
 	@Override
-	public void execute(User user, List<String> args, MessageReceivedEvent event) {
-		if (args.size() < 2) {
-			event.getChannel().sendMessage("Specify a valid campaign id").queue();
-			return;
-		}
-		
+	public void execute(User user, SlashCommandInteractionEvent event) {
 		UUID id;
 
 		try {
-			id = UUID.fromString(args.get(1));
+			id = UUID.fromString(event.getOption("id").getAsString());
 		} catch (IllegalArgumentException e) {
 			event.getChannel().sendMessage("Invalid id format").queue();
 			return;
@@ -44,6 +38,12 @@ public class CampaignSelectCommand extends BaseCommand {
 			return;
 		}
 	}
+
+	@Override
+	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}	
 	
-	
+	@Override
+	public void addOptions(SubcommandData data) {
+		data.addOption(OptionType.STRING, "id", "the id of the campaign", true);
+	}
 }

@@ -4,8 +4,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.SlashBaseSubcommand;
-import com.tempera.atelier.discord.commands.SlashBaseSubcommandGroup;
+import com.tempera.atelier.discord.commands.BaseSubcommand;
+import com.tempera.atelier.discord.commands.BaseSubcommandGroup;
 import com.tempera.atelier.dnd.types.enums.Ability;
 import com.tempera.atelier.dnd.types.enums.Skill;
 
@@ -14,9 +14,9 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class CharacterRollCommand extends SlashBaseSubcommandGroup {
+public class CharacterRollCommand extends BaseSubcommandGroup {
 
-	private class RollSaving extends SlashBaseSubcommand {
+	private class RollSaving extends BaseSubcommand {
 		public RollSaving() {
 			super("saving", "Roll for an saving check");
 		}
@@ -39,7 +39,7 @@ public class CharacterRollCommand extends SlashBaseSubcommandGroup {
 		}	
 	}
 	
-	private class RollSkill extends SlashBaseSubcommand {
+	private class RollSkill extends BaseSubcommand {
 		public RollSkill() {
 			super("skill", "Roll for a skill check");
 		}

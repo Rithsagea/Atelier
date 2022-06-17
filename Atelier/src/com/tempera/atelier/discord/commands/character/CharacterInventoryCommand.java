@@ -1,13 +1,13 @@
 package com.tempera.atelier.discord.commands.character;
 
-import com.tempera.atelier.discord.SlashMenuManager;
+import com.tempera.atelier.discord.MenuManager;
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.SlashBaseSubcommand;
+import com.tempera.atelier.discord.commands.BaseSubcommand;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class CharacterInventoryCommand extends SlashBaseSubcommand {
+public class CharacterInventoryCommand extends BaseSubcommand {
 
 	public CharacterInventoryCommand() {
 		super("inventory", "Gets the character's inventory");
@@ -15,7 +15,7 @@ public class CharacterInventoryCommand extends SlashBaseSubcommand {
 
 	@Override
 	public void execute(User user, SlashCommandInteractionEvent event) {
-		SlashMenuManager.getInstance().addMenu(new CharacterInventoryMenu(user.getSheet()), true, event);
+		MenuManager.getInstance().addMenu(new CharacterInventoryMenu(user.getSheet()), true, event);
 	}
 
 	@Override

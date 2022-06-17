@@ -1,13 +1,13 @@
 package com.tempera.atelier.discord.commands.character;
 
 import com.tempera.atelier.discord.User;
-import com.tempera.atelier.discord.commands.SlashBaseSubcommand;
+import com.tempera.atelier.discord.commands.BaseSubcommand;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class CharacterListCommand extends SlashBaseSubcommand {
+public class CharacterListCommand extends BaseSubcommand {
 
 	public CharacterListCommand() {
 		super("list", "Lists the user's available character sheets");

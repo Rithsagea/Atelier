@@ -3,7 +3,7 @@ package com.tempera.test;
 import javax.security.auth.login.LoginException;
 
 import com.tempera.atelier.Config;
-import com.tempera.atelier.discord.SlashCommandListener;
+import com.tempera.atelier.discord.CommandListener;
 import com.tempera.atelier.dnd.types.AtelierDB;
 
 import net.dv8tion.jda.api.JDA;
@@ -25,6 +25,6 @@ public class CommandTest {
 			System.exit(0);
 		}
 		
-		new SlashCommandListener(null);
+		new CommandListener(null);
 	}
 }
