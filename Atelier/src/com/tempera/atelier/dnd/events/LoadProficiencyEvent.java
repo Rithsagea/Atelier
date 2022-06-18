@@ -32,24 +32,15 @@ public class LoadProficiencyEvent<E> extends LoadSheetEvent {
 		proficiencies.remove(proficiency);
 	}
 
-	public static class LoadSavingProficiencyEvent
-		extends LoadProficiencyEvent<Ability> {
-		public LoadSavingProficiencyEvent(Sheet sheet) {
-			super(sheet);
-		}
+	public static class LoadSavingProficiencyEvent extends LoadProficiencyEvent<Ability> {
+		public LoadSavingProficiencyEvent(Sheet sheet) { super(sheet); }
 	}
 
-	public static class LoadSkillProficiencyEvent
-		extends LoadProficiencyEvent<Skill> {
-		public LoadSkillProficiencyEvent(Sheet sheet) {
-			super(sheet);
-		}
+	public static class LoadSkillProficiencyEvent extends LoadProficiencyEvent<Skill> {
+		public LoadSkillProficiencyEvent(Sheet sheet) { super(sheet); }
 	}
 
-	public static class LoadEquipmentProficiencyEvent
-		extends LoadProficiencyEvent<EquipmentType> {
-		public LoadEquipmentProficiencyEvent(Sheet sheet) {
-			super(sheet);
-		}
+	public static class LoadEquipmentProficiencyEvent extends LoadProficiencyEvent<EquipmentType> {
+		public LoadEquipmentProficiencyEvent(Sheet sheet) { super(sheet); }
 	}
 }

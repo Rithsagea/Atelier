@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.mongojack.Id;
 
@@ -25,6 +28,10 @@ import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficie
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
 import com.tempera.atelier.dnd.events.LoadSheetEvent;
+import com.tempera.atelier.dnd.events.LoadValuesEvent.LoadAbilityModifierEvent;
+import com.tempera.atelier.dnd.events.LoadValuesEvent.LoadAbilityScoreEvent;
+import com.tempera.atelier.dnd.events.LoadValuesEvent.LoadSavingModifierEvent;
+import com.tempera.atelier.dnd.events.LoadValuesEvent.LoadSkillModifierEvent;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
 import com.tempera.atelier.dnd.types.character.CharacterAttribute;
 import com.tempera.atelier.dnd.types.enums.Ability;
@@ -32,6 +39,7 @@ import com.tempera.atelier.dnd.types.enums.EquipmentType;
 import com.tempera.atelier.dnd.types.enums.Skill;
 import com.tempera.atelier.dnd.types.equipment.Inventory;
 import com.tempera.atelier.dnd.types.spread.AbilitySpread;
+import com.tempera.atelier.dnd.types.spread.PointBuySpread;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Sheet implements Listener {
@@ -40,7 +48,7 @@ public class Sheet implements Listener {
 	private final UUID id;
 
 	private String name;
-	private AbilitySpread baseScores;
+	private AbilitySpread baseScores = new PointBuySpread();
 
 	private int hitPoints;
 	private int maxHitPoints;
@@ -51,6 +59,13 @@ public class Sheet implements Listener {
 
 	private transient EventBus eventBus = new EventBus();
 
+	private transient Map<Ability, Integer> abilityScores = new HashMap<>();
+	private transient Map<Ability, Integer> abilityModifiers = new HashMap<>();
+	private transient Map<Ability, Integer> savingModifiers = new HashMap<>();
+	private transient Map<Skill, Integer> skillModifiers = new HashMap<>();
+	
+	private transient int proficiencyBonus = 2; // 2 + (level - 1) / 4
+	
 	private transient Set<Ability> savingProficiencies = new HashSet<>();
 	private transient Set<Skill> skillProficiencies = new HashSet<>();
 	private transient Set<EquipmentType> equipmentProficiencies = new HashSet<>();
@@ -90,6 +105,20 @@ public class Sheet implements Listener {
 		eventBus.submitEvent(new LoadSavingProficiencyEvent(this));
 		eventBus.submitEvent(new LoadSkillProficiencyEvent(this));
 		eventBus.submitEvent(new LoadEquipmentProficiencyEvent(this));
+
+		eventBus.submitEvent(new LoadAbilityScoreEvent(this, 
+				Stream.of(Ability.values()).collect(Collectors.toMap(
+						Function.identity(), this::getBaseScore))));
+		eventBus.submitEvent(new LoadAbilityModifierEvent(this, 
+				Stream.of(Ability.values()).collect(Collectors.toMap( 
+						Function.identity(), a -> (getAbilityScore(a) - 10) / 2))));
+		eventBus.submitEvent(new LoadSavingModifierEvent(this,
+				Stream.of(Ability.values()).collect(Collectors.toMap(
+						Function.identity(), a -> (getAbilityModifier(a) + (hasSavingProficiency(a) ? proficiencyBonus : 0))))));
+		eventBus.submitEvent(new LoadSkillModifierEvent(this,
+				Stream.of(Skill.values()).collect(Collectors.toMap(
+						Function.identity(), s -> (getSkillModifier(s) + (hasSkillProficiency(s) ? proficiencyBonus : 0))))));
+		
 		eventBus.submitEvent(new LoadHitPointsEvent(this));
 	}
 
@@ -112,6 +141,26 @@ public class Sheet implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
+	private void onLoadAbilityScore(LoadAbilityScoreEvent e) {
+		e.getKeys().forEach(k -> abilityScores.put(k, e.getValue(k)));
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	private void onLoadAbilityModifier(LoadAbilityModifierEvent e) {
+		e.getKeys().forEach(k -> abilityModifiers.put(k, e.getValue(k)));
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	private void onLoadSavingModifier(LoadSavingModifierEvent e) {
+		e.getKeys().forEach(k -> savingModifiers.put(k, e.getValue(k)));
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	private void onLoadSkillModifier(LoadSkillModifierEvent e) {
+		e.getKeys().forEach(k -> skillModifiers.put(k, e.getValue(k)));
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
 	private void onLoadHitPoints(LoadHitPointsEvent e) {
 		maxHitPoints = e.getMaxHitPoints();
 		hitPoints = Math.min(maxHitPoints, hitPoints);
@@ -132,19 +181,21 @@ public class Sheet implements Listener {
 	public AbilitySpread getBaseScores() {
 		return baseScores;
 	}
-
-	public int getAbilityScore(Ability ability) {
+	
+	public int getBaseScore(Ability ability) {
 		return baseScores.getBaseScore(ability);
+	}
+	
+	public int getAbilityScore(Ability ability) {
+		return abilityScores.get(ability);
 	}
 
 	public int getAbilityModifier(Ability ability) {
-		return (baseScores.getBaseScore(ability) - 10) / 2;
+		return abilityModifiers.get(ability);
 	}
-
+	
 	public int getSavingModifier(Ability ability) {
-		if (hasSavingProficiency(ability))
-			return getAbilityModifier(ability) + 2;
-		return getAbilityModifier(ability);
+		return savingModifiers.get(ability);
 	}
 
 	public int getSkillModifier(Skill skill) {

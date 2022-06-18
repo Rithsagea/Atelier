@@ -92,14 +92,14 @@ public class EventBus {
 				for (Handler handler : listenerMap.get(type)) {
 					try {
 						handler.method.invoke(handler.listener, event);
-					} catch (IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException e) {
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 						e.printStackTrace();
 					}
 				}
 			}
-
+			
 			type = type.getSuperclass();
+			if(type.isAnnotationPresent(AtomicEvent.class)) return;
 		}
 	}
 }

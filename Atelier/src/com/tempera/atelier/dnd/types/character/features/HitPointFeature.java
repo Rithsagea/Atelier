@@ -8,6 +8,7 @@ import com.rithsagea.util.rand.Die;
 import com.tempera.atelier.discord.Menu;
 import com.tempera.atelier.dnd.events.LoadClassEvent;
 import com.tempera.atelier.dnd.events.LoadHitPointsEvent;
+import com.tempera.atelier.dnd.events.LoadSheetEvent;
 import com.tempera.atelier.dnd.events.character.LevelUpClassEvent;
 import com.tempera.atelier.dnd.types.IndexedItem;
 import com.tempera.atelier.dnd.types.character.AbstractClass;
@@ -93,6 +94,11 @@ public class HitPointFeature implements CharacterAttribute {
 	@EventHandler
 	private void onLoadClass(LoadClassEvent event) {
 		AbstractClass c = event.getCharacterClass();
+	}
+	
+	@EventHandler
+	private void onLoadSheet(LoadSheetEvent event) {
+		System.out.println(event.getSheet());
 	}
 
 	@Override
