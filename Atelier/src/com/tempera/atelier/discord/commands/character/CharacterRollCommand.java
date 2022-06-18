@@ -24,8 +24,9 @@ public class CharacterRollCommand extends BaseSubcommandGroup {
 		@Override
 		public void execute(User user, SlashCommandInteractionEvent event) {
 			Ability a = Ability.fromString(event.getOption("ability").getAsString());
-			int roll = (int) (Math.random() * 20 + 1) + user.getSheet().getAbilityModifier(a);
-			event.replyFormat("%s Check: %d", a, roll).queue();
+			int roll = (int) (Math.random() * 20 + 1);
+			int modifier = user.getSheet().getAbilityModifier(a);
+			event.replyFormat("%s Check: %d (%d + %d)", a, roll + modifier, roll, modifier).queue();
 		}
 
 		@Override
@@ -47,8 +48,9 @@ public class CharacterRollCommand extends BaseSubcommandGroup {
 		@Override
 		public void execute(User user, SlashCommandInteractionEvent event) {
 			Skill s = Skill.fromString(event.getOption("skill").getAsString());
-			int roll = (int) (Math.random() * 20 + 1) + user.getSheet().getSkillModifier(s);
-			event.replyFormat("%s Check: %d", s, roll).queue();
+			int roll = (int) (Math.random() * 20 + 1);
+			int modifier = user.getSheet().getSkillModifier(s);
+			event.replyFormat("%s Check: %d (%d + %d)", s, roll + modifier, roll, modifier).queue();
 		}
 
 		@Override
