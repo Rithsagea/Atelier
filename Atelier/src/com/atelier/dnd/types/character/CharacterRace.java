@@ -3,6 +3,7 @@ package com.atelier.dnd.types.character;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.atelier.AtelierLanguageManager;
 import com.atelier.dnd.events.LoadEvent.LoadRaceEvent;
 import com.atelier.dnd.events.LoadEvent.LoadSheetEvent;
 import com.rithsagea.util.event.EventBus;
@@ -15,9 +16,10 @@ public abstract class CharacterRace implements AbstractRace {
 	private transient final String name;
 	private transient EventBus eventBus = new EventBus();
 	
-	public CharacterRace(String id, String name) {
+	public CharacterRace(String id) {
 		this.id = id;
-		this.name = name;
+		
+		name = AtelierLanguageManager.getInstance().get(this, "name");
 	}
 	
 	protected void addTrait(String key, CharacterAttribute attribute) {

@@ -1,12 +1,10 @@
 package com.atelier.discord.commands.music;
 
-import com.atelier.discord.commands.GroupCommand;
+import com.atelier.discord.commands.BaseInteraction.GroupCommand;
 
 public class MusicCommand extends GroupCommand {
 
 	public MusicCommand() {
-		super("music", "For managing and playing music in vc");
-
 		registerSubcommand(new MusicPlayCommand());
 		registerSubcommand(new MusicQueueCommand());
 		registerSubcommand(new MusicJoinCommand());
@@ -16,7 +14,7 @@ public class MusicCommand extends GroupCommand {
 		registerSubcommand(new MusicSkipCommand());
 		registerSubcommand(new MusicDisconnectCommand());
 		registerSubcommand(new MusicSansCommand());
-		registerSubcommand(new MusicClearQueueCommand());
+		registerSubcommand(new MusicClearCommand());
 	}
 
 }

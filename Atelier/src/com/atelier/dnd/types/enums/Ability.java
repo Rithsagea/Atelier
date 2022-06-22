@@ -3,17 +3,15 @@ package com.atelier.dnd.types.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.atelier.util.WordUtil;
+import com.atelier.AtelierLanguageManager;
 
 public enum Ability implements Proficiency {
-	STRENGTH("str"), DEXTERITY("dex"), CONSTITUTION("con"), INTELLIGENCE("int"),
-	WISDOM("wis"), CHARISMA("cha");
+	STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENCE, WISDOM, CHARISMA;
 
 	private static Map<String, Ability> labelMap;
 	static {
 		labelMap = new HashMap<>();
 		for (Ability ability : Ability.values()) {
-//			labelMap.put(ability.getLabel(), ability);
 			labelMap.put(ability.toString(), ability);
 		}
 	}
@@ -22,18 +20,14 @@ public enum Ability implements Proficiency {
 		return labelMap.get(str);
 	}
 
-	private String label;
-
-	private Ability(String label) {
-		this.label = label;
+	private final String name;
+	
+	private Ability() {
+		name = AtelierLanguageManager.getInstance().get(this, "name");
 	}
-
-	public String getLabel() {
-		return label;
-	}
-
+	
 	@Override
 	public String toString() {
-		return WordUtil.capitalize(name().replace("_", " "));
+		return name;
 	}
 }

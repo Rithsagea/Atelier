@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.atelier.AtelierLanguageManager;
 import com.atelier.dnd.events.LoadEvent.LoadClassEvent;
 import com.atelier.dnd.events.LoadEvent.LoadSheetEvent;
 import com.rithsagea.util.event.EventBus;
@@ -18,9 +19,10 @@ public abstract class CharacterClass implements AbstractClass {
 	private transient final String name;
 	private transient EventBus eventBus = new EventBus();
 
-	public CharacterClass(String id, String name) {
+	public CharacterClass(String id) {
 		this.id = id;
-		this.name = name;
+		
+		name = AtelierLanguageManager.getInstance().get(this, "name");
 	}
 
 	protected void addFeature(String key, CharacterAttribute feature) {

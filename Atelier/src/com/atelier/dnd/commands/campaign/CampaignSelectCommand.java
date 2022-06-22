@@ -3,7 +3,7 @@ package com.atelier.dnd.commands.campaign;
 import java.util.UUID;
 
 import com.atelier.discord.User;
-import com.atelier.discord.commands.BaseSubcommand;
+import com.atelier.discord.commands.BaseInteraction.BaseSubcommand;
 import com.atelier.dnd.types.AtelierDB;
 import com.atelier.dnd.types.Campaign;
 
@@ -15,10 +15,6 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 public class CampaignSelectCommand extends BaseSubcommand {
 	
 	private AtelierDB db = AtelierDB.getInstance();
-	
-	public CampaignSelectCommand() {
-		super("select", "selects a campaign to join");
-	}
 
 	@Override
 	public void execute(User user, SlashCommandInteractionEvent event) {

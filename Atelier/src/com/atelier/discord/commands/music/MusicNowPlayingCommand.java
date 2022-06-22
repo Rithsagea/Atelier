@@ -7,14 +7,9 @@ import java.time.format.DateTimeFormatter;
 import com.atelier.discord.User;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class MusicNowPlayingCommand extends MusicSubCommand {
-
-	public MusicNowPlayingCommand() {
-		super("nowplaying", "Displays currently playing track");
-	}
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
@@ -44,8 +39,4 @@ public class MusicNowPlayingCommand extends MusicSubCommand {
 
 		event.replyEmbeds(eb.build()).queue();
 	}
-
-	@Override
-	public void complete(User user, CommandAutoCompleteInteractionEvent event) { }
-
 }

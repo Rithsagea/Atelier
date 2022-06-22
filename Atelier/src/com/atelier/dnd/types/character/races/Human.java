@@ -10,7 +10,7 @@ import com.atelier.dnd.types.enums.Size;
 public class Human extends CharacterRace {
 
 	public Human() {
-		super("human", "Human");
+		super("human");
 		
 		addTrait("age", new AgeTrait("Humans reach adulthood in their late teens and live less than a century."));
 		addTrait("size", new SizeTrait(Size.MEDIUM, "Humans vary widely in height and build, from barely 5 feet to well over 6 feet tall. Regardless of your position in that range, your size is Medium."));

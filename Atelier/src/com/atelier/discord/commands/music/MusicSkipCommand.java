@@ -4,16 +4,11 @@ import java.util.Collections;
 
 import com.atelier.discord.User;
 
-import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 public class MusicSkipCommand extends MusicSubCommand {
-
-	public MusicSkipCommand() {
-		super("skip", "Skips the currently playing track");
-	}
 	
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
@@ -36,7 +31,4 @@ public class MusicSkipCommand extends MusicSubCommand {
 	public void addOptions(SubcommandData data) {
 		data.addOption(OptionType.STRING, "tracks", "The amount of tracks to skip", false, false);
 	}
-	
-	@Override
-	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}
 }

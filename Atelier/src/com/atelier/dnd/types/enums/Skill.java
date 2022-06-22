@@ -3,27 +3,21 @@ package com.atelier.dnd.types.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.atelier.util.WordUtil;
+import com.atelier.AtelierLanguageManager;
 
 public enum Skill implements Proficiency {
-	ACROBATICS("acr", Ability.DEXTERITY),
-	ANIMAL_HANDLING("ani", Ability.WISDOM), ARCANA("arc", Ability.INTELLIGENCE),
-	ATHLETICS("ath", Ability.STRENGTH), DECEPTION("dec", Ability.CHARISMA),
-	HISTORY("his", Ability.INTELLIGENCE), INSIGHT("ins", Ability.WISDOM),
-	INTIMIDATION("itm", Ability.CHARISMA),
-	INVESTIGATION("inv", Ability.INTELLIGENCE), MEDICINE("med", Ability.WISDOM),
-	NATURE("nat", Ability.INTELLIGENCE), PERCEPTION("prc", Ability.WISDOM),
-	PERFORMANCE("prf", Ability.CHARISMA), PERSUASION("prs", Ability.CHARISMA),
-	RELIGION("rel", Ability.INTELLIGENCE),
-	SLEIGHT_OF_HAND("soh", Ability.DEXTERITY),
-	STEALTH("ste", Ability.DEXTERITY), SURVIVAL("sur", Ability.WISDOM);
+	ACROBATICS(Ability.DEXTERITY), ANIMAL_HANDLING(Ability.WISDOM), ARCANA(Ability.INTELLIGENCE),
+	ATHLETICS(Ability.STRENGTH), DECEPTION(Ability.CHARISMA), HISTORY(Ability.INTELLIGENCE), INSIGHT(Ability.WISDOM),
+	INTIMIDATION(Ability.CHARISMA), INVESTIGATION(Ability.INTELLIGENCE), MEDICINE(Ability.WISDOM),
+	NATURE(Ability.INTELLIGENCE), PERCEPTION(Ability.WISDOM), PERFORMANCE(Ability.CHARISMA),
+	PERSUASION(Ability.CHARISMA), RELIGION(Ability.INTELLIGENCE), SLEIGHT_OF_HAND(Ability.DEXTERITY),
+	STEALTH(Ability.DEXTERITY), SURVIVAL(Ability.WISDOM);
 
 	private static Map<String, Skill> labelMap;
 	static {
 		labelMap = new HashMap<>();
 		for (Skill skill : Skill.values()) {
 			labelMap.put(skill.toString(), skill);
-//			labelMap.put(skill.getLabel(), skill);
 		}
 	}
 
@@ -31,24 +25,21 @@ public enum Skill implements Proficiency {
 		return labelMap.get(str);
 	}
 
-	private final String label;
 	private final Ability ability;
-
-	private Skill(String label, Ability ability) {
-		this.label = label;
+	private final String name;
+	
+	private Skill(Ability ability) {
 		this.ability = ability;
-	}
-
-	public String getLabel() {
-		return label;
+		
+		name = AtelierLanguageManager.getInstance().get(this, "name");
 	}
 
 	public Ability getAbility() {
 		return ability;
 	}
-
+	
 	@Override
 	public String toString() {
-		return WordUtil.capitalize(name().replace("_", " "));
+		return name;
 	}
 }

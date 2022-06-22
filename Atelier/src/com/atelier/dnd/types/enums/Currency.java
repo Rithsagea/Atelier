@@ -1,15 +1,16 @@
 package com.atelier.dnd.types.enums;
 
+import com.atelier.AtelierLanguageManager;
+
 public enum Currency {
-	COPPER("cp", 1), SILVER("sp", 10), ELECTRUM("ep", 50), GOLD("gp", 100),
-	PLATINUM("pp", 1000);
+	COPPER(1), SILVER(10), ELECTRUM(50), GOLD(100), PLATINUM(1000);
 
 	private final String label;
 	private final int value;
 
-	private Currency(String label, int value) {
-		this.label = label;
+	private Currency(int value) {
 		this.value = value;
+		label = AtelierLanguageManager.getInstance().get(this, "label");
 	}
 
 	public String getLabel() {
@@ -29,8 +30,7 @@ public enum Currency {
 		private final Currency currency;
 		private final int quantity;
 
-		private static final Currency[] CURRENCY_PRIORITY = { GOLD, SILVER,
-			COPPER };
+		private static final Currency[] CURRENCY_PRIORITY = { GOLD, SILVER, COPPER };
 
 		public Price(int quantity, Currency currency) {
 			double value;

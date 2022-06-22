@@ -4,13 +4,27 @@ import com.atelier.discord.User;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 
-public interface AbstractSubcommandGroup {
+public interface AbstractInteraction {
 	public String getName();
 	public String getDescription();
-	public SubcommandGroupData getData();
 	
 	public void execute(User user, SlashCommandInteractionEvent event);
 	public void complete(User user, CommandAutoCompleteInteractionEvent event);
+	
+	public static interface AbstractCommand extends AbstractInteraction {
+		public CommandData getData();
+	}
+	
+	public static interface AbstractSubcommand extends AbstractInteraction {
+		public SubcommandData getData();
+	}
+	
+	public static interface AbstractSubcommandGroup extends AbstractInteraction {
+		public SubcommandGroupData getData();
+	}
+
 }

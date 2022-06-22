@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import com.atelier.AtelierBot;
 import com.atelier.Config;
-import com.atelier.discord.commands.AbstractCommand;
+import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.CommandRegistry;
 import com.atelier.discord.commands.StopCommand;
 import com.atelier.discord.commands.WaifuCommand;

@@ -28,7 +28,7 @@ public class Rogue extends CharacterClass {
 	}
 
 	public Rogue(boolean multiclass) {
-		super("rogue", "Rogue");
+		super("rogue");
 
 		if (multiclass) {
 

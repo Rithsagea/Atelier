@@ -1,6 +1,7 @@
 package com.atelier.discord.commands;
 
 import com.atelier.discord.User;
+import com.atelier.discord.commands.BaseInteraction.BaseCommand;
 import com.atelier.util.NekoUtil;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -10,10 +11,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class WaifuCommand extends BaseCommand {
-
-	public WaifuCommand() {
-		super("waifu", "Provides waifus for the degenerate masses");
-	}
 
 	@Override
 	public void addOptions(SlashCommandData data) {

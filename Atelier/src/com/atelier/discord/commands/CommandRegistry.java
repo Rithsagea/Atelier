@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
+
 public class CommandRegistry {
 	private Map<String, AbstractCommand> commands = new HashMap<>();
 	

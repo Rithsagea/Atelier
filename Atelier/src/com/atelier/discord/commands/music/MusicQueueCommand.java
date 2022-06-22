@@ -1,9 +1,9 @@
 package com.atelier.discord.commands.music;
 
+import com.atelier.AtelierLanguageManager;
 import com.atelier.discord.MenuManager;
 import com.atelier.discord.User;
 
-import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -11,10 +11,9 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 public class MusicQueueCommand extends MusicSubCommand {
 
 	private MenuManager menuManager = MenuManager.getInstance();
-
-	public MusicQueueCommand() {
-		super("queue", "Displays the current queue of tracks");
-	}
+	
+	private final String optionPageName = AtelierLanguageManager.getInstance().get(this, "page.name");
+	private final String optionPageDescription = AtelierLanguageManager.getInstance().get(this, "page.description");
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
@@ -29,11 +28,6 @@ public class MusicQueueCommand extends MusicSubCommand {
 
 	@Override
 	public void addOptions(SubcommandData data) {
-		data.addOption(OptionType.INTEGER, "page", "The page number", false, false);
+		data.addOption(OptionType.INTEGER, optionPageName, optionPageDescription, false, false);
 	}
-	
-	
-	@Override
-	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}
-
 }

@@ -3,15 +3,10 @@ package com.atelier.discord.commands.music;
 import com.atelier.discord.User;
 
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class MusicDisconnectCommand extends MusicSubCommand {
-
-	public MusicDisconnectCommand() {
-		super("disconnect", "Disconnects from voice channel");
-	}
 
 	@Override
 	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
@@ -29,8 +24,4 @@ public class MusicDisconnectCommand extends MusicSubCommand {
 		
 		event.reply(String.format("Disconnected from %s", state.getChannel().getAsMention())).queue();
 	}
-
-	@Override
-	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}
-
 }

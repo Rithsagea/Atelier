@@ -3,9 +3,10 @@ package com.atelier.discord.commands.character;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.atelier.AtelierLanguageManager;
 import com.atelier.discord.MenuManager;
 import com.atelier.discord.User;
-import com.atelier.discord.commands.BaseSubcommand;
+import com.atelier.discord.commands.BaseInteraction.BaseSubcommand;
 import com.atelier.dnd.types.character.AbstractClass;
 import com.atelier.dnd.types.character.CharacterAttribute;
 
@@ -17,10 +18,9 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 public class CharacterAttributeCommand extends BaseSubcommand {
 
-	public CharacterAttributeCommand() {
-		super("attribute", "Gets the character's attribute information");
-	}
-
+	private String optionAttributeName = AtelierLanguageManager.getInstance().get(this, "attribute.name");
+	private String optionAttributeDescription = AtelierLanguageManager.getInstance().get(this, "attribute.description");
+	
 	@Override
 	public void execute(User user, SlashCommandInteractionEvent event) {
 		if(event.getOption("attribute") != null) {
@@ -55,7 +55,7 @@ public class CharacterAttributeCommand extends BaseSubcommand {
 	
 	@Override
 	public void addOptions(SubcommandData data) {
-		data.addOption(OptionType.STRING, "attribute", "the name of the attribute to get", false, true);
+		data.addOption(OptionType.STRING, optionAttributeName, optionAttributeDescription, false, true);
 	}
 
 }

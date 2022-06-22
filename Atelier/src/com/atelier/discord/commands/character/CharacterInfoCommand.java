@@ -1,16 +1,12 @@
 package com.atelier.discord.commands.character;
 
 import com.atelier.discord.User;
-import com.atelier.discord.commands.BaseSubcommand;
+import com.atelier.discord.commands.BaseInteraction.BaseSubcommand;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class CharacterInfoCommand extends BaseSubcommand {
-
-	public CharacterInfoCommand() {
-		super("info", "Gets an overview of the selected character sheet");
-	}
 
 	@Override
 	public void execute(User user, SlashCommandInteractionEvent event) {

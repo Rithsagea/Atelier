@@ -24,7 +24,7 @@ public class Fighter extends CharacterClass{
 	}
 	
 	public Fighter(boolean multiclass) {
-		super("fighter", "Fighter");
+		super("fighter");
 
 		if (multiclass) {
 		} else {

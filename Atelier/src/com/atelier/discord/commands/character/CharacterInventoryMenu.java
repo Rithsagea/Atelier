@@ -44,7 +44,7 @@ public class CharacterInventoryMenu implements Menu {
 		}
 
 		mb.setEmbeds(eb.build());
-		Builder menu = SelectMenu.create("menu:roll").setPlaceholder("Choose an item").setRequiredRange(1, 1);
+		Builder menu = SelectMenu.create("items").setPlaceholder("Choose an item").setRequiredRange(1, 1);
 		for (int i = 0; i < items.size(); i++)
 			menu.addOption("[" + i + "] "+ items.get(i), "" + i);
 		mb.setActionRows(ActionRow.of(menu.build()), ActionRow.of(Button.primary("get", "Get")));

@@ -3,9 +3,9 @@ package com.atelier.discord.commands.character;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.atelier.AtelierLanguageManager;
 import com.atelier.discord.User;
-import com.atelier.discord.commands.BaseSubcommand;
-import com.atelier.discord.commands.BaseSubcommandGroup;
+import com.atelier.discord.commands.BaseInteraction.BaseSubcommandGroup;
 import com.atelier.dnd.types.enums.Ability;
 import com.atelier.dnd.types.enums.Skill;
 
@@ -17,10 +17,10 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 public class CharacterRollCommand extends BaseSubcommandGroup {
 
 	private class RollSaving extends BaseSubcommand {
-		public RollSaving() {
-			super("saving", "Roll for an saving check");
-		}
-
+		
+		private final String optionAbilityName = AtelierLanguageManager.getInstance().get(this, "ability.name");
+		private final String optionAbilityDescription = AtelierLanguageManager.getInstance().get(this, "ability.description");
+		
 		@Override
 		public void execute(User user, SlashCommandInteractionEvent event) {
 			Ability a = Ability.fromString(event.getOption("ability").getAsString());
@@ -36,15 +36,15 @@ public class CharacterRollCommand extends BaseSubcommandGroup {
 
 		@Override
 		public void addOptions(SubcommandData data) {
-			data.addOption(OptionType.STRING, "ability", "the ability to roll for", true, true);
+			data.addOption(OptionType.STRING, optionAbilityName, optionAbilityDescription, true, true);
 		}	
 	}
 	
 	private class RollSkill extends BaseSubcommand {
-		public RollSkill() {
-			super("skill", "Roll for a skill check");
-		}
-
+		
+		private final String optionSkillName = AtelierLanguageManager.getInstance().get(this, "skill.name");
+		private final String optionSkillDescription = AtelierLanguageManager.getInstance().get(this, "skill.description");
+		
 		@Override
 		public void execute(User user, SlashCommandInteractionEvent event) {
 			Skill s = Skill.fromString(event.getOption("skill").getAsString());
@@ -60,12 +60,11 @@ public class CharacterRollCommand extends BaseSubcommandGroup {
 
 		@Override
 		public void addOptions(SubcommandData data) {
-			data.addOption(OptionType.STRING, "skill", "the skill to roll for", true, true);
+			data.addOption(OptionType.STRING, optionSkillName, optionSkillDescription, true, true);
 		}	
 	}
 	
 	public CharacterRollCommand() {
-		super("roll", "Roll for a character");
 		registerSubcommand(new RollSaving());
 		registerSubcommand(new RollSkill());
 	}

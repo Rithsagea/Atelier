@@ -1,12 +1,10 @@
 package com.atelier.discord.commands.character;
 
-import com.atelier.discord.commands.GroupCommand;
+import com.atelier.discord.commands.BaseInteraction.GroupCommand;
 
 public class CharacterCommand extends GroupCommand {
 
 	public CharacterCommand() {
-		super("character", "General utility command for player characters");
-		
 		registerSubcommand(new CharacterListCommand());
 		registerSubcommand(new CharacterInfoCommand());
 		registerSubcommand(new CharacterSelectCommand());

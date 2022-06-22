@@ -1,0 +1,174 @@
+#################
+#################
+#### Discord ####
+#################
+#################
+
+##############
+## Commands ##
+##############
+
+======
+|stop|
+======
+Command.StopCommand.name=stop
+Command.StopCommand.description=Stops the bot
+
+=======
+|waifu|
+=======
+Command.WaifuCommand.name=waifu
+Command.WaifuCommand.description=Provides waifus for the degenerate masses
+
+===========
+|character|
+===========
+Command.CharacterCommand.name=character
+Command.CharacterCommand.description=General utility command for player characters
+
+Subcommand.CharacterAttributeCommand.name=attribute
+Subcommand.CharacterAttributeCommand.description=Gets the character's attribute information
+Subcommand.CharacterAttributeCommand.attribute.name=attribute
+Subcommand.CharacterAttributeCommand.attribute.description=the name of the attribute to get
+
+Subcommand.CharacterInfoCommand.name=info
+Subcommand.CharacterInfoCommand.description=Gets an overview of the selected character sheet
+
+Subcommand.CharacterInventoryCommand.name=inventory
+Subcommand.CharacterInventoryCommand.description=Gets the character's inventory
+
+Subcommand.CharacterListCommand.name=list
+Subcommand.CharacterListCommand.description=Lists the user's available character sheets
+
+SubcommandGroup.CharacterRollCommand.name=roll
+SubcommandGroup.CharacterRollCommand.description=Roll for a character
+
+Subcommand.RollSaving.name=saving
+Subcommand.RollSaving.description=Roll for an saving check
+Subcommand.RollSaving.ability.name=ability
+Subcommand.RollSaving.ability.description=the ability to roll for
+
+Subcommand.RollSkill.name=skill
+Subcommand.RollSkill.description=Roll for a skill check
+Subcommand.RollSkill.skill.name=skill
+Subcommand.RollSkill.skill.description=the skill to roll for
+
+Subcommand.CharacterSelectCommand.name=select
+Subcommand.CharacterSelectCommand.description=Selects a character sheet
+Subcommand.CharacterSelectCommand.id.name=id
+Subcommand.CharacterSelectCommand.id.description=the id of the character sheet
+
+==========
+|campaign|
+==========
+Command.CampaignCommand.name=campaign
+Command.CampaignCommand.description=Generic command for campaigns
+
+Subcommand.CampaignInfoCommand.name=info
+Subcommand.CampaignInfoCommand.description=Gets info about the selected campaign
+
+Subcommand.CampaignSelectCommand.name=select
+Subcommand.CampaignSelectCommand.description=Selects a campaign to join
+=======
+|music|
+=======
+Command.MusicCommand.name=music
+Command.MusicCommand.description=For managing and playing music in vc
+
+Subcommand.MusicClearCommand.name=clear
+Subcommand.MusicClearCommand.description=Clears the queue
+
+Subcommand.MusicDisconnectCommand.name=disconnect
+Subcommand.MusicDisconnectCommand.description=Disconnects from voice channel
+
+Subcommand.MusicJoinCommand.name=join
+Subcommand.MusicJoinCommand.description=Joins the user's current voice channel
+
+Subcommand.MusicLoopCommand.name=loop
+Subcommand.MusicLoopCommand.description=Turns looping on and off
+
+Subcommand.MusicNowPlayingCommand.name=np
+Subcommand.MusicNowPlayingCommand.description=Displays currently playing track
+
+Subcommand.MusicPauseCommand.name = pause
+Subcommand.MusicPauseCommand.description=Pauses or unpauses the current track
+
+Subcommand.MusicPlayCommand.name=play
+Subcommand.MusicPlayCommand.description=Adds a song or playlist to queue
+Subcommand.MusicPlayCommand.url.name=url
+Subcommand.MusicPlayCommand.url.description=The song URL to play
+
+Subcommand.MusicQueueCommand.name=queue
+Subcommand.MusicQueueCommand.description=Displays the current queue of tracks
+Subcommand.MusicQueueCommand.page.name=page
+Subcommand.MusicQueueCommand.page.description=the page number
+
+Subcommand.MusicSansCommand.name=sans
+Subcommand.MusicSansCommand.description=bad time
+
+Subcommand.MusicSkipCommand.name=skip
+Subcommand.MusicSkipCommand.description=Skips the currently playing track
+
+#############
+#############
+#### DND ####
+#############
+#############
+
+###############
+## Abilities ##
+###############
+
+Ability.STRENGTH.name=Strength
+Ability.DEXTERITY.name=Dexterity
+Ability.CONSTITUTION.name=Constitution
+Ability.INTELLIGENCE.name=Intelligence
+Ability.WISDOM.name=Wisdom
+Ability.CHARISMA.name=Charisma
+
+############
+## Skills ##
+############
+
+Skill.ACROBATICS.name=Acrobatics
+Skill.ANIMAL_HANDLING.name=Animal Handling
+Skill.ARCANA.name=Arcana
+Skill.ATHLETICS.name=Athletics
+Skill.DECEPTION.name=Deception
+Skill.HISTORY.name=History
+Skill.INSIGHT.name=Insight
+Skill.INTIMIDATION.name=Intimidation
+Skill.INVESTIGATION.name=Investigation
+Skill.MEDICINE.name=Medicine
+Skill.NATURE.name=Nature
+Skill.PERCEPTION.name=Perception
+Skill.PERFORMANCE.name=Performance
+Skill.PERSUASION.name=Persuasion
+Skill.RELIGION.name=Religion
+Skill.SLEIGHT_OF_HAND.name=Sleight of Hand
+Skill.STEALTH.name=Stealth
+Skill.SURVIVAL.name=Survival
+
+##############
+## Currency ##
+##############
+
+Currency.COPPER.label=cp
+Currency.SILVER.label=sp
+Currency.ELECTRUM.label=ep
+Currency.GOLD.label=gp
+Currency.PLATINUM.label=pp
+
+###########
+## Races ##
+###########
+
+Race.Human.name=Human
+
+#############
+## Classes ##
+#############
+
+Class.Fighter.name=Fighter
+
+Class.Rogue.name=Rogue

@@ -3,8 +3,9 @@ package com.atelier.discord.commands.character;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.atelier.AtelierLanguageManager;
 import com.atelier.discord.User;
-import com.atelier.discord.commands.BaseSubcommand;
+import com.atelier.discord.commands.BaseInteraction.BaseSubcommand;
 import com.atelier.dnd.types.AtelierDB;
 import com.atelier.dnd.types.Sheet;
 
@@ -15,10 +16,9 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 public class CharacterSelectCommand extends BaseSubcommand {
 
-	public CharacterSelectCommand() {
-		super("select", "Selects a character sheet");
-	}
-
+	private final String optionIdName = AtelierLanguageManager.getInstance().get(this, "id.name");
+	private final String optionIdDescription = AtelierLanguageManager.getInstance().get(this, "id.description");
+	
 	@Override
 	public void execute(User user, SlashCommandInteractionEvent event) {
 		Sheet sheet = AtelierDB.getInstance().getSheet(UUID.fromString(event.getOption("id").getAsString()));
@@ -29,16 +29,14 @@ public class CharacterSelectCommand extends BaseSubcommand {
 
 	@Override
 	public void complete(User user, CommandAutoCompleteInteractionEvent event) {
-		event.replyChoiceStrings(user
-				.getSheets()
-				.stream()
+		event.replyChoiceStrings(user.getSheets().stream()
 				.map(s -> s.getId().toString())
 				.collect(Collectors.toList())).queue();
 	}
 	
 	@Override
 	public void addOptions(SubcommandData data) {
-		data.addOption(OptionType.STRING, "id", "the id of the character sheet", true, true);
+		data.addOption(OptionType.STRING, optionIdName, optionIdDescription, true, true);
 	}
 
 }
