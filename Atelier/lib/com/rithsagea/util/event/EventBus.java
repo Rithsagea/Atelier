@@ -44,6 +44,7 @@ public class EventBus {
 	}
 
 	public void registerListener(Listener listener) {
+		if(listener == null) return;
 		for (Method method : DataUtil.getMethods(listener.getClass())) {
 			if (method.getParameterCount() == 1) {
 				Parameter p = method.getParameters()[0];
