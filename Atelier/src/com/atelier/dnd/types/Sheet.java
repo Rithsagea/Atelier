@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 
 import org.mongojack.Id;
 
-import com.atelier.dnd.events.LoadHitPointsEvent;
 import com.atelier.dnd.events.LoadEvent.LoadSheetEvent;
+import com.atelier.dnd.events.LoadHitPointsEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
@@ -28,6 +28,7 @@ import com.atelier.dnd.events.LoadValuesEvent.LoadSkillModifierEvent;
 import com.atelier.dnd.types.character.AbstractClass;
 import com.atelier.dnd.types.character.AbstractRace;
 import com.atelier.dnd.types.character.CharacterAttribute;
+import com.atelier.dnd.types.character.races.Human;
 import com.atelier.dnd.types.enums.Ability;
 import com.atelier.dnd.types.enums.EquipmentType;
 import com.atelier.dnd.types.enums.Skill;
@@ -55,7 +56,7 @@ public class Sheet implements Listener {
 	private int maxHitPoints;
 	private transient Dice hitDice = new Dice();
 
-	private AbstractRace race;
+	private AbstractRace race = new Human();
 	private List<AbstractClass> classes = new ArrayList<>();
 	private Inventory inventory = new Inventory();
 
