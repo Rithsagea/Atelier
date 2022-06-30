@@ -87,7 +87,7 @@ Subcommand.MusicJoinCommand.description=Joins the user's current voice channel
 Subcommand.MusicLoopCommand.name=loop
 Subcommand.MusicLoopCommand.description=Turns looping on and off
 
-Subcommand.MusicNowPlayingCommand.name=np
+Subcommand.MusicNowPlayingCommand.name=nowplaying
 Subcommand.MusicNowPlayingCommand.description=Displays currently playing track
 
 Subcommand.MusicPauseCommand.name = pause

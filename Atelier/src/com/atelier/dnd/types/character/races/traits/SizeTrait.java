@@ -9,6 +9,8 @@ public class SizeTrait extends DescriptionAttribute {
 
 	private Size size;
 	
+	public SizeTrait() {this(null,null);}
+	
 	public SizeTrait(Size size, String info) {
 		super("Size", info);
 		

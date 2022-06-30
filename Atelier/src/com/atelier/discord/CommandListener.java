@@ -75,6 +75,7 @@ public class CommandListener extends ListenerAdapter {
 		
 		//global commands
 		JDA jda = event.getJDA();
+//		jda.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
 		Stream.of(waifuCommand, musicCommand)
 			.map(cmd -> jda.upsertCommand(cmd.getData()))
 			.forEach(cmd -> cmd.queue());
