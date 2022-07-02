@@ -9,6 +9,7 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atelier.console.AtelierConsole;
 import com.atelier.discord.CommandListener;
 import com.atelier.discord.LoginListener;
 import com.atelier.discord.MessageListener;
@@ -22,6 +23,7 @@ import net.dv8tion.jda.api.JDABuilder;
 public class AtelierBot {
 
 	private AtelierDB db;
+	private AtelierConsole console;
 	private Config config;
 
 	private Logger logger = LoggerFactory.getLogger("Atelier");
@@ -35,12 +37,15 @@ public class AtelierBot {
 
 		this.config = Config.init(configPath);
 		this.db = AtelierDB.init(config);
+		console = new AtelierConsole(System.in);
 	}
 
 	public void init() {
 		running = true;
 		logger.info("Initializing Atelier");
 
+		console.start();
+		
 		JDABuilder builder = JDABuilder.createDefault(config.getDiscordToken());
 		try {
 			jda = builder.build();
