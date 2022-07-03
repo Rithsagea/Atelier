@@ -28,6 +28,7 @@ public class AtelierAudioManager {
 	}
 
 	public void shutdown() {
+		audioHandlers.values().forEach(handler -> {handler.clearQueue(); handler.nextTrack();});
 		playerManager.shutdown();
 	}
 

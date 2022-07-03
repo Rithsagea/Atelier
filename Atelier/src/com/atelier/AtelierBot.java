@@ -22,6 +22,15 @@ import net.dv8tion.jda.api.JDABuilder;
 
 public class AtelierBot {
 
+	private static AtelierBot INSTANCE;
+	public static AtelierBot init(String configPath) {
+		return INSTANCE = new AtelierBot(configPath);
+	}
+	
+	public static AtelierBot getInstance() {
+		return INSTANCE;
+	}
+	
 	private AtelierDB db;
 	private AtelierConsole console;
 	private Config config;
@@ -32,7 +41,7 @@ public class AtelierBot {
 
 	private boolean running;
 
-	public AtelierBot(String configPath) {
+	private AtelierBot(String configPath) {
 		System.setProperty("http.agent", "Chrome");
 
 		this.config = Config.init(configPath);
@@ -40,11 +49,9 @@ public class AtelierBot {
 		console = new AtelierConsole(System.in);
 	}
 
-	public void init() {
+	public void start() {
 		running = true;
 		logger.info("Initializing Atelier");
-
-		console.start();
 		
 		JDABuilder builder = JDABuilder.createDefault(config.getDiscordToken());
 		try {
@@ -53,6 +60,8 @@ public class AtelierBot {
 			e.printStackTrace();
 			System.exit(0);
 		}
+		
+		console.start();
 
 		registerTasks();
 
@@ -79,10 +88,17 @@ public class AtelierBot {
 
 	public void stop() {
 		running = false;
-		jda.shutdownNow();
+		scheduler.shutdown();
+		
 		AtelierAudioManager.getInstance().shutdown();
+		jda.shutdownNow();
 		db.disconnect();
-
+		
+		try {
+			scheduler.awaitTermination(30, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		System.exit(0);
 	}
 
