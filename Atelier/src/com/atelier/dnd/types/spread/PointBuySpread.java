@@ -3,10 +3,8 @@ package com.atelier.dnd.types.spread;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.atelier.dnd.types.IndexedItem;
 import com.atelier.dnd.types.enums.Ability;
 
-@IndexedItem("point-buy")
 public class PointBuySpread implements AbilitySpread {
 
 	private Map<Ability, Integer> scores;

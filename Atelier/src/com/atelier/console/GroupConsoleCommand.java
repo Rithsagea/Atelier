@@ -1,5 +1,6 @@
 package com.atelier.console;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -7,9 +8,9 @@ import org.slf4j.Logger;
 
 public abstract class GroupConsoleCommand extends BaseConsoleCommand {
 
-	private Map<String, AbstractConsoleSubcommand> subcommands;
+	private Map<String, AbstractConsoleSubcommand> subcommands = new HashMap<>();
 	
-	public GroupConsoleCommand(String label, String[] aliases) {
+	public GroupConsoleCommand(String label, String... aliases) {
 		super(label, aliases);
 	}
 	
