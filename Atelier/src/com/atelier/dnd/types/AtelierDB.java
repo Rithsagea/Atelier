@@ -8,16 +8,14 @@ import java.util.UUID;
 import org.bson.UuidRepresentation;
 import org.mongojack.JacksonMongoCollection;
 import org.mongojack.ObjectMapperConfigurer;
-import org.reflections.Reflections;
-import org.reflections.util.ConfigurationBuilder;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.atelier.Config;
 import com.atelier.discord.User;
+import com.atelier.dnd.types.alpha.TypeRegistry;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -49,14 +47,14 @@ public class AtelierDB {
 	private MongoCollection<Campaign> campaignCollection;
 	private MongoCollection<Track> atelierTrack;
 
-	private ReplaceOptions replaceUpsertOption;
+	private ReplaceOptions replaceUpsertOption = new ReplaceOptions().upsert(true);;
 
-	private Map<Long, User> users;
-	private Map<UUID, Sheet> sheets;
-	private Map<UUID, Campaign> campaigns;
-	private Map<UUID, Track> tracks;
+	private Map<Long, User> users = new HashMap<>();
+	private Map<UUID, Sheet> sheets = new HashMap<>();
+	private Map<UUID, Campaign> campaigns = new HashMap<>();
+	private Map<UUID, Track> tracks = new HashMap<>();
 
-	private TypeRegistry typeRegistry;
+	private TypeRegistry typeRegistry = new TypeRegistry();
 
 	private AtelierDB(Config config) {
 		MongoClientSettings settings = MongoClientSettings.builder()
@@ -68,8 +66,8 @@ public class AtelierDB {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
 		mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-		registerSubtypes(mapper);
-
+		Types.registerTypes(typeRegistry);
+		typeRegistry.configureMapper(mapper);
 		ObjectMapperConfigurer.configureObjectMapper(mapper);
 
 		client = MongoClients.create(settings);
@@ -88,13 +86,6 @@ public class AtelierDB {
 			.withObjectMapper(mapper)
 			.build(db.getCollection("tracks", Track.class), Track.class, UuidRepresentation.JAVA_LEGACY);
 
-		replaceUpsertOption = new ReplaceOptions().upsert(true);
-
-		users = new HashMap<>();
-		sheets = new HashMap<>();
-		campaigns = new HashMap<>();
-		tracks = new HashMap<>();
-
 		if (!OFFLINE_MODE) {
 			userCollection.find().forEach((User user) -> users.put(user.getId(), user));
 			sheetCollection.find().forEach((Sheet sheet) -> {
@@ -105,20 +96,6 @@ public class AtelierDB {
 				campaigns.put(campaign.getId(), campaign));
 			atelierTrack.find().forEach((Track track) ->
 				tracks.put(track.getId(), track));
-		}
-	}
-
-	private void registerSubtypes(ObjectMapper mapper) {
-		String basePackage = "";
-//		basePackage = "com.tempera.atelier.dnd.types";
-		ConfigurationBuilder cb = new ConfigurationBuilder().forPackage(basePackage);
-
-		typeRegistry = new TypeRegistry();
-
-		for (Class<?> clazz : new Reflections(cb).getTypesAnnotatedWith(IndexedItem.class)) {
-			String id = clazz.getAnnotation(IndexedItem.class).value();
-			mapper.registerSubtypes(new NamedType(clazz, id));
-			typeRegistry.registerType(id, clazz);
 		}
 	}
 
