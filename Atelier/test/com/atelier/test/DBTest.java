@@ -1,12 +1,8 @@
 package com.atelier.test;
 
 import com.atelier.Config;
+import com.atelier.database.AtelierDB;
 import com.atelier.discord.User;
-import com.atelier.dnd.types.AtelierDB;
-import com.atelier.dnd.types.Sheet;
-import com.atelier.dnd.types.character.classes.Rogue;
-import com.atelier.dnd.types.enums.Ability;
-import com.atelier.util.WordUtil;
 
 public class DBTest {
 	public static void main(String[] args) {
@@ -19,22 +15,11 @@ public class DBTest {
 	}
 
 	public static void editDB(AtelierDB db) {
-		User user = db.getUser(171378138041942016l);
-
-		Sheet sheet = user.getSheet();
-
-		sheet.clearClasses();
-		sheet.addClass(new Rogue());
-		sheet.reload();
-		sheet.setHitPoints(10000);
-
-		System.out.println("User: " + user);
-		System.out.println("Name: " + sheet.getName());
-		for (Ability a : Ability.values()) {
-			System.out.printf("%s%s: %d [%s]\n",
-				sheet.hasSavingProficiency(a) ? "*" : "",
-				WordUtil.capitalize(a.name()), sheet.getAbilityScore(a),
-				WordUtil.formatModifier(sheet.getAbilityModifier(a)));
-		}
+		long id = 171378138041942016l;
+//		User user = new User(id);
+//		db.addUser(user);
+		
+		User user = db.getUser(id);
+		System.out.println(user.getId());
 	}
 }

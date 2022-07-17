@@ -14,8 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.mongojack.Id;
-
+import com.atelier.database.Id;
 import com.atelier.dnd.events.LoadEvent.LoadSheetEvent;
 import com.atelier.dnd.events.LoadHitPointsEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
@@ -35,15 +34,12 @@ import com.atelier.dnd.types.enums.Skill;
 import com.atelier.dnd.types.equipment.Inventory;
 import com.atelier.dnd.types.spread.AbilitySpread;
 import com.atelier.dnd.types.spread.PointBuySpread;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.rithsagea.util.event.EventBus;
 import com.rithsagea.util.event.EventHandler;
 import com.rithsagea.util.event.EventPriority;
 import com.rithsagea.util.event.Listener;
 import com.rithsagea.util.rand.Dice;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Sheet implements Listener {
 
 	@Id
@@ -75,8 +71,7 @@ public class Sheet implements Listener {
 
 	private transient Map<String, CharacterAttribute> attributes = new HashMap<>();
 
-	@JsonCreator
-	public Sheet(@Id UUID id) {
+	public Sheet(UUID id) {
 		this.id = id;
 	}
 

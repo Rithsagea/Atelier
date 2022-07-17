@@ -5,12 +5,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.mongojack.Id;
-
-import com.atelier.dnd.types.AtelierDB;
+import com.atelier.database.AtelierDB;
+import com.atelier.database.Id;
 import com.atelier.dnd.types.Campaign;
 import com.atelier.dnd.types.Sheet;
-import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class User {
 
@@ -26,8 +24,7 @@ public class User {
 	
 	private Set<UUID> sheets = new HashSet<>();
 	
-	@JsonCreator
-	public User(@Id long id) {
+	public User(long id) {
 		this.id = id;
 	}
 

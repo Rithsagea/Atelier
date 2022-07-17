@@ -5,11 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.atelier.database.IndexedItem;
 import com.atelier.discord.Menu;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
-import com.atelier.dnd.types.IndexedItem;
 import com.atelier.dnd.types.character.CharacterAttribute;
 import com.atelier.dnd.types.enums.Ability;
 import com.atelier.dnd.types.enums.EquipmentType;

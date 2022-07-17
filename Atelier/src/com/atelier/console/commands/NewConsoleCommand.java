@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 
 import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.console.GroupConsoleCommand;
-import com.atelier.dnd.types.AtelierDB;
+import com.atelier.database.AtelierDB;
 import com.atelier.dnd.types.Sheet;
 
 public class NewConsoleCommand extends GroupConsoleCommand {

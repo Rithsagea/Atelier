@@ -5,9 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.mongojack.Id;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.atelier.database.Id;
 
 public class Campaign {
 	@Id
@@ -16,8 +14,7 @@ public class Campaign {
 
 	private String name;
 
-	@JsonCreator
-	public Campaign(@Id UUID id) {
+	public Campaign(UUID id) {
 		this.id = id;
 	}
 

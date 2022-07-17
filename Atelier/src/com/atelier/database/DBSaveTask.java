@@ -1,4 +1,4 @@
-package com.atelier.dnd.types;
+package com.atelier.database;
 
 import com.atelier.AtelierTask;
 

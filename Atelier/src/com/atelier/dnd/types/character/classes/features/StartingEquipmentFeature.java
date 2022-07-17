@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.atelier.database.IndexedItem;
 import com.atelier.discord.Menu;
 import com.atelier.dnd.events.LoadEvent.LoadSheetEvent;
-import com.atelier.dnd.types.IndexedItem;
 import com.atelier.dnd.types.Sheet;
 import com.atelier.dnd.types.character.CharacterAttribute;
 import com.atelier.dnd.types.equipment.Inventory;

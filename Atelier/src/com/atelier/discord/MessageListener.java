@@ -1,6 +1,6 @@
 package com.atelier.discord;
 
-import com.atelier.dnd.types.AtelierDB;
+import com.atelier.database.AtelierDB;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

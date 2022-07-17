@@ -1,6 +1,6 @@
 package com.atelier.dnd.types.equipment.armor;
 
-import com.atelier.dnd.types.IndexedItem;
+import com.atelier.database.IndexedItem;
 import com.atelier.dnd.types.enums.Currency;
 import com.atelier.dnd.types.enums.Currency.Price;
 import com.atelier.dnd.types.equipment.Armor;

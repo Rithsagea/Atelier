@@ -4,9 +4,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.atelier.AtelierLanguageManager;
+import com.atelier.database.AtelierDB;
 import com.atelier.discord.User;
 import com.atelier.discord.commands.BaseInteraction.BaseSubcommand;
-import com.atelier.dnd.types.AtelierDB;
 import com.atelier.dnd.types.Sheet;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;

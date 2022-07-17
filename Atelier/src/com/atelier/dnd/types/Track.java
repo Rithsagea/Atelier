@@ -5,9 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.mongojack.Id;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.atelier.database.Id;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 public class Track {
@@ -15,8 +13,7 @@ public class Track {
 	private final UUID id;
 	private Set<AudioTrack> tracks = new HashSet<>();
 	
-	@JsonCreator
-	public Track(@Id UUID id) {
+	public Track(UUID id) {
 		this.id = id;
 	}
 	
@@ -36,6 +33,7 @@ public class Track {
 		return id;
 	}
 	
+	@Override
 	public String toString() {
 		return String.format("%s", id);
 	}

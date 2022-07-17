@@ -1,6 +1,6 @@
 package com.atelier.dnd.types.character.races.traits;
 
-import com.atelier.dnd.types.IndexedItem;
+import com.atelier.database.IndexedItem;
 import com.atelier.dnd.types.character.DescriptionAttribute;
 import com.atelier.dnd.types.enums.Size;
 

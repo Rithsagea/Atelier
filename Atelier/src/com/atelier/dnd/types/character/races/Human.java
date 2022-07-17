@@ -1,6 +1,6 @@
 package com.atelier.dnd.types.character.races;
 
-import com.atelier.dnd.types.IndexedItem;
+import com.atelier.database.IndexedItem;
 import com.atelier.dnd.types.character.CharacterRace;
 import com.atelier.dnd.types.character.races.traits.AgeTrait;
 import com.atelier.dnd.types.character.races.traits.SizeTrait;

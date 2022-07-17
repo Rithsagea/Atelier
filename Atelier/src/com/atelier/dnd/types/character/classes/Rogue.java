@@ -1,6 +1,6 @@
 package com.atelier.dnd.types.character.classes;
 
-import com.atelier.dnd.types.IndexedItem;
+import com.atelier.database.IndexedItem;
 import com.atelier.dnd.types.character.CharacterClass;
 import com.atelier.dnd.types.character.classes.features.HitPointFeature;
 import com.atelier.dnd.types.character.classes.features.ProficiencyFeature;

@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
 public class DataUtil {
 	public static <T> Set<T> set(@SuppressWarnings("unchecked") T... t) {
@@ -74,6 +77,19 @@ public class DataUtil {
 		return methods;
 	}
 
+	public static Set<Field> getFields(Class<?> clazz) {
+		Map<String, Field> fields = new TreeMap<>();
+		
+		for(Class<?> c = clazz; c != null; c = c.getSuperclass()) {
+			Stream.of(c.getDeclaredFields())
+				.filter(field -> !Modifier.isStatic(field.getModifiers()))
+				.filter(field -> !fields.containsKey(field.getName()))
+				.forEach(field -> fields.put(field.getName(), field));
+		}
+		
+		return new LinkedHashSet<>(fields.values());
+	}
+	
 	private static Object methodKey(Method m) {
 		return Arrays.asList(m.getName(),
 			MethodType.methodType(m.getReturnType(), m.getParameterTypes()));
@@ -99,5 +115,42 @@ public class DataUtil {
 		}
 		
 		return null;
+	}
+
+	public static boolean isNoneType(Object obj) {
+		if(obj == null) return true;
+		
+		if(obj instanceof int[]) return ((int[]) obj).length == 0;
+		if(obj instanceof int[][]) return ((int[][]) obj).length == 0;
+		if(obj instanceof double[]) return ((double[]) obj).length == 0;
+		if(obj instanceof double[][]) return ((double[][]) obj).length == 0;
+		if(obj instanceof short[]) return ((short[]) obj).length == 0;
+		if(obj instanceof byte[]) return ((byte[]) obj).length == 0;
+		if(obj instanceof boolean[]) return ((boolean[]) obj).length == 0;
+		if(obj instanceof Object[]) return ((Object[]) obj).length == 0;
+		
+		if(obj instanceof Collection) return ((Collection<?>) obj).isEmpty();
+		if(obj instanceof Map) return ((Map<?, ?>) obj).isEmpty();
+		
+		return false;
+	}
+
+	// https://stackoverflow.com/a/1704658
+	private static final Map<Class<?>, Class<?>> WRAPPER_MAP;
+	static {
+		WRAPPER_MAP = new HashMap<>();
+		WRAPPER_MAP.put(boolean.class, Boolean.class);
+		WRAPPER_MAP.put(byte.class, Byte.class);
+		WRAPPER_MAP.put(char.class, Character.class);
+		WRAPPER_MAP.put(double.class, Double.class);
+		WRAPPER_MAP.put(float.class, Float.class);
+		WRAPPER_MAP.put(int.class, Integer.class);
+		WRAPPER_MAP.put(long.class, Long.class);
+		WRAPPER_MAP.put(short.class, Short.class);
+		WRAPPER_MAP.put(void.class, Void.class);
+	}
+	
+	public static Class<?> getWrapper(Class<?> primitiveClass) {
+		return WRAPPER_MAP.get(primitiveClass);
 	}
 }

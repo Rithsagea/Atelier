@@ -2,12 +2,12 @@ package com.atelier.dnd.types.character.classes.features;
 
 import java.awt.Color;
 
+import com.atelier.database.IndexedItem;
 import com.atelier.discord.Menu;
 import com.atelier.dnd.events.LoadHitPointsEvent;
 import com.atelier.dnd.events.LoadEvent.LoadClassEvent;
 import com.atelier.dnd.events.LoadEvent.LoadSheetEvent;
 import com.atelier.dnd.events.character.LevelUpClassEvent;
-import com.atelier.dnd.types.IndexedItem;
 import com.atelier.dnd.types.character.AbstractClass;
 import com.atelier.dnd.types.character.CharacterAttribute;
 import com.atelier.dnd.types.enums.Ability;

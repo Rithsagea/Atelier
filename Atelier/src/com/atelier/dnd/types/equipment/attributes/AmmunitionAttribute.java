@@ -1,6 +1,6 @@
 package com.atelier.dnd.types.equipment.attributes;
 
-import com.atelier.dnd.types.IndexedItem;
+import com.atelier.database.IndexedItem;
 
 @IndexedItem("ammunition")
 public class AmmunitionAttribute implements ItemAttribute {

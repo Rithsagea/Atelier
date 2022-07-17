@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 
 import com.atelier.AtelierBot;
 import com.atelier.Config;
+import com.atelier.database.AtelierDB;
 import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.CommandRegistry;
 import com.atelier.discord.commands.StopCommand;
@@ -13,7 +14,6 @@ import com.atelier.discord.commands.WaifuCommand;
 import com.atelier.discord.commands.character.CharacterCommand;
 import com.atelier.discord.commands.music.MusicCommand;
 import com.atelier.dnd.commands.campaign.CampaignCommand;
-import com.atelier.dnd.types.AtelierDB;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;

@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atelier.console.AtelierConsole;
+import com.atelier.database.AtelierDB;
+import com.atelier.database.DBSaveTask;
 import com.atelier.discord.CommandListener;
 import com.atelier.discord.LoginListener;
 import com.atelier.discord.MessageListener;
 import com.atelier.discord.commands.music.AtelierAudioManager;
-import com.atelier.dnd.types.AtelierDB;
-import com.atelier.dnd.types.DBSaveTask;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
