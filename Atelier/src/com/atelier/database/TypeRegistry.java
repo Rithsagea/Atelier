@@ -8,7 +8,6 @@ import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 
-import com.atelier.discord.User;
 import com.mongodb.MongoClientSettings;
 
 public class TypeRegistry implements CodecProvider {
@@ -18,7 +17,8 @@ public class TypeRegistry implements CodecProvider {
 		return INSTANCE;
 	}
 	
-	private Map<Class<?>, Codec<?>> factories;
+	private Map<Class<?>, Factory<?>> factories;
+	private Map<Class<?>, Codec<?>> codecs;
 	private CodecRegistry codecRegistry;
 	
 	private TypeRegistry() {
@@ -27,17 +27,20 @@ public class TypeRegistry implements CodecProvider {
 				CodecRegistries.fromProviders(this));
 		
 		factories = new HashMap<>();
+		codecs = new HashMap<>();
 		
-		registerType(new BaseFactory<User>(User.class) {
-			@Override
-			public User build() {
-				return new User(0l);
-			}
-		});
+		registerType(new UserFactory());
 	}
 	
-	public void registerType(Factory<?> typeFactory) {
-		factories.put(typeFactory.getEncoderClass(), typeFactory);
+	public <T> void registerType(Factory<T> factory) {
+		Class<T> clazz = factory.getTypeClass();
+		factories.put(clazz, factory);
+		codecs.put(clazz, new BaseCodec<T>(clazz));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> Factory<T> getFactory(Class<T> type) {
+		return (Factory<T>) factories.get(type);
 	}
 	
 	public CodecRegistry getCodecRegistry() {
@@ -47,7 +50,7 @@ public class TypeRegistry implements CodecProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
-		return (Codec<T>) factories.get(clazz);
+		return (Codec<T>) codecs.get(clazz);
 	}
 
 }

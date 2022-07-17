@@ -1,7 +1,16 @@
 package com.atelier.database;
 
-import org.bson.codecs.Codec;
-
-public interface Factory<T> extends Codec<T> {
-	public T build();
+public abstract class Factory<T> {
+	
+	private Class<T> typeClass;
+	
+	public Factory(Class<T> typeClass) {
+		this.typeClass = typeClass;
+	}
+	
+	public Class<T> getTypeClass() {
+		return typeClass;
+	}
+	
+	public abstract T build();
 }

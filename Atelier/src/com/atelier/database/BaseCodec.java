@@ -14,11 +14,11 @@ import org.bson.codecs.configuration.CodecRegistry;
 
 import com.rithsagea.util.DataUtil;
 
-public class BaseFactory<T> implements Factory<T> {
+public class BaseCodec<T> implements Codec<T> {
 	
 	private Class<T> encoderClass;
 	
-	protected BaseFactory(Class<T> encoderClass) {
+	protected BaseCodec(Class<T> encoderClass) {
 		this.encoderClass = encoderClass;
 	}
 	
@@ -51,7 +51,7 @@ public class BaseFactory<T> implements Factory<T> {
 	@Override
 	public T decode(BsonReader reader, DecoderContext decoderContext) {
 		
-		T obj = build();
+		T obj = TypeRegistry.getInstance().getFactory(encoderClass).build();
 		
 		CodecRegistry codecRegistry = TypeRegistry.getInstance().getCodecRegistry();
 		
@@ -90,10 +90,5 @@ public class BaseFactory<T> implements Factory<T> {
 	@Override
 	public Class<T> getEncoderClass() {
 		return encoderClass;
-	}
-
-	@Override
-	public T build() {
-		return null;
 	}
 }
