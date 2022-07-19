@@ -1,13 +1,13 @@
 package com.atelier.dnd.types.equipment.weapons;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.enums.Currency;
 import com.atelier.dnd.types.enums.EquipmentType;
 import com.atelier.dnd.types.enums.Currency.Price;
 import com.atelier.dnd.types.equipment.Weapon;
 import com.atelier.dnd.types.equipment.attributes.ThrownAttribute;
 
-@IndexedItem("phb-javelin")
+@Subtype("phb-javelin")
 public class PHBJavelin extends Weapon {
 
 	public PHBJavelin() {

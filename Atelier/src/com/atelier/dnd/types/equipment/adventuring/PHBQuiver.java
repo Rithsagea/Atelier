@@ -1,11 +1,11 @@
 package com.atelier.dnd.types.equipment.adventuring;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.enums.Currency;
 import com.atelier.dnd.types.enums.Currency.Price;
 import com.atelier.dnd.types.equipment.AdventuringGear;
 
-@IndexedItem("phb-quiver")
+@Subtype("phb-quiver")
 public class PHBQuiver extends AdventuringGear {
 
 	public PHBQuiver() {

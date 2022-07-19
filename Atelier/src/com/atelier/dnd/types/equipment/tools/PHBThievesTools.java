@@ -1,11 +1,11 @@
 package com.atelier.dnd.types.equipment.tools;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.enums.Currency;
 import com.atelier.dnd.types.enums.Currency.Price;
 import com.atelier.dnd.types.equipment.Tools;
 
-@IndexedItem("phb-thieves-tools")
+@Subtype("phb-thieves-tools")
 public class PHBThievesTools extends Tools {
 
 	public PHBThievesTools() {

@@ -14,20 +14,26 @@ import org.bson.codecs.configuration.CodecRegistry;
 
 import com.rithsagea.util.DataUtil;
 
-public class BaseCodec<T> implements Codec<T> {
+public class AtelierCodec<T> implements Codec<T> {
 	
 	private Class<T> encoderClass;
 	
-	protected BaseCodec(Class<T> encoderClass) {
+	public AtelierCodec(Class<T> encoderClass) {
 		this.encoderClass = encoderClass;
 	}
 	
 	@Override
 	public void encode(BsonWriter writer, T value, EncoderContext encoderContext) {
-		CodecRegistry codecRegistry = TypeRegistry.getInstance().getCodecRegistry();
+		TypeRegistry types = TypeRegistry.getInstance();
+		CodecRegistry codecRegistry = types.getCodecRegistry();
 		
 		writer.writeStartDocument();
+		
+		Subtype ann = value.getClass().getAnnotation(Subtype.class);
+		if(ann != null) writer.writeString("_type", ann.value());
+		
 		for(Field field : DataUtil.getFields(encoderClass)) {
+			
 			if(field.isAnnotationPresent(Id.class)) continue;
 			
 			try {
@@ -69,6 +75,8 @@ public class BaseCodec<T> implements Codec<T> {
 			Field field = fieldMap.get(name);
 			if(name.equals("_id"))
 			if(field == null) continue; // TODO: handle unknown case
+			
+			//TODO handle subtypes
 			
 			field.setAccessible(true);
 			Class<?> fieldType = field.getType();

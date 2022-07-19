@@ -1,6 +1,6 @@
 package com.atelier.dnd.types.equipment.weapons;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.enums.Currency;
 import com.atelier.dnd.types.enums.EquipmentType;
 import com.atelier.dnd.types.enums.Currency.Price;
@@ -8,7 +8,7 @@ import com.atelier.dnd.types.equipment.Weapon;
 import com.atelier.dnd.types.equipment.attributes.FinesseAttribute;
 import com.atelier.dnd.types.equipment.attributes.LightAttribute;
 
-@IndexedItem("phb-shortsword")
+@Subtype("phb-shortsword")
 public class PHBShortsword extends Weapon {
 	public PHBShortsword() {
 		super("Shortsword", null,

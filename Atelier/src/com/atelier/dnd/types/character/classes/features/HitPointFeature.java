@@ -2,7 +2,7 @@ package com.atelier.dnd.types.character.classes.features;
 
 import java.awt.Color;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.discord.Menu;
 import com.atelier.dnd.events.LoadHitPointsEvent;
 import com.atelier.dnd.events.LoadEvent.LoadClassEvent;
@@ -21,7 +21,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 
-@IndexedItem("feature-hit-points")
+@Subtype("feature-hit-points")
 public class HitPointFeature implements CharacterAttribute {
 
 	private class HitPointMenu implements Menu {

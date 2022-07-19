@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.discord.Menu;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 
-@IndexedItem("feature-proficiencies")
+@Subtype("feature-proficiencies")
 public class ProficiencyFeature implements CharacterAttribute {
 	private Set<Ability> savingProficiencies;
 	private Set<EquipmentType> equipmentProficiencies;

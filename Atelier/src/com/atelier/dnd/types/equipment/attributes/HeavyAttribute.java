@@ -1,8 +1,8 @@
 package com.atelier.dnd.types.equipment.attributes;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 
-@IndexedItem("heavy")
+@Subtype("heavy")
 public class HeavyAttribute implements ItemAttribute {
 
 	@Override

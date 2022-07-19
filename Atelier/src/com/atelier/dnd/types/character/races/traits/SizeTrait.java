@@ -1,10 +1,10 @@
 package com.atelier.dnd.types.character.races.traits;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.character.DescriptionAttribute;
 import com.atelier.dnd.types.enums.Size;
 
-@IndexedItem("size-trait")
+@Subtype("size-trait")
 public class SizeTrait extends DescriptionAttribute {
 
 	private Size size;

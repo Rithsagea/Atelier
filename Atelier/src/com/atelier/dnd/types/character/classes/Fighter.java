@@ -1,6 +1,6 @@
 package com.atelier.dnd.types.character.classes;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.character.CharacterClass;
 import com.atelier.dnd.types.character.classes.features.HitPointFeature;
 import com.atelier.dnd.types.character.classes.features.ProficiencyFeature;
@@ -16,7 +16,7 @@ import com.atelier.dnd.types.equipment.weapons.PHBDagger;
 import com.rithsagea.util.DataUtil;
 import com.rithsagea.util.choice.Choice;
 
-@IndexedItem("fighter")
+@Subtype("fighter")
 public class Fighter extends CharacterClass{
 
 	public Fighter() {

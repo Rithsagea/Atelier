@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.discord.Menu;
 import com.atelier.dnd.events.LoadEvent.LoadSheetEvent;
 import com.atelier.dnd.types.Sheet;
@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu.Builder;
 
-@IndexedItem("feature-starting-equipment")
+@Subtype("feature-starting-equipment")
 public class StartingEquipmentFeature implements CharacterAttribute {
 
 	public static class EquipmentOption {

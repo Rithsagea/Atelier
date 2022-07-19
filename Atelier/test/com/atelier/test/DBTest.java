@@ -16,10 +16,10 @@ public class DBTest {
 
 	public static void editDB(AtelierDB db) {
 		long id = 171378138041942016l;
-//		User user = new User(id);
-//		db.addUser(user);
+		User user = new User(id);
+		db.addUser(user);
 		
-		User user = db.getUser(id);
-		System.out.println(user.getId());
+//		User user = db.getUser(id);
+		user.setName("Rithsagea");
 	}
 }

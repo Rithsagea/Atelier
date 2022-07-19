@@ -1,12 +1,12 @@
 package com.atelier.dnd.types.character.races;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.character.CharacterRace;
 import com.atelier.dnd.types.character.races.traits.AgeTrait;
 import com.atelier.dnd.types.character.races.traits.SizeTrait;
 import com.atelier.dnd.types.enums.Size;
 
-@IndexedItem("human")
+@Subtype("human")
 public class Human extends CharacterRace {
 
 	public Human() {

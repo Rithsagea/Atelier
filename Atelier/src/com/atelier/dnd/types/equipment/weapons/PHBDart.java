@@ -1,6 +1,6 @@
 package com.atelier.dnd.types.equipment.weapons;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.enums.Currency;
 import com.atelier.dnd.types.enums.EquipmentType;
 import com.atelier.dnd.types.enums.Currency.Price;
@@ -9,7 +9,7 @@ import com.atelier.dnd.types.equipment.attributes.FinesseAttribute;
 import com.atelier.dnd.types.equipment.attributes.RangeAttribute;
 import com.atelier.dnd.types.equipment.attributes.ThrownAttribute;
 
-@IndexedItem("phb-dart")
+@Subtype("phb-dart")
 public class PHBDart extends Weapon {
 
 	public PHBDart() {

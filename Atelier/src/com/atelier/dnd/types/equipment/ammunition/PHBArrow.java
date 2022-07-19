@@ -1,11 +1,11 @@
 package com.atelier.dnd.types.equipment.ammunition;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.atelier.dnd.types.enums.Currency;
 import com.atelier.dnd.types.enums.Currency.Price;
 import com.atelier.dnd.types.equipment.Ammunition;
 
-@IndexedItem("phb-arrow")
+@Subtype("phb-arrow")
 public class PHBArrow extends Ammunition {
 
 	public PHBArrow() {

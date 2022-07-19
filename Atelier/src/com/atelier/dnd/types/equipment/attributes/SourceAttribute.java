@@ -1,10 +1,10 @@
 package com.atelier.dnd.types.equipment.attributes;
 
-import com.atelier.database.IndexedItem;
+import com.atelier.database.Subtype;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@IndexedItem("source")
+@Subtype("source")
 public class SourceAttribute implements ItemAttribute {
 
 	private String source;
