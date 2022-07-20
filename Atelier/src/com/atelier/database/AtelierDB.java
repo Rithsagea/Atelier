@@ -41,6 +41,7 @@ public class AtelierDB {
 	private ReplaceOptions replaceUpsertOption = new ReplaceOptions().upsert(true);
 	
 	private MongoCollection<User> userCollection;
+	private MongoCollection<Sheet> sheetCollection;
 	
 	private AtelierDB(Config config) {
 		MongoClientSettings settings = MongoClientSettings.builder()
@@ -83,6 +84,7 @@ public class AtelierDB {
 	}
 
 	public void addSheet(Sheet sheet) {
+		sheets.put(sheet.getId(), sheet);
 	}
 	
 	public Campaign getCampaign(UUID id) {
@@ -101,14 +103,25 @@ public class AtelierDB {
 	
 	public void load() {
 		userCollection = database.getCollection("users", User.class);
+		sheetCollection = database.getCollection("sheets", Sheet.class);
+		
 		userCollection.find().forEach((User user) -> users.put(user.getId(), user));
+		sheetCollection.find().forEach((Sheet sheet) -> {
+			sheets.put(sheet.getId(), sheet);
+			sheet.reload();
+		});
 	}
 	
 	private void updateUser(User user) {
 		userCollection.replaceOne(Filters.eq("_id", user.getId()), user, replaceUpsertOption);
 	}
 	
+	private void updateSheet(Sheet sheet) {
+		sheetCollection.replaceOne(Filters.eq("_id", sheet.getId()), sheet, replaceUpsertOption);
+	}
+	
 	public void save() {
 		users.values().forEach(this::updateUser);
+		sheets.values().forEach(this::updateSheet);
 	}
 }

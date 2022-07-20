@@ -7,15 +7,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.atelier.database.Id;
-import com.atelier.dnd.events.LoadEvent.LoadSheetEvent;
 import com.atelier.dnd.events.LoadHitPointsEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadEquipmentProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
@@ -27,13 +22,11 @@ import com.atelier.dnd.events.LoadValuesEvent.LoadSkillModifierEvent;
 import com.atelier.dnd.types.character.AbstractClass;
 import com.atelier.dnd.types.character.AbstractRace;
 import com.atelier.dnd.types.character.CharacterAttribute;
-import com.atelier.dnd.types.character.races.Human;
 import com.atelier.dnd.types.enums.Ability;
 import com.atelier.dnd.types.enums.EquipmentType;
 import com.atelier.dnd.types.enums.Skill;
 import com.atelier.dnd.types.equipment.Inventory;
 import com.atelier.dnd.types.spread.AbilitySpread;
-import com.atelier.dnd.types.spread.PointBuySpread;
 import com.rithsagea.util.event.EventBus;
 import com.rithsagea.util.event.EventHandler;
 import com.rithsagea.util.event.EventPriority;
@@ -46,15 +39,15 @@ public class Sheet implements Listener {
 	private final UUID id;
 
 	private String name;
-	private AbilitySpread baseScores = new PointBuySpread();
+	private AbilitySpread baseScores;// = new PointBuySpread();
 
 	private int hitPoints;
 	private int maxHitPoints;
-	private transient Dice hitDice = new Dice();
+	private transient Dice hitDice;// = new Dice();
 
-	private AbstractRace race = new Human();
+	private AbstractRace race ;// = new Human();
 	private List<AbstractClass> classes = new ArrayList<>();
-	private Inventory inventory = new Inventory();
+	private Inventory inventory;// = new Inventory();
 
 	private transient EventBus eventBus = new EventBus();
 
@@ -87,44 +80,43 @@ public class Sheet implements Listener {
 	// EVENT HANDLERS
 
 	public void reload() {
-		eventBus.clearListeners();
-		eventBus.registerListener(this);
-
-		
-		eventBus.registerListener(race);
-		for(Entry<String, CharacterAttribute> entry : race.getTraits().entrySet()) {
-			eventBus.registerListener(entry.getValue());
-			attributes.put(entry.getKey(), entry.getValue());
-		}
-		
-		for (AbstractClass c : classes) {
-			eventBus.registerListener(c);
-			for (Entry<String, CharacterAttribute> entry : c.getFeatures().entrySet()) {
-				eventBus.registerListener(entry.getValue());
-				attributes.put(entry.getKey(), entry.getValue());
-			}
-		}
-
-		eventBus.submitEvent(new LoadSheetEvent(this));
-
-		eventBus.submitEvent(new LoadSavingProficiencyEvent(this));
-		eventBus.submitEvent(new LoadSkillProficiencyEvent(this));
-		eventBus.submitEvent(new LoadEquipmentProficiencyEvent(this));
-
-		eventBus.submitEvent(new LoadAbilityScoreEvent(this, 
-				Stream.of(Ability.values()).collect(Collectors.toMap(
-						Function.identity(), this::getBaseScore))));
-		eventBus.submitEvent(new LoadAbilityModifierEvent(this, 
-				Stream.of(Ability.values()).collect(Collectors.toMap( 
-						Function.identity(), a -> (getAbilityScore(a) - 10) / 2))));
-		eventBus.submitEvent(new LoadSavingModifierEvent(this,
-				Stream.of(Ability.values()).collect(Collectors.toMap(
-						Function.identity(), a -> (getAbilityModifier(a) + (hasSavingProficiency(a) ? proficiencyBonus : 0))))));
-		eventBus.submitEvent(new LoadSkillModifierEvent(this,
-				Stream.of(Skill.values()).collect(Collectors.toMap(
-						Function.identity(), s -> (getSkillModifier(s) + (hasSkillProficiency(s) ? proficiencyBonus : 0))))));
-		
-		eventBus.submitEvent(new LoadHitPointsEvent(this));
+//		eventBus.clearListeners();
+//		eventBus.registerListener(this);
+//
+//		eventBus.registerListener(race);
+//		for(Entry<String, CharacterAttribute> entry : race.getTraits().entrySet()) {
+//			eventBus.registerListener(entry.getValue());
+//			attributes.put(entry.getKey(), entry.getValue());
+//		}
+//		
+//		for (AbstractClass c : classes) {
+//			eventBus.registerListener(c);
+//			for (Entry<String, CharacterAttribute> entry : c.getFeatures().entrySet()) {
+//				eventBus.registerListener(entry.getValue());
+//				attributes.put(entry.getKey(), entry.getValue());
+//			}
+//		}
+//
+//		eventBus.submitEvent(new LoadSheetEvent(this));
+//
+//		eventBus.submitEvent(new LoadSavingProficiencyEvent(this));
+//		eventBus.submitEvent(new LoadSkillProficiencyEvent(this));
+//		eventBus.submitEvent(new LoadEquipmentProficiencyEvent(this));
+//
+//		eventBus.submitEvent(new LoadAbilityScoreEvent(this, 
+//				Stream.of(Ability.values()).collect(Collectors.toMap(
+//						Function.identity(), this::getBaseScore))));
+//		eventBus.submitEvent(new LoadAbilityModifierEvent(this, 
+//				Stream.of(Ability.values()).collect(Collectors.toMap( 
+//						Function.identity(), a -> (getAbilityScore(a) - 10) / 2))));
+//		eventBus.submitEvent(new LoadSavingModifierEvent(this,
+//				Stream.of(Ability.values()).collect(Collectors.toMap(
+//						Function.identity(), a -> (getAbilityModifier(a) + (hasSavingProficiency(a) ? proficiencyBonus : 0))))));
+//		eventBus.submitEvent(new LoadSkillModifierEvent(this,
+//				Stream.of(Skill.values()).collect(Collectors.toMap(
+//						Function.identity(), s -> (getSkillModifier(s) + (hasSkillProficiency(s) ? proficiencyBonus : 0))))));
+//		
+//		eventBus.submitEvent(new LoadHitPointsEvent(this));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

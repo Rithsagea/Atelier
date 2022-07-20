@@ -10,7 +10,8 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atelier.discord.User;
+import com.atelier.discord.UserFactory;
+import com.atelier.dnd.types.SheetFactory;
 import com.mongodb.MongoClientSettings;
 
 public class TypeRegistry implements CodecProvider {
@@ -36,14 +37,27 @@ public class TypeRegistry implements CodecProvider {
 		codecs = new HashMap<>();
 		subtypes = new HashMap<>();
 		
+		
+		
 		registerType(new UserFactory());
-		registerSubtype(User.class, User.class);
+		registerType(new SheetFactory());
 	}
 	
 	public <T> void registerType(Factory<T> factory) {
-		Class<T> clazz = factory.getTypeClass();
+		@SuppressWarnings("unchecked")
+		Class<T> clazz = (Class<T>) factory.build().getClass();
+		registerType(clazz, factory, new AtelierCodec<T>(clazz));
+	}
+	
+	public <T> void registerType(Factory<T> factory, Codec<T> codec) {
+		@SuppressWarnings("unchecked")
+		Class<T> clazz = (Class<T>) factory.build().getClass();
+		registerType(clazz, factory, codec);
+	}
+	
+	public <T> void registerType(Class<T> clazz, Factory<T> factory, Codec<T> codec) {
 		factories.put(clazz, factory);
-		codecs.put(clazz, new AtelierCodec<T>(clazz));
+		codecs.put(clazz, codec);
 	}
 	
 	//TODO change subtype to subtypefactory
@@ -67,8 +81,9 @@ public class TypeRegistry implements CodecProvider {
 		return codecRegistry;
 	}
 	
-	public Class<?> getSubtype(Class<?> supertype, String name) {
-		return subtypes.get(supertype).get(name);
+	@SuppressWarnings("unchecked")
+	public <T> Class<? extends T> getSubtype(Class<T> supertype, String name) {
+		return (Class<? extends T>) subtypes.get(supertype).get(name);
 	}
 	
 	

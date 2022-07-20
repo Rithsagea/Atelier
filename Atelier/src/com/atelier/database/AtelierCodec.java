@@ -1,6 +1,7 @@
 package com.atelier.database;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,8 @@ public class AtelierCodec<T> implements Codec<T> {
 		for(Field field : DataUtil.getFields(encoderClass)) {
 			
 			if(field.isAnnotationPresent(Id.class)) continue;
-			
+			if(Modifier.isTransient(field.getModifiers())) continue;
+				
 			try {
 				field.setAccessible(true);
 				Object obj = field.get(value);
@@ -57,40 +59,65 @@ public class AtelierCodec<T> implements Codec<T> {
 	@Override
 	public T decode(BsonReader reader, DecoderContext decoderContext) {
 		
-		T obj = TypeRegistry.getInstance().getFactory(encoderClass).build();
-		
-		CodecRegistry codecRegistry = TypeRegistry.getInstance().getCodecRegistry();
+		T obj = null;
+		TypeRegistry types = TypeRegistry.getInstance();
+		CodecRegistry codecRegistry = types.getCodecRegistry();
 		
 		Map<String, Field> fieldMap = new HashMap<>();
 		for(Field field : DataUtil.getFields(encoderClass)) {
+			if(Modifier.isTransient(field.getModifiers())) continue;
+			
 			if(field.isAnnotationPresent(Id.class))
 				fieldMap.put("_id", field);
 			else
 				fieldMap.put(field.getName(), field);
 		}
 		
+		Object id = null;
+		
 		reader.readStartDocument();
 		while(reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
 			String name = reader.readName();
 			Field field = fieldMap.get(name);
-			if(name.equals("_id"))
-			if(field == null) continue; // TODO: handle unknown case
 			
-			//TODO handle subtypes
+			if(name.equals("_type")) { // handle subtypes
+				Class<? extends T> type = types.getSubtype(encoderClass, reader.readString());
+				obj = types.getFactory(type).build();
+				continue;
+			}
+			
+			if(field == null) continue; // TODO: handle unknown case for id
 			
 			field.setAccessible(true);
 			Class<?> fieldType = field.getType();
 			if(fieldType.isPrimitive()) fieldType = DataUtil.getWrapper(fieldType);
-			Codec<?> codec = codecRegistry.get(fieldType);
+			
+			if(name.equals("_id")) {
+				id = codecRegistry.get(fieldType).decode(reader, decoderContext);
+				continue;
+			}
+			
+			if(obj == null) obj = types.getFactory(encoderClass).build();
+			
 			try {
-				field.set(obj, codec.decode(reader, decoderContext));
+				Codec<?> codec = codecRegistry.get(fieldType);
+				Object res = codec.decode(reader, decoderContext);
+				field.set(obj, res);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+			//TODO handle subtypes
 		}
 		
 		reader.readEndDocument();
+		
+		Field idField = fieldMap.get("_id");
+		idField.setAccessible(true);
+		try {
+			idField.set(obj, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return obj;
 	}

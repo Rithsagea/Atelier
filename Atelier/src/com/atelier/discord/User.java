@@ -7,11 +7,9 @@ import java.util.stream.Collectors;
 
 import com.atelier.database.AtelierDB;
 import com.atelier.database.Id;
-import com.atelier.database.Subtype;
 import com.atelier.dnd.types.Campaign;
 import com.atelier.dnd.types.Sheet;
 
-@Subtype("test")
 public class User {
 
 	@Id
