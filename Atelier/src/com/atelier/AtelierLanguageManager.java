@@ -4,8 +4,6 @@ import com.atelier.discord.commands.AbstractInteraction;
 import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommandGroup;
-import com.atelier.dnd.types.character.AbstractClass;
-import com.atelier.dnd.types.character.AbstractRace;
 import com.rithsagea.util.lang.LanguageManager;
 
 public class AtelierLanguageManager extends LanguageManager {
@@ -17,8 +15,8 @@ public class AtelierLanguageManager extends LanguageManager {
 		String group = obj.getClass().getSimpleName();
 		String name = "";
 		if(obj instanceof Enum) name = ((Enum<?>) obj).name();
-		if(obj instanceof AbstractClass) name = "Class";
-		if(obj instanceof AbstractRace) name = "Race";
+//		if(obj instanceof AbstractClass) name = "Class";
+//		if(obj instanceof AbstractRace) name = "Race";
 		if(obj instanceof AbstractInteraction) {
 			name = group;
 			group = "Interaction";

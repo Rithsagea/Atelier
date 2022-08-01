@@ -10,8 +10,6 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atelier.discord.UserFactory;
-import com.atelier.dnd.types.SheetFactory;
 import com.mongodb.MongoClientSettings;
 
 public class TypeRegistry implements CodecProvider {
@@ -36,11 +34,6 @@ public class TypeRegistry implements CodecProvider {
 		factories = new HashMap<>();
 		codecs = new HashMap<>();
 		subtypes = new HashMap<>();
-		
-		
-		
-		registerType(new UserFactory());
-		registerType(new SheetFactory());
 	}
 	
 	public <T> void registerType(Factory<T> factory) {
