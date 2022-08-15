@@ -51,6 +51,8 @@ public class AtelierDB {
 	}
 	
 	public User getUser(long id) {
+		if(!users.containsKey(id)) users.put(id, new User(id));
+		
 		return users.get(id);
 	}
 	
