@@ -1,10 +1,7 @@
 package com.atelier.discord;
 
-import com.atelier.database.Id;
-
 public class User {
 
-	@Id
 	private final long id;
 	private String name;
 	

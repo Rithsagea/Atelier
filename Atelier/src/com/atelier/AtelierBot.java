@@ -12,10 +12,9 @@ import org.slf4j.LoggerFactory;
 import com.atelier.console.AtelierConsole;
 import com.atelier.database.AtelierDB;
 import com.atelier.database.DBSaveTask;
-import com.atelier.discord.CommandListener;
-import com.atelier.discord.LoginListener;
-import com.atelier.discord.MessageListener;
 import com.atelier.discord.commands.music.AtelierAudioManager;
+import com.atelier.discord.listeners.CommandListener;
+import com.atelier.discord.listeners.LoginListener;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -66,7 +65,6 @@ public class AtelierBot {
 		registerTasks();
 
 		jda.addEventListener(new LoginListener(this));
-		jda.addEventListener(new MessageListener());
 		jda.addEventListener(new CommandListener(this));
 	}
 
