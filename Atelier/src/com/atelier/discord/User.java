@@ -1,9 +1,17 @@
 package com.atelier.discord;
 
+import com.atelier.database.annotations.Id;
+
 public class User {
 
+	@Id
 	private final long id;
 	private String name;
+	
+	//TODO remove this
+	public User() {
+		id = 0l;
+	}
 	
 	public User(long id) {
 		this.id = id;
