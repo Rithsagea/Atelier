@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class MusicNowPlayingCommand extends MusicSubCommand {
 
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, AtelierUser user, SlashCommandInteractionEvent event) {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.WHITE);
 		if (audioHandler.getPlayingTrack() != null) {

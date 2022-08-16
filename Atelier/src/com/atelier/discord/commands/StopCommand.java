@@ -1,7 +1,7 @@
 package com.atelier.discord.commands;
 
 import com.atelier.AtelierBot;
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.BaseCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -16,12 +16,12 @@ public class StopCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(User user, SlashCommandInteractionEvent event) {
+	public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
 		event.reply("Stopping AtelierBot!").setEphemeral(true).queue(m -> bot.stop());
 	}
 
 	@Override
-	public void complete(User user, CommandAutoCompleteInteractionEvent event) {
+	public void complete(AtelierUser user, CommandAutoCompleteInteractionEvent event) {
 		
 	}
 }

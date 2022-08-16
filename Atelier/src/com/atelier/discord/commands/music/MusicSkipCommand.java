@@ -2,7 +2,7 @@ package com.atelier.discord.commands.music;
 
 import java.util.Collections;
 
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 public class MusicSkipCommand extends MusicSubCommand {
 	
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, AtelierUser user, SlashCommandInteractionEvent event) {
 		if (audioHandler.getPlayingTrack() != null) {
 			if (event.getOption("tracks") == null) {
 				event.reply(String.format("Skipping `%s`!", audioHandler.getPlayingTrack().getInfo().title)).queue();

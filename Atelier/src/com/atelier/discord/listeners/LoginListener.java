@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 
 import com.atelier.AtelierBot;
 import com.atelier.database.AtelierDB;
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -25,7 +25,7 @@ public class LoginListener extends ListenerAdapter {
 		logger.info("Initialized Guild: " + guild.getName() + " [" + guild.getIdLong() + "]");
 		
 		guild.loadMembers(m -> {
-			User user = db.getUser(m.getIdLong());
+			AtelierUser user = db.getUser(m.getIdLong());
 			user.setName(m.getUser().getName());
 		});
 	}

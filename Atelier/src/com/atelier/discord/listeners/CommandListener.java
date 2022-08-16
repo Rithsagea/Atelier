@@ -6,7 +6,7 @@ import com.atelier.AtelierBot;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.Menu;
 import com.atelier.discord.MenuManager;
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.CommandRegistry;
 import com.atelier.discord.commands.StopCommand;
@@ -75,7 +75,7 @@ public class CommandListener extends ListenerAdapter {
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 		if(event.getUser().isBot()) return;
 		
-		User user = db.getUser(event.getUser().getIdLong());
+		AtelierUser user = db.getUser(event.getUser().getIdLong());
 		log.info(user + " used command: " + event.getCommandString());
 		reg.getCommand(event.getName()).execute(user, event);
 	}
@@ -84,7 +84,7 @@ public class CommandListener extends ListenerAdapter {
 	public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event) {
 		if(event.getUser().isBot()) return;
 		
-		User user = db.getUser(event.getUser().getIdLong());
+		AtelierUser user = db.getUser(event.getUser().getIdLong());
 		reg.getCommand(event.getName()).complete(user, event);
 	}
 

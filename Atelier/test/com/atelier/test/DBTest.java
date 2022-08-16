@@ -1,8 +1,11 @@
 package com.atelier.test;
 
+import java.util.UUID;
+
 import com.atelier.Config;
 import com.atelier.database.AtelierDB;
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
+import com.atelier.dnd.AtelierCharacter;
 
 public class DBTest {
 	public static void main(String[] args) {
@@ -16,13 +19,16 @@ public class DBTest {
 
 	public static void editDB(AtelierDB db) {
 		long userId = 171378138041942016l;
-//		UUID sheetId = UUID.fromString("12345678-1234-1234-1234-12345678");
+		UUID charId = UUID.fromString("3ba3717b-b2be-4220-bf86-949691e37afe");
 //		User user = new User(userId);
 //		Sheet sheet = new Sheet(sheetId);
 //		db.addUser(user);
 //		db.addSheet(sheet);
 		
-		User user = db.getUser(userId);
-		System.out.println(user);
+		AtelierUser user = db.getUser(userId);
+		
+		AtelierCharacter character = db.getCharacter(charId);
+//		character.setName("Lita");
+		System.out.println(character.getName());
 	}
 }

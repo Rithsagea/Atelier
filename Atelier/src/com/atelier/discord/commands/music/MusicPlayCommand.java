@@ -1,7 +1,7 @@
 package com.atelier.discord.commands.music;
 
 import com.atelier.AtelierLanguageManager;
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -13,7 +13,7 @@ public class MusicPlayCommand extends MusicSubCommand {
 	private final String optionUrlDescription = AtelierLanguageManager.getInstance().get(this, "url.description");
 	
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, AtelierUser user, SlashCommandInteractionEvent event) {
 		String url = event.getOption("url").getAsString();
 		event.reply("Loading url: " + url).queue();
 		

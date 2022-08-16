@@ -62,6 +62,17 @@ public class AtelierCodec<T> implements Codec<T> {
 		return type;
 	}
 
+	private T constructValue(Constructor construct) {
+		try {
+			if(construct != null) return (T) construct.value().newInstance().build();
+			else return type.newInstance();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public T decode(BsonReader reader, DecoderContext decoderContext) {
@@ -83,6 +94,11 @@ public class AtelierCodec<T> implements Codec<T> {
 			String name = reader.readName();
 			Field field = fieldMap.get(name);
 			
+			if(field == null) {
+				reader.skipValue();
+				continue; // TODO resolve unknown field names
+			}
+			
 			field.setAccessible(true);
 			Class<?> fieldType = field.getType(); // wrap primitive types
 			if(fieldType.isPrimitive()) fieldType = DataUtil.getWrapper(fieldType);
@@ -90,15 +106,7 @@ public class AtelierCodec<T> implements Codec<T> {
 			if(name.equals("_id")) { id = codecs.get(fieldType).decode(reader, decoderContext); continue; }
 			
 			// TODO subtypes go here
-			try {
-				if(value == null) {
-					Constructor construct = type.getAnnotation(Constructor.class);
-					if(construct != null) value = (T) construct.value().newInstance().build();
-					else value = type.newInstance(); // TODO factory class
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+			if(value == null) value = constructValue(type.getAnnotation(Constructor.class));
 			
 			// actually serialize field
 			try {
@@ -116,6 +124,7 @@ public class AtelierCodec<T> implements Codec<T> {
 		Field field = fieldMap.get("_id");
 		field.setAccessible(true);
 		try {
+			if(value == null) value = constructValue(type.getAnnotation(Constructor.class));
 			field.set(value, id);
 		} catch(Exception e) {
 			e.printStackTrace();

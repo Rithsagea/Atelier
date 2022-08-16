@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.atelier.AtelierLanguageManager;
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -36,7 +36,7 @@ public abstract class BaseInteraction implements AbstractInteraction {
 	}
 	
 	@Override
-	public void complete(User user, CommandAutoCompleteInteractionEvent event) {}
+	public void complete(AtelierUser user, CommandAutoCompleteInteractionEvent event) {}
 	
 	public static abstract class BaseCommand extends BaseInteraction implements AbstractCommand {	
 		public void addOptions(SlashCommandData data) {}
@@ -75,12 +75,12 @@ public abstract class BaseInteraction implements AbstractInteraction {
 		}
 		
 		@Override
-		public void execute(User user, SlashCommandInteractionEvent event) {
+		public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
 			subcommands.get(event.getSubcommandName()).execute(user, event);
 		}
 		
 		@Override
-		public void complete(User user, CommandAutoCompleteInteractionEvent event) {
+		public void complete(AtelierUser user, CommandAutoCompleteInteractionEvent event) {
 			subcommands.get(event.getSubcommandName()).complete(user, event);
 		}
 		
@@ -100,7 +100,7 @@ public abstract class BaseInteraction implements AbstractInteraction {
 		}
 		
 		@Override
-		public final void execute(User user, SlashCommandInteractionEvent event) {
+		public final void execute(AtelierUser user, SlashCommandInteractionEvent event) {
 			String group = event.getSubcommandGroup();
 			String name = event.getSubcommandName();
 			
@@ -114,7 +114,7 @@ public abstract class BaseInteraction implements AbstractInteraction {
 		}
 		
 		@Override
-		public final void complete(User user, CommandAutoCompleteInteractionEvent event) {
+		public final void complete(AtelierUser user, CommandAutoCompleteInteractionEvent event) {
 			String group = event.getSubcommandGroup();
 			String name = event.getSubcommandName();
 			

@@ -3,15 +3,15 @@ package com.atelier.discord;
 import com.atelier.database.Factory;
 import com.atelier.database.annotations.Constructor;
 import com.atelier.database.annotations.Id;
-import com.atelier.discord.User.UserFactory;
+import com.atelier.discord.AtelierUser.UserFactory;
 
 @Constructor(UserFactory.class)
-public class User {
+public class AtelierUser {
 	
-	public static class UserFactory implements Factory<User> {
+	public static class UserFactory implements Factory<AtelierUser> {
 		@Override
-		public User build() {
-			return new User(0);
+		public AtelierUser build() {
+			return new AtelierUser(0);
 		}
 	}
 
@@ -19,7 +19,7 @@ public class User {
 	private final long id;
 	private String name;
 	
-	public User(long id) {
+	public AtelierUser(long id) {
 		this.id = id;
 	}
 

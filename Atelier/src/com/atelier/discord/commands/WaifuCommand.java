@@ -1,6 +1,6 @@
 package com.atelier.discord.commands;
 
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.BaseCommand;
 import com.atelier.util.NekoUtil;
 
@@ -18,7 +18,7 @@ public class WaifuCommand extends BaseCommand {
 	}
 	
 	@Override
-	public void execute(User user, SlashCommandInteractionEvent event) {
+	public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
 		EmbedBuilder eb = new EmbedBuilder();
 		
 		eb.setTitle("Waifu");
@@ -55,7 +55,7 @@ public class WaifuCommand extends BaseCommand {
 	}
 
 	@Override
-	public void complete(User user, CommandAutoCompleteInteractionEvent event) {
+	public void complete(AtelierUser user, CommandAutoCompleteInteractionEvent event) {
 		event.replyChoiceStrings("catgirl", "foxgirl", "catboy", "cat", "dog").queue();
 	}
 

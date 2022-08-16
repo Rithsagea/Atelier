@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.console.BaseGroupConsoleCommand;
 import com.atelier.database.AtelierDB;
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 
 public class UserConsoleCommand extends BaseGroupConsoleCommand {
 
@@ -22,16 +22,16 @@ public class UserConsoleCommand extends BaseGroupConsoleCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
-			List<User> users = new ArrayList<>(AtelierDB.getInstance().listUsers());
-			Collections.sort(users, new Comparator<User>() {
+			List<AtelierUser> users = new ArrayList<>(AtelierDB.getInstance().listUsers());
+			Collections.sort(users, new Comparator<AtelierUser>() {
 				@Override
-				public int compare(User u1, User u2) {
+				public int compare(AtelierUser u1, AtelierUser u2) {
 					return u1.getName().compareTo(u2.getName());
 				}
 			});
 			
 			logger.info("Users: ");
-			for(User user : users) {
+			for(AtelierUser user : users) {
 				logger.info("{} [{}]", user.getName(), user.getId());
 			}
 		}
@@ -46,7 +46,7 @@ public class UserConsoleCommand extends BaseGroupConsoleCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
-			User user = AtelierDB.getInstance().getUser(Long.parseLong(args[2]));
+			AtelierUser user = AtelierDB.getInstance().getUser(Long.parseLong(args[2]));
 			logger.info("Selected User: {}", user);
 			
 			selectedUser = user;
@@ -54,7 +54,7 @@ public class UserConsoleCommand extends BaseGroupConsoleCommand {
 		
 	}
 	
-	private static User selectedUser;
+	private static AtelierUser selectedUser;
 	
 	public UserConsoleCommand() {
 		super("user");

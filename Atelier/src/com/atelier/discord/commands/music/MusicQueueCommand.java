@@ -2,7 +2,7 @@ package com.atelier.discord.commands.music;
 
 import com.atelier.AtelierLanguageManager;
 import com.atelier.discord.MenuManager;
-import com.atelier.discord.User;
+import com.atelier.discord.AtelierUser;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -16,7 +16,7 @@ public class MusicQueueCommand extends MusicSubCommand {
 	private final String optionPageDescription = AtelierLanguageManager.getInstance().get(this, "page.description");
 
 	@Override
-	public void execute(AtelierAudioHandler audioHandler, User user, SlashCommandInteractionEvent event) {
+	public void execute(AtelierAudioHandler audioHandler, AtelierUser user, SlashCommandInteractionEvent event) {
 		int page = 1;
 		if (event.getOption("page") != null) {
 			page = (int) event.getOption("page").getAsLong() <= 1 ? 1 
