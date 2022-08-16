@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atelier.console.commands.CharacterConsoleCommand;
 import com.atelier.console.commands.StopConsoleCommand;
 import com.atelier.console.commands.UserConsoleCommand;
 
@@ -27,6 +28,7 @@ public class AtelierConsole implements Runnable {
 		// register commands here
 		registry.registerCommand(new StopConsoleCommand());
 		registry.registerCommand(new UserConsoleCommand());
+		registry.registerCommand(new CharacterConsoleCommand());
 	}
 	
 	public void start() {

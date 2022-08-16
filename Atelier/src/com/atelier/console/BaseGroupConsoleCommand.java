@@ -13,7 +13,7 @@ public abstract class BaseGroupConsoleCommand extends BaseConsoleCommand {
 		super(label, aliases);
 	}
 	
-	protected void registerCommand(AbstractConsoleSubcommand cmd) {
+	protected void registerSubcommand(AbstractConsoleSubcommand cmd) {
 		subcommands.put(cmd.getLabel(), cmd);
 		for(String alias : cmd.getAliases()) {
 			subcommands.put(alias, cmd);
@@ -21,7 +21,7 @@ public abstract class BaseGroupConsoleCommand extends BaseConsoleCommand {
 	}
 	
 	@Override
-	public void execute(String[] args, Logger logger) {
+	public final void execute(String[] args, Logger logger) {
 		if(args.length >= 2) {
 			AbstractConsoleSubcommand cmd = subcommands.get(args[1]);
 			if(cmd != null) {

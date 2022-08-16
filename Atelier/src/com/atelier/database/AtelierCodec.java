@@ -73,7 +73,6 @@ public class AtelierCodec<T> implements Codec<T> {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public T decode(BsonReader reader, DecoderContext decoderContext) {
 		

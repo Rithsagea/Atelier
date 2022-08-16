@@ -8,7 +8,7 @@ public class AtelierCharacter {
 	
 	@Id
 	private UUID id;
-	private String name;
+	private String name = "";
 	
 	public AtelierCharacter() {
 		id = UUID.randomUUID();

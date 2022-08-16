@@ -1,9 +1,6 @@
 package com.atelier.console.commands;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import org.slf4j.Logger;
 
@@ -22,18 +19,16 @@ public class UserConsoleCommand extends BaseGroupConsoleCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
-			List<AtelierUser> users = new ArrayList<>(AtelierDB.getInstance().listUsers());
-			Collections.sort(users, new Comparator<AtelierUser>() {
-				@Override
-				public int compare(AtelierUser u1, AtelierUser u2) {
-					return u1.getName().compareTo(u2.getName());
-				}
-			});
-			
-			logger.info("Users: ");
-			for(AtelierUser user : users) {
-				logger.info("{} [{}]", user.getName(), user.getId());
-			}
+			logger.info("Users:");
+			AtelierDB.getInstance().listUsers()
+				.stream()
+				.sorted(new Comparator<AtelierUser>() {
+					@Override
+					public int compare(AtelierUser u1, AtelierUser u2) {
+						return u1.getName().compareTo(u2.getName());
+					}
+				}).forEach(
+					(AtelierUser c) -> logger.info("{} [{}]", c.getName(), c.getId()));
 		}
 		
 	}
@@ -59,8 +54,8 @@ public class UserConsoleCommand extends BaseGroupConsoleCommand {
 	public UserConsoleCommand() {
 		super("user");
 		
-		registerCommand(new UserList());
-		registerCommand(new UserSelect());
+		registerSubcommand(new UserList());
+		registerSubcommand(new UserSelect());
 	}
 	
 	@Override
