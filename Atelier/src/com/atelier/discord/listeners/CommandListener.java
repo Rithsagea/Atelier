@@ -3,7 +3,6 @@ package com.atelier.discord.listeners;
 import org.slf4j.Logger;
 
 import com.atelier.AtelierBot;
-import com.atelier.Config;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.Menu;
 import com.atelier.discord.MenuManager;
@@ -14,7 +13,6 @@ import com.atelier.discord.commands.StopCommand;
 import com.atelier.discord.commands.WaifuCommand;
 import com.atelier.discord.commands.music.MusicCommand;
 
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -59,8 +57,8 @@ public class CommandListener extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event) {
 		//testing commands
-		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
-		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
+//		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
+//		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
 //		Stream.of(stopCommand, characterCommand, campaignCommand)
 //			.map(cmd -> guild.upsertCommand(cmd.getData()))
 //			.forEach(cmd -> cmd.queue());

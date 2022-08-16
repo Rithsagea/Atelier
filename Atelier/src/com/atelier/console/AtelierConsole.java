@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atelier.console.commands.StopConsoleCommand;
+import com.atelier.console.commands.UserConsoleCommand;
+
 public class AtelierConsole implements Runnable {
 	private BufferedReader reader;
 	private ConsoleCommandRegistry registry;
@@ -22,7 +25,8 @@ public class AtelierConsole implements Runnable {
 		logger = LoggerFactory.getLogger("Console");
 		
 		// register commands here
-//		registry.registerCommand(new StopConsoleCommand());
+		registry.registerCommand(new StopConsoleCommand());
+		registry.registerCommand(new UserConsoleCommand());
 	}
 	
 	public void start() {
@@ -46,8 +50,15 @@ public class AtelierConsole implements Runnable {
 			
 			String[] args = line.split(" ");
 			AbstractConsoleCommand cmd = registry.getCommand(args[0]);
-			if(cmd != null) cmd.execute(args, logger);
-			else System.out.println("Echo: " + line);
+			if(cmd != null) {
+				try {
+					cmd.execute(args, logger); 
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("Echo: " + line);
+			}
 		}
 	}
 

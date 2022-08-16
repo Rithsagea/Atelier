@@ -30,7 +30,6 @@ public class TypeRegistry implements CodecProvider {
 				CodecRegistries.fromProviders(this));
 		
 		Types.registerTypes(this);
-		System.out.println();
 	}
 	
 	public <T> void registerType(Class<T> typeClass) {

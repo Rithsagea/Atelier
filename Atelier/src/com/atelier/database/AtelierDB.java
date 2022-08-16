@@ -1,5 +1,6 @@
 package com.atelier.database;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +59,10 @@ public class AtelierDB {
 	
 	public void addUser(User user) {
 		users.put(user.getId(), user);
+	}
+	
+	public Collection<User> listUsers() {
+		return users.values();
 	}
 	
 	public void load() {
