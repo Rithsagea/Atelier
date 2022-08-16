@@ -22,7 +22,7 @@ public class TypeRegistry implements CodecProvider {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private CodecRegistry codecRegistry;
-	private Map<Class<?>, Codec<?>> codecs = new HashMap<>();
+	private Map<Class<?>, AtelierCodec<?>> codecs = new HashMap<>();
 	
 	private TypeRegistry() {
 		codecRegistry = CodecRegistries.fromRegistries(
@@ -33,9 +33,10 @@ public class TypeRegistry implements CodecProvider {
 		System.out.println();
 	}
 	
-	public <T> void registerType(Class<T> type) {
-		logger.info("Registered Type: " + type);
-		codecs.put(type, new AtelierCodec<T>(type));
+	public <T> void registerType(Class<T> typeClass) {
+		codecs.put(typeClass, new AtelierCodec<T>(typeClass));
+		
+		logger.info("Registered Type: " + typeClass);
 	}
 	
 	public CodecRegistry getCodecRegistry() {

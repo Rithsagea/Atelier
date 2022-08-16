@@ -13,6 +13,7 @@ import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.bson.codecs.configuration.CodecRegistry;
 
+import com.atelier.database.annotations.Constructor;
 import com.atelier.database.annotations.Id;
 import com.rithsagea.util.DataUtil;
 
@@ -61,6 +62,7 @@ public class AtelierCodec<T> implements Codec<T> {
 		return type;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T decode(BsonReader reader, DecoderContext decoderContext) {
 		
@@ -87,9 +89,13 @@ public class AtelierCodec<T> implements Codec<T> {
 			
 			if(name.equals("_id")) { id = codecs.get(fieldType).decode(reader, decoderContext); continue; }
 			
-			// TODO add factory to this
+			// TODO subtypes go here
 			try {
-				if(value == null) value = type.newInstance();
+				if(value == null) {
+					Constructor construct = type.getAnnotation(Constructor.class);
+					if(construct != null) value = (T) construct.value().newInstance().build();
+					else value = type.newInstance(); // TODO factory class
+				}
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

@@ -11,7 +11,7 @@ public class DBTest {
 
 		editDB(db);
 
-//		db.save();
+		db.save();
 	}
 
 	public static void editDB(AtelierDB db) {

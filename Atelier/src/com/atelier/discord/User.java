@@ -1,17 +1,23 @@
 package com.atelier.discord;
 
+import com.atelier.database.Factory;
+import com.atelier.database.annotations.Constructor;
 import com.atelier.database.annotations.Id;
+import com.atelier.discord.User.UserFactory;
 
+@Constructor(UserFactory.class)
 public class User {
+	
+	public static class UserFactory implements Factory<User> {
+		@Override
+		public User build() {
+			return new User(0);
+		}
+	}
 
 	@Id
 	private final long id;
 	private String name;
-	
-	//TODO remove this
-	public User() {
-		id = 0l;
-	}
 	
 	public User(long id) {
 		this.id = id;
