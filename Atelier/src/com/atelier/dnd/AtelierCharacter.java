@@ -25,4 +25,9 @@ public class AtelierCharacter {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s [%s]", name, id);
+	}
 }
