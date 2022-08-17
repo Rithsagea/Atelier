@@ -25,6 +25,7 @@ Parameters:
 ## character
 
 Syntax: ```character```<br>
+Aliases: ```char```<br>
 Description: Displays information about the selected character.<br>
 
 ### character list
