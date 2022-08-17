@@ -2,45 +2,65 @@
 
 ## stop
 
-Syntax: ```stop```<br>
+Syntax: `stop`<br>
 Description: Stops the bot.<br>
 
 ## user
 
-Syntax: ```user```<br>
+Syntax: `user`<br>
 Description: Displays information about the selected user.<br>
 
 ### user list
 
-Syntax: ```user list```<br>
+Syntax: `user list`<br>
 Description: Lists all existing users.<br>
 
 ### user select
 
-Syntax: ```user select <id>```<br>
+Syntax: `user select <id>`<br>
 Description: Selects a user with the given id.<br>
 Parameters:
-- long ```id```: The discord id of the user.
+- long `id`: The discord id of the user.
+
+### user addcharacter
+
+Syntax: `user addcharacter <id>`<br>
+Description: Adds a character to the selected user.<br>
+Options:
+- UUID `id`: The id of the character
+
+### user removecharacter
+
+Syntax: `user removecharacter <id>`<br>
+Description: Removes a character from the selected user.<br>
+Options:
+- UUID `id`: The id of the character
+
+### user listcharacter
+
+Syntax: `user listcharacter`<br>
+Description: Lists a user's characters. <br>
+
 
 ## character
 
-Syntax: ```character```<br>
-Aliases: ```char```<br>
+Syntax: `character`<br>
+Aliases: `char`<br>
 Description: Displays information about the selected character.<br>
 
 ### character list
 
-Syntax: ```character list```<br>
+Syntax: `character list`<br>
 Description: Lists all existing characters.<br>
 
 ### character select
 
-Syntax: ```character select <id>```<br>
+Syntax: `character select <id>`<br>
 Description: Selects a character with the given id.<br>
 Parameters:
-- UUID ```id```: The id of the character.
+- UUID `id`: The id of the character.
 
 ### character new
 
-Syntax: ```character new```<br>
+Syntax: `character new`<br>
 Description: Creates a new character, and returns its id.
