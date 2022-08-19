@@ -2,11 +2,11 @@ package com.atelier.dnd;
 
 import java.util.UUID;
 
-import com.atelier.database.annotations.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AtelierCharacter {
 	
-	@Id
+	@JsonProperty("_id")
 	private UUID id;
 	private String name = "";
 	
@@ -14,6 +14,10 @@ public class AtelierCharacter {
 		id = UUID.randomUUID();
 	}
 	
+	public AtelierCharacter(UUID id) {
+		this.id = id;
+	}
+
 	public UUID getId() {
 		return id;
 	}

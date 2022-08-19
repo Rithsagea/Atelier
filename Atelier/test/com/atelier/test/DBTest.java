@@ -20,15 +20,27 @@ public class DBTest {
 	public static void editDB(AtelierDB db) {
 		long userId = 171378138041942016l;
 		UUID charId = UUID.fromString("3ba3717b-b2be-4220-bf86-949691e37afe");
-//		User user = new User(userId);
-//		Sheet sheet = new Sheet(sheetId);
+		AtelierUser user;
+		AtelierCharacter character;
+		
+//		user = new AtelierUser(userId);
+//		user.setName("Rithsagea");
 //		db.addUser(user);
-//		db.addSheet(sheet);
 		
-		AtelierUser user = db.getUser(userId);
+		user = db.getUser(userId);
 		
-		AtelierCharacter character = db.getCharacter(charId);
-//		character.setName("Lita");
-		System.out.println(character.getName());
+//		character = new AtelierCharacter(charId);
+//		db.addCharacter(character);
+		
+		character = db.getCharacter(charId);
+		character.setName("Lita");
+		
+		user.addCharacter(character);
+		
+		System.out.println("Username: " + user.getName());
+		System.out.println("User ID: " + user.getId());
+		
+		System.out.println("Character Name: " + character.getName());
+		System.out.println("Character Id: " + character.getId());
 	}
 }

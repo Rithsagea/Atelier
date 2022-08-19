@@ -1,4 +1,4 @@
-package com.rithsagea.util;
+package com.rithsagea.util.data;
 
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
@@ -13,8 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DataUtil {
@@ -137,6 +139,7 @@ public class DataUtil {
 
 	// https://stackoverflow.com/a/1704658
 	private static final Map<Class<?>, Class<?>> WRAPPER_MAP;
+	private static final Map<Class<?>, Class<?>> PRIMITIVE_MAP;
 	static {
 		WRAPPER_MAP = new HashMap<>();
 		WRAPPER_MAP.put(boolean.class, Boolean.class);
@@ -148,9 +151,17 @@ public class DataUtil {
 		WRAPPER_MAP.put(long.class, Long.class);
 		WRAPPER_MAP.put(short.class, Short.class);
 		WRAPPER_MAP.put(void.class, Void.class);
+		
+		PRIMITIVE_MAP = WRAPPER_MAP.entrySet()
+			.stream()
+			.collect(Collectors.toMap(Entry::getValue, Entry::getKey));
 	}
 	
 	public static Class<?> getWrapper(Class<?> primitiveClass) {
 		return WRAPPER_MAP.get(primitiveClass);
+	}
+	
+	public static Class<?> getPrimitive(Class<?> wrapperClass) {
+		return PRIMITIVE_MAP.get(wrapperClass);
 	}
 }

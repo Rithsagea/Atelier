@@ -6,28 +6,19 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.atelier.database.AtelierDB;
-import com.atelier.database.Factory;
-import com.atelier.database.annotations.Constructor;
-import com.atelier.database.annotations.Id;
-import com.atelier.discord.AtelierUser.UserFactory;
 import com.atelier.dnd.AtelierCharacter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Constructor(UserFactory.class)
 public class AtelierUser {
-	
-	public static class UserFactory implements Factory<AtelierUser> {
-		@Override
-		public AtelierUser build() {
-			return new AtelierUser(0);
-		}
-	}
 
-	@Id
+	@JsonProperty("_id")
 	private final long id;
 	private String name;
 	private HashSet<UUID> characters = new HashSet<>();
 	
-	public AtelierUser(long id) {
+	@JsonCreator
+	public AtelierUser(@JsonProperty("_id")long id) {
 		this.id = id;
 	}
 

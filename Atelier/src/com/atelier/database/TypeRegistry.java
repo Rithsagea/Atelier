@@ -7,9 +7,10 @@ import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClientSettings;
 
 public class TypeRegistry implements CodecProvider {
@@ -19,23 +20,19 @@ public class TypeRegistry implements CodecProvider {
 		return INSTANCE;
 	}
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	
 	private CodecRegistry codecRegistry;
 	private Map<Class<?>, AtelierCodec<?>> codecs = new HashMap<>();
+	
+	private ObjectMapper mapper;
 	
 	private TypeRegistry() {
 		codecRegistry = CodecRegistries.fromRegistries(
 				MongoClientSettings.getDefaultCodecRegistry(),
 				CodecRegistries.fromProviders(this));
 		
-		Types.registerTypes(this);
-	}
-	
-	public <T> void registerType(Class<T> typeClass) {
-		codecs.put(typeClass, new AtelierCodec<T>(typeClass));
-		
-		logger.info("Registered Type: " + typeClass);
+		mapper = new ObjectMapper();
+		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+		mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 	}
 	
 	public CodecRegistry getCodecRegistry() {
@@ -45,6 +42,7 @@ public class TypeRegistry implements CodecProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
+		if(!codecs.containsKey(clazz)) codecs.put(clazz, new AtelierCodec<T>(clazz, mapper));
 		return (Codec<T>) codecs.get(clazz);
 	}
 }

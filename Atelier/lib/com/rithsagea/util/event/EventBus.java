@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.rithsagea.util.DataUtil;
+import com.rithsagea.util.data.DataUtil;
 
 public class EventBus {
 	private static class Handler implements Comparable<Handler> {

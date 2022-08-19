@@ -62,9 +62,9 @@ public class CommandListener extends ListenerAdapter {
 		//testing commands
 		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
 		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
-		reg.getCommands().stream()
-			.map(cmd -> guild.upsertCommand(cmd.getData()))
-			.forEach(cmd -> cmd.queue());
+//		reg.getCommands().stream()
+//			.map(cmd -> guild.upsertCommand(cmd.getData()))
+//			.forEach(cmd -> cmd.queue());
 		
 		//global commands
 		JDA jda = event.getJDA();

@@ -94,11 +94,14 @@ public class AtelierDB {
 	}
 	
 	private void updateCharacter(AtelierCharacter character) {
-		characterCollection.replaceOne(Filters.eq("_id", character.getId()), character, replaceUpsertOption);
+		characterCollection.replaceOne(Filters.eq("_id", character.getId().toString()), character, replaceUpsertOption);
 	}
 	
 	public void save() {
 		users.values().forEach(this::updateUser);
 		characters.values().forEach(this::updateCharacter);
+		
+//		userCollection.insertMany(new ArrayList<>(users.values()));
+//		characterCollection.insertMany(new ArrayList<>(characters.values()));
 	}
 }

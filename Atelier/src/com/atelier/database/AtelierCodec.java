@@ -1,135 +1,146 @@
 package com.atelier.database;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.Map.Entry;
 
+import org.bson.BsonBinary;
 import org.bson.BsonReader;
 import org.bson.BsonType;
 import org.bson.BsonWriter;
 import org.bson.codecs.Codec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
-import org.bson.codecs.configuration.CodecRegistry;
 
-import com.atelier.database.annotations.Constructor;
-import com.atelier.database.annotations.Id;
-import com.rithsagea.util.DataUtil;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.BinaryNode;
+import com.fasterxml.jackson.databind.node.LongNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 public class AtelierCodec<T> implements Codec<T> {
 
 	private Class<T> type;
+	private ObjectMapper mapper;
 	
-	public AtelierCodec(Class<T> type) {
+	public AtelierCodec(Class<T> type, ObjectMapper mapper) {
 		this.type = type;
+		this.mapper = mapper;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void encode(BsonWriter writer, T value, EncoderContext encoderContext) {
-		TypeRegistry types = TypeRegistry.getInstance();
-		CodecRegistry codecs = types.getCodecRegistry();
-		
-		writer.writeStartDocument();
-		
-		for(Field field : DataUtil.getFields(type)) {
-			
-			if(field.isAnnotationPresent(Id.class)) continue;
-			
-			try {
-				field.setAccessible(true);
-				
-				// write to the following to bson
-				String name = field.getName();
-				Object obj = field.get(value);
-				//TODO: nonetype check
-				
-				writer.writeName(name);
-				Codec<Object> codec = (Codec<Object>) codecs.get(obj.getClass());
-				codec.encode(writer, obj, encoderContext);
-				
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+		ObjectNode node = mapper.valueToTree(value);
+		writeNode(writer, node);
+	}
+	
+	private void writeNode(BsonWriter writer, JsonNode node) {
+		switch(node.getNodeType()) {
+			case BINARY:
+				try {
+					writer.writeBinaryData(new BsonBinary(node.binaryValue()));
+				} catch(Exception e) {
+					e.printStackTrace();
+					writer.writeNull();
+				}
+				break;
+			case BOOLEAN:
+				writer.writeBoolean(node.booleanValue());
+				break;
+			case NUMBER:
+				switch(node.numberType()) {
+					case DOUBLE:
+					case FLOAT:
+						writer.writeDouble(node.doubleValue());
+						break;
+					case INT:
+						writer.writeInt32(node.intValue());
+						break;
+					case LONG:
+						writer.writeInt64(node.longValue());
+						break;
+					case BIG_DECIMAL:
+					case BIG_INTEGER:
+					default:
+						break;
+				}
+				break;
+			case STRING:
+				writer.writeString(node.textValue());
+				break;
+			case ARRAY:
+				writer.writeStartArray();
+				node.forEach(e -> writeNode(writer, e));
+				writer.writeEndArray();
+				break;
+			case OBJECT:
+				writer.writeStartDocument();
+				node.fields().forEachRemaining((Entry<String, JsonNode> entry) -> {
+					if(entry.getKey().equals("_id")) return; // don't serialize id
+					writer.writeName(entry.getKey());
+					writeNode(writer, entry.getValue());
+				});
+				writer.writeEndDocument();
+				break;
+			case MISSING:
+			case POJO:
+			case NULL:
+			default:
+				writer.writeNull();
+				break;
 		}
-		
-		writer.writeEndDocument();
 	}
 
 	@Override
 	public Class<T> getEncoderClass() {
 		return type;
 	}
-
-	private T constructValue(Constructor construct) {
+	
+	@Override
+	public T decode(BsonReader reader, DecoderContext decoderContext) {
+		ObjectNode node = mapper.createObjectNode();
+		BsonType valueType;
+		
+		reader.readStartDocument();
+		while((valueType = reader.readBsonType()) != BsonType.END_OF_DOCUMENT) {
+			node.set(reader.readName(), readNode(reader, valueType));
+		}
+		
+		reader.readEndDocument();
+		
 		try {
-			if(construct != null) return (T) construct.value().newInstance().build();
-			else return type.newInstance();
-		} catch(Exception e) {
+			return mapper.readerFor(type).readValue(node);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		return null;
 	}
 	
-	@Override
-	public T decode(BsonReader reader, DecoderContext decoderContext) {
+	private JsonNode readNode(BsonReader reader, BsonType type) {
 		
-		T value = null;
-		Object id = null;
-		TypeRegistry types = TypeRegistry.getInstance();
-		CodecRegistry codecs = types.getCodecRegistry();
-		
-		Map<String, Field> fieldMap = new HashMap<>(); // map out all fields in type to serialize
-		for(Field field : DataUtil.getFields(type)) {
-			if(Modifier.isTransient(field.getModifiers())) continue;
-			fieldMap.put(field.isAnnotationPresent(Id.class) ? "_id" : field.getName(), field);
+		//TODO add more
+		switch(type) {
+			case INT64:
+				return new LongNode(reader.readInt64());
+			case STRING:
+				return new TextNode(reader.readString());
+			case BINARY:
+				return new BinaryNode(reader.readBinaryData().getData());
+			case ARRAY:
+				reader.readStartArray();
+				ArrayNode arr = mapper.createArrayNode();
+				BsonType valueType;
+				
+				while((valueType = reader.readBsonType()) != BsonType.END_OF_DOCUMENT) {
+					arr.add(readNode(reader, valueType));
+				}
+				
+				reader.readEndArray();
+				return arr;
+			default:
+				throw new RuntimeException("Unsupported Type: " + type);
 		}
-		
-		reader.readStartDocument();
-		
-		while(reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
-			String name = reader.readName();
-			Field field = fieldMap.get(name);
-			
-			if(field == null) {
-				reader.skipValue();
-				continue; // TODO resolve unknown field names
-			}
-			
-			field.setAccessible(true);
-			Class<?> fieldType = field.getType(); // wrap primitive types
-			if(fieldType.isPrimitive()) fieldType = DataUtil.getWrapper(fieldType);
-			
-			if(name.equals("_id")) { id = codecs.get(fieldType).decode(reader, decoderContext); continue; }
-			
-			// TODO subtypes go here
-			if(value == null) value = constructValue(type.getAnnotation(Constructor.class));
-			
-			// actually serialize field
-			try {
-				Codec<?> codec = codecs.get(fieldType);
-				Object obj = codec.decode(reader, decoderContext);
-				field.set(value, obj);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		reader.readEndDocument();
-		
-		// handle id
-		Field field = fieldMap.get("_id");
-		field.setAccessible(true);
-		try {
-			if(value == null) value = constructValue(type.getAnnotation(Constructor.class));
-			field.set(value, id);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return value;
 	}
-
 }
