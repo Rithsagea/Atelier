@@ -1,77 +1,17 @@
-#################
-#################
-#### Discord ####
-#################
-#################
+# Discord
 
-##############
-## Commands ##
-##############
+## Stop
 
-======
-|stop|
-======
 Command.StopCommand.name=stop
 Command.StopCommand.description=Stops the bot
 
-=======
-|waifu|
-=======
+## Waifu
+
 Command.WaifuCommand.name=waifu
 Command.WaifuCommand.description=Provides waifus for the degenerate masses
 
-===========
-|character|
-===========
-Command.CharacterCommand.name=character
-Command.CharacterCommand.description=General utility command for player characters
+## Music
 
-Subcommand.CharacterAttributeCommand.name=attribute
-Subcommand.CharacterAttributeCommand.description=Gets the character's attribute information
-Subcommand.CharacterAttributeCommand.attribute.name=attribute
-Subcommand.CharacterAttributeCommand.attribute.description=the name of the attribute to get
-
-Subcommand.CharacterInfoCommand.name=info
-Subcommand.CharacterInfoCommand.description=Gets an overview of the selected character sheet
-
-Subcommand.CharacterInventoryCommand.name=inventory
-Subcommand.CharacterInventoryCommand.description=Gets the character's inventory
-
-Subcommand.CharacterListCommand.name=list
-Subcommand.CharacterListCommand.description=Lists the user's available character sheets
-
-SubcommandGroup.CharacterRollCommand.name=roll
-SubcommandGroup.CharacterRollCommand.description=Roll for a character
-
-Subcommand.RollSaving.name=saving
-Subcommand.RollSaving.description=Roll for an saving check
-Subcommand.RollSaving.ability.name=ability
-Subcommand.RollSaving.ability.description=the ability to roll for
-
-Subcommand.RollSkill.name=skill
-Subcommand.RollSkill.description=Roll for a skill check
-Subcommand.RollSkill.skill.name=skill
-Subcommand.RollSkill.skill.description=the skill to roll for
-
-Subcommand.CharacterSelectCommand.name=select
-Subcommand.CharacterSelectCommand.description=Selects a character sheet
-Subcommand.CharacterSelectCommand.id.name=id
-Subcommand.CharacterSelectCommand.id.description=the id of the character sheet
-
-==========
-|campaign|
-==========
-Command.CampaignCommand.name=campaign
-Command.CampaignCommand.description=Generic command for campaigns
-
-Subcommand.CampaignInfoCommand.name=info
-Subcommand.CampaignInfoCommand.description=Gets info about the selected campaign
-
-Subcommand.CampaignSelectCommand.name=select
-Subcommand.CampaignSelectCommand.description=Selects a campaign to join
-=======
-|music|
-=======
 Command.MusicCommand.name=music
 Command.MusicCommand.description=For managing and playing music in vc
 
@@ -109,66 +49,10 @@ Subcommand.MusicSansCommand.description=bad time
 Subcommand.MusicSkipCommand.name=skip
 Subcommand.MusicSkipCommand.description=Skips the currently playing track
 
-#############
-#############
-#### DND ####
-#############
-#############
+## Dnd Character
 
-###############
-## Abilities ##
-###############
+Command.CharacterCommand.name=character
+Command.CharacterCommand.description=Manages the player's character
 
-Ability.STRENGTH.name=Strength
-Ability.DEXTERITY.name=Dexterity
-Ability.CONSTITUTION.name=Constitution
-Ability.INTELLIGENCE.name=Intelligence
-Ability.WISDOM.name=Wisdom
-Ability.CHARISMA.name=Charisma
-
-############
-## Skills ##
-############
-
-Skill.ACROBATICS.name=Acrobatics
-Skill.ANIMAL_HANDLING.name=Animal Handling
-Skill.ARCANA.name=Arcana
-Skill.ATHLETICS.name=Athletics
-Skill.DECEPTION.name=Deception
-Skill.HISTORY.name=History
-Skill.INSIGHT.name=Insight
-Skill.INTIMIDATION.name=Intimidation
-Skill.INVESTIGATION.name=Investigation
-Skill.MEDICINE.name=Medicine
-Skill.NATURE.name=Nature
-Skill.PERCEPTION.name=Perception
-Skill.PERFORMANCE.name=Performance
-Skill.PERSUASION.name=Persuasion
-Skill.RELIGION.name=Religion
-Skill.SLEIGHT_OF_HAND.name=Sleight of Hand
-Skill.STEALTH.name=Stealth
-Skill.SURVIVAL.name=Survival
-
-##############
-## Currency ##
-##############
-
-Currency.COPPER.label=cp
-Currency.SILVER.label=sp
-Currency.ELECTRUM.label=ep
-Currency.GOLD.label=gp
-Currency.PLATINUM.label=pp
-
-###########
-## Races ##
-###########
-
-Race.Human.name=Human
-
-#############
-## Classes ##
-#############
-
-Class.Fighter.name=Fighter
-
-Class.Rogue.name=Rogue
+Subcommand.CharacterList.name=list
+Subcommand.CharacterList.description=Lists the user's characters

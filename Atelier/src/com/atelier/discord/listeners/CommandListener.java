@@ -13,8 +13,8 @@ import com.atelier.discord.commands.CommandRegistry;
 import com.atelier.discord.commands.StopCommand;
 import com.atelier.discord.commands.WaifuCommand;
 import com.atelier.discord.commands.music.MusicCommand;
+import com.atelier.dnd.commands.CharacterCommand;
 
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -55,20 +55,29 @@ public class CommandListener extends ListenerAdapter {
 		reg.registerCommand(waifuCommand);
 		reg.registerCommand(musicCommand);
 		reg.registerCommand(stopCommand);
+		
+		//DND
+		reg.registerCommand(new CharacterCommand());
 	}
 	
 	@Override
 	public void onReady(ReadyEvent event) {
 		//testing commands
 		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
-		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
-//		reg.getCommands().stream()
-//			.map(cmd -> guild.upsertCommand(cmd.getData()))
-//			.forEach(cmd -> cmd.queue());
+		
+		//delete all commands
+//		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
+		
+		reg.getCommands().stream()
+			.map(cmd -> guild.upsertCommand(cmd.getData()))
+			.forEach(cmd -> cmd.queue());
 		
 		//global commands
-		JDA jda = event.getJDA();
-		jda.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
+//		JDA jda = event.getJDA();
+		
+		//delete all commands
+//		jda.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
+
 //		Stream.of(waifuCommand, musicCommand)
 //			.map(cmd -> jda.upsertCommand(cmd.getData()))
 //			.forEach(cmd -> cmd.queue());
