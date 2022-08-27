@@ -67,7 +67,7 @@ public class AtelierBot {
 		registerTasks();
 
 		jda.addEventListener(new LoginListener(this));
-		jda.addEventListener(new CommandListener(this));
+		jda.addEventListener(new CommandListener());
 	}
 
 	private void registerTasks() {

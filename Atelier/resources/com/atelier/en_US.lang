@@ -1,14 +1,24 @@
 # Discord
 
-## Stop
-
-Command.StopCommand.name=stop
-Command.StopCommand.description=Stops the bot
-
 ## Waifu
 
 Command.WaifuCommand.name=waifu
 Command.WaifuCommand.description=Provides waifus for the degenerate masses
+Command.WaifuCommand.type.name=type
+Command.WaifuCommand.type.text=the type of waifu to get
+
+Command.WaifuCommand.waifu.name=waifu
+Command.WaifuCommand.waifu.title=Waifu
+Command.WaifuCommand.catgirl.name=catgirl
+Command.WaifuCommand.catgirl.title=Catgirl
+Command.WaifuCommand.foxgirl.name=foxgirl
+Command.WaifuCommand.foxgirl.title=Foxgirl
+Command.WaifuCommand.catboy.name=catboy
+Command.WaifuCommand.catboy.title=Catboy
+Command.WaifuCommand.cat.name=cat
+Command.WaifuCommand.cat.title=Cat
+Command.WaifuCommand.dog.name=dog
+Command.WaifuCommand.dog.title=Dog
 
 ## Music
 

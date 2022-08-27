@@ -8,12 +8,8 @@ import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.Menu;
 import com.atelier.discord.MenuManager;
-import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.CommandRegistry;
-import com.atelier.discord.commands.StopCommand;
-import com.atelier.discord.commands.WaifuCommand;
-import com.atelier.discord.commands.music.MusicCommand;
-import com.atelier.dnd.commands.CharacterCommand;
+import com.atelier.discord.commands.Commands;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -26,38 +22,18 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class CommandListener extends ListenerAdapter {
 	private CommandRegistry reg = new CommandRegistry();
 	
-	private AtelierBot bot;
 	private AtelierDB db = AtelierDB.getInstance();
 	private MenuManager menus = MenuManager.getInstance();
 	
 	private Logger log;
 	
-	public CommandListener(AtelierBot bot) {
-		this.bot = bot;
-		this.log = bot.getLogger();
-		registerCommands();
+	public CommandListener() {
+		this.log = AtelierBot.getInstance().getLogger();
+		Commands.registerCommands(reg);
 	}
 	
 	public CommandRegistry getRegistry() {
 		return reg;
-	}
-	
-	
-	private AbstractCommand waifuCommand;
-	private AbstractCommand musicCommand;
-	private AbstractCommand stopCommand;
-	
-	private void registerCommands() {
-		waifuCommand = new WaifuCommand();
-		musicCommand  = new MusicCommand();
-		stopCommand = new StopCommand(bot);
-		
-		reg.registerCommand(waifuCommand);
-		reg.registerCommand(musicCommand);
-		reg.registerCommand(stopCommand);
-		
-		//DND
-		reg.registerCommand(new CharacterCommand());
 	}
 	
 	@Override
