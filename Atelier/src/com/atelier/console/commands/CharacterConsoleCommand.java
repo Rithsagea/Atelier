@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 
-import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.console.BaseConsoleGroupCommand;
+import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.database.AtelierDB;
 import com.atelier.dnd.AtelierCharacter;
 
@@ -41,7 +41,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		@Override
 		public void execute(String[] args, Logger logger) {
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
-			logger.info("Selected Character: {}", character);
+			logger.info(getMessage("info").addCharacter(character).get());
 			
 			selectedCharacter = character;
 		}
@@ -56,7 +56,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		public void execute(String[] args, Logger logger) {
 			AtelierCharacter character = new AtelierCharacter();
 			AtelierDB.getInstance().addCharacter(character);
-			logger.info("Created new character with id: " + character.getId());
+			logger.info(getMessage("info").addCharacter(character).get());
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 	@Override
 	public void executeDefault(String[] args, Logger logger) {
 		if(selectedCharacter == null) {
-			logger.info("No character selected!");
+			logger.info(getMessage("missing").get());
 			return;
 		}
 		

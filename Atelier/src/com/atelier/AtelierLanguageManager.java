@@ -29,7 +29,7 @@ public class AtelierLanguageManager extends LanguageManager {
 		if(obj instanceof AbstractConsoleCommand) {
 			name = group;
 			if(obj instanceof AbstractConsoleSubcommand) group = "ConsoleSubcommand";
-			if(obj instanceof AbstractConsoleGroupCommand) group = "ConsoleCommandGroup";
+			else if(obj instanceof AbstractConsoleGroupCommand) group = "ConsoleCommandGroup";
 			else group = "ConsoleCommand";
 		}
 		

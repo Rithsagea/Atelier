@@ -1,3 +1,18 @@
+# Console
+
+ConsoleCommand.StopConsoleCommand.msg.stop=Stopping Atelier Bot!
+
+ConsoleCommandGroup.UserConsoleCommand.msg.missing=No user selected!
+ConsoleSubcommand.UserSelect.msg.info=Selected User: ${user}
+ConsoleSubcommand.UserAddCharacter.msg.info=Added ${character} to ${user}
+ConsoleSubcommand.UserRemoveCharacter.msg.info=Removed ${character} from ${user}
+ConsoleSubcommand.UserRemoveCharacter.msg.missing=${user} does not have ${character}
+ConsoleSubcommand.UserListCharacter.msg.info=${user.name}'s Characters:
+
+ConsoleCommandGroup.CharacterConsoleCommand.msg.missing=No character selected!
+ConsoleSubcommand.CharacterSelect.msg.info=Selected Character: ${character}
+ConsoleSubcommand.CharacterNew.msg.info=Created new character with id: ${character.id}
+
 # Discord
 
 ## Waifu
