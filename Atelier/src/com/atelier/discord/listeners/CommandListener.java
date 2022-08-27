@@ -3,13 +3,13 @@ package com.atelier.discord.listeners;
 import org.slf4j.Logger;
 
 import com.atelier.AtelierBot;
+import com.atelier.Commands;
 import com.atelier.Config;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.Menu;
 import com.atelier.discord.MenuManager;
 import com.atelier.discord.commands.CommandRegistry;
-import com.atelier.discord.commands.Commands;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -29,7 +29,7 @@ public class CommandListener extends ListenerAdapter {
 	
 	public CommandListener() {
 		this.log = AtelierBot.getInstance().getLogger();
-		Commands.registerCommands(reg);
+		Commands.registerDiscordCommands(reg);
 	}
 	
 	public CommandRegistry getRegistry() {

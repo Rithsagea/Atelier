@@ -66,3 +66,4 @@ Command.CharacterCommand.description=Manages the player's character
 
 Subcommand.CharacterList.name=list
 Subcommand.CharacterList.description=Lists the user's characters
+Subcommand.CharacterList.msg.title=${user.name}'s Characters

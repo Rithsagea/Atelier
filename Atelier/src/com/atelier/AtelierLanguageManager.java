@@ -5,7 +5,6 @@ import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommandGroup;
 import com.rithsagea.util.lang.LanguageManager;
-import com.rithsagea.util.lang.TemplateMessage;
 
 public class AtelierLanguageManager extends LanguageManager {
 	private static final AtelierLanguageManager INSTANCE = new AtelierLanguageManager();
@@ -25,9 +24,5 @@ public class AtelierLanguageManager extends LanguageManager {
 		}
 		
 		return get(String.format("%s.%s.%s", group, name, key));
-	}
-	
-	public TemplateMessage getMessage(Object obj, String key) {
-		return new TemplateMessage(get(obj, key));
 	}
 }

@@ -8,9 +8,7 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atelier.console.commands.CharacterConsoleCommand;
-import com.atelier.console.commands.StopConsoleCommand;
-import com.atelier.console.commands.UserConsoleCommand;
+import com.atelier.Commands;
 
 public class AtelierConsole implements Runnable {
 	private BufferedReader reader;
@@ -25,10 +23,7 @@ public class AtelierConsole implements Runnable {
 		registry = new ConsoleCommandRegistry();
 		logger = LoggerFactory.getLogger("Console");
 		
-		// register commands here
-		registry.registerCommand(new StopConsoleCommand());
-		registry.registerCommand(new UserConsoleCommand());
-		registry.registerCommand(new CharacterConsoleCommand());
+		Commands.registerConsoleCommands(registry);
 	}
 	
 	public void start() {

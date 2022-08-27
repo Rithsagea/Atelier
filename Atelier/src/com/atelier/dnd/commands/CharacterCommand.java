@@ -12,7 +12,9 @@ public class CharacterCommand extends GroupCommand {
 		@Override
 		public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setTitle(user.getName() + "'s Characters");
+			eb.setTitle(getMessage("title")
+					.add("user.name", user.getName())
+					.get());
 			for(AtelierCharacter character : user.getCharacters()) {
 				eb.appendDescription(character + "\n");
 			}
