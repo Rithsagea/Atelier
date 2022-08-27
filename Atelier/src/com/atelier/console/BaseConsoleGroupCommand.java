@@ -5,15 +5,15 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
-public abstract class BaseGroupConsoleCommand extends BaseConsoleCommand {
+public abstract class BaseConsoleGroupCommand extends BaseConsoleCommand implements AbstractConsoleGroupCommand {
 
 	private Map<String, AbstractConsoleSubcommand> subcommands = new HashMap<>();
 	
-	public BaseGroupConsoleCommand(String label, String... aliases) {
+	public BaseConsoleGroupCommand(String label, String... aliases) {
 		super(label, aliases);
 	}
 	
-	protected void registerSubcommand(AbstractConsoleSubcommand cmd) {
+	public void registerSubcommand(AbstractConsoleSubcommand cmd) {
 		subcommands.put(cmd.getLabel(), cmd);
 		for(String alias : cmd.getAliases()) {
 			subcommands.put(alias, cmd);

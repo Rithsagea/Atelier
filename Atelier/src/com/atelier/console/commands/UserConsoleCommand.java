@@ -6,12 +6,12 @@ import java.util.UUID;
 import org.slf4j.Logger;
 
 import com.atelier.console.BaseConsoleSubcommand;
-import com.atelier.console.BaseGroupConsoleCommand;
+import com.atelier.console.BaseConsoleGroupCommand;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.AtelierCharacter;
 
-public class UserConsoleCommand extends BaseGroupConsoleCommand {
+public class UserConsoleCommand extends BaseConsoleGroupCommand {
 
 	private class UserList extends BaseConsoleSubcommand {
 

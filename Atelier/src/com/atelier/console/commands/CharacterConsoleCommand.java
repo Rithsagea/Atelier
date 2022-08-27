@@ -6,11 +6,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 
 import com.atelier.console.BaseConsoleSubcommand;
-import com.atelier.console.BaseGroupConsoleCommand;
+import com.atelier.console.BaseConsoleGroupCommand;
 import com.atelier.database.AtelierDB;
 import com.atelier.dnd.AtelierCharacter;
 
-public class CharacterConsoleCommand extends BaseGroupConsoleCommand {
+public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 	
 	private class CharacterList extends BaseConsoleSubcommand {
 		public CharacterList() {

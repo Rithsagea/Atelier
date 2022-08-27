@@ -2,7 +2,9 @@ package com.atelier.console;
 
 import org.slf4j.Logger;
 
-public interface AbstractConsoleCommand {
+import com.atelier.AtelierObject;
+
+public interface AbstractConsoleCommand extends AtelierObject {
 	public String getLabel();
 	public String[] getAliases();
 	
