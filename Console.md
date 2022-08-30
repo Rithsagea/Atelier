@@ -64,3 +64,13 @@ Parameters:
 
 Syntax: `character new`<br>
 Description: Creates a new character, and returns its id.
+
+### character name
+
+Syntax: `character name`<br>
+Description: Displays the name of the selected character.<br>
+
+Syntax: `character name <name>`<br>
+Description: Changes the name of the selected character.<br>
+Paramters:
+- String `name`: The new name of the character.
