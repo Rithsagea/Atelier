@@ -12,6 +12,8 @@ ConsoleSubcommand.UserListCharacter.msg.info=${user.name}'s Characters:
 ConsoleCommandGroup.CharacterConsoleCommand.msg.missing=No character selected!
 ConsoleSubcommand.CharacterSelect.msg.info=Selected Character: ${character}
 ConsoleSubcommand.CharacterNew.msg.info=Created new character with id: ${character.id}
+ConsoleSubcommand.CharacterName.msg.info=Character's name is ${character.name}
+ConsoleSubcommand.CharacterName.msg.set=Character's name changed from ${character.name} to ${name}
 
 # Discord
 

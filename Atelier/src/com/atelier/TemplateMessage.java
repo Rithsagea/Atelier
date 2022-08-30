@@ -38,6 +38,7 @@ public class TemplateMessage {
 	
 	public TemplateMessage addCharacter(AtelierCharacter character, String name) {
 		tokens.put(name + ".id", character.getId().toString());
+		tokens.put(name + ".name", character.getName());
 		tokens.put(name, character.toString());
 		return this;
 	}

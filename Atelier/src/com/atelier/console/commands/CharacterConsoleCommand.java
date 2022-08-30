@@ -60,6 +60,26 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		}
 	}
 	
+	private class CharacterName extends BaseConsoleSubcommand {
+
+		public CharacterName() {
+			super("name");
+		}
+
+		@Override
+		public void execute(String[] args, Logger logger) {
+			if(args.length == 2) {
+				logger.info(getMessage("info").addCharacter(selectedCharacter).get());
+			} else {
+				logger.info(getMessage("set")
+						.addCharacter(selectedCharacter)
+						.add("name", args[2]).get());
+				selectedCharacter.setName(args[2]);
+			}
+		}
+		
+	}
+	
 	private static AtelierCharacter selectedCharacter;
 	
 	public CharacterConsoleCommand() {
@@ -68,6 +88,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		registerSubcommand(new CharacterList());
 		registerSubcommand(new CharacterSelect());
 		registerSubcommand(new CharacterNew());
+		registerSubcommand(new CharacterName());
 	}
 
 	@Override
