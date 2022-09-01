@@ -7,6 +7,7 @@ import com.atelier.discord.commands.AbstractInteraction;
 import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommandGroup;
+import com.atelier.dnd.Ability;
 import com.rithsagea.util.lang.LanguageManager;
 
 public class AtelierLanguageManager extends LanguageManager {
@@ -32,6 +33,8 @@ public class AtelierLanguageManager extends LanguageManager {
 			else if(obj instanceof AbstractConsoleGroupCommand) group = "ConsoleCommandGroup";
 			else group = "ConsoleCommand";
 		}
+		
+		if(obj instanceof Ability) name = ((Ability) obj).name();
 		
 		return get(String.format("%s.%s.%s", group, name, key));
 	}

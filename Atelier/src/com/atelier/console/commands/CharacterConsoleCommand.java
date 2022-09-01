@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import com.atelier.console.BaseConsoleGroupCommand;
 import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.database.AtelierDB;
+import com.atelier.dnd.Ability;
+import com.atelier.dnd.AbilitySpread;
 import com.atelier.dnd.AtelierCharacter;
 
 public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
@@ -80,6 +82,23 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		
 	}
 	
+	private class CharacterAbility extends BaseConsoleSubcommand {
+		public CharacterAbility() {
+			super("ability");
+		}
+
+		@Override
+		public void execute(String[] args, Logger logger) {
+			AbilitySpread spread = selectedCharacter.getAbilitySpread();
+			for(Ability ability : Ability.values()) {
+				logger.info(getMessage("info")
+						.addAbility(ability)
+						.add("baseScore", spread.getScore(ability))
+						.get());
+			}
+		}
+	}
+	
 	private static AtelierCharacter selectedCharacter;
 	
 	public CharacterConsoleCommand() {
@@ -89,6 +108,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		registerSubcommand(new CharacterSelect());
 		registerSubcommand(new CharacterNew());
 		registerSubcommand(new CharacterName());
+		registerSubcommand(new CharacterAbility());
 	}
 
 	@Override

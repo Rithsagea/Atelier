@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.text.StringSubstitutor;
 
 import com.atelier.discord.AtelierUser;
+import com.atelier.dnd.Ability;
 import com.atelier.dnd.AtelierCharacter;
 
 public class TemplateMessage {
@@ -25,26 +26,40 @@ public class TemplateMessage {
 		return this;
 	}
 	
-	public TemplateMessage addUser(AtelierUser user, String name) {
-		tokens.put(name + ".name", user.getName());
-		tokens.put(name + ".id", Long.toString(user.getId()));
-		tokens.put(name, user.toString());
+	public TemplateMessage add(String token, int value) {
+		tokens.put(token, Integer.toString(value));
+		return this;
+	}
+	
+	public TemplateMessage addUser(String token, AtelierUser user) {
+		tokens.put(token + ".name", user.getName());
+		tokens.put(token + ".id", Long.toString(user.getId()));
+		tokens.put(token, user.toString());
 		return this;
 	}
 	
 	public TemplateMessage addUser(AtelierUser user) {
-		return addUser(user, "user");
+		return addUser("user", user);
 	}
 	
-	public TemplateMessage addCharacter(AtelierCharacter character, String name) {
-		tokens.put(name + ".id", character.getId().toString());
-		tokens.put(name + ".name", character.getName());
-		tokens.put(name, character.toString());
+	public TemplateMessage addCharacter(String token, AtelierCharacter character) {
+		tokens.put(token + ".id", character.getId().toString());
+		tokens.put(token + ".name", character.getName());
+		tokens.put(token, character.toString());
 		return this;
 	}
 	
 	public TemplateMessage addCharacter(AtelierCharacter character) {
-		return addCharacter(character, "character");
+		return addCharacter("character", character);
+	}
+	
+	public TemplateMessage addAbility(String token, Ability ability) {
+		tokens.put(token, ability.getName());
+		return this;
+	}
+	
+	public TemplateMessage addAbility(Ability ability) {
+		return addAbility("ability", ability);
 	}
 	
 	public String get() {

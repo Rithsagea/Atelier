@@ -10,8 +10,10 @@ public class AtelierCharacter {
 	private UUID id;
 	private String name = "";
 	
+	private AbilitySpread abilitySpread = new AbilitySpread();
+	
 	public AtelierCharacter() {
-		id = UUID.randomUUID();
+		this(UUID.randomUUID());
 	}
 	
 	public AtelierCharacter(UUID id) {
@@ -22,12 +24,16 @@ public class AtelierCharacter {
 		return id;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public String getName() {
 		return name;
+	}
+	
+	public AbilitySpread getAbilitySpread() {
+		return abilitySpread;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	@Override
