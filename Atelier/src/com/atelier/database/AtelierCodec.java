@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BinaryNode;
+import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -99,15 +100,7 @@ public class AtelierCodec<T> implements Codec<T> {
 	
 	@Override
 	public T decode(BsonReader reader, DecoderContext decoderContext) {
-		ObjectNode node = mapper.createObjectNode();
-		BsonType valueType;
-		
-		reader.readStartDocument();
-		while((valueType = reader.readBsonType()) != BsonType.END_OF_DOCUMENT) {
-			node.set(reader.readName(), readNode(reader, valueType));
-		}
-		
-		reader.readEndDocument();
+		JsonNode node = readNode(reader, BsonType.DOCUMENT);
 		
 		try {
 			return mapper.readerFor(type).readValue(node);
@@ -122,6 +115,8 @@ public class AtelierCodec<T> implements Codec<T> {
 		
 		//TODO add more
 		switch(type) {
+			case INT32:
+				return new IntNode(reader.readInt32());
 			case INT64:
 				return new LongNode(reader.readInt64());
 			case STRING:
@@ -132,13 +127,17 @@ public class AtelierCodec<T> implements Codec<T> {
 				reader.readStartArray();
 				ArrayNode arr = mapper.createArrayNode();
 				BsonType valueType;
-				
-				while((valueType = reader.readBsonType()) != BsonType.END_OF_DOCUMENT) {
+				while((valueType = reader.readBsonType()) != BsonType.END_OF_DOCUMENT)
 					arr.add(readNode(reader, valueType));
-				}
-				
 				reader.readEndArray();
 				return arr;
+			case DOCUMENT:
+				reader.readStartDocument();
+				ObjectNode obj = mapper.createObjectNode();
+				while((valueType = reader.readBsonType()) != BsonType.END_OF_DOCUMENT)
+					obj.set(reader.readName(), readNode(reader, valueType));
+				reader.readEndDocument();
+				return obj;
 			default:
 				throw new RuntimeException("Unsupported Type: " + type);
 		}
