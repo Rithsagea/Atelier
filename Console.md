@@ -72,5 +72,16 @@ Description: Displays the name of the selected character.<br>
 
 Syntax: `character name <name>`<br>
 Description: Changes the name of the selected character.<br>
-Paramters:
+Parameters:
 - String `name`: The new name of the character.
+
+### character ability
+
+Syntax: `character ability`<br>
+Description: Displays the selected character's ability scores
+
+Syntax: `character ability <ability> <score>`<br>
+Description: Changes the ability score of the selected character.<br>
+Parameters:
+- Ability `ability`: The ability to change, `str|dex|con|int|wis|cha`
+- String `score`: The ability score
