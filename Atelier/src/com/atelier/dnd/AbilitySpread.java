@@ -15,7 +15,7 @@ public class AbilitySpread {
 	
 	public AbilitySpread() {
 		abilityScores = new EnumMap<>(Ability.class);
-		Stream.of(Ability.values()).forEach(a -> abilityScores.put(a, 0));
+		Stream.of(Ability.values()).forEach(a -> abilityScores.put(a, 8));
 		points = 27;
 	}
 	
@@ -27,11 +27,17 @@ public class AbilitySpread {
 		if(!MathUtil.within(MIN_SCORE, MAX_SCORE, score))
 			throw new RuntimeException("Invalid Score");
 		
-		int newPoints = points - ABILITY_COST[abilityScores.get(ability)] + ABILITY_COST[score];
+		int newPoints = points
+				+ ABILITY_COST[abilityScores.get(ability) - MIN_SCORE]
+				- ABILITY_COST[score - MIN_SCORE];
 		if(!MathUtil.within(0, 27, newPoints))
 			throw new RuntimeException("Insufficient Points");
 		
 		points = newPoints;
 		abilityScores.put(ability, score);
+	}
+
+	public int getPoints() {
+		return points;
 	}
 }

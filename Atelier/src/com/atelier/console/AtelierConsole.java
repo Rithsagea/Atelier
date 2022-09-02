@@ -51,7 +51,7 @@ public class AtelierConsole implements Runnable {
 				try {
 					cmd.execute(args, logger); 
 				} catch(Exception e) {
-					e.printStackTrace();
+					logger.info("Error: " + e.getMessage());
 				}
 			} else {
 				System.out.println("Echo: " + line);

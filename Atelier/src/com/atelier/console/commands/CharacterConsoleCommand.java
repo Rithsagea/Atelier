@@ -90,10 +90,23 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		@Override
 		public void execute(String[] args, Logger logger) {
 			AbilitySpread spread = selectedCharacter.getAbilitySpread();
-			for(Ability ability : Ability.values()) {
-				logger.info(getMessage("info")
+
+			if(args.length == 2) {
+				logger.info(getMessage("info.points").add("points", spread.getPoints()).get());
+				for(Ability ability : Ability.values()) {
+					logger.info(getMessage("info.score")
+							.addAbility(ability)
+							.add("baseScore", spread.getScore(ability))
+							.get());
+				}
+			} else {
+				Ability ability = Ability.fromLabel(args[2].toLowerCase());
+				int score = Integer.parseInt(args[3]);
+				
+				spread.setScore(ability, score);
+				logger.info(getMessage("set")
 						.addAbility(ability)
-						.add("baseScore", spread.getScore(ability))
+						.add("score", score)
 						.get());
 			}
 		}
