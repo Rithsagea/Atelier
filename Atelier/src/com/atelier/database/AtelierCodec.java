@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BinaryNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.LongNode;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
@@ -115,6 +116,9 @@ public class AtelierCodec<T> implements Codec<T> {
 		
 		//TODO add more
 		switch(type) {
+			case NULL:
+				reader.readNull();
+				return NullNode.getInstance();
 			case INT32:
 				return new IntNode(reader.readInt32());
 			case INT64:

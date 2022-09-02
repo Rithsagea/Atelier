@@ -8,6 +8,7 @@ import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommandGroup;
 import com.atelier.dnd.Ability;
+import com.atelier.dnd.embeds.AtelierEmbed;
 import com.rithsagea.util.lang.LanguageManager;
 
 public class AtelierLanguageManager extends LanguageManager {
@@ -18,6 +19,11 @@ public class AtelierLanguageManager extends LanguageManager {
 	public String get(Object obj, String key) {
 		String group = obj.getClass().getSimpleName();
 		String name = "";
+		
+		if(obj instanceof AtelierEmbed) {
+			name = group;
+			group = "Embed";
+		}
 		
 		if(obj instanceof AbstractInteraction) {
 			name = group;

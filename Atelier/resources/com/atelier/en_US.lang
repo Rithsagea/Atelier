@@ -88,6 +88,15 @@ Subcommand.CharacterList.name=list
 Subcommand.CharacterList.description=Lists the user's characters
 Subcommand.CharacterList.msg.title=${user.name}'s Characters
 
+Subcommand.CharacterSelect.name=select
+Subcommand.CharacterSelect.description=Selects a character to use
+Subcommand.CharacterSelect.id.name=id
+Subcommand.CharacterSelect.id.description=the id of the character
+Embed.CharacterInfoEmbedBuilder.title=${character.name}
+
+Subcommand.CharacterInfo.name=info
+Subcommand.CharacterInfo.description=Gets info about the selected character
+
 # DND
 
 Ability.STRENGTH.name=Strength

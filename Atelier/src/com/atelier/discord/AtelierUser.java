@@ -16,6 +16,7 @@ public class AtelierUser {
 	private final long id;
 	private String name;
 	private HashSet<UUID> characters = new HashSet<>();
+	private UUID selectedCharacter;
 	
 	@JsonCreator
 	public AtelierUser(@JsonProperty("_id")long id) {
@@ -47,6 +48,10 @@ public class AtelierUser {
 				.map((UUID id) -> db.getCharacter(id))
 				.collect(Collectors.toSet());
 	}
+	
+	public AtelierCharacter getSelectedCharacter() {
+		return AtelierDB.getInstance().getCharacter(selectedCharacter);
+	}
 
 	// MUTATORS
 
@@ -60,5 +65,12 @@ public class AtelierUser {
 	
 	public boolean removeCharacter(AtelierCharacter character) {
 		return characters.remove(character.getId());
+	}
+	
+	public void selectedCharacter(AtelierCharacter character) {
+		if(characters.contains(character.getId()))
+			selectedCharacter = character.getId();
+		else
+			throw new RuntimeException("User does not contain specified character");
 	}
 }
