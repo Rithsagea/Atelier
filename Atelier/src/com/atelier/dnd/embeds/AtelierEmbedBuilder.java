@@ -4,6 +4,6 @@ import com.atelier.AtelierObject;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 
-public class AtelierEmbed extends EmbedBuilder implements AtelierObject {
+public class AtelierEmbedBuilder extends EmbedBuilder implements AtelierObject {
 
 }

@@ -10,12 +10,13 @@ ConsoleSubcommand.UserRemoveCharacter.msg.missing=${user} does not have ${charac
 ConsoleSubcommand.UserListCharacter.msg.info=${user.name}'s Characters:
 
 ConsoleCommandGroup.CharacterConsoleCommand.msg.missing=No character selected!
+ConsoleSubcommand.CharacterList.msg.info=Characters:
 ConsoleSubcommand.CharacterSelect.msg.info=Selected Character: ${character}
 ConsoleSubcommand.CharacterNew.msg.info=Created new character with id: ${character.id}
 ConsoleSubcommand.CharacterName.msg.info=Character's name is ${character.name}
 ConsoleSubcommand.CharacterName.msg.set=Character's name changed from ${character.name} to ${name}
 ConsoleSubcommand.CharacterAbility.msg.info.points=Points: ${points}
-ConsoleSubcommand.CharacterAbility.msg.info.score=${ability}: ${baseScore}
+ConsoleSubcommand.CharacterAbility.msg.info.score=${ability}: ${abilityScore}[${baseScore}] (${abilityModifier})
 ConsoleSubcommand.CharacterAbility.msg.set=Set ${ability} to ${score}
 
 # Discord
@@ -86,7 +87,7 @@ Command.CharacterCommand.description=Manages the player's character
 
 Subcommand.CharacterList.name=list
 Subcommand.CharacterList.description=Lists the user's characters
-Subcommand.CharacterList.msg.title=${user.name}'s Characters
+Embed.CharacterListEmbedBuilder.msg.title=${user.name}'s Characters
 
 Subcommand.CharacterSelect.name=select
 Subcommand.CharacterSelect.description=Selects a character to use
@@ -96,6 +97,9 @@ Embed.CharacterInfoEmbedBuilder.title=${character.name}
 
 Subcommand.CharacterInfo.name=info
 Subcommand.CharacterInfo.description=Gets info about the selected character
+Embed.CharacterInfoEmbedBuilder.msg.title=${character.name}
+Embed.CharacterInfoEmbedBuilder.msg.ability=${ability}: ${baseScore}
+Embed.CharacterInfoEmbedBuilder.msg.ability.title=Abilities
 
 # DND
 

@@ -86,7 +86,10 @@ public class AtelierDB {
 		characterCollection = database.getCollection("characters", AtelierCharacter.class);
 		
 		userCollection.find().forEach((AtelierUser user) -> users.put(user.getId(), user));
-		characterCollection.find().forEach((AtelierCharacter character) -> characters.put(character.getId(), character));
+		characterCollection.find().forEach((AtelierCharacter character) -> {
+			character.reload();
+			characters.put(character.getId(), character);
+		});
 	}
 	
 	private void updateUser(AtelierUser user) {

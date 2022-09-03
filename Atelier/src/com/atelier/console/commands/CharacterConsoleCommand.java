@@ -11,6 +11,7 @@ import com.atelier.database.AtelierDB;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.AbilitySpread;
 import com.atelier.dnd.AtelierCharacter;
+import com.atelier.util.WordUtil;
 
 public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 	
@@ -21,7 +22,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
-			logger.info("Characters:");
+			logger.info(getMessage("info").get());
 			AtelierDB.getInstance().listCharacters()
 				.stream()
 				.sorted(new Comparator<AtelierCharacter>() {
@@ -29,8 +30,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 					public int compare(AtelierCharacter u1, AtelierCharacter u2) {
 						return u1.getName().compareTo(u2.getName());
 					}
-				}).forEach(
-					(AtelierCharacter c) -> logger.info("{} [{}]", c.getName(), c.getId()));
+				}).forEach(c -> logger.info(c.toString()));
 		}
 	}
 	
@@ -96,7 +96,9 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 				for(Ability ability : Ability.values()) {
 					logger.info(getMessage("info.score")
 							.addAbility(ability)
-							.add("baseScore", spread.getScore(ability))
+							.add("baseScore", selectedCharacter.getBaseScore(ability))
+							.add("abilityScore", selectedCharacter.getAbilityScore(ability))
+							.add("abilityModifier", WordUtil.formatModifier(selectedCharacter.getAbilityModifier(ability)))
 							.get());
 				}
 			} else {

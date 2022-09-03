@@ -1,4 +1,7 @@
 # TODO
 
 Add types as necessary to deserialization
-Add localization to character and user list console commands
+
+AtelierCharacter
+- Add proficiency bonus (level based)
+- Add equipment proficiencies

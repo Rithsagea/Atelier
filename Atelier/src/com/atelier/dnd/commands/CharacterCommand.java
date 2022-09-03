@@ -8,8 +8,8 @@ import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
 import com.atelier.dnd.AtelierCharacter;
 import com.atelier.dnd.embeds.CharacterInfoEmbedBuilder;
+import com.atelier.dnd.embeds.CharacterListEmbedBuilder;
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -20,13 +20,8 @@ public class CharacterCommand extends GroupCommand {
 	private class CharacterList extends BaseSubcommand {
 		@Override
 		public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
-			EmbedBuilder eb = new EmbedBuilder();
-			eb.setTitle(getMessage("title").addUser(user).get());
-			for(AtelierCharacter character : user.getCharacters()) {
-				eb.appendDescription(character + "\n");
-			}
-			
-			event.replyEmbeds(eb.build()).queue();
+			event.replyEmbeds(new CharacterListEmbedBuilder(user).build())
+				.setEphemeral(true).queue();
 		}
 	}
 	

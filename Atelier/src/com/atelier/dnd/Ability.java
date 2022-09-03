@@ -15,13 +15,8 @@ public enum Ability implements AtelierObject {
 	WISDOM,
 	CHARISMA;
 	
-	private String name;
-	private String label;
-	
-	private Ability() {
-		name = getProperty("name");
-		label = getProperty("label");
-	}
+	private final String name = getProperty("name");
+	private final String label = getProperty("label");
 	
 	public String getName() {
 		return name;
