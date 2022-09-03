@@ -47,7 +47,7 @@ public class CharacterCommand extends GroupCommand {
 		public void complete(AtelierUser user, CommandAutoCompleteInteractionEvent event) {
 			if(event.getFocusedOption().getName().equals(id)) {
 				event.replyChoices(user.getCharacters().stream()
-					.filter(c -> c.getId().toString().startsWith(event.getFocusedOption().getValue()))
+					.filter(c -> c.getName().startsWith(event.getFocusedOption().getValue()))
 					.map(c -> new Command.Choice(c.getName(), c.getId().toString()))
 					.collect(Collectors.toList())).queue();
 			}

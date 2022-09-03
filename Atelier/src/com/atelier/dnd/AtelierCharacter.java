@@ -144,6 +144,10 @@ public class AtelierCharacter implements Listener {
 		return savingModifiers.get(ability);
 	}
 	
+	public int getSkillModifier(Skill skill) {
+		return skillModifiers.get(skill);
+	}
+	
 	public EventBus getEventBus() {
 		return eventBus;
 	}

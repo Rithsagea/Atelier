@@ -97,9 +97,26 @@ Embed.CharacterInfoEmbedBuilder.title=${character.name}
 
 Subcommand.CharacterInfo.name=info
 Subcommand.CharacterInfo.description=Gets info about the selected character
-Embed.CharacterInfoEmbedBuilder.msg.title=${character.name}
-Embed.CharacterInfoEmbedBuilder.msg.ability=${ability}: ${baseScore}
+Embed.CharacterInfoEmbedBuilder.msg.title=${character}
+Embed.CharacterInfoEmbedBuilder.msg.ability=${ability}: ${abilityScore}[${baseScore}] (${abilityModifier})
 Embed.CharacterInfoEmbedBuilder.msg.ability.title=Abilities
+
+Command.RollCommand.name=roll
+Command.RollCommand.description=Roll dice for various scenarios
+
+Subcommand.RollSaving.name=saving
+Subcommand.RollSaving.description=Rolls for a saving check
+Subcommand.RollSaving.ability.name=ability
+Subcommand.RollSaving.ability.description=The ability to roll for
+Embed.RollSavingEmbedBuilder.msg.title=${ability} Saving Check
+Embed.RollSavingEmbedBuilder.msg.roll=**${value}** (__${roll}__${modifier})
+
+Subcommand.RollSkill.name=skill
+Subcommand.RollSkill.description=Rolls for a skill check
+Subcommand.RollSkill.skill.name=skill
+Subcommand.RollSkill.skill.description=The skill to roll for
+Embed.RollSkillEmbedBuilder.msg.title=${skill} Check
+Embed.RollSkillEmbedBuilder.msg.roll=**${value}** (__${roll}__${modifier})
 
 # DND
 
@@ -116,3 +133,22 @@ Ability.CONSTITUTION.label=con
 Ability.INTELLIGENCE.label=int
 Ability.WISDOM.label=wis
 Ability.CHARISMA.label=cha
+
+Skill.ACROBATICS.name=Acrobatics
+Skill.ANIMAL_HANDLING.name=Animal Handling
+Skill.ARCANA.name=Arcana
+Skill.ATHLETICS.name=Athletics
+Skill.DECEPTION.name=Deception
+Skill.HISTORY.name=History
+Skill.INSIGHT.name=Insight
+Skill.INTIMIDATION.name=Intimidation
+Skill.INVESTIGATION.name=Investigation
+Skill.MEDICINE.name=Medicine
+Skill.NATURE.name=Nature
+Skill.PERCEPTION.name=Perception
+Skill.PERFORMANCE.name=Performance
+Skill.PERSUASION.name=Persuasion
+Skill.RELIGION.name=Religion
+Skill.SLEIGHT_OF_HAND.name=Sleight of Hand
+Skill.STEALTH.name=Stealth
+Skill.SURVIVAL.name=Survival

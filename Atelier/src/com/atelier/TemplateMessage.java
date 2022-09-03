@@ -8,6 +8,7 @@ import org.apache.commons.text.StringSubstitutor;
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.Skill;
 
 public class TemplateMessage {
 	
@@ -60,6 +61,15 @@ public class TemplateMessage {
 	
 	public TemplateMessage addAbility(Ability ability) {
 		return addAbility("ability", ability);
+	}
+	
+	public TemplateMessage addSkill(String token, Skill skill) {
+		tokens.put(token, skill.getName());
+		return this;
+	}
+	
+	public TemplateMessage addSkill(Skill skill) {
+		return addSkill("skill", skill);
 	}
 	
 	public String get() {

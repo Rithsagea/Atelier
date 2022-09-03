@@ -8,6 +8,7 @@ import com.atelier.discord.commands.CommandRegistry;
 import com.atelier.discord.commands.WaifuCommand;
 import com.atelier.discord.commands.music.MusicCommand;
 import com.atelier.dnd.commands.CharacterCommand;
+import com.atelier.dnd.commands.RollCommand;
 
 public class Commands {
 	public static void registerDiscordCommands(CommandRegistry reg) {
@@ -16,6 +17,7 @@ public class Commands {
 		
 		//DND
 		reg.registerCommand(new CharacterCommand());
+		reg.registerCommand(new RollCommand());
 	}
 	
 	public static void registerConsoleCommands(ConsoleCommandRegistry registry) {

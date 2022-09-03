@@ -1,8 +1,8 @@
 package com.atelier.dnd.embeds;
 
 import com.atelier.dnd.Ability;
-import com.atelier.dnd.AbilitySpread;
 import com.atelier.dnd.AtelierCharacter;
+import com.atelier.util.WordUtil;
 
 public class CharacterInfoEmbedBuilder extends AtelierEmbedBuilder {
 	public CharacterInfoEmbedBuilder(AtelierCharacter character) {
@@ -11,12 +11,13 @@ public class CharacterInfoEmbedBuilder extends AtelierEmbedBuilder {
 		setTitle(getMessage("title").addCharacter(character).get());
 		
 		prefix = "";
-		AbilitySpread spread = character.getAbilitySpread();
 		for(Ability ability : Ability.values()) {
 			content.append(prefix);
 			content.append(getMessage("ability")
 					.addAbility(ability)
-					.add("baseScore", spread.getScore(ability))
+					.add("baseScore", character.getBaseScore(ability))
+					.add("abilityScore", character.getAbilityScore(ability))
+					.add("abilityModifier", WordUtil.formatModifier(character.getAbilityModifier(ability)))
 					.get());
 			prefix = "\n";
 		}
