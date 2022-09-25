@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class LanguageManager {
 
@@ -18,13 +19,17 @@ public class LanguageManager {
 	}
 
 	private void reloadMessages() {
-		try {
-			messages = new Properties();
-			missing = new LinkedHashSet<>();
-			messages.load(getClass().getResourceAsStream(locale + ".properties"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		messages = new Properties();
+		missing = new LinkedHashSet<>();
+
+		Stream.of("console", "discord", "dnd").forEach(
+			s -> {
+				try {
+					messages.load(ClassLoader.getSystemResourceAsStream(String.format("lang/%s/%s.properties", locale, s)));
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+			});
 	}
 
 	public Locale getLocale() {
