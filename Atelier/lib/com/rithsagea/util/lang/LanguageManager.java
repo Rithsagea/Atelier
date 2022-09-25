@@ -21,24 +21,24 @@ public class LanguageManager {
 		try {
 			messages = new Properties();
 			missing = new LinkedHashSet<>();
-			messages.load(getClass().getResourceAsStream(locale + ".lang"));
+			messages.load(getClass().getResourceAsStream(locale + ".properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Locale getLocale() {
 		return locale;
 	}
-	
+
 	public String get(String key) {
-		if(!messages.containsKey(key)) {
+		if (!messages.containsKey(key)) {
 			missing.add(key + "=");
 			return key;
 		}
 		return messages.getProperty(key);
 	}
-	
+
 	public Set<String> getMissing() {
 		return Collections.unmodifiableSet(missing);
 	}
