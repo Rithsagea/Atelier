@@ -42,21 +42,21 @@ public class CommandListener extends ListenerAdapter {
 		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
 		
 		//delete all commands
-//		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
+		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
 		
 		reg.getCommands().stream()
 			.map(cmd -> guild.upsertCommand(cmd.getData()))
 			.forEach(cmd -> cmd.queue());
 		
 		//global commands
-//		JDA jda = event.getJDA();
+		// JDA jda = event.getJDA();
 		
 		//delete all commands
-//		jda.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
+		// jda.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
 
-//		Stream.of(waifuCommand, musicCommand)
-//			.map(cmd -> jda.upsertCommand(cmd.getData()))
-//			.forEach(cmd -> cmd.queue());
+		// Stream.of(reg.getCommand("music"))
+		// 	.map(cmd -> jda.upsertCommand(cmd.getData()))
+		// 	.forEach(cmd -> cmd.queue());
 	}
 	
 	@Override

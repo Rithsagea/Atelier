@@ -2,8 +2,6 @@ package com.atelier.util;
 
 public class WordUtil {
 	
-	public static final String BULLET_POINT = "•";
-	
 	public static String capitalize(String str) {
 		str = str.toLowerCase();
 		StringBuilder builder = new StringBuilder();
