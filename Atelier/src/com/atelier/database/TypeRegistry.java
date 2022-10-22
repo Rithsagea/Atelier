@@ -35,6 +35,8 @@ public class TypeRegistry implements CodecProvider {
 		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
 		mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		Types.registerTypes(mapper);
 	}
 	
 	public CodecRegistry getCodecRegistry() {

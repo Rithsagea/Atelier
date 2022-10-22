@@ -29,7 +29,8 @@ public class AtelierCharacter implements Listener {
 	private String name = "";
 	
 	private AbilitySpread abilitySpread = new AbilitySpread();
-	
+	private CharacterClass characterClass;
+
 	private transient EventBus eventBus = new EventBus();
 	
 	private transient Set<Ability> savingProficiencies = EnumSet.noneOf(Ability.class);
@@ -147,6 +148,10 @@ public class AtelierCharacter implements Listener {
 	public int getSkillModifier(Skill skill) {
 		return skillModifiers.get(skill);
 	}
+
+	public CharacterClass getCharacterClass() {
+		return characterClass;
+	}
 	
 	public EventBus getEventBus() {
 		return eventBus;
@@ -156,6 +161,10 @@ public class AtelierCharacter implements Listener {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setCharacterClass(CharacterClass characterClass) {
+		this.characterClass = characterClass;
 	}
 	
 	@Override
