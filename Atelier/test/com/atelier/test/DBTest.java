@@ -6,7 +6,8 @@ import com.atelier.Config;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.AtelierCharacter;
-import com.atelier.dnd.CharacterClass.TestClass;
+import com.atelier.dnd.character.CharacterClass.TestAttribute;
+import com.atelier.dnd.character.CharacterClass.TestClass;
 
 public class DBTest {
 	public static void main(String[] args) {
@@ -35,6 +36,7 @@ public class DBTest {
 		
 		character = db.getCharacter(charId);
 		character.setCharacterClass(new TestClass());
+		character.getCharacterClass().levelUp();
 
 		user.addCharacter(character);
 		
@@ -44,5 +46,6 @@ public class DBTest {
 		System.out.println("Character Name: " + character.getName());
 		System.out.println("Character Id: " + character.getId());
 		System.out.println("Character Class Name: " + character.getCharacterClass());
+		System.out.println("Test: " + ((TestAttribute)character.getCharacterClass().getAttributes().get("1-test")).test);
 	}
 }

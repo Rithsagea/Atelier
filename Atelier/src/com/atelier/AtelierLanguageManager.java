@@ -8,8 +8,9 @@ import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommandGroup;
 import com.atelier.dnd.Ability;
-import com.atelier.dnd.CharacterClass;
 import com.atelier.dnd.Skill;
+import com.atelier.dnd.character.CharacterAttribute;
+import com.atelier.dnd.character.CharacterClass;
 import com.atelier.dnd.embeds.AtelierEmbedBuilder;
 import com.rithsagea.util.lang.LanguageManager;
 
@@ -48,6 +49,11 @@ public class AtelierLanguageManager extends LanguageManager {
 		if(obj instanceof CharacterClass) {
 			name = group;
 			group = "CharacterClass";
+		}
+
+		if( obj instanceof CharacterAttribute) {
+			name = group;
+			group = "CharacterAttribute";
 		}
 
 		return get(String.format("%s.%s.%s", group, name, key));

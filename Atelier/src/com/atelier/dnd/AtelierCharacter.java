@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.atelier.dnd.character.CharacterClass;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
