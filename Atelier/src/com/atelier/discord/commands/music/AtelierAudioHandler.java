@@ -163,14 +163,13 @@ public class AtelierAudioHandler extends AudioEventAdapter implements AudioLoadR
 
 	@Override
 	public void noMatches() {
-		channel.sendMessage("No matches!")
-			.queue();
+		channel.sendMessage("No matches!").queue();
 	}
 
 	@Override
-	public void loadFailed(FriendlyException exception) {
-		channel.sendMessage("Something unexpected happened!")
-			.queue();
+	public void loadFailed(FriendlyException e) {
+		channel.sendMessage("Something unexpected happened!").queue();
+		e.printStackTrace();
 	}
 
 }

@@ -40,7 +40,7 @@ public class AtelierCharacter implements Listener {
 	private transient Map<Ability, Integer> savingModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Skill, Integer> skillModifiers = new EnumMap<>(Skill.class);
 	
-	private transient int proficiencyBonus; // TODO
+	private transient int proficiencyBonus; // TODO finish this
 	
 	public AtelierCharacter() {
 		this(UUID.randomUUID());

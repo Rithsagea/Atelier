@@ -42,7 +42,7 @@ public class CommandListener extends ListenerAdapter {
 		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
 		
 		//delete all commands
-		guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
+		// guild.retrieveCommands().queue(list -> list.forEach(cmd -> cmd.delete().queue()));
 		
 		reg.getCommands().stream()
 			.map(cmd -> guild.upsertCommand(cmd.getData()))
