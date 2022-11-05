@@ -2,6 +2,7 @@ package com.atelier.dnd;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.atelier.dnd.character.CharacterAttribute;
 import com.atelier.dnd.character.CharacterClass;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
@@ -55,6 +57,7 @@ public class AtelierCharacter implements Listener {
 	public void reload() {
 		eventBus.clearListeners();
 		eventBus.registerListener(this);
+		eventBus.registerListener(characterClass);
 		
 		eventBus.submitEvent(new LoadCharacterEvent(this));
 		eventBus.submitEvent(new LoadSavingProficiencyEvent(this));
@@ -152,6 +155,10 @@ public class AtelierCharacter implements Listener {
 
 	public CharacterClass getCharacterClass() {
 		return characterClass;
+	}
+
+	public Set<CharacterAttribute> getAttributes() {
+		return new HashSet<>(characterClass.getAttributes().values());
 	}
 	
 	public EventBus getEventBus() {

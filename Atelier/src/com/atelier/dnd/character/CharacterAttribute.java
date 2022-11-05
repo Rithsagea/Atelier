@@ -11,4 +11,9 @@ public class CharacterAttribute implements Listener, AtelierObject {
 	public String getName() {
 		return getProperty("name");
 	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
 }
