@@ -1,4 +1,7 @@
-package com.atelier;
+package com.atelier.database;
+
+import com.atelier.util.AtelierLanguageManager;
+import com.atelier.util.TemplateMessage;
 
 public interface AtelierObject {
 	public default String getProperty(String key) {

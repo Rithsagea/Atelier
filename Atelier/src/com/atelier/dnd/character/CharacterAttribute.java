@@ -1,6 +1,6 @@
 package com.atelier.dnd.character;
 
-import com.atelier.AtelierObject;
+import com.atelier.database.AtelierObject;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;

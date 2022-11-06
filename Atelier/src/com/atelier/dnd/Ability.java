@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.atelier.AtelierObject;
+import com.atelier.database.AtelierObject;
 
 public enum Ability implements AtelierObject {
 	STRENGTH,

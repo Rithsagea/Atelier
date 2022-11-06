@@ -1,4 +1,4 @@
-package com.atelier;
+package com.atelier.util;
 
 import java.util.HashMap;
 import java.util.Map;

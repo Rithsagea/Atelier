@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-import com.atelier.AtelierObject;
+import com.atelier.database.AtelierObject;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterClassEvent;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

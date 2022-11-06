@@ -1,6 +1,6 @@
 package com.atelier.dnd;
 
-import com.atelier.AtelierObject;
+import com.atelier.database.AtelierObject;
 
 public enum Skill implements AtelierObject {
 	ACROBATICS(Ability.DEXTERITY), ANIMAL_HANDLING(Ability.WISDOM), ARCANA(Ability.INTELLIGENCE),

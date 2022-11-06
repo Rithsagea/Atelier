@@ -1,4 +1,4 @@
-package com.atelier;
+package com.atelier.util;
 
 import com.atelier.console.AbstractConsoleCommand;
 import com.atelier.console.AbstractConsoleGroupCommand;

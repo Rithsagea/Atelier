@@ -1,7 +1,7 @@
 package com.atelier.discord.commands.music;
 
-import com.atelier.AtelierLanguageManager;
 import com.atelier.discord.AtelierUser;
+import com.atelier.util.AtelierLanguageManager;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
