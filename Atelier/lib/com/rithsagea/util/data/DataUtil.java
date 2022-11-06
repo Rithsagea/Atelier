@@ -110,6 +110,7 @@ public class DataUtil {
 				}
 			}
 			
+			if(field == null) return null;
 			field.setAccessible(true);
 			return field.get(object);
 		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
