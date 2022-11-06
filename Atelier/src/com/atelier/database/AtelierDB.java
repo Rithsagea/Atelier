@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import com.atelier.Config;
 import com.atelier.discord.AtelierUser;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;

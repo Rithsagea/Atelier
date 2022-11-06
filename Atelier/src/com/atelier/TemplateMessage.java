@@ -7,8 +7,8 @@ import org.apache.commons.text.StringSubstitutor;
 
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.Ability;
-import com.atelier.dnd.AtelierCharacter;
 import com.atelier.dnd.Skill;
+import com.atelier.dnd.character.AtelierCharacter;
 
 public class TemplateMessage {
 	

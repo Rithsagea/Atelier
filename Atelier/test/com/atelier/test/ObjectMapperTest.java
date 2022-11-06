@@ -1,7 +1,7 @@
 package com.atelier.test;
 
 import com.atelier.discord.AtelierUser;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.JsonNode;

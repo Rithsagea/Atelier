@@ -9,7 +9,7 @@ import com.atelier.console.BaseConsoleGroupCommand;
 import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 
 public class UserConsoleCommand extends BaseConsoleGroupCommand {
 

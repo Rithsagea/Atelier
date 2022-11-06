@@ -6,7 +6,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.atelier.database.AtelierDB;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.atelier.dnd.Ability;
-import com.atelier.dnd.AtelierCharacter;
 import com.atelier.dnd.Skill;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 
 public class LoadProficiencyEvent<T extends Enum<T>> extends LoadCharacterEvent {

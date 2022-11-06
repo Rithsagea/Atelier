@@ -3,8 +3,8 @@ package com.atelier.dnd.events;
 import java.util.Map;
 
 import com.atelier.dnd.Ability;
-import com.atelier.dnd.AtelierCharacter;
 import com.atelier.dnd.Skill;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 
 public class LoadValuesEvent<K extends Enum<K>, V> extends LoadCharacterEvent {

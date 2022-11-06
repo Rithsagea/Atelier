@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.dnd.embeds.CharacterInfoEmbedBuilder;
 import com.atelier.dnd.embeds.CharacterListEmbedBuilder;
 

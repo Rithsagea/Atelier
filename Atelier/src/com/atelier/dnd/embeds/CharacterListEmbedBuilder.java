@@ -1,7 +1,7 @@
 package com.atelier.dnd.embeds;
 
 import com.atelier.discord.AtelierUser;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 
 public class CharacterListEmbedBuilder extends AtelierEmbedBuilder {
 	public CharacterListEmbedBuilder(AtelierUser user) {

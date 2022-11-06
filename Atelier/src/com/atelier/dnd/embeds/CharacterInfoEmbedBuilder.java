@@ -1,7 +1,7 @@
 package com.atelier.dnd.embeds;
 
 import com.atelier.dnd.Ability;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.util.WordUtil;
 
 public class CharacterInfoEmbedBuilder extends AtelierEmbedBuilder {

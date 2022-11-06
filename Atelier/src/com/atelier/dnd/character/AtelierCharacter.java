@@ -1,4 +1,4 @@
-package com.atelier.dnd;
+package com.atelier.dnd.character;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -10,8 +10,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.atelier.dnd.character.CharacterAttribute;
-import com.atelier.dnd.character.CharacterClass;
+import com.atelier.dnd.Ability;
+import com.atelier.dnd.AbilitySpread;
+import com.atelier.dnd.Skill;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;

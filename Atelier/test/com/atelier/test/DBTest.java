@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.atelier.Config;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.dnd.character.CharacterAttribute;
 import com.rithsagea.phb.classes.rogue.Rogue;
 

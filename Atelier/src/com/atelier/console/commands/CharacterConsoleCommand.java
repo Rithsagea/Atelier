@@ -10,7 +10,7 @@ import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.database.AtelierDB;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.AbilitySpread;
-import com.atelier.dnd.AtelierCharacter;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.util.WordUtil;
 
 public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
