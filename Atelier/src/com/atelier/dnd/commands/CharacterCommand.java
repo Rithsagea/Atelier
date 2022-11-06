@@ -7,6 +7,7 @@ import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
 import com.atelier.dnd.character.AtelierCharacter;
+import com.atelier.dnd.embeds.CharacterAttributesEmbedBuilder;
 import com.atelier.dnd.embeds.CharacterInfoEmbedBuilder;
 import com.atelier.dnd.embeds.CharacterListEmbedBuilder;
 
@@ -62,14 +63,21 @@ public class CharacterCommand extends GroupCommand {
 	private class CharacterInfo extends BaseSubcommand {
 		@Override
 		public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
-			event.replyEmbeds(new CharacterInfoEmbedBuilder(user.getSelectedCharacter()).build())
-				.setEphemeral(true).queue();
+			event.replyEmbeds(new CharacterInfoEmbedBuilder(user.getSelectedCharacter()).build()).setEphemeral(true).queue();
 		}
 	}
 	
+	private class CharacterAttribute extends BaseSubcommand {
+		@Override
+		public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
+			event.replyEmbeds(new CharacterAttributesEmbedBuilder(user.getSelectedCharacter()).build()).setEphemeral(true).queue();
+		}
+	}
+
 	public CharacterCommand() {
 		registerSubcommand(new CharacterList());
 		registerSubcommand(new CharacterSelect());
 		registerSubcommand(new CharacterInfo());
+		registerSubcommand(new CharacterAttribute());
 	}
 }

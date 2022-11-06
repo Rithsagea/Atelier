@@ -7,7 +7,8 @@ import com.atelier.util.WordUtil;
 public class CharacterInfoEmbedBuilder extends AtelierEmbedBuilder {
 	public CharacterInfoEmbedBuilder(AtelierCharacter character) {
 		StringBuilder content = new StringBuilder();
-		String prefix ;
+		String prefix;
+		
 		setTitle(getMessage("title").addCharacter(character).get());
 		
 		prefix = "";
