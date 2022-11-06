@@ -11,10 +11,10 @@ public class Rogue extends CharacterClass {
 	
 	@Override
 	public void init() {
-		registerAttribute(0, "0-test", new TestAttribute());
+		registerFeature(0, "0-test", new TestAttribute());
 
-		registerAttribute(1, "1-expertise", new RogueExpertiseFeature());
-		registerAttribute(1, "1-sneak-attack", new SneakAttackFeature());
-		registerAttribute(1, "1-thieves-cant", new ThievesCantFeature());
+		registerFeature(1, "1-expertise", new RogueExpertiseFeature());
+		registerFeature(1, "1-sneak-attack", new SneakAttackFeature());
+		registerFeature(1, "1-thieves-cant", new ThievesCantFeature());
 	}
 }

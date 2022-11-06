@@ -23,16 +23,16 @@ public abstract class CharacterClass implements AtelierObject, Listener {
 	private transient EventBus eventBus = new EventBus();
 	private int level = 0;
 	
-	private Map<String, CharacterAttribute> attributes = new HashMap<>();
+	private Map<String, ClassFeature> features = new HashMap<>();
 	
-	private transient List<Map<String, CharacterAttribute>> levelAttributeMap;
+	private transient List<Map<String, ClassFeature>> levelFeatureMap;
 
 	public CharacterClass() {
-		levelAttributeMap = new ArrayList<>();
-		IntStream.range(0, 20).forEach(x -> levelAttributeMap.add(new HashMap<>()));
+		levelFeatureMap = new ArrayList<>();
+		IntStream.range(0, 20).forEach(x -> levelFeatureMap.add(new HashMap<>()));
 
 		init();
-		attributes.putAll(levelAttributeMap.get(0));
+		features.putAll(levelFeatureMap.get(0));
 	}
 
 	/**
@@ -42,14 +42,17 @@ public abstract class CharacterClass implements AtelierObject, Listener {
 	 */
 	@EventHandler
 	private void onLoadCharacter(LoadCharacterEvent event) {
-		attributes.values().forEach(eventBus::registerListener);
+		features.values().forEach(eventBus::registerListener);
 		eventBus.submitEvent(new LoadCharacterClassEvent(this));
 	}
 
+	/**
+	 * Register features gained through leveling for this class
+	 */
 	protected abstract void init();
 
-	protected void registerAttribute(int level, String key, CharacterAttribute attribute) {
-		levelAttributeMap.get(level).put(key, attribute);
+	protected void registerFeature(int level, String key, ClassFeature feature) {
+		levelFeatureMap.get(level).put(key, feature);
 	}
 
 	public String getName() { 
@@ -64,15 +67,11 @@ public abstract class CharacterClass implements AtelierObject, Listener {
 	@Deprecated
 	public void levelUp() {
 		level++;
-		attributes.putAll(levelAttributeMap.get(level));
+		features.putAll(levelFeatureMap.get(level));
 	}
 	
-	public EventBus getEventBus() {
-		return eventBus;
-	}
-	
-	public Map<String, CharacterAttribute> getAttributes() {
-		return Collections.unmodifiableMap(attributes);
+	public Map<String, ClassFeature> getAttributes() {
+		return Collections.unmodifiableMap(features);
 	}
 	
 	@Override
