@@ -1,8 +1,8 @@
 package com.atelier.dnd.character;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -33,7 +33,8 @@ public class AtelierCharacter implements Listener {
 	private String name = "";
 	
 	private AbilitySpread abilitySpread = new AbilitySpread();
-	private CharacterClass characterClass;
+	private CharacterClass characterClass = new NullClass();
+	private CharacterRace characterRace = new NullRace();
 
 	private transient EventBus eventBus = new EventBus();
 	
@@ -59,6 +60,7 @@ public class AtelierCharacter implements Listener {
 		eventBus.clearListeners();
 		eventBus.registerListener(this);
 		eventBus.registerListener(characterClass);
+		eventBus.registerListener(characterRace);
 		
 		eventBus.submitEvent(new LoadCharacterEvent(this));
 		eventBus.submitEvent(new LoadSavingProficiencyEvent(this));
@@ -158,8 +160,14 @@ public class AtelierCharacter implements Listener {
 		return characterClass;
 	}
 
-	public Set<CharacterAttribute> getAttributes() {
-		return new HashSet<>(characterClass.getAttributes().values());
+	public CharacterRace getCharacterRace() {
+		return characterRace;
+	}
+
+	public Stream<CharacterAttribute> getAttributes() {
+		return Stream.of(
+			characterClass.getAttributes().values(),
+			characterRace.getTraits().values()).flatMap(Collection::stream);
 	}
 	
 	public EventBus getEventBus() {
@@ -174,6 +182,10 @@ public class AtelierCharacter implements Listener {
 
 	public void setCharacterClass(CharacterClass characterClass) {
 		this.characterClass = characterClass;
+	}
+
+	public void setCharacterRace(CharacterRace characterRace) {
+		this.characterRace = characterRace;
 	}
 	
 	@Override

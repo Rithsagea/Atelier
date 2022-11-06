@@ -1,6 +1,7 @@
 package com.atelier.dnd.character;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.atelier.AtelierObject;
@@ -16,9 +17,9 @@ import com.rithsagea.util.event.Listener;
 @JsonTypeInfo(use = Id.NAME, include = As.EXTERNAL_PROPERTY, property = "_cls", defaultImpl = Void.class)
 public abstract class CharacterRace implements AtelierObject, Listener {
 	
-	private EventBus eventBus = new EventBus();
+	private transient EventBus eventBus = new EventBus();
 
-	private Map<String, RacialTrait> traits;
+	private Map<String, RacialTrait> traits = new HashMap<>();
 
 	public CharacterRace() {
 		init();
@@ -40,8 +41,8 @@ public abstract class CharacterRace implements AtelierObject, Listener {
 	 */
 	protected abstract void init();
 
-	protected void registerTrait(String key, RacialTrait feature) {
-		traits.put(key, feature);
+	protected void registerTrait(String key, RacialTrait trait) {
+		traits.put(key, trait);
 	}
 
 	public String getName() { 

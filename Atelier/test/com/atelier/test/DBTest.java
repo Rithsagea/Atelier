@@ -6,13 +6,14 @@ import com.atelier.Config;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.character.AtelierCharacter;
-import com.atelier.dnd.character.CharacterAttribute;
 import com.rithsagea.phb.classes.rogue.Rogue;
+import com.rithsagea.phb.races.elf.Elf;
 
 public class DBTest {
 	public static void main(String[] args) {
 		Config config = Config.init("config.properties");
 		AtelierDB db = AtelierDB.init(config);
+		db.connect();
 
 		editDB(db);
 
@@ -37,6 +38,7 @@ public class DBTest {
 		character = db.getCharacter(charId);
 		character.setCharacterClass(new Rogue());
 		character.getCharacterClass().levelUp();
+		character.setCharacterRace(new Elf());
 
 		user.addCharacter(character);
 		
@@ -45,11 +47,10 @@ public class DBTest {
 		System.out.println();
 		System.out.println("Character Name: " + character.getName());
 		System.out.println("Character Id: " + character.getId());
-		System.out.println("Character Class Name: " + character.getCharacterClass());
+		System.out.println("Character Class: " + character.getCharacterClass());
+		System.out.println("Character Race: " + character.getCharacterRace());
 		System.out.println();
 		System.out.println("Character Attributes: ");
-		for(CharacterAttribute attr : character.getAttributes()) {
-			System.out.println(attr);
-		}
+		character.getAttributes().forEach(System.out::println);
 	}
 }
