@@ -53,6 +53,10 @@ public class AtelierBot {
 		running = true;
 		logger.info("Initializing Atelier");
 		
+		console.start();
+
+		db.connect();
+
 		JDABuilder builder = JDABuilder.createDefault(config.getDiscordToken());
 		builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
 		try {
@@ -61,13 +65,11 @@ public class AtelierBot {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
-		console.start();
-
-		registerTasks();
 
 		jda.addEventListener(new LoginListener(this));
 		jda.addEventListener(new CommandListener());
+
+		registerTasks();
 	}
 
 	private void registerTasks() {

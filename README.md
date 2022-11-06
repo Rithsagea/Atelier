@@ -14,4 +14,5 @@ To run an instance of this bot, the user must provide a MongoDB database link, a
 	- [Jackson](https://github.com/FasterXML/jackson/) (Serialization)
 	- [Apache Commons Text](https://commons.apache.org/proper/commons-text/)
 ## Documentation
-[Console Commands](./Console.md)
+- [Program Lifecycle](./Lifecycle.md)
+- [Console Commands](./Console.md)

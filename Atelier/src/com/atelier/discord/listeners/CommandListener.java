@@ -1,5 +1,7 @@
 package com.atelier.discord.listeners;
 
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 
 import com.atelier.AtelierBot;
@@ -36,8 +38,9 @@ public class CommandListener extends ListenerAdapter {
 		return reg;
 	}
 	
+	//TODO Null safety checks
 	@Override
-	public void onReady(ReadyEvent event) {
+	public void onReady(@Nonnull ReadyEvent event) {
 		//testing commands
 		Guild guild = event.getJDA().getGuildById(Config.getInstance().getTestingGuildId());
 		
@@ -60,7 +63,7 @@ public class CommandListener extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+	public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
 		if(event.getUser().isBot()) return;
 		
 		AtelierUser user = db.getUser(event.getUser().getIdLong());
@@ -69,7 +72,7 @@ public class CommandListener extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event) {
+	public void onCommandAutoCompleteInteraction(@Nonnull CommandAutoCompleteInteractionEvent event) {
 		if(event.getUser().isBot()) return;
 		
 		AtelierUser user = db.getUser(event.getUser().getIdLong());
@@ -78,13 +81,13 @@ public class CommandListener extends ListenerAdapter {
 
 	
 	@Override
-	public void onButtonInteraction(ButtonInteractionEvent event) {
+	public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
 		Menu menu = menus.getMenu(event.getMessageIdLong());
 		if(menu != null) menu.onButtonInteract(event);
 	}
 	
 	@Override
-	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+	public void onSelectMenuInteraction(@Nonnull SelectMenuInteractionEvent event) {
 		Menu menu = menus.getMenu(event.getMessageIdLong());
 		if(menu != null) menu.onSelectInteract(event);
 	}

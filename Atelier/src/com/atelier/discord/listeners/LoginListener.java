@@ -1,5 +1,7 @@
 package com.atelier.discord.listeners;
 
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 
 import com.atelier.AtelierBot;
@@ -20,7 +22,7 @@ public class LoginListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildReady(GuildReadyEvent event) {
+	public void onGuildReady(@Nonnull GuildReadyEvent event) {
 		Guild guild = event.getGuild();
 		logger.info("Initialized Guild: " + guild.getName() + " [" + guild.getIdLong() + "]");
 		

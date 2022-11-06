@@ -32,6 +32,7 @@ public class AtelierDB {
 	private Map<Long, AtelierUser> users = new HashMap<>();
 	private Map<UUID, AtelierCharacter> characters = new HashMap<>();
 	
+	private Config config;
 	private MongoClient client;
 	private MongoDatabase database;
 	private ReplaceOptions replaceUpsertOption = new ReplaceOptions().upsert(true);
@@ -40,11 +41,15 @@ public class AtelierDB {
 	private MongoCollection<AtelierCharacter> characterCollection;
 	
 	private AtelierDB(Config config) {
+		this.config = config;
+		
+	}
+
+	public void connect() {
 		MongoClientSettings settings = MongoClientSettings.builder()
 				.codecRegistry(TypeRegistry.getInstance().getCodecRegistry())
 				.applyConnectionString(new ConnectionString(config.getDatabaseUrl()))
 				.build();
-				
 		client = MongoClients.create(settings);
 		database = client.getDatabase(config.getDatabaseName());
 		
