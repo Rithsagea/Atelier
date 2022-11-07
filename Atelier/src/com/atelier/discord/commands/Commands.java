@@ -1,14 +1,13 @@
-package com.atelier;
+package com.atelier.discord.commands;
 
 import com.atelier.console.ConsoleCommandRegistry;
 import com.atelier.console.commands.CharacterConsoleCommand;
 import com.atelier.console.commands.StopConsoleCommand;
 import com.atelier.console.commands.UserConsoleCommand;
-import com.atelier.discord.commands.CommandRegistry;
-import com.atelier.discord.commands.WaifuCommand;
+import com.atelier.discord.commands.dnd.AttributeCommand;
+import com.atelier.discord.commands.dnd.CharacterCommand;
+import com.atelier.discord.commands.dnd.RollCommand;
 import com.atelier.discord.commands.music.MusicCommand;
-import com.atelier.dnd.commands.CharacterCommand;
-import com.atelier.dnd.commands.RollCommand;
 
 public class Commands {
 	public static void registerDiscordCommands(CommandRegistry reg) {
@@ -17,6 +16,7 @@ public class Commands {
 		
 		//DND
 		reg.registerCommand(new CharacterCommand());
+		reg.registerCommand(new AttributeCommand());
 		reg.registerCommand(new RollCommand());
 	}
 	

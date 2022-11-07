@@ -70,7 +70,7 @@ public abstract class CharacterClass implements AtelierObject, Listener {
 		features.putAll(levelFeatureMap.get(level));
 	}
 	
-	public Map<String, ClassFeature> getAttributes() {
+	public Map<String, ClassFeature> getFeatures() {
 		return Collections.unmodifiableMap(features);
 	}
 	

@@ -1,4 +1,4 @@
-package com.atelier.dnd.embeds;
+package com.atelier.discord.commands.dnd.embeds;
 
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.character.AtelierCharacter;

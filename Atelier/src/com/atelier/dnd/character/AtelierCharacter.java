@@ -166,7 +166,7 @@ public class AtelierCharacter implements Listener {
 
 	public Stream<CharacterAttribute> getAttributes() {
 		return Stream.of(
-			characterClass.getAttributes().values(),
+			characterClass.getFeatures().values(),
 			characterRace.getTraits().values()).flatMap(Collection::stream);
 	}
 	

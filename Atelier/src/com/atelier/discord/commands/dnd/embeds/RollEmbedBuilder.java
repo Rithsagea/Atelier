@@ -1,4 +1,4 @@
-package com.atelier.dnd.embeds;
+package com.atelier.discord.commands.dnd.embeds;
 
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;

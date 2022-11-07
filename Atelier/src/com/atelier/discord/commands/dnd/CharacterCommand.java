@@ -1,4 +1,4 @@
-package com.atelier.dnd.commands;
+package com.atelier.discord.commands.dnd;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -6,10 +6,9 @@ import java.util.stream.Collectors;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
+import com.atelier.discord.commands.dnd.embeds.CharacterInfoEmbedBuilder;
+import com.atelier.discord.commands.dnd.embeds.CharacterListEmbedBuilder;
 import com.atelier.dnd.character.AtelierCharacter;
-import com.atelier.dnd.embeds.CharacterAttributesEmbedBuilder;
-import com.atelier.dnd.embeds.CharacterInfoEmbedBuilder;
-import com.atelier.dnd.embeds.CharacterListEmbedBuilder;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -66,18 +65,10 @@ public class CharacterCommand extends GroupCommand {
 			event.replyEmbeds(new CharacterInfoEmbedBuilder(user.getSelectedCharacter()).build()).setEphemeral(true).queue();
 		}
 	}
-	
-	private class CharacterAttribute extends BaseSubcommand {
-		@Override
-		public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
-			event.replyEmbeds(new CharacterAttributesEmbedBuilder(user.getSelectedCharacter()).build()).setEphemeral(true).queue();
-		}
-	}
 
 	public CharacterCommand() {
 		registerSubcommand(new CharacterList());
 		registerSubcommand(new CharacterSelect());
 		registerSubcommand(new CharacterInfo());
-		registerSubcommand(new CharacterAttribute());
 	}
 }

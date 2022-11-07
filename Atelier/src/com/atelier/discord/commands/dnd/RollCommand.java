@@ -1,15 +1,15 @@
-package com.atelier.dnd.commands;
+package com.atelier.discord.commands.dnd;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
+import com.atelier.discord.commands.dnd.embeds.RollEmbedBuilder.RollSavingEmbedBuilder;
+import com.atelier.discord.commands.dnd.embeds.RollEmbedBuilder.RollSkillEmbedBuilder;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
 import com.atelier.dnd.character.AtelierCharacter;
-import com.atelier.dnd.embeds.RollEmbedBuilder.RollSavingEmbedBuilder;
-import com.atelier.dnd.embeds.RollEmbedBuilder.RollSkillEmbedBuilder;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

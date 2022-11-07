@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atelier.Commands;
+import com.atelier.discord.commands.Commands;
 
 public class AtelierConsole implements Runnable {
 	private BufferedReader reader;
