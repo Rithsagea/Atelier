@@ -13,13 +13,11 @@ public class MenuManager {
 	
 	private Map<Long, Menu> menus = new HashMap<>();
 
-	private MenuManager() {
-		
-	}
+	private MenuManager() {}
 	
 	public void addMenu(Menu menu, boolean ephemeral, IReplyCallback event) {
-		event.deferReply(ephemeral).queue(hook ->
-			hook.editOriginal(menu.initialize())
+		event.deferReply(ephemeral).queue(hook -> hook
+			.editOriginal(menu.initialize())
 			.queue(msg -> menus.put(msg.getIdLong(), menu)));
 	}
 	

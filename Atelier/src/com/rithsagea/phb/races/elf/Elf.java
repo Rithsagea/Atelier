@@ -1,13 +1,13 @@
 package com.rithsagea.phb.races.elf;
 
 import com.atelier.dnd.character.CharacterRace;
-import com.atelier.dnd.character.RacialTrait;
+import com.atelier.dnd.character.DescriptionTrait;
 
 public class Elf extends CharacterRace {
 
-	public static class ElfAgeTrait extends RacialTrait {}
-	public static class ElfSizeTrait extends RacialTrait {}
-	public static class ElfLanguageTrait extends RacialTrait {}
+	public static class ElfAgeTrait extends DescriptionTrait {}
+	public static class ElfSizeTrait extends DescriptionTrait {}
+	public static class ElfLanguageTrait extends DescriptionTrait {}
 
 	@Override
 	protected void init() {

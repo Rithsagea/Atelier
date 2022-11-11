@@ -1,18 +1,16 @@
 package com.atelier.discord.commands.dnd;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.atelier.discord.AtelierUser;
+import com.atelier.discord.MenuManager;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
 import com.atelier.discord.commands.dnd.embeds.AttributeListEmbedBuilder;
 import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.dnd.character.CharacterAttribute;
-import com.rithsagea.util.data.DataUtil;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -37,6 +35,8 @@ public class AttributeCommand extends GroupCommand {
 		private String attribute = getProperty("attribute.name");
 		private String attributeDescription = getProperty("attribute.description");
 
+		private MenuManager menuManager = MenuManager.getInstance();
+
 		@Override
 		public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
 			AtelierCharacter character = user.getSelectedCharacter();
@@ -49,7 +49,7 @@ public class AttributeCommand extends GroupCommand {
 				default: event.reply(getError("category").get()).setEphemeral(true).queue(); return;
 			}
 
-			event.reply(characterAttribute.toString()).setEphemeral(true).queue();
+			menuManager.addMenu(characterAttribute.getMenu(), true, event);
 		}
 
 		@Override
@@ -78,21 +78,17 @@ public class AttributeCommand extends GroupCommand {
 				}
 				String selectedCategory = event.getOption(category).getAsString();
 
-				List<Stream<Entry<String, CharacterAttribute>>> attributes;
-
-				Stream<Entry<String, CharacterAttribute>> features = character.getCharacterClass().getFeatures().entrySet().stream()
-					.map(e -> new SimpleEntry<String, CharacterAttribute>(e.getKey(), (CharacterAttribute)e.getValue()));
-				Stream<Entry<String, CharacterAttribute>> traits = character.getCharacterRace().getTraits().entrySet().stream()
-					.map(e -> new SimpleEntry<String, CharacterAttribute>(e.getKey(), (CharacterAttribute)e.getValue()));;
+				Stream<Entry<String, CharacterAttribute>> attributes;
 
 				if(selectedCategory.equals("class"))
-					attributes = DataUtil.list(features); //TODO figure out how to get this to stop complaining
+					attributes = character.getCharacterClass().getFeatures().entrySet().stream()
+					.map(e -> new SimpleEntry<String, CharacterAttribute>(e.getKey(), (CharacterAttribute)e.getValue()));
 				else if(selectedCategory.equals("race"))
-					attributes = DataUtil.list(traits);
-				else attributes = Collections.emptyList();
+					attributes = character.getCharacterRace().getTraits().entrySet().stream()
+					.map(e -> new SimpleEntry<String, CharacterAttribute>(e.getKey(), (CharacterAttribute)e.getValue()));
+				else attributes = Stream.empty();
 
-				event.replyChoices(attributes.stream()
-					.flatMap(i -> i)
+				event.replyChoices(attributes
 					.filter(e -> e.getValue().toString().startsWith(event.getFocusedOption().getValue()))
 				  .map(e -> new Command.Choice(e.getValue().toString(), e.getKey()))
 				  .collect(Collectors.toList())).queue();
