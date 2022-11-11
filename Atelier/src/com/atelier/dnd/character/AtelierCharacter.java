@@ -36,6 +36,10 @@ public class AtelierCharacter implements Listener {
 	private CharacterClass characterClass = new NullClass();
 	private CharacterRace characterRace = new NullRace();
 
+	private static final int[] EXPERIENCE_TABLE = { 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000 };
+	private int experiencePoints = 0;
+	private int level = 0;
+	
 	private transient EventBus eventBus = new EventBus();
 	
 	private transient Set<Ability> savingProficiencies = EnumSet.noneOf(Ability.class);
@@ -45,8 +49,6 @@ public class AtelierCharacter implements Listener {
 	private transient Map<Ability, Integer> abilityModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Ability, Integer> savingModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Skill, Integer> skillModifiers = new EnumMap<>(Skill.class);
-	
-	private transient int proficiencyBonus; // TODO finish this
 	
 	public AtelierCharacter() {
 		this(UUID.randomUUID());
@@ -61,6 +63,9 @@ public class AtelierCharacter implements Listener {
 		eventBus.registerListener(this);
 		eventBus.registerListener(characterClass);
 		eventBus.registerListener(characterRace);
+		getAttributes().forEach(eventBus::registerListener);
+
+		for(int l = 0; l < 20 && experiencePoints >= EXPERIENCE_TABLE[l]; l++, level = l);
 		
 		eventBus.submitEvent(new LoadCharacterEvent(this));
 		eventBus.submitEvent(new LoadSavingProficiencyEvent(this));
@@ -74,10 +79,10 @@ public class AtelierCharacter implements Listener {
 						Function.identity(), a -> (getAbilityScore(a) - 10) / 2))));
 		eventBus.submitEvent(new LoadSavingModifierEvent(this,
 				Stream.of(Ability.values()).collect(Collectors.toMap(
-						Function.identity(), a -> (getAbilityModifier(a) + (hasSavingProficiency(a) ? proficiencyBonus : 0))))));
+						Function.identity(), a -> (getAbilityModifier(a) + (hasSavingProficiency(a) ? getProficiencyBonus() : 0))))));
 		eventBus.submitEvent(new LoadSkillModifierEvent(this,
 				Stream.of(Skill.values()).collect(Collectors.toMap(
-						Function.identity(), s -> (getAbilityModifier(s.getAbility()) + (hasSkillProficiency(s) ? proficiencyBonus : 0))))));
+						Function.identity(), s -> (getAbilityModifier(s.getAbility()) + (hasSkillProficiency(s) ? getProficiencyBonus() : 0))))));
 	}
 	
 	// Handlers
@@ -169,6 +174,14 @@ public class AtelierCharacter implements Listener {
 			characterClass.getFeatures().values(),
 			characterRace.getTraits().values()).flatMap(Collection::stream);
 	}
+
+	public int getExperiencePoints() {
+		return experiencePoints;
+	}
+
+	public int getLevel() {
+		return level;
+	}
 	
 	public EventBus getEventBus() {
 		return eventBus;
@@ -186,6 +199,18 @@ public class AtelierCharacter implements Listener {
 
 	public void setCharacterRace(CharacterRace characterRace) {
 		this.characterRace = characterRace;
+	}
+
+	public void addExperience(int experiencePoints) {
+		this.experiencePoints += experiencePoints;
+		while(level < 20 && this.experiencePoints >= EXPERIENCE_TABLE[level]) {
+			level++;
+			characterClass.levelUp();
+		}
+	}
+
+	public int getProficiencyBonus() {
+		return (level - 1) / 4 + 2;
 	}
 	
 	@Override

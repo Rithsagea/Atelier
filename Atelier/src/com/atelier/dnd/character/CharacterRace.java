@@ -14,7 +14,7 @@ import com.rithsagea.util.event.EventBus;
 import com.rithsagea.util.event.EventHandler;
 import com.rithsagea.util.event.Listener;
 
-@JsonTypeInfo(use = Id.NAME, include = As.EXTERNAL_PROPERTY, property = "_cls", defaultImpl = Void.class)
+@JsonTypeInfo(use = Id.NAME, include = As.EXTERNAL_PROPERTY, property = "_cls", defaultImpl = NullRace.class)
 public abstract class CharacterRace implements AtelierObject, Listener {
 	
 	private transient EventBus eventBus = new EventBus();

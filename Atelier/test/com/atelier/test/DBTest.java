@@ -36,9 +36,14 @@ public class DBTest {
 //		db.addCharacter(character);
 		
 		character = db.getCharacter(charId);
+		character.addExperience(-character.getExperiencePoints());
 		character.setCharacterClass(new Rogue());
-		character.getCharacterClass().levelUp();
 		character.setCharacterRace(new Elf());
+		character.reload();
+
+
+		character.addExperience(355000);
+		character.reload();
 
 		user.addCharacter(character);
 		
@@ -46,6 +51,7 @@ public class DBTest {
 		System.out.println("User ID: " + user.getId());
 		System.out.println();
 		System.out.println("Character Name: " + character.getName());
+		System.out.println("Character Level: " + character.getLevel() + "(" + character.getExperiencePoints() + ")");
 		System.out.println("Character Id: " + character.getId());
 		System.out.println("Character Class: " + character.getCharacterClass());
 		System.out.println("Character Race: " + character.getCharacterRace());
