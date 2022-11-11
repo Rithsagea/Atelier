@@ -46,6 +46,7 @@ public class AttributeCommand extends GroupCommand {
 			switch(event.getOption(category).getAsString()) {
 				case "class": characterAttribute = character.getCharacterClass().getFeatures().get(label); break;
 				case "race": characterAttribute = character.getCharacterRace().getTraits().get(label); break;
+				default: event.reply(getError("category").get()).setEphemeral(true).queue(); return;
 			}
 
 			event.reply(characterAttribute.toString()).setEphemeral(true).queue();
@@ -71,6 +72,10 @@ public class AttributeCommand extends GroupCommand {
 			}
 
 			if(event.getFocusedOption().getName().equals(attribute)) {
+				if(event.getOption(category) == null) {
+					event.replyChoices().queue();
+					return;
+				}
 				String selectedCategory = event.getOption(category).getAsString();
 
 				List<Stream<Entry<String, CharacterAttribute>>> attributes;
@@ -88,9 +93,9 @@ public class AttributeCommand extends GroupCommand {
 
 				event.replyChoices(attributes.stream()
 					.flatMap(i -> i)
-				 .filter(e -> e.getValue().toString().startsWith(event.getFocusedOption().getValue()))
-				 .map(e -> new Command.Choice(e.getValue().toString(), e.getKey()))
-				 .collect(Collectors.toList())).queue();
+					.filter(e -> e.getValue().toString().startsWith(event.getFocusedOption().getValue()))
+				  .map(e -> new Command.Choice(e.getValue().toString(), e.getKey()))
+				  .collect(Collectors.toList())).queue();
 			}
 		}
 	}

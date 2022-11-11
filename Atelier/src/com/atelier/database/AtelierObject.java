@@ -11,4 +11,8 @@ public interface AtelierObject {
 	public default TemplateMessage getMessage(String key) {
 		return new TemplateMessage(getProperty("msg." + key));
 	}
+
+	public default TemplateMessage getError(String key) {
+		return new TemplateMessage(getProperty("error." + key));
+	}
 }
