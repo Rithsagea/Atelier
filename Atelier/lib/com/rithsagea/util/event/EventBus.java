@@ -33,7 +33,7 @@ public class EventBus {
 			if(h.priority != priority)
 			return h.priority - priority;
 			
-			return method.toString().compareTo(h.method.toString());
+			return listener.hashCode() - h.listener.hashCode();
 		}
 	}
 
