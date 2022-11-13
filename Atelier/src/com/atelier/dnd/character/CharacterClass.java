@@ -22,6 +22,11 @@ public abstract class CharacterClass implements AtelierObject, Listener {
 	
 	private Map<String, ClassFeature> features = new HashMap<>();
 
+	public CharacterClass() {
+		features.putAll(getFeatures(0));
+		features.putAll(getFeatures(1));
+	}
+
 	/**
 	 * Load class features here
 	 * - Add all features to event listener
@@ -31,8 +36,6 @@ public abstract class CharacterClass implements AtelierObject, Listener {
 	private void onLoadCharacter(LoadCharacterEvent event) {
 		features.values().forEach(eventBus::registerListener);
 		eventBus.submitEvent(new LoadCharacterClassEvent(this));
-		features.putAll(getFeatures(0));
-		features.putAll(getFeatures(1));
 	}
 
 	protected abstract Map<String, ClassFeature> getFeatures(int level);
