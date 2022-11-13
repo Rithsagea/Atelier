@@ -45,10 +45,12 @@ public class CharacterInfoEmbedBuilder extends AtelierEmbedBuilder {
 		content.setLength(0);
 		for(Skill skill : Skill.values()) {
 			content.append(prefix);
+			if(character.hasSkillProficiency(skill)) content.append("__");
 			content.append(getMessage("skill")
 				.addSkill(skill)
 				.add("skillModifier", WordUtil.formatModifier(character.getSkillModifier(skill)))
 				.get());
+			if(character.hasSkillProficiency(skill)) content.append("__");
 			prefix = "\n";
 		}
 		addField(getMessage("skill.title").get(), content.toString(), false);

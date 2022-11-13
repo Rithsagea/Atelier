@@ -8,7 +8,7 @@ public abstract class ClassFeature extends CharacterAttribute {
 	private transient CharacterClass characterClass;
 
 	@EventHandler
-	public void onLoadCharacterClass(LoadCharacterClassEvent event) {
+	private void onLoadCharacterClass(LoadCharacterClassEvent event) {
 		characterClass = event.getCharacterClass();
 	}
 

@@ -72,17 +72,17 @@ public class AtelierCharacter implements Listener {
 		eventBus.submitEvent(new LoadSkillProficiencyEvent(this));
 		
 		eventBus.submitEvent(new LoadAbilityScoreEvent(this,
-				Stream.of(Ability.values()).collect(Collectors.toMap(
-						Function.identity(), this::getBaseScore))));
+			Stream.of(Ability.values()).collect(Collectors.toMap(
+				Function.identity(), this::getBaseScore))));
 		eventBus.submitEvent(new LoadAbilityModifierEvent(this, 
-				Stream.of(Ability.values()).collect(Collectors.toMap( 
-						Function.identity(), a -> (getAbilityScore(a) - 10) / 2))));
+			Stream.of(Ability.values()).collect(Collectors.toMap( 
+				Function.identity(), a -> (getAbilityScore(a) - 10) / 2))));
 		eventBus.submitEvent(new LoadSavingModifierEvent(this,
-				Stream.of(Ability.values()).collect(Collectors.toMap(
-						Function.identity(), a -> (getAbilityModifier(a) + (hasSavingProficiency(a) ? getProficiencyBonus() : 0))))));
+			Stream.of(Ability.values()).collect(Collectors.toMap(
+				Function.identity(), a -> (getAbilityModifier(a) + (hasSavingProficiency(a) ? getProficiencyBonus() : 0))))));
 		eventBus.submitEvent(new LoadSkillModifierEvent(this,
-				Stream.of(Skill.values()).collect(Collectors.toMap(
-						Function.identity(), s -> (getAbilityModifier(s.getAbility()) + (hasSkillProficiency(s) ? getProficiencyBonus() : 0))))));
+			Stream.of(Skill.values()).collect(Collectors.toMap(
+				Function.identity(), s -> (getAbilityModifier(s.getAbility()) + (hasSkillProficiency(s) ? getProficiencyBonus() : 0))))));
 	}
 	
 	// Handlers

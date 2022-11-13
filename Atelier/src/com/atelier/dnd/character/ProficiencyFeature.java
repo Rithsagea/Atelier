@@ -1,7 +1,11 @@
 package com.atelier.dnd.character;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.atelier.database.AtelierType;
 import com.atelier.discord.AtelierMenu;
@@ -9,6 +13,7 @@ import com.atelier.discord.Menu;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
+import com.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
 import com.rithsagea.util.event.EventHandler;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -16,6 +21,9 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 
 @AtelierType("proficiency")
 public class ProficiencyFeature extends ClassFeature {
@@ -24,7 +32,7 @@ public class ProficiencyFeature extends ClassFeature {
 	private List<Skill> skillProficiencies = new ArrayList<>();
 
 	private int skillCount;
-	private List<Integer> selectedSkills;
+	private Set<Integer> selectedSkills = Collections.emptySet();
 
 	public ProficiencyFeature() { this(0); }
 
@@ -48,6 +56,11 @@ public class ProficiencyFeature extends ClassFeature {
 		savingProficiencies.forEach(event::addProficiency);
 	}
 
+	@EventHandler
+	public void onLoadSkill(LoadSkillProficiencyEvent event) {
+		selectedSkills.forEach(s -> event.addProficiency(skillProficiencies.get(s)));
+	}
+
 	private class ProficiencyMenu implements AtelierMenu {
 		@Override
 		public Message initialize() {
@@ -65,24 +78,36 @@ public class ProficiencyFeature extends ClassFeature {
 
 			content.setLength(0);
 			content.append(getMessage("skill.prefix").add("count", skillCount));
-			skillProficiencies.forEach(s -> {
-				content.append(s);
+			for(int x = 0; x < skillProficiencies.size(); x++) {
+				content.append(String.format(selectedSkills.contains(x) ? "__%s__" : "%s", skillProficiencies.get(x)));
 				content.append(", ");
-			}); content.setLength(content.length() - 2);
+			} content.setLength(content.length() - 2);
 			eb.addField(getMessage("skill.title").get(), content.toString(), false);
 
 			mb.setEmbeds(eb.build());
+			mb.setActionRows(ActionRow.of(
+				SelectMenu.create("skills")
+					.setMaxValues(skillCount)
+					.addOptions(IntStream.range(0, skillProficiencies.size()).boxed()
+						.map(i -> SelectOption.of(skillProficiencies.get(i).getName(), Integer.toString(i)))
+						.collect(Collectors.toList()))
+					.setDefaultValues(selectedSkills.stream()
+						.map(i -> Integer.toString(i))
+						.collect(Collectors.toList()))
+					.build()));
 			return mb.build();
 		}
 
 		@Override
-		public void onButtonInteract(ButtonInteractionEvent event) {
-
-		}
+		public void onButtonInteract(ButtonInteractionEvent event) {}
 
 		@Override
 		public void onSelectInteract(SelectMenuInteractionEvent event) {
-
+			selectedSkills = event.getSelectedOptions().stream()
+				.map(o -> Integer.parseInt(o.getValue()))
+				.collect(Collectors.toSet());
+			getCharacter().reload();
+			event.editMessage(initialize()).queue();
 		}
 	}
 
