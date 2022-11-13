@@ -1,12 +1,17 @@
 package com.rithsagea.phb.races.elf;
 
+import com.atelier.database.AtelierType;
 import com.atelier.dnd.character.CharacterRace;
 import com.atelier.dnd.character.DescriptionTrait;
 
+@AtelierType("elf")
 public class Elf extends CharacterRace {
 
+	@AtelierType("elf-age")
 	public static class ElfAgeTrait extends DescriptionTrait {}
+	@AtelierType("elf-size")
 	public static class ElfSizeTrait extends DescriptionTrait {}
+	@AtelierType("elf-language")
 	public static class ElfLanguageTrait extends DescriptionTrait {}
 
 	@Override

@@ -7,12 +7,15 @@ import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.reflections.Reflections;
+import org.reflections.util.ConfigurationBuilder;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.mongodb.MongoClientSettings;
 
 public class TypeRegistry implements CodecProvider {
@@ -38,7 +41,17 @@ public class TypeRegistry implements CodecProvider {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.setSerializationInclusion(Include.NON_NULL);
 
-		Types.registerTypes(mapper);
+		Reflections reflections = new Reflections(
+			new ConfigurationBuilder()
+				.forPackage("")
+				.setParallel(true)
+		);
+
+		mapper.registerSubtypes(
+			reflections.getTypesAnnotatedWith(AtelierType.class)
+			.stream()
+			.map(t -> new NamedType(t, t.getAnnotation(AtelierType.class).value()))
+			.toArray(NamedType[]::new));
 	}
 	
 	public CodecRegistry getCodecRegistry() {

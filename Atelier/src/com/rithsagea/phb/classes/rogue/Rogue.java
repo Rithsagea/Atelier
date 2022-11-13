@@ -3,9 +3,11 @@ package com.rithsagea.phb.classes.rogue;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.atelier.database.AtelierType;
 import com.atelier.dnd.character.CharacterClass;
 import com.atelier.dnd.character.ClassFeature;
 
+@AtelierType("rogue")
 public class Rogue extends CharacterClass {
 	
 	@Override
