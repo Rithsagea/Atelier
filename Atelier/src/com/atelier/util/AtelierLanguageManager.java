@@ -3,11 +3,12 @@ package com.atelier.util;
 import com.atelier.console.AbstractConsoleCommand;
 import com.atelier.console.AbstractConsoleGroupCommand;
 import com.atelier.console.AbstractConsoleSubcommand;
+import com.atelier.discord.AtelierEmbedBuilder;
+import com.atelier.discord.AtelierMenu;
 import com.atelier.discord.commands.AbstractInteraction;
 import com.atelier.discord.commands.AbstractInteraction.AbstractCommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommandGroup;
-import com.atelier.discord.commands.dnd.embeds.AtelierEmbedBuilder;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
 import com.atelier.dnd.character.CharacterAttribute;
@@ -28,9 +29,8 @@ public class AtelierLanguageManager extends LanguageManager {
 		else if(obj instanceof Skill) name = ((Skill) obj).name();
 		else name = group;
 
-		if(obj instanceof AtelierEmbedBuilder) {
-			group = "Embed";
-		}
+		if(obj instanceof AtelierEmbedBuilder) group = "Embed";
+		if(obj instanceof AtelierMenu) group = "Menu";
 		
 		if(obj instanceof AbstractInteraction) {
 			if(obj instanceof AbstractCommand) group = "Command";
@@ -45,11 +45,9 @@ public class AtelierLanguageManager extends LanguageManager {
 			else group = "ConsoleCommand";
 		}
 
-		if(obj instanceof CharacterClass) group = "CharacterClass";
-
-		if(obj instanceof CharacterRace) group = "CharacterRace";
-
-		if(obj instanceof CharacterAttribute) group = "CharacterAttribute";
+		if(obj instanceof CharacterClass) group = "Class";
+		if(obj instanceof CharacterRace) group = "Race";
+		if(obj instanceof CharacterAttribute) group = "Attribute";
 
 		return get(String.format("%s.%s.%s", group, name, key));
 	}

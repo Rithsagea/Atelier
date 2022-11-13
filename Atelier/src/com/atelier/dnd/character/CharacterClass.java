@@ -31,6 +31,8 @@ public abstract class CharacterClass implements AtelierObject, Listener {
 	private void onLoadCharacter(LoadCharacterEvent event) {
 		features.values().forEach(eventBus::registerListener);
 		eventBus.submitEvent(new LoadCharacterClassEvent(this));
+		features.putAll(getFeatures(0));
+		features.putAll(getFeatures(1));
 	}
 
 	protected abstract Map<String, ClassFeature> getFeatures(int level);

@@ -1,7 +1,9 @@
 package com.atelier.database;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecProvider;
@@ -9,6 +11,8 @@ import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -25,11 +29,12 @@ public class TypeRegistry implements CodecProvider {
 		return INSTANCE;
 	}
 	
+	private Logger log = LoggerFactory.getLogger("Types");
 	private CodecRegistry codecRegistry;
 	private Map<Class<?>, AtelierCodec<?>> codecs = new HashMap<>();
 	
 	private ObjectMapper mapper;
-	
+
 	private TypeRegistry() {
 		codecRegistry = CodecRegistries.fromRegistries(
 				MongoClientSettings.getDefaultCodecRegistry(),
@@ -47,11 +52,19 @@ public class TypeRegistry implements CodecProvider {
 				.setParallel(true)
 		);
 
-		mapper.registerSubtypes(
-			reflections.getTypesAnnotatedWith(AtelierType.class)
-			.stream()
+		Set<Class<?>> subtypes = reflections.getTypesAnnotatedWith(AtelierType.class);
+		mapper.registerSubtypes(subtypes.stream()
 			.map(t -> new NamedType(t, t.getAnnotation(AtelierType.class).value()))
 			.toArray(NamedType[]::new));
+
+		subtypes.stream()
+			.sorted(new Comparator<Class<?>>() {
+				@Override
+				public int compare(Class<?> a, Class<?> b) {
+					return a.getName().compareTo(b.getName());
+				}
+			})
+			.forEach(t -> log.debug(String.format("%s: %s", t.getAnnotation(AtelierType.class).value(), t.getName())));
 	}
 	
 	public CodecRegistry getCodecRegistry() {

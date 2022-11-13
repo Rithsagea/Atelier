@@ -1,5 +1,6 @@
 package com.atelier.discord.commands.dnd.embeds;
 
+import com.atelier.discord.AtelierEmbedBuilder;
 import com.atelier.dnd.character.AtelierCharacter;
 
 public class AttributeListEmbedBuilder extends AtelierEmbedBuilder {

@@ -75,4 +75,9 @@ public class TemplateMessage {
 	public String get() {
 		return new StringSubstitutor(tokens).replace(msg);
 	}
+
+	@Override
+	public String toString() {
+		return get();
+	}
 }
