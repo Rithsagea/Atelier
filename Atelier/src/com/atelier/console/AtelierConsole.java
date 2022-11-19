@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atelier.discord.commands.Commands;
+import com.atelier.Commands;
 
 public class AtelierConsole implements Runnable {
 	private BufferedReader reader;
@@ -51,7 +51,7 @@ public class AtelierConsole implements Runnable {
 				try {
 					cmd.execute(args, logger); 
 				} catch(Exception e) {
-					logger.info("Error: " + e.getMessage());
+					logger.error("Error", e);
 				}
 			} else {
 				System.out.println("Echo: " + line);

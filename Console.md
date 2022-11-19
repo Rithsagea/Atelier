@@ -41,6 +41,27 @@ Options:
 Syntax: `user listcharacter`<br>
 Description: Lists a user's characters. <br>
 
+## campaign
+
+Syntax: `campaign`<br>
+Description: Displays information about the selected campaign.<br>
+
+### campaign list
+
+Syntax `campaign list`<br>
+Description: Lists all existing campaigns.<br>
+
+### campaign select
+
+Syntax: `campaign select <id>`<br>
+Description: Selects a campaign with the given id.<br>
+Parameters:
+- UUID `id`: The id of the campaign.
+
+### campaign new
+
+Syntax: `campaign new`<br>
+Description: Creates a new campaign and returns its id.
 
 ## character
 
@@ -63,7 +84,7 @@ Parameters:
 ### character new
 
 Syntax: `character new`<br>
-Description: Creates a new character, and returns its id.
+Description: Creates a new character and returns its id.
 
 ### character name
 

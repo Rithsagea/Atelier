@@ -28,7 +28,9 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 				.sorted(new Comparator<AtelierCharacter>() {
 					@Override
 					public int compare(AtelierCharacter u1, AtelierCharacter u2) {
-						return u1.getName().compareTo(u2.getName());
+						if(!u1.getName().equals(u2.getName()))
+							return u1.getName().compareTo(u2.getName());
+						return u1.getId().compareTo(u2.getId());
 					}
 				}).forEach(c -> logger.info(c.toString()));
 		}
@@ -114,7 +116,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		}
 	}
 	
-	private static AtelierCharacter selectedCharacter;
+	private AtelierCharacter selectedCharacter;
 	
 	public CharacterConsoleCommand() {
 		super("character", "char");

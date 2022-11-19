@@ -8,6 +8,7 @@ import org.apache.commons.text.StringSubstitutor;
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
+import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.character.AtelierCharacter;
 
 public class TemplateMessage {
@@ -52,6 +53,17 @@ public class TemplateMessage {
 	
 	public TemplateMessage addCharacter(AtelierCharacter character) {
 		return addCharacter("character", character);
+	}
+
+	public TemplateMessage addCampaign(String token, Campaign campaign) {
+		tokens.put(token + ".id", campaign.getId().toString());
+		tokens.put(token + ".name", campaign.getName());
+		tokens.put(token, campaign.toString());
+		return this;
+	}
+
+	public TemplateMessage addCampaign(Campaign campaign) {
+		return addCampaign("campaign", campaign);
 	}
 	
 	public TemplateMessage addAbility(String token, Ability ability) {

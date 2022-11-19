@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.atelier.Config;
 import com.atelier.discord.AtelierUser;
+import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.character.AtelierCharacter;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -31,6 +32,7 @@ public class AtelierDB {
 	
 	private Map<Long, AtelierUser> users = new HashMap<>();
 	private Map<UUID, AtelierCharacter> characters = new HashMap<>();
+	private Map<UUID, Campaign> campaigns = new HashMap<>();
 	
 	private Config config;
 	private MongoClient client;
@@ -39,6 +41,7 @@ public class AtelierDB {
 	
 	private MongoCollection<AtelierUser> userCollection;
 	private MongoCollection<AtelierCharacter> characterCollection;
+	private MongoCollection<Campaign> campaignCollection;
 	
 	private AtelierDB(Config config) {
 		this.config = config;
@@ -85,16 +88,30 @@ public class AtelierDB {
 	public Collection<AtelierCharacter> listCharacters() {
 		return characters.values();
 	}
+
+	public Collection<Campaign> listCampaigns() {
+		return campaigns.values();
+	}
+
+	public Campaign getCampaign(UUID id) {
+		return campaigns.get(id);
+	}
+
+	public void addCampaign(Campaign campaign) {
+		campaigns.put(campaign.getId(), campaign);
+	}
 	
 	public void load() {
 		userCollection = database.getCollection("users", AtelierUser.class);
 		characterCollection = database.getCollection("characters", AtelierCharacter.class);
+		campaignCollection = database.getCollection("campaign", Campaign.class);
 		
 		userCollection.find().forEach((AtelierUser user) -> users.put(user.getId(), user));
 		characterCollection.find().forEach((AtelierCharacter character) -> {
 			character.reload();
 			characters.put(character.getId(), character);
 		});
+		campaignCollection.find().forEach((Campaign campaign) -> campaigns.put(campaign.getId(), campaign));
 	}
 	
 	private void updateUser(AtelierUser user) {
@@ -104,10 +121,15 @@ public class AtelierDB {
 	private void updateCharacter(AtelierCharacter character) {
 		characterCollection.replaceOne(Filters.eq("_id", character.getId().toString()), character, replaceUpsertOption);
 	}
+
+	private void updateCampaign(Campaign campaign) {
+		campaignCollection.replaceOne(Filters.eq("_id", campaign.getId().toString()), campaign, replaceUpsertOption);
+	}
 	
 	public void save() {
 		users.values().forEach(this::updateUser);
 		characters.values().forEach(this::updateCharacter);
+		campaigns.values().forEach(this::updateCampaign);
 		
 //		userCollection.insertMany(new ArrayList<>(users.values()));
 //		characterCollection.insertMany(new ArrayList<>(characters.values()));

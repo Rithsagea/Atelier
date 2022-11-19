@@ -58,5 +58,7 @@ public class DBTest {
 		System.out.println();
 		System.out.println("Character Attributes: ");
 		character.getAttributes().forEach(System.out::println);
+
+		System.out.println("Campaigns: " + db.listCampaigns());
 	}
 }
