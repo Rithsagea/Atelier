@@ -6,12 +6,6 @@
 	"configurations": [
 		{
 			"type": "java",
-			"name": "Launch Current File",
-			"request": "launch",
-			"mainClass": "${file}"
-		},
-		{
-			"type": "java",
 			"name": "Launch AtelierRunner",
 			"request": "launch",
 			"mainClass": "com.atelier.AtelierRunner",
@@ -19,51 +13,9 @@
 		},
 		{
 			"type": "java",
-			"name": "Launch CurrencyTest",
-			"request": "launch",
-			"mainClass": "com.atelier.test.CurrencyTest",
-			"projectName": "Atelier"
-		},
-		{
-			"type": "java",
 			"name": "Launch DBTest",
 			"request": "launch",
 			"mainClass": "com.atelier.test.DBTest",
-			"projectName": "Atelier"
-		},
-		{
-			"type": "java",
-			"name": "Launch DiceTest",
-			"request": "launch",
-			"mainClass": "com.atelier.test.DiceTest",
-			"projectName": "Atelier"
-		},
-		{
-			"type": "java",
-			"name": "Launch LangTest",
-			"request": "launch",
-			"mainClass": "com.atelier.test.LangTest",
-			"projectName": "Atelier"
-		},
-		{
-			"type": "java",
-			"name": "Launch NekoTest",
-			"request": "launch",
-			"mainClass": "com.atelier.test.NekoTest",
-			"projectName": "Atelier"
-		},
-		{
-			"type": "java",
-			"name": "Launch ObjectMapperTest",
-			"request": "launch",
-			"mainClass": "com.atelier.test.ObjectMapperTest",
-			"projectName": "Atelier"
-		},
-		{
-			"type": "java",
-			"name": "Launch SheetTest",
-			"request": "launch",
-			"mainClass": "com.atelier.test.SheetTest",
 			"projectName": "Atelier"
 		}
 	]
