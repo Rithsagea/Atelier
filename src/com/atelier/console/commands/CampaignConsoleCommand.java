@@ -2,6 +2,7 @@ package com.atelier.console.commands;
 
 import java.util.Comparator;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
@@ -131,5 +132,6 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 
 		logger.info("Name: " + selectedCampaign.getName());
 		logger.info("Id: " + selectedCampaign.getId());
+		logger.info("Characters: " + selectedCampaign.getCharacters().map(AtelierCharacter::getName).collect(Collectors.toList()));
 	}
 }

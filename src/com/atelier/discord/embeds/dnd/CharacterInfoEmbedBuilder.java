@@ -13,7 +13,12 @@ public class CharacterInfoEmbedBuilder extends AtelierEmbedBuilder {
 		
 		setTitle(getMessage("title").addCharacter(character).get());
 		
+		content.append(getMessage("description.campaign")
+			.addCampaign(character.getCampaign()).get());
+		this.setDescription(content.toString());
+
 		prefix = "";
+		content.setLength(0);
 		for(Ability ability : Ability.values()) {
 			content.append(prefix);
 
