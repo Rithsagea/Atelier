@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
-import com.atelier.discord.commands.dnd.embeds.RollEmbedBuilder.RollSavingEmbedBuilder;
-import com.atelier.discord.commands.dnd.embeds.RollEmbedBuilder.RollSkillEmbedBuilder;
+import com.atelier.discord.embeds.dnd.RollEmbedBuilder.RollSavingEmbedBuilder;
+import com.atelier.discord.embeds.dnd.RollEmbedBuilder.RollSkillEmbedBuilder;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
 import com.atelier.dnd.character.AtelierCharacter;

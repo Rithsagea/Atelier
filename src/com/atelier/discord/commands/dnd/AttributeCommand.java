@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.MenuManager;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
-import com.atelier.discord.commands.dnd.embeds.AttributeListEmbedBuilder;
+import com.atelier.discord.embeds.dnd.AttributeListEmbedBuilder;
 import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.dnd.character.CharacterAttribute;
 

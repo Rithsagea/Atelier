@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
-import com.atelier.discord.commands.dnd.embeds.CharacterInfoEmbedBuilder;
-import com.atelier.discord.commands.dnd.embeds.CharacterListEmbedBuilder;
+import com.atelier.discord.embeds.dnd.CharacterInfoEmbedBuilder;
+import com.atelier.discord.embeds.dnd.CharacterListEmbedBuilder;
 import com.atelier.dnd.character.AtelierCharacter;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
