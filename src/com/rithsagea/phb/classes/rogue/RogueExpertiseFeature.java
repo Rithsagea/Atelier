@@ -2,7 +2,7 @@ package com.rithsagea.phb.classes.rogue;
 
 import com.atelier.database.AtelierType;
 import com.atelier.discord.Menu;
-import com.atelier.dnd.character.ClassFeature;
+import com.atelier.dnd.character.attributes.ClassFeature;
 
 @AtelierType("rogue-expertise")
 public class RogueExpertiseFeature extends ClassFeature {

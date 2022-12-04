@@ -10,7 +10,7 @@ import com.atelier.discord.MenuManager;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
 import com.atelier.discord.embeds.dnd.AttributeListEmbedBuilder;
 import com.atelier.dnd.character.AtelierCharacter;
-import com.atelier.dnd.character.CharacterAttribute;
+import com.atelier.dnd.character.attributes.CharacterAttribute;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;

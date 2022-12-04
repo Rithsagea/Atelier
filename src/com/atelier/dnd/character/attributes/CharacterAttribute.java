@@ -1,7 +1,8 @@
-package com.atelier.dnd.character;
+package com.atelier.dnd.character.attributes;
 
 import com.atelier.database.AtelierObject;
 import com.atelier.discord.Menu;
+import com.atelier.dnd.character.AtelierCharacter;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;

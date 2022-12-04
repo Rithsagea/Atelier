@@ -1,4 +1,4 @@
-package com.atelier.dnd.character;
+package com.atelier.dnd.character.attributes;
 
 import com.atelier.discord.Menu;
 

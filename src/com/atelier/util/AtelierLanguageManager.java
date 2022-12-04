@@ -11,9 +11,9 @@ import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommandGroup;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
-import com.atelier.dnd.character.CharacterAttribute;
-import com.atelier.dnd.character.CharacterClass;
-import com.atelier.dnd.character.CharacterRace;
+import com.atelier.dnd.character.attributes.CharacterAttribute;
+import com.atelier.dnd.character.attributes.CharacterClass;
+import com.atelier.dnd.character.attributes.CharacterRace;
 import com.rithsagea.util.lang.LanguageManager;
 
 public class AtelierLanguageManager extends LanguageManager {

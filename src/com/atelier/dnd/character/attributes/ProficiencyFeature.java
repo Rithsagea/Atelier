@@ -1,4 +1,4 @@
-package com.atelier.dnd.character;
+package com.atelier.dnd.character.attributes;
 
 import java.util.ArrayList;
 import java.util.Collections;

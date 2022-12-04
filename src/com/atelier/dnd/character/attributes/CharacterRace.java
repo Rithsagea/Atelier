@@ -1,10 +1,11 @@
-package com.atelier.dnd.character;
+package com.atelier.dnd.character.attributes;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.atelier.database.AtelierObject;
+import com.atelier.dnd.character.NullRace;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterRaceEvent;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

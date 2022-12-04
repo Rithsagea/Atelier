@@ -1,8 +1,8 @@
 package com.rithsagea.phb.races.elf;
 
 import com.atelier.database.AtelierType;
-import com.atelier.dnd.character.CharacterRace;
-import com.atelier.dnd.character.DescriptionTrait;
+import com.atelier.dnd.character.attributes.CharacterRace;
+import com.atelier.dnd.character.attributes.DescriptionTrait;
 
 @AtelierType("elf")
 public class Elf extends CharacterRace {

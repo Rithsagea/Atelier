@@ -1,10 +1,12 @@
-package com.atelier.dnd.character;
+package com.atelier.dnd.character.attributes;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.atelier.database.AtelierObject;
+import com.atelier.dnd.character.LevelUpEvent;
+import com.atelier.dnd.character.NullClass;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterClassEvent;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

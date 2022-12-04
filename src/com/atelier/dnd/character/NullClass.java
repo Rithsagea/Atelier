@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.atelier.database.AtelierType;
+import com.atelier.dnd.character.attributes.CharacterClass;
+import com.atelier.dnd.character.attributes.ClassFeature;
 
 @AtelierType("null")
 public class NullClass extends CharacterClass {

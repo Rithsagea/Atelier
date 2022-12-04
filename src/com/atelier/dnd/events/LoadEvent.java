@@ -1,8 +1,8 @@
 package com.atelier.dnd.events;
 
 import com.atelier.dnd.character.AtelierCharacter;
-import com.atelier.dnd.character.CharacterClass;
-import com.atelier.dnd.character.CharacterRace;
+import com.atelier.dnd.character.attributes.CharacterClass;
+import com.atelier.dnd.character.attributes.CharacterRace;
 import com.rithsagea.util.event.AtomicEvent;
 import com.rithsagea.util.event.Event;
 

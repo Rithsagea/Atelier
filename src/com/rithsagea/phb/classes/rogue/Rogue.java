@@ -6,9 +6,9 @@ import java.util.Map;
 import com.atelier.database.AtelierType;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
-import com.atelier.dnd.character.CharacterClass;
-import com.atelier.dnd.character.ClassFeature;
-import com.atelier.dnd.character.ProficiencyFeature;
+import com.atelier.dnd.character.attributes.CharacterClass;
+import com.atelier.dnd.character.attributes.ClassFeature;
+import com.atelier.dnd.character.attributes.ProficiencyFeature;
 
 @AtelierType("rogue")
 public class Rogue extends CharacterClass {
