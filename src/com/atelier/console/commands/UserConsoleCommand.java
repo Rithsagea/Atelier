@@ -61,9 +61,9 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
 			selectedUser.addCharacter(character);
 			logger.info(getMessage("info")
-					.addCharacter(character)
-					.addUser(selectedUser)
-					.get());
+				.addCharacter(character)
+				.addUser(selectedUser)
+				.get());
 		}
 	}
 	

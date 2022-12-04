@@ -9,6 +9,7 @@ import com.atelier.console.BaseConsoleGroupCommand;
 import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.database.AtelierDB;
 import com.atelier.dnd.campaign.Campaign;
+import com.atelier.dnd.character.AtelierCharacter;
 
 public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 
@@ -22,17 +23,11 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 			logger.info(getMessage("info").get());
 			AtelierDB.getInstance().listCampaigns()
 				.stream()
-				.sorted(new Comparator<Campaign>() {
-					@Override
-					public int compare(Campaign u1, Campaign u2) {
-						if(!u1.getName().equals(u2.getName()))
-							return u1.getName().compareTo(u2.getName());
-						return u1.getId().compareTo(u2.getId());
-					}
-				}).forEach(c -> logger.info(c.toString()));
+				.sorted(Comparator.comparing(Campaign::getName)
+					.thenComparing(Campaign::getId))
+				.forEach(c -> logger.info(c.toString()));
 		}
 	}
-	
 
 	private class CampaignSelect extends BaseConsoleSubcommand {
 		public CampaignSelect() {
@@ -61,6 +56,59 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 		}
 	}
 
+	private class CampaignAddCharacter extends BaseConsoleSubcommand {
+		public CampaignAddCharacter() {
+			super("addcharacter");
+		}
+
+		@Override
+		public void execute(String[] args, Logger logger) {
+			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
+			selectedCampaign.addCharacter(character);
+			logger.info(getMessage("info")
+				.addCharacter(character)
+				.addCampaign(selectedCampaign)
+				.get());
+		}
+	}
+
+	private class CampaignRemoveCharacter extends BaseConsoleSubcommand {
+		public CampaignRemoveCharacter() {
+			super("removecharacter");
+		}
+
+		@Override
+		public void execute(String[] args, Logger logger) {
+			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
+			if(selectedCampaign.removeCharacter(character))
+				logger.info(getMessage("info")
+						.addCharacter(character)
+						.addCampaign(selectedCampaign)
+						.get());
+			else
+				logger.info(getMessage("missing")
+						.addCharacter(character)
+						.addCampaign(selectedCampaign)
+						.get());
+		}
+	}
+
+	private class CampaignListCharacter extends BaseConsoleSubcommand {
+		public CampaignListCharacter() {
+			super("listcharacter");
+		}
+
+		@Override
+		public void execute(String[] args, Logger logger) {
+			logger.info(getMessage("info")
+				.addCampaign(selectedCampaign).get());
+			selectedCampaign.getCharacters()
+				.sorted(Comparator.comparing(AtelierCharacter::getName)
+					.thenComparing(AtelierCharacter::getId))
+				.forEach(c -> logger.info(c.toString()));
+		}
+	}
+
 	private Campaign selectedCampaign;
 
 	public CampaignConsoleCommand() {
@@ -69,11 +117,14 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 		registerSubcommand(new CampaignList());
 		registerSubcommand(new CampaignSelect());
 		registerSubcommand(new CampaignNew());
+		registerSubcommand(new CampaignAddCharacter());
+		registerSubcommand(new CampaignRemoveCharacter());
+		registerSubcommand(new CampaignListCharacter());
 	}
 
 	@Override
 	public void executeDefault(String[] args, Logger logger) {
-		if(selectedCampaign == null) {
+		if (selectedCampaign == null) {
 			logger.info(getMessage("missing").get());
 			return;
 		}

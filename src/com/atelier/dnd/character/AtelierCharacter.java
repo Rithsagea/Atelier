@@ -10,9 +10,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.atelier.database.AtelierDB;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.AbilitySpread;
 import com.atelier.dnd.Skill;
+import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.events.LoadEvent.LoadCharacterEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSavingProficiencyEvent;
 import com.atelier.dnd.events.LoadProficiencyEvent.LoadSkillProficiencyEvent;
@@ -40,6 +42,8 @@ public class AtelierCharacter implements Listener {
 	private int experiencePoints = 0;
 	private int level = 0;
 	
+	private UUID campaign;
+
 	private transient EventBus eventBus = new EventBus();
 	
 	private transient Set<Ability> savingProficiencies = EnumSet.noneOf(Ability.class);
@@ -182,6 +186,10 @@ public class AtelierCharacter implements Listener {
 	public int getLevel() {
 		return level;
 	}
+
+	public Campaign getCampaign() {
+		return AtelierDB.getInstance().getCampaign(campaign);
+	}
 	
 	public EventBus getEventBus() {
 		return eventBus;
@@ -211,6 +219,10 @@ public class AtelierCharacter implements Listener {
 
 	public int getProficiencyBonus() {
 		return (level - 1) / 4 + 2;
+	}
+
+	public void setCampaign(Campaign campaign) {
+		this.campaign = campaign == null ? null : campaign.getId();
 	}
 	
 	@Override

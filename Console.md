@@ -63,6 +63,25 @@ Parameters:
 Syntax: `campaign new`<br>
 Description: Creates a new campaign and returns its id.
 
+### campaign addcharacter
+
+Syntax: `campaign addcharacter <id>`<br>
+Description: Adds a character to the selected campaign.<br>
+Options:
+- UUID `id`: The id of the character
+
+### campaign removecharacter
+
+Syntax: `campaign removecharacter <id>`<br>
+Description: Removes a character from the selected campaign.<br>
+Options:
+- UUID `id`: The id of the character
+
+### campaign listcharacter
+
+Syntax: `campaign listcharacter`<br>
+Description: Lists all character's in a campaign. <br>
+
 ## character
 
 Syntax: `character`<br>
