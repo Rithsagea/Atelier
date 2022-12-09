@@ -9,6 +9,7 @@ import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
 import com.atelier.dnd.campaign.Campaign;
+import com.atelier.dnd.campaign.Scene;
 import com.atelier.dnd.character.AtelierCharacter;
 
 public class TemplateMessage {
@@ -89,6 +90,21 @@ public class TemplateMessage {
 		return addCampaign("campaign", campaign);
 	}
 	
+	public TemplateMessage addScene(String token, Scene scene) {
+		if(scene == null) {
+			tokens.put(token, "null");
+			return this;
+		}
+
+		tokens.put(token + "id", scene.getId().toString());
+		tokens.put(token, scene.toString());
+		return this;
+	}
+
+	public TemplateMessage addScene(Scene scene) {
+		return addScene("scene", scene);
+	}
+
 	public TemplateMessage addAbility(String token, Ability ability) {
 		if(ability == null) {
 			tokens.put(token, "null");

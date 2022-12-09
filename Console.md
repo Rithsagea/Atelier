@@ -125,3 +125,15 @@ Description: Changes the ability score of the selected character.<br>
 Parameters:
 - Ability `ability`: The ability to change, `str|dex|con|int|wis|cha`
 - String `score`: The ability score
+
+## campaign
+
+### campaign new
+
+Syntax: `scene new`<br>
+Description: Creates a new scene in the selected campaign and returns its id.<br>
+
+### campaign list
+
+Syntax: `scene list`<br>
+Description: Lists all scenes in the selected campaign.<br>
