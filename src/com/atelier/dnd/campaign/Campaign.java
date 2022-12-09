@@ -1,6 +1,9 @@
 package com.atelier.dnd.campaign;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -16,6 +19,7 @@ public class Campaign {
 	private String name = "";
 
 	private Set<UUID> characters = new HashSet<>();
+	private Map<String, Scene> scenes = new HashMap<>();
 
 	public UUID getId() {
 		return id;
@@ -27,6 +31,10 @@ public class Campaign {
 
 	public Stream<AtelierCharacter> getCharacters() {
 		return characters.stream().map(AtelierDB.getInstance()::getCharacter);
+	}
+
+	public Map<String, Scene> getScenes() {
+		return Collections.unmodifiableMap(scenes);
 	}
 
 	public void setName(String name) {

@@ -1,5 +1,6 @@
 package com.atelier;
 
+import com.atelier.console.ConsoleCache;
 import com.atelier.console.ConsoleCommandRegistry;
 import com.atelier.console.commands.CampaignConsoleCommand;
 import com.atelier.console.commands.CharacterConsoleCommand;
@@ -24,9 +25,11 @@ public class Commands {
 	}
 	
 	public static void registerConsoleCommands(ConsoleCommandRegistry registry) {
+		ConsoleCache cache = new ConsoleCache();
+
 		registry.registerCommand(new StopConsoleCommand());
-		registry.registerCommand(new UserConsoleCommand());
-		registry.registerCommand(new CharacterConsoleCommand());
-		registry.registerCommand(new CampaignConsoleCommand());
+		registry.registerCommand(new UserConsoleCommand(cache));
+		registry.registerCommand(new CharacterConsoleCommand(cache));
+		registry.registerCommand(new CampaignConsoleCommand(cache));
 	}
 }

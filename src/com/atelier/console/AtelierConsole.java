@@ -58,5 +58,4 @@ public class AtelierConsole implements Runnable {
 			}
 		}
 	}
-
 }

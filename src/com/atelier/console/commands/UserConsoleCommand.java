@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import com.atelier.console.BaseConsoleGroupCommand;
 import com.atelier.console.BaseConsoleSubcommand;
+import com.atelier.console.ConsoleCache;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.character.AtelierCharacter;
@@ -46,7 +47,7 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 			AtelierUser user = AtelierDB.getInstance().getUser(Long.parseLong(args[2]));
 			logger.info(getMessage("info").addUser(user).get());
 			
-			selectedUser = user;
+			cache.selectedUser = user;
 		}
 		
 	}
@@ -59,10 +60,10 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 		@Override
 		public void execute(String[] args, Logger logger) {
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
-			selectedUser.addCharacter(character);
+			cache.selectedUser.addCharacter(character);
 			logger.info(getMessage("info")
 				.addCharacter(character)
-				.addUser(selectedUser)
+				.addUser(cache.selectedUser)
 				.get());
 		}
 	}
@@ -75,15 +76,15 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 		@Override
 		public void execute(String[] args, Logger logger) {
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
-			if(selectedUser.removeCharacter(character))
+			if(cache.selectedUser.removeCharacter(character))
 				logger.info(getMessage("info")
 						.addCharacter(character)
-						.addUser(selectedUser)
+						.addUser(cache.selectedUser)
 						.get());
 			else
 				logger.info(getMessage("missing")
 						.addCharacter(character)
-						.addUser(selectedUser)
+						.addUser(cache.selectedUser)
 						.get());
 		}
 	}
@@ -95,17 +96,18 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
-			logger.info(getMessage("info").addUser(selectedUser).get());
-			selectedUser.getCharacters().forEach(
+			logger.info(getMessage("info").addUser(cache.selectedUser).get());
+			cache.selectedUser.getCharacters().forEach(
 				(AtelierCharacter character) -> logger.info(character.toString()));
 		}
 	}
 	
-	private static AtelierUser selectedUser;
-	
-	public UserConsoleCommand() {
+	private ConsoleCache cache;
+
+	public UserConsoleCommand(ConsoleCache cache) {
 		super("user");
-		
+		this.cache = cache;
+
 		registerSubcommand(new UserList());
 		registerSubcommand(new UserSelect());
 		registerSubcommand(new UserAddCharacter());
@@ -115,12 +117,12 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 	
 	@Override
 	public void executeDefault(String[] args, Logger logger) {
-		if(selectedUser == null) {
+		if(cache.selectedUser == null) {
 			logger.info(getMessage("missing").get());
 			return;
 		}
 		
-		logger.info("Name: " + selectedUser.getName());
-		logger.info("Id: " + selectedUser.getId());
+		logger.info("Name: " + cache.selectedUser.getName());
+		logger.info("Id: " + cache.selectedUser.getId());
 	}
 }
