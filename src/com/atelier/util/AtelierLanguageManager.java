@@ -3,6 +3,7 @@ package com.atelier.util;
 import com.atelier.console.AbstractConsoleCommand;
 import com.atelier.console.AbstractConsoleGroupCommand;
 import com.atelier.console.AbstractConsoleSubcommand;
+import com.atelier.console.ConsoleException;
 import com.atelier.discord.AtelierEmbedBuilder;
 import com.atelier.discord.AtelierMenu;
 import com.atelier.discord.commands.AbstractInteraction;
@@ -44,6 +45,8 @@ public class AtelierLanguageManager extends LanguageManager {
 			else if(obj instanceof AbstractConsoleGroupCommand) group = "ConsoleCommandGroup";
 			else group = "ConsoleCommand";
 		}
+
+		if(obj instanceof ConsoleException) group = "ConsoleException";
 
 		if(obj instanceof CharacterClass) group = "Class";
 		if(obj instanceof CharacterRace) group = "Race";

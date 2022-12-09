@@ -47,7 +47,7 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 			AtelierUser user = AtelierDB.getInstance().getUser(Long.parseLong(args[2]));
 			logger.info(getMessage("info").addUser(user).get());
 			
-			cache.selectedUser = user;
+			cache.selectUser(user);
 		}
 		
 	}
@@ -59,11 +59,13 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
+			AtelierUser selectedUser = cache.selectedUser();
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
-			cache.selectedUser.addCharacter(character);
+			
+			selectedUser.addCharacter(character);
 			logger.info(getMessage("info")
 				.addCharacter(character)
-				.addUser(cache.selectedUser)
+				.addUser(selectedUser)
 				.get());
 		}
 	}
@@ -75,16 +77,18 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
+			AtelierUser selectedUser = cache.selectedUser();
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
-			if(cache.selectedUser.removeCharacter(character))
+
+			if(selectedUser.removeCharacter(character))
 				logger.info(getMessage("info")
 						.addCharacter(character)
-						.addUser(cache.selectedUser)
+						.addUser(selectedUser)
 						.get());
 			else
 				logger.info(getMessage("missing")
 						.addCharacter(character)
-						.addUser(cache.selectedUser)
+						.addUser(selectedUser)
 						.get());
 		}
 	}
@@ -96,8 +100,10 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
-			logger.info(getMessage("info").addUser(cache.selectedUser).get());
-			cache.selectedUser.getCharacters().forEach(
+			AtelierUser selectedUser = cache.selectedUser();
+
+			logger.info(getMessage("info").addUser(selectedUser).get());
+			selectedUser.getCharacters().forEach(
 				(AtelierCharacter character) -> logger.info(character.toString()));
 		}
 	}
@@ -117,12 +123,9 @@ public class UserConsoleCommand extends BaseConsoleGroupCommand {
 	
 	@Override
 	public void executeDefault(String[] args, Logger logger) {
-		if(cache.selectedUser == null) {
-			logger.info(getMessage("missing").get());
-			return;
-		}
+		AtelierUser selectedUser = cache.selectedUser();
 		
-		logger.info("Name: " + cache.selectedUser.getName());
-		logger.info("Id: " + cache.selectedUser.getId());
+		logger.info("Name: " + selectedUser.getName());
+		logger.info("Id: " + selectedUser.getId());
 	}
 }

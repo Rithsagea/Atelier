@@ -43,15 +43,17 @@ public class AtelierConsole implements Runnable {
 		while(running) {
 			try {
 				line = reader.readLine();
-			} catch (IOException e) { e.printStackTrace(); }
+			} catch (IOException e) { 
+				e.printStackTrace(); 
+			}
 			
 			String[] args = line.split(" ");
 			AbstractConsoleCommand cmd = registry.getCommand(args[0]);
 			if(cmd != null) {
 				try {
 					cmd.execute(args, logger); 
-				} catch(Exception e) {
-					logger.error("Error", e);
+				} catch(ConsoleException e) {
+					logger.error("{}: {}", e.getClass().getSimpleName(), e.getLogMessage());
 				}
 			} else {
 				System.out.println("Echo: " + line);

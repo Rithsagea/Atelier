@@ -41,7 +41,7 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 			Campaign campaign = AtelierDB.getInstance().getCampaign(UUID.fromString(args[2]));
 			logger.info(getMessage("info").addCampaign(campaign).get());
 
-			cache.selectedCampaign = campaign;
+			cache.selectCampaign(campaign);
 		}
 	}
 
@@ -65,11 +65,13 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
+			Campaign selectedCampaign = cache.selectedCampaign();
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
-			cache.selectedCampaign.addCharacter(character);
+
+			selectedCampaign.addCharacter(character);
 			logger.info(getMessage("info")
 				.addCharacter(character)
-				.addCampaign(cache.selectedCampaign)
+				.addCampaign(selectedCampaign)
 				.get());
 		}
 	}
@@ -81,16 +83,18 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
+			Campaign selectedCampaign = cache.selectedCampaign();
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
-			if(cache.selectedCampaign.removeCharacter(character))
+
+			if(selectedCampaign.removeCharacter(character))
 				logger.info(getMessage("info")
 						.addCharacter(character)
-						.addCampaign(cache.selectedCampaign)
+						.addCampaign(selectedCampaign)
 						.get());
 			else
 				logger.info(getMessage("missing")
 						.addCharacter(character)
-						.addCampaign(cache.selectedCampaign)
+						.addCampaign(selectedCampaign)
 						.get());
 		}
 	}
@@ -102,9 +106,11 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
+			Campaign selectedCampaign = cache.selectedCampaign();
+
 			logger.info(getMessage("info")
-				.addCampaign(cache.selectedCampaign).get());
-			cache.selectedCampaign.getCharacters()
+				.addCampaign(selectedCampaign).get());
+			selectedCampaign.getCharacters()
 				.sorted(Comparator.comparing(AtelierCharacter::getName)
 					.thenComparing(AtelierCharacter::getId))
 				.forEach(c -> logger.info(c.toString()));
@@ -127,13 +133,10 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 
 	@Override
 	public void executeDefault(String[] args, Logger logger) {
-		if (cache.selectedCampaign == null) {
-			logger.info(getMessage("missing").get());
-			return;
-		}
+		Campaign selectedCampaign = cache.selectedCampaign();
 
-		logger.info("Name: " + cache.selectedCampaign.getName());
-		logger.info("Id: " + cache.selectedCampaign.getId());
-		logger.info("Characters: " + cache.selectedCampaign.getCharacters().map(AtelierCharacter::getName).collect(Collectors.toList()));
+		logger.info("Name: " + selectedCampaign.getName());
+		logger.info("Id: " + selectedCampaign.getId());
+		logger.info("Characters: " + selectedCampaign.getCharacters().map(AtelierCharacter::getName).collect(Collectors.toList()));
 	}
 }

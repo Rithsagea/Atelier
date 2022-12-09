@@ -48,7 +48,7 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 			AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
 			logger.info(getMessage("info").addCharacter(character).get());
 			
-			cache.selectedCharacter = character;
+			cache.selectCharacter(character);
 		}
 	}
 	
@@ -73,13 +73,15 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
+			AtelierCharacter selectedCharacter = cache.selectedCharacter();
+
 			if(args.length == 2) {
-				logger.info(getMessage("info").addCharacter(cache.selectedCharacter).get());
+				logger.info(getMessage("info").addCharacter(selectedCharacter).get());
 			} else {
 				logger.info(getMessage("set")
-						.addCharacter(cache.selectedCharacter)
+						.addCharacter(selectedCharacter)
 						.add("name", args[2]).get());
-				cache.selectedCharacter.setName(args[2]);
+				selectedCharacter.setName(args[2]);
 			}
 		}
 		
@@ -92,16 +94,17 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 
 		@Override
 		public void execute(String[] args, Logger logger) {
-			AbilitySpread spread = cache.selectedCharacter.getAbilitySpread();
+			AtelierCharacter selectedCharacter = cache.selectedCharacter();
+			AbilitySpread spread = selectedCharacter.getAbilitySpread();
 
 			if(args.length == 2) {
 				logger.info(getMessage("info.points").add("points", spread.getPoints()).get());
 				for(Ability ability : Ability.values()) {
 					logger.info(getMessage("info.score")
 							.addAbility(ability)
-							.add("baseScore", cache.selectedCharacter.getBaseScore(ability))
-							.add("abilityScore", cache.selectedCharacter.getAbilityScore(ability))
-							.add("abilityModifier", WordUtil.formatModifier(cache.selectedCharacter.getAbilityModifier(ability)))
+							.add("baseScore", selectedCharacter.getBaseScore(ability))
+							.add("abilityScore", selectedCharacter.getAbilityScore(ability))
+							.add("abilityModifier", WordUtil.formatModifier(selectedCharacter.getAbilityModifier(ability)))
 							.get());
 				}
 			} else {
@@ -133,12 +136,9 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 
 	@Override
 	public void executeDefault(String[] args, Logger logger) {
-		if(cache.selectedCharacter == null) {
-			logger.info(getMessage("missing").get());
-			return;
-		}
+		AtelierCharacter selectedCharacter = cache.selectedCharacter();
 		
-		logger.info("Name: " + cache.selectedCharacter.getName());
-		logger.info("Id: " + cache.selectedCharacter.getId());
+		logger.info("Name: " + selectedCharacter.getName());
+		logger.info("Id: " + selectedCharacter.getId());
 	}
 }
