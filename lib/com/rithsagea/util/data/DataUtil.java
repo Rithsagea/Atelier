@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -164,5 +165,24 @@ public class DataUtil {
 	
 	public static Class<?> getPrimitive(Class<?> wrapperClass) {
 		return PRIMITIVE_MAP.get(wrapperClass);
+	}
+
+
+	//null checked string conversions
+
+	public static long stringToLong(String str) {
+		try {
+			return Long.parseLong(str);
+		} catch(Exception e) {
+			return 0;
+		}
+	}
+
+	public static UUID stringToUuid(String str) {
+		try {
+			return UUID.fromString(str);
+		} catch(Exception e) {
+			return null;
+		}
 	}
 }

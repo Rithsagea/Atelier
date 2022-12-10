@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atelier.console.AtelierConsole;
+import com.atelier.console.ConsoleCache;
 import com.atelier.database.AtelierDB;
 import com.atelier.database.DBSaveTask;
 import com.atelier.discord.commands.music.AtelierAudioManager;
@@ -33,6 +34,7 @@ public class AtelierBot {
 	
 	private AtelierDB db;
 	private AtelierConsole console;
+	private ConsoleCache consoleCache;
 	private Config config;
 
 	private Logger logger = LoggerFactory.getLogger("Atelier");
@@ -46,16 +48,18 @@ public class AtelierBot {
 
 		this.config = Config.init(configPath);
 		this.db = AtelierDB.init(config);
-		console = new AtelierConsole(System.in);
 	}
 
 	public void start() {
 		running = true;
 		logger.info("Initializing Atelier");
 		
-		console.start();
-
 		db.connect();
+		
+		this.consoleCache = ConsoleCache.init(config.getCachePath());
+		console = new AtelierConsole(System.in);
+
+		console.start();
 
 		JDABuilder builder = JDABuilder.createDefault(config.getDiscordToken());
 		builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
@@ -95,6 +99,8 @@ public class AtelierBot {
 		AtelierAudioManager.getInstance().shutdown();
 		jda.shutdownNow();
 		db.disconnect();
+
+		consoleCache.save();
 		
 		try {
 			scheduler.awaitTermination(30, TimeUnit.SECONDS);

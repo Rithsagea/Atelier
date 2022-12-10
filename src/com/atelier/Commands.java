@@ -26,7 +26,7 @@ public class Commands {
 	}
 	
 	public static void registerConsoleCommands(ConsoleCommandRegistry registry) {
-		ConsoleCache cache = new ConsoleCache();
+		ConsoleCache cache = ConsoleCache.getInstance();
 
 		registry.registerCommand(new StopConsoleCommand());
 		registry.registerCommand(new UserConsoleCommand(cache));

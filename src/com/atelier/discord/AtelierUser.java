@@ -14,7 +14,7 @@ public class AtelierUser {
 
 	@JsonProperty("_id")
 	private final long id;
-	private String name;
+	private String name = "";
 	private HashSet<UUID> characters = new HashSet<>();
 	private UUID selectedCharacter;
 	

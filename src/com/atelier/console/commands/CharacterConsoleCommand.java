@@ -25,7 +25,6 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 		public void execute(String[] args, Logger logger) {
 			logger.info(getMessage("info").get());
 			AtelierDB.getInstance().listCharacters()
-				.stream()
 				.sorted(new Comparator<AtelierCharacter>() {
 					@Override
 					public int compare(AtelierCharacter u1, AtelierCharacter u2) {

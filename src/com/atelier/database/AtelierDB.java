@@ -3,11 +3,15 @@ package com.atelier.database;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import com.atelier.Config;
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.campaign.Campaign;
+import com.atelier.dnd.campaign.Scene;
 import com.atelier.dnd.character.AtelierCharacter;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -85,12 +89,8 @@ public class AtelierDB {
 		characters.put(character.getId(), character);
 	}
 
-	public Collection<AtelierCharacter> listCharacters() {
-		return characters.values();
-	}
-
-	public Collection<Campaign> listCampaigns() {
-		return campaigns.values();
+	public Stream<AtelierCharacter> listCharacters() {
+		return characters.values().stream();
 	}
 
 	public Campaign getCampaign(UUID id) {
@@ -99,6 +99,22 @@ public class AtelierDB {
 
 	public void addCampaign(Campaign campaign) {
 		campaigns.put(campaign.getId(), campaign);
+	}
+
+	public Stream<Campaign> listCampaigns() {
+		return campaigns.values().stream();
+	}
+
+	public Scene getScene(UUID id) {
+		try {
+			return listScenes().filter(s -> s.getId().equals(id)).findFirst().get();
+		} catch(NoSuchElementException e) {
+			return null; //scene does not exist
+		}
+	}
+
+	public Stream<Scene> listScenes() {
+		return campaigns.values().stream().map(c -> c.getScenes()).flatMap(Function.identity());
 	}
 	
 	public void load() {

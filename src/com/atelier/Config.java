@@ -26,6 +26,7 @@ public class Config {
 	private static final String DB_NAME = "databaseName";
 	private static final String DISCORD_TOKEN = "discordToken";
 	private static final String TESTING_GUILD_ID = "testingGuildId";
+	private static final String CACHE_PATH = "cachePath";
 	
 	private Config(String configPath) {
 		configFile = new File(configPath);
@@ -44,6 +45,7 @@ public class Config {
 		setDefault(DB_NAME, "atelier");
 		setDefault(DISCORD_TOKEN, "");
 		setDefault(TESTING_GUILD_ID, "-1");
+		setDefault(CACHE_PATH, "cache.properties");
 		save();
 	}
 
@@ -85,5 +87,9 @@ public class Config {
 	
 	public String getTestingGuildId() {
 		return prop.getProperty(TESTING_GUILD_ID);
+	}
+
+	public String getCachePath() {
+		return prop.getProperty(CACHE_PATH);
 	}
 }

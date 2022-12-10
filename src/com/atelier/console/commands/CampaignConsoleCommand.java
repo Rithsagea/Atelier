@@ -24,7 +24,6 @@ public class CampaignConsoleCommand extends BaseConsoleGroupCommand {
 		public void execute(String[] args, Logger logger) {
 			logger.info(getMessage("info").get());
 			AtelierDB.getInstance().listCampaigns()
-				.stream()
 				.sorted(Comparator.comparing(Campaign::getName)
 					.thenComparing(Campaign::getId))
 				.forEach(c -> logger.info(c.toString()));
