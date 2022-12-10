@@ -14,6 +14,7 @@ Description: Lists all existing characters.<br>
 Syntax: `character select <id>`<br>
 Description: Selects a character with the given id.<br>
 Parameters:
+
 - UUID `id`: The id of the character.
 
 ## new
@@ -29,6 +30,7 @@ Description: Displays the name of the selected character.<br>
 Syntax: `character name <name>`<br>
 Description: Changes the name of the selected character.<br>
 Parameters:
+
 - String `name`: The new name of the character.
 
 ## ability
@@ -39,5 +41,6 @@ Description: Displays the selected character's ability scores
 Syntax: `character ability <ability> <score>`<br>
 Description: Changes the ability score of the selected character.<br>
 Parameters:
+
 - Ability `ability`: The ability to change, `str|dex|con|int|wis|cha`
 - String `score`: The ability score
