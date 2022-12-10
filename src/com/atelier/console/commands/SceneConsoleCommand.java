@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import com.atelier.console.BaseConsoleGroupCommand;
 import com.atelier.console.BaseConsoleSubcommand;
 import com.atelier.console.ConsoleCache;
-import com.atelier.console.ConsoleException.MissingArgumentException;
-import com.atelier.console.ConsoleException.UnknownArgumentException;
 import com.atelier.database.AtelierDB;
 import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.campaign.Scene;
@@ -64,18 +62,22 @@ public class SceneConsoleCommand extends BaseConsoleGroupCommand {
     }
   }
 
-  private class SceneEdit extends BaseConsoleSubcommand {
-    public SceneEdit() {
-      super("edit");
+  private class SceneName extends BaseConsoleSubcommand {
+    public SceneName() {
+      super("name");
     }
 
     @Override
     public void execute(String[] args, Logger logger) {
-      if(args.length <= 2)
-        throw new MissingArgumentException("field");
-      switch(args[1]) {
-        default:
-          throw new UnknownArgumentException(args[1]);
+      Scene scene = cache.selectedScene();
+
+      if(args.length == 2) {
+        logger.info(getMessage("info").addScene(scene).get());
+      } else {
+        logger.info(getMessage("set")
+          .addScene(scene)
+          .add("name", args[2]).get());
+        scene.setName(args[2]);
       }
     }
   }
@@ -89,7 +91,7 @@ public class SceneConsoleCommand extends BaseConsoleGroupCommand {
     registerSubcommand(new SceneList());
     registerSubcommand(new SceneSelect());
     registerSubcommand(new SceneNew());
-    registerSubcommand(new SceneEdit());
+    registerSubcommand(new SceneName());
   }
 
   @Override

@@ -96,7 +96,8 @@ public class TemplateMessage {
 			return this;
 		}
 
-		tokens.put(token + "id", scene.getId().toString());
+		tokens.put(token + ".id", scene.getId().toString());
+		tokens.put(token + ".name", scene.getName());
 		tokens.put(token, scene.toString());
 		return this;
 	}
