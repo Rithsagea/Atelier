@@ -6,7 +6,10 @@ import java.util.stream.Collectors;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.discord.commands.BaseInteraction.GroupCommand;
+import com.atelier.discord.embeds.dnd.SessionNewEmbedBuilder;
+import com.atelier.dnd.SessionManager;
 import com.atelier.dnd.campaign.Campaign;
+import com.atelier.dnd.campaign.Session;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -25,7 +28,8 @@ public class SessionCommand extends GroupCommand {
     @Override
     public void execute(AtelierUser user, SlashCommandInteractionEvent event) {
       Campaign campaign = AtelierDB.getInstance().getCampaign(UUID.fromString(event.getOption(this.campaign).getAsString()));
-      event.reply("Selected Campaign: " + campaign).setEphemeral(true).queue();
+      Session session = SessionManager.getInstance().createSession(campaign, event.getMessageChannel());
+      event.replyEmbeds(new SessionNewEmbedBuilder(session).build()).queue();
     }
     
     @Override
