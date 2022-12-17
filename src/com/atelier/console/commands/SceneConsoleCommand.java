@@ -1,6 +1,7 @@
 package com.atelier.console.commands;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
@@ -10,6 +11,7 @@ import com.atelier.console.ConsoleCache;
 import com.atelier.database.AtelierDB;
 import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.campaign.Scene;
+import com.atelier.dnd.character.AtelierCharacter;
 
 public class SceneConsoleCommand extends BaseConsoleGroupCommand {
   
@@ -82,6 +84,24 @@ public class SceneConsoleCommand extends BaseConsoleGroupCommand {
     }
   }
 
+  private class SceneAddCharacter extends BaseConsoleSubcommand {
+    public SceneAddCharacter() {
+      super("addcharacter", "addchar");
+    }
+
+    @Override
+    public void execute(String[] args, Logger logger) {
+      Scene scene = cache.selectedScene();
+      AtelierCharacter character = AtelierDB.getInstance().getCharacter(UUID.fromString(args[2]));
+      logger.info(getMessage("info")
+        .addCharacter(character)
+        .addScene(scene)
+        .get());
+
+      character.setScene(scene);
+    }
+  }
+
   private ConsoleCache cache;
 
   public SceneConsoleCommand(ConsoleCache cache) {
@@ -92,6 +112,7 @@ public class SceneConsoleCommand extends BaseConsoleGroupCommand {
     registerSubcommand(new SceneSelect());
     registerSubcommand(new SceneNew());
     registerSubcommand(new SceneName());
+    registerSubcommand(new SceneAddCharacter());
   }
 
   @Override
@@ -100,5 +121,6 @@ public class SceneConsoleCommand extends BaseConsoleGroupCommand {
 
     logger.info("Name: " + scene.getName());
     logger.info("Id: " + scene.getId());
+    logger.info("Characters: " + scene.listCharacters().collect(Collectors.toList()));
   }
 }

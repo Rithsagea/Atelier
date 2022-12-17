@@ -28,3 +28,11 @@ Description: Changes the name of the selected scene.<br>
 Parameters:
 
 - String `name`: The new name of the scene.
+
+## addcharacter
+
+Syntax: `scene addcharacter <id>`<br>
+Description: Adds a character to the selected scene. <br>
+Paramters:
+
+- UUID `id`: The id of the character

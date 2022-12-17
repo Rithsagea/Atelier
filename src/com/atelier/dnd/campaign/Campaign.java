@@ -32,6 +32,10 @@ public class Campaign {
 		return characters.stream().map(AtelierDB.getInstance()::getCharacter);
 	}
 
+	public Scene getScene(UUID id) {
+		return scenes.get(id);
+	}
+
 	public Stream<Scene> getScenes() {
 		return scenes.values().stream();
 	}

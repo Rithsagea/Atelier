@@ -15,6 +15,7 @@ import com.atelier.dnd.Ability;
 import com.atelier.dnd.AbilitySpread;
 import com.atelier.dnd.Skill;
 import com.atelier.dnd.campaign.Campaign;
+import com.atelier.dnd.campaign.Scene;
 import com.atelier.dnd.character.attributes.CharacterAttribute;
 import com.atelier.dnd.character.attributes.CharacterClass;
 import com.atelier.dnd.character.attributes.CharacterRace;
@@ -46,6 +47,7 @@ public class AtelierCharacter implements Listener {
 	private int level = 0;
 	
 	private UUID campaign;
+	private UUID scene;
 
 	private transient EventBus eventBus = new EventBus();
 	
@@ -56,6 +58,7 @@ public class AtelierCharacter implements Listener {
 	private transient Map<Ability, Integer> abilityModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Ability, Integer> savingModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Skill, Integer> skillModifiers = new EnumMap<>(Skill.class);
+
 	
 	public AtelierCharacter() {
 		this(UUID.randomUUID());
@@ -193,6 +196,10 @@ public class AtelierCharacter implements Listener {
 	public Campaign getCampaign() {
 		return AtelierDB.getInstance().getCampaign(campaign);
 	}
+
+	public Scene getScene() {
+		return AtelierDB.getInstance().getScene(scene);
+	}
 	
 	public EventBus getEventBus() {
 		return eventBus;
@@ -226,6 +233,12 @@ public class AtelierCharacter implements Listener {
 
 	public void setCampaign(Campaign campaign) {
 		this.campaign = campaign == null ? null : campaign.getId();
+	}
+
+	public void setScene(Scene scene) {
+		if(this.scene != null) AtelierDB.getInstance().getScene(this.scene).removeCharacter(this);
+		this.scene = scene == null ? null : scene.getId();
+		scene.addCharacter(this);
 	}
 	
 	@Override
