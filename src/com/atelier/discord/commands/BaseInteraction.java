@@ -133,7 +133,7 @@ public abstract class BaseInteraction implements AbstractInteraction {
 			
 			data.addSubcommands(subcommands.values().stream().map(cmd -> cmd.getData()).collect(Collectors.toList()));
 			data.addSubcommandGroups(groups.values().stream().map(cmd -> cmd.getData()).collect(Collectors.toList()));
-			
+
 			return data;
 		}
 	}
