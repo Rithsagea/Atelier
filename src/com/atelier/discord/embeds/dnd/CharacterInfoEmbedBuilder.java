@@ -14,7 +14,9 @@ public class CharacterInfoEmbedBuilder extends AtelierEmbedBuilder {
 		setTitle(getMessage("title").addCharacter(character).get());
 		
 		content.append(getMessage("description.campaign")
-			.addCampaign(character.getCampaign()).get());
+			.addCampaign(character.getCampaign()).get() + "\n");
+		content.append(getMessage("description.scene")
+			.addScene(character.getScene()).get());
 		this.setDescription(content.toString());
 
 		prefix = "";

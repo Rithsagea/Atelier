@@ -135,9 +135,11 @@ public class CharacterConsoleCommand extends BaseConsoleGroupCommand {
 
 	@Override
 	public void executeDefault(String[] args, Logger logger) {
-		AtelierCharacter selectedCharacter = cache.selectedCharacter();
+		AtelierCharacter character = cache.selectedCharacter();
 		
-		logger.info("Name: " + selectedCharacter.getName());
-		logger.info("Id: " + selectedCharacter.getId());
+		logger.info("Name: " + character.getName());
+		logger.info("Id: " + character.getId());
+		logger.info("Campaign: " + character.getCampaign());
+		logger.info("Scene: " + character.getScene());
 	}
 }
