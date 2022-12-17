@@ -8,7 +8,7 @@ public class SessionNewEmbedBuilder extends AtelierEmbedBuilder {
     setTitle(getMessage("title").addCampaign(session.getCampaign()).get());
     setDescription(getMessage("description")
       .addCampaign(session.getCampaign())
-      .add("channel", session.getChannel().getAsMention())
+      .addChannel(session.getChannel())
       .get());
   }
 }

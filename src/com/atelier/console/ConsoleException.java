@@ -12,6 +12,7 @@ public class ConsoleException extends RuntimeException implements AtelierObject 
   public static class UnselectedUserException extends ConsoleException {}
   public static class UnselectedCampaignException extends ConsoleException {}
   public static class UnselectedSceneException extends ConsoleException {}
+  public static class UnselectedSessionException extends ConsoleException {}
 
   public static class MissingArgumentException extends ConsoleException {
     

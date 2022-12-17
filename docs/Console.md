@@ -8,3 +8,4 @@
 - [character](./console/character.md)
 - [campaign](./console/campaign.md)
 - [scene](./console/scene.md)
+- [session](./console/session.md)

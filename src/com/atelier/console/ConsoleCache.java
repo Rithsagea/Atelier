@@ -9,11 +9,13 @@ import java.util.Properties;
 import com.atelier.console.ConsoleException.UnselectedCampaignException;
 import com.atelier.console.ConsoleException.UnselectedCharacterException;
 import com.atelier.console.ConsoleException.UnselectedSceneException;
+import com.atelier.console.ConsoleException.UnselectedSessionException;
 import com.atelier.console.ConsoleException.UnselectedUserException;
 import com.atelier.database.AtelierDB;
 import com.atelier.discord.AtelierUser;
 import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.campaign.Scene;
+import com.atelier.dnd.campaign.Session;
 import com.atelier.dnd.character.AtelierCharacter;
 import com.rithsagea.util.data.DataUtil;
 
@@ -32,6 +34,7 @@ public class ConsoleCache {
   private AtelierUser selectedUser;
   private Campaign selectedCampaign;
   private Scene selectedScene;
+  private transient Session selectedSession;
 
   private File cacheFile;
   private Properties properties;
@@ -76,6 +79,12 @@ public class ConsoleCache {
     return selectedScene;
   }
 
+  public Session selectedSession() {
+    if(selectedSession == null)
+      throw new UnselectedSessionException();
+    return selectedSession;
+  }
+
 
   public void selectCharacter(AtelierCharacter character) {
     selectedCharacter = character;
@@ -91,6 +100,10 @@ public class ConsoleCache {
 
   public void selectScene(Scene scene) {
     selectedScene = scene;
+  }
+
+  public void selectSession(Session session) {
+    selectedSession = session;
   }
 
 

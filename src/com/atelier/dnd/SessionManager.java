@@ -1,5 +1,9 @@
 package com.atelier.dnd;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.campaign.Session;
 
@@ -12,9 +16,17 @@ public class SessionManager {
     return INSTANCE;
   }
   
+  private Map<Long, Session> sessions = new HashMap<>();
+
   private SessionManager() {}
 
   public Session createSession(Campaign campaign, MessageChannel channel) {
-    return new Session(campaign, channel);
+    Session session = new Session(campaign, channel);
+    sessions.put(session.getChannel().getIdLong(), session);
+    return session;
+  }
+
+  public Map<Long, Session> getSessions() {
+    return Collections.unmodifiableMap(sessions);
   }
 }

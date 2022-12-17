@@ -1,5 +1,8 @@
 # scene
 
+Syntax: `scene`<br>
+Description: Displays information about the selected scene.<br>
+
 ## list
 
 Syntax: `scene list`<br>

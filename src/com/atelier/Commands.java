@@ -5,6 +5,7 @@ import com.atelier.console.ConsoleCommandRegistry;
 import com.atelier.console.commands.CampaignConsoleCommand;
 import com.atelier.console.commands.CharacterConsoleCommand;
 import com.atelier.console.commands.SceneConsoleCommand;
+import com.atelier.console.commands.SessionConsoleCommand;
 import com.atelier.console.commands.StopConsoleCommand;
 import com.atelier.console.commands.UserConsoleCommand;
 import com.atelier.discord.commands.CommandRegistry;
@@ -37,5 +38,6 @@ public class Commands {
 		registry.registerCommand(new CharacterConsoleCommand(cache));
 		registry.registerCommand(new CampaignConsoleCommand(cache));
 		registry.registerCommand(new SceneConsoleCommand(cache));
+		registry.registerCommand(new SessionConsoleCommand(cache));
 	}
 }

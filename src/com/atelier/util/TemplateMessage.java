@@ -12,6 +12,8 @@ import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.campaign.Scene;
 import com.atelier.dnd.character.AtelierCharacter;
 
+import net.dv8tion.jda.api.entities.MessageChannel;
+
 public class TemplateMessage {
 	
 	private String msg;
@@ -42,6 +44,22 @@ public class TemplateMessage {
 		return this;
 	}
 	
+	public TemplateMessage addChannel(String token, MessageChannel channel) {
+			if(channel == null) {
+				tokens.put(token, "null");
+				return this;
+			}
+
+			tokens.put(token + ".name", channel.getName());
+			tokens.put(token + ".id", channel.getId());
+			tokens.put(token, channel.getAsMention());
+			return this;
+	}
+
+	public TemplateMessage addChannel(MessageChannel channel) {
+		return addChannel("channel", channel);
+	}
+
 	public TemplateMessage addUser(String token, AtelierUser user) {
 		if(user == null) {
 			tokens.put(token, "null");
