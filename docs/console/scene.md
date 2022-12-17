@@ -20,11 +20,11 @@ Description: Creates a new scene in the selected campaign and returns its id.<br
 
 ## name
 
-Syntax: `character name`<br>
+Syntax: `scene name`<br>
 Description: Displays the name of the selected scene.<br>
 
-Syntax: `character name <name>`<br>
+Syntax: `scene name <name>`<br>
 Description: Changes the name of the selected scene.<br>
 Parameters:
 
-- String `name`: The new name of the character.
+- String `name`: The new name of the scene.
