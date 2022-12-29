@@ -114,7 +114,7 @@ public class AtelierDB {
 	}
 
 	public Stream<Scene> listScenes() {
-		return campaigns.values().stream().map(c -> c.getScenes()).flatMap(Function.identity());
+		return campaigns.values().stream().map(c -> c.listScenes()).flatMap(Function.identity());
 	}
 	
 	public void load() {

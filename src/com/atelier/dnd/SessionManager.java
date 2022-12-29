@@ -29,4 +29,8 @@ public class SessionManager {
   public Map<Long, Session> getSessions() {
     return Collections.unmodifiableMap(sessions);
   }
+
+  public Session getSession(MessageChannel channel) {
+    return sessions.get(channel.getIdLong());
+  }
 }

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 public class Session {
   
   private Campaign campaign;
+  private Scene scene;
   private MessageChannel channel;
 
   public Session(Campaign campaign, MessageChannel channel) {
@@ -16,7 +17,15 @@ public class Session {
     return campaign;
   }
 
+  public Scene getScene() {
+    return scene;
+  }
+
   public MessageChannel getChannel() {
     return channel;
+  }
+
+  public void setScene(Scene scene) {
+    this.scene = scene;
   }
 }

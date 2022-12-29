@@ -36,7 +36,7 @@ public class Campaign {
 		return scenes.get(id);
 	}
 
-	public Stream<Scene> getScenes() {
+	public Stream<Scene> listScenes() {
 		return scenes.values().stream();
 	}
 
