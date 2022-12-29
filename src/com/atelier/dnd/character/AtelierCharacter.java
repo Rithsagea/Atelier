@@ -14,6 +14,7 @@ import com.atelier.database.AtelierDB;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.AbilitySpread;
 import com.atelier.dnd.Skill;
+import com.atelier.dnd.action.Action;
 import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.campaign.Scene;
 import com.atelier.dnd.character.attributes.CharacterAttribute;
@@ -58,7 +59,6 @@ public class AtelierCharacter implements Listener {
 	private transient Map<Ability, Integer> abilityModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Ability, Integer> savingModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Skill, Integer> skillModifiers = new EnumMap<>(Skill.class);
-
 	
 	public AtelierCharacter() {
 		this(UUID.randomUUID());
@@ -193,6 +193,14 @@ public class AtelierCharacter implements Listener {
 		return level;
 	}
 
+	public int getProficiencyBonus() {
+		return (level - 1) / 4 + 2;
+	}
+
+	public Stream<Action> getActions() {
+		return null; //TODO implement
+	}
+
 	public Campaign getCampaign() {
 		return AtelierDB.getInstance().getCampaign(campaign);
 	}
@@ -227,10 +235,6 @@ public class AtelierCharacter implements Listener {
 		}
 	}
 
-	public int getProficiencyBonus() {
-		return (level - 1) / 4 + 2;
-	}
-
 	public void setCampaign(Campaign campaign) {
 		this.campaign = campaign == null ? null : campaign.getId();
 	}
@@ -241,6 +245,8 @@ public class AtelierCharacter implements Listener {
 		scene.addCharacter(this);
 	}
 	
+	// NATIVE
+
 	@Override
 	public String toString() {
 		return String.format("%s [%s]", name, id);

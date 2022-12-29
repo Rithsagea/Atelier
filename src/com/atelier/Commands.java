@@ -10,6 +10,7 @@ import com.atelier.console.commands.StopConsoleCommand;
 import com.atelier.console.commands.UserConsoleCommand;
 import com.atelier.discord.commands.CommandRegistry;
 import com.atelier.discord.commands.WaifuCommand;
+import com.atelier.discord.commands.dnd.ActionCommand;
 import com.atelier.discord.commands.dnd.AttributeCommand;
 import com.atelier.discord.commands.dnd.CharacterCommand;
 import com.atelier.discord.commands.dnd.RollCommand;
@@ -25,6 +26,7 @@ public class Commands {
 		reg.registerCommand(new CharacterCommand());
 		reg.registerCommand(new AttributeCommand());
 		reg.registerCommand(new RollCommand());
+		reg.registerCommand(new ActionCommand());
 
 		//DND Admin
 		reg.registerCommand(new SessionCommand());
