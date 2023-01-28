@@ -3,6 +3,8 @@ package com.atelier.dnd.character;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -15,8 +17,10 @@ import com.atelier.dnd.Ability;
 import com.atelier.dnd.AbilitySpread;
 import com.atelier.dnd.Skill;
 import com.atelier.dnd.action.Action;
+import com.atelier.dnd.action.LoadActionsEvent;
 import com.atelier.dnd.campaign.Campaign;
 import com.atelier.dnd.campaign.Scene;
+import com.atelier.dnd.character.actions.MoveAction;
 import com.atelier.dnd.character.attributes.CharacterAttribute;
 import com.atelier.dnd.character.attributes.CharacterClass;
 import com.atelier.dnd.character.attributes.CharacterRace;
@@ -59,6 +63,9 @@ public class AtelierCharacter implements Listener {
 	private transient Map<Ability, Integer> abilityModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Ability, Integer> savingModifiers = new EnumMap<>(Ability.class);
 	private transient Map<Skill, Integer> skillModifiers = new EnumMap<>(Skill.class);
+
+	private transient HashMap<String, Action> baseActions = new HashMap<>();
+	private transient Set<Action> actions = new HashSet<>();
 	
 	public AtelierCharacter() {
 		this(UUID.randomUUID());
@@ -66,6 +73,8 @@ public class AtelierCharacter implements Listener {
 	
 	public AtelierCharacter(UUID id) {
 		this.id = id;
+
+		baseActions.put("move", new MoveAction());
 	}
 	
 	public void reload() {
@@ -127,6 +136,11 @@ public class AtelierCharacter implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	private void onLoadSkillModifier(LoadSkillModifierEvent e) {
 		Stream.of(Skill.values()).forEach(s -> skillModifiers.put(s, e.getSkillModifier(s)));
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	private void onLoadActions(LoadActionsEvent e) {
+		actions = e.getActions();
 	}
 
 	// ACCESSORS
@@ -198,7 +212,10 @@ public class AtelierCharacter implements Listener {
 	}
 
 	public Stream<Action> getActions() {
-		return null; //TODO implement
+		LoadActionsEvent e = new LoadActionsEvent();
+		baseActions.values().stream().forEach(e::addAction);
+		eventBus.submitEvent(e);
+		return actions.stream();
 	}
 
 	public Campaign getCampaign() {

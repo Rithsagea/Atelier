@@ -12,6 +12,7 @@ import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommand;
 import com.atelier.discord.commands.AbstractInteraction.AbstractSubcommandGroup;
 import com.atelier.dnd.Ability;
 import com.atelier.dnd.Skill;
+import com.atelier.dnd.action.Action;
 import com.atelier.dnd.character.attributes.CharacterAttribute;
 import com.atelier.dnd.character.attributes.CharacterClass;
 import com.atelier.dnd.character.attributes.CharacterRace;
@@ -32,6 +33,7 @@ public class AtelierLanguageManager extends LanguageManager {
 
 		if(obj instanceof AtelierEmbedBuilder) group = "Embed";
 		if(obj instanceof AtelierMenu) group = "Menu";
+		if(obj instanceof Action) group = "Action";
 		
 		if(obj instanceof AbstractInteraction) {
 			if(obj instanceof AbstractCommand) group = "Command";

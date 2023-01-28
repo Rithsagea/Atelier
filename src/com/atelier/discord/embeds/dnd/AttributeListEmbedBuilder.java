@@ -15,7 +15,7 @@ public class AttributeListEmbedBuilder extends AtelierEmbedBuilder {
 			content.append("\n");
 		});
 		content.setLength(content.length() - 1);
-		this.addField(character.getCharacterClass().toString(), content.toString(), true);
+		addField(character.getCharacterClass().toString(), content.toString(), true);
 
 		content.setLength(0);
 		character.getCharacterRace().getTraits().values().forEach(a -> {
