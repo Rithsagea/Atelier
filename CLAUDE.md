@@ -181,8 +181,8 @@ A container of aspects. No lifecycle state — it either has an aspect or it doe
 
 ```ts
 actor.provide(HpAspect, new HitPoints(30, 30))
-actor.get(HpAspect)        // throws with clear message if missing — this is intentional
-actor.suppose(HpAspect)    // returns T | undefined
+actor.get(HpAspect) // throws with clear message if missing — this is intentional
+actor.suppose(HpAspect) // returns T | undefined
 ```
 
 **There is no Phase or lifecycle guard.** Missing aspect = content bug = thrown error.
@@ -202,8 +202,8 @@ fields. Anything serialized is explicitly decorated. The content author owns thi
 distinction entirely.
 
 ```ts
-scope.get(actorId)         // throws if missing
-scope.suppose(actorId)     // returns Actor | undefined
+scope.get(actorId) // throws if missing
+scope.suppose(actorId) // returns Actor | undefined
 scope.all()
 scope.allWhere(predicate)
 ```
@@ -229,11 +229,15 @@ not runtime enforcement.
 
 ```ts
 const PlayerCharacter = new ActorTemplate('PlayerCharacter', [
-  AbilityScoresAspect, HpAspect, ClassAspect, RaceAspect, SkillsAspect
+  AbilityScoresAspect,
+  HpAspect,
+  ClassAspect,
+  RaceAspect,
+  SkillsAspect,
 ])
 
-template.validate(actor)   // throws listing all missing aspects
-template.create()          // creates empty Actor, does not validate
+template.validate(actor) // throws listing all missing aspects
+template.create() // creates empty Actor, does not validate
 ```
 
 ### Prefab
@@ -260,7 +264,7 @@ Local events use `createEvent`, `@Subscribe`, `Emitter` — unchanged from origi
 Network events extend this for the WS boundary:
 
 ```ts
-const HpChanged = createNetworkEvent<{ actorId: string, current: number }>('hp_changed', 's2c')
+const HpChanged = createNetworkEvent<{ actorId: string; current: number }>('hp_changed', 's2c')
 ```
 
 `NetworkEvent` carries a stable string id for wire format and direction (`c2s` | `s2c` | `both`).
@@ -329,7 +333,7 @@ that's a frontend quality-of-life feature for generic renderers, not core infras
 ```ts
 @Register(Spells)
 class Fireball extends Spell {
-  cast(actor: ReadyActor, inputs: { targetPoint: Point, slotLevel: number }) {
+  cast(actor: ReadyActor, inputs: { targetPoint: Point; slotLevel: number }) {
     actor.get(SpellSlotsAspect).consume(inputs.slotLevel)
     // apply damage to actors in range
   }
@@ -357,6 +361,7 @@ class Fireball extends Spell {
 `SessionRegistry` is in-memory (transient), holds live WS connections, handles broadcast.
 
 **Critical split — HTTP vs WS:**
+
 - HTTP: request/response shaped operations (load sheet, create actor, cast spell action)
 - WS: push/broadcast only (HP changed, scene advanced, chat, dice results broadcast)
 
@@ -389,8 +394,8 @@ Content authors never call this manually.
 const level = Bun.env.LOG_LEVEL ?? 'info'
 
 export const logger = {
-  info:  (...args: any[]) => console.log('[INFO]', ...args),
-  warn:  (...args: any[]) => console.warn('[WARN]', ...args),
+  info: (...args: any[]) => console.log('[INFO]', ...args),
+  warn: (...args: any[]) => console.warn('[WARN]', ...args),
   error: (...args: any[]) => console.error('[ERROR]', ...args),
   debug: (...args: any[]) => level === 'debug' && console.debug('[DEBUG]', ...args),
 }
@@ -491,6 +496,7 @@ Prod: everything on one port, `adapter-static` build served by Bun.
 **Goal:** Full combat encounter runnable from CLI. No frontend.
 
 **SRD Scope (deliberately limited):**
+
 - Classes: Fighter (Champion), Rogue (Thief), Cleric (Life), Wizard (Evocation)
 - Races: Human (variant), Elf (High), Dwarf (Hill), Halfling (Lightfoot)
 - Spells: Cantrips + levels 1–3, Wizard and Cleric lists only
@@ -500,6 +506,7 @@ Prod: everything on one port, `adapter-static` build served by Bun.
 - Combat: action economy, death saves, short/long rest, concentration
 
 **Done when:**
+
 - Fighter vs Goblin encounter resolves entirely via CLI
 - `sim run` executes headless combat script and prints event log
 - All serialization round-trips correctly
@@ -534,6 +541,7 @@ Board is a view over actor state, not a separate system. The same combat mechani
 work with or without a board — board is additive, not a replacement.
 
 **Key decisions to make before building:**
+
 - Canvas vs SVG. Canvas for performance/animations. SVG for simpler hit testing and
   DOM integration. Don't let this be decided by whatever gets generated first.
 - Fog of war scope. It's genuinely complex (polygon clipping for line of sight).
@@ -613,6 +621,7 @@ When content defines a new aspect the frontend has no registered component for,
 the view renderer needs a fallback rather than silent omission.
 
 Policy:
+
 - **Dev mode:** render unknown aspects as a labeled JSON dump. Visible, ugly, useful.
 - **Prod mode:** omit silently.
 
