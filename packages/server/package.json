@@ -1,0 +1,8 @@
+{
+  "name": "@atelier/server",
+  "module": "src/index.ts",
+  "type": "module",
+  "dependencies": {
+    "@atelier/core": "workspace:*"
+  }
+}

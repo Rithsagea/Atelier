@@ -1,0 +1,8 @@
+{
+  "name": "@atelier/core",
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    "./*": "./src/*"
+  }
+}
