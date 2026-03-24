@@ -29,6 +29,9 @@ export default defineConfig(
       // TypeScript namespaces are used intentionally (e.g. Property namespace)
       "@typescript-eslint/no-namespace": "off",
 
+      // Function type is used intentionally for loosely-typed handler collections
+      "@typescript-eslint/no-unsafe-function-type": "off",
+
       // Allow unused vars prefixed with _ (intentional ignore)
       "@typescript-eslint/no-unused-vars": [
         "warn",

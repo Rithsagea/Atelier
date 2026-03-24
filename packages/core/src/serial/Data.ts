@@ -3,6 +3,7 @@ import { type Constructor } from "../util/Types";
 import { getMetadata } from "./Metadata";
 
 export type Context = BiMap<string, Constructor>;
+export type SerializedObject = Record<string, unknown>;
 
 export interface SerializationStrategy<T = any> {
   serialize(source: T): any;
@@ -21,24 +22,27 @@ function getPropertyData(target: object): PropertyData {
 
 // --- serialize / deserialize ---
 
-export function serialize(target: object): object {
-  const res: any = {};
+export function serialize(target: object): SerializedObject {
+  const res: SerializedObject = {};
   const properties = getPropertyData(target);
   for (const [label, strategy] of Object.entries(properties)) {
-    const value = (target as any)[label];
+    const value = (target as SerializedObject)[label];
     if (value === undefined) continue;
     res[label] = strategy.serialize(value);
   }
   return res;
 }
 
-export function deserialize<T extends object>(source: any, constructor: Constructor<T>): T {
+export function deserialize<T extends object>(
+  source: SerializedObject,
+  constructor: Constructor<T>,
+): T {
   const res = new constructor();
   const properties = getPropertyData(res);
   for (const [label, strategy] of Object.entries(properties)) {
     const value = source[label];
     if (value === undefined) continue;
-    (res as any)[label] = strategy.deserialize(value);
+    (res as SerializedObject)[label] = strategy.deserialize(value);
   }
   return res;
 }
@@ -70,14 +74,14 @@ function MultiStrategy(context: Context): SerializationStrategy {
 function ListStrategy<T>(base: SerializationStrategy<T>): SerializationStrategy<T[]> {
   return {
     serialize: (source) => source.map((i) => base.serialize(i)),
-    deserialize: (source) => (source as any[]).map((i) => base.deserialize(i)),
+    deserialize: (source) => (source as unknown[]).map((i) => base.deserialize(i)),
   };
 }
 
 function MapStrategy<T>(base: SerializationStrategy<T>): SerializationStrategy<Record<string, T>> {
   return {
     serialize(source) {
-      const res: any = {};
+      const res: SerializedObject = {};
       for (const k in source) res[k] = base.serialize(source[k]!);
       return res;
     },

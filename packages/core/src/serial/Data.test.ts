@@ -5,7 +5,7 @@ import type { Constructor } from "../util/Types";
 
 export function testSerialize<T extends object>(
   source: T,
-  target: any,
+  target: object,
   constructor: Constructor<T>,
 ) {
   const forwardResult = serialize(source);

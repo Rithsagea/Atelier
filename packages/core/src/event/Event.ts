@@ -8,7 +8,7 @@ export function createEvent<D = undefined>(name?: string): Event<D> {
   return { id: Symbol(name) };
 }
 
-type SubscriptionData = Record<symbol, any[]>;
+type SubscriptionData = Record<symbol, Function[]>;
 const SUBSCRIPTION_SYMBOL = Symbol("subscriptions");
 
 function getSubscriptionData(target: object): SubscriptionData {

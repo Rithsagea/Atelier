@@ -1,4 +1,4 @@
-const store = new WeakMap<object, Map<symbol, any>>();
+const store = new WeakMap<object, Map<symbol, unknown>>();
 
 export function getMetadata<T>(target: object, symbol: symbol, defaultValue: T): T {
   let symbolMap = store.get(target);
@@ -7,5 +7,5 @@ export function getMetadata<T>(target: object, symbol: symbol, defaultValue: T):
     store.set(target, symbolMap);
   }
   if (!symbolMap.has(symbol)) symbolMap.set(symbol, defaultValue);
-  return symbolMap.get(symbol)!;
+  return symbolMap.get(symbol) as T;
 }
