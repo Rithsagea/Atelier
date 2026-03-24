@@ -38,9 +38,9 @@ CLAUDE.md        # this file
 All imports use package aliases. **Never use relative paths that cross package boundaries.**
 
 ```ts
-import { Aspect } from '@atelier/core/actor/Aspect'
-import { Subscribe } from '@atelier/core/event/Event'
-import { AbilityScoresAspect } from '@atelier/server/aspects/AbilityScores'
+import { Aspect } from "@atelier/core/actor/Aspect";
+import { Subscribe } from "@atelier/core/event/Event";
+import { AbilityScoresAspect } from "@atelier/server/aspects/AbilityScores";
 ```
 
 `@atelier/core/*` for core primitives. `@atelier/server/*` for server internals.
@@ -170,7 +170,7 @@ These live in `packages/core`. Understand these before touching anything else.
 A typed capability slot. The primitive everything builds on.
 
 ```ts
-const HpAspect = new Aspect<HitPoints>('HitPoints')
+const HpAspect = new Aspect<HitPoints>("HitPoints");
 ```
 
 An `Aspect` has a stable symbol id and a name for error messages. Nothing else.
@@ -180,9 +180,9 @@ An `Aspect` has a stable symbol id and a name for error messages. Nothing else.
 A container of aspects. No lifecycle state — it either has an aspect or it doesn't.
 
 ```ts
-actor.provide(HpAspect, new HitPoints(30, 30))
-actor.get(HpAspect) // throws with clear message if missing — this is intentional
-actor.suppose(HpAspect) // returns T | undefined
+actor.provide(HpAspect, new HitPoints(30, 30));
+actor.get(HpAspect); // throws with clear message if missing — this is intentional
+actor.suppose(HpAspect); // returns T | undefined
 ```
 
 **There is no Phase or lifecycle guard.** Missing aspect = content bug = thrown error.
@@ -202,10 +202,10 @@ fields. Anything serialized is explicitly decorated. The content author owns thi
 distinction entirely.
 
 ```ts
-scope.get(actorId) // throws if missing
-scope.suppose(actorId) // returns Actor | undefined
-scope.all()
-scope.allWhere(predicate)
+scope.get(actorId); // throws if missing
+scope.suppose(actorId); // returns Actor | undefined
+scope.all();
+scope.allWhere(predicate);
 ```
 
 ### ActorRef
@@ -214,7 +214,7 @@ Typed wrapper for inter-actor references. **Never use raw strings for inter-acto
 
 ```ts
 class Links {
-  @Property.Map(ActorRefContext) refs: Record<string, ActorRef>
+  @Property.Map(ActorRefContext) refs: Record<string, ActorRef>;
 }
 ```
 
@@ -228,16 +228,16 @@ Declares required aspects for an entity type. Used for validation and documentat
 not runtime enforcement.
 
 ```ts
-const PlayerCharacter = new ActorTemplate('PlayerCharacter', [
+const PlayerCharacter = new ActorTemplate("PlayerCharacter", [
   AbilityScoresAspect,
   HpAspect,
   ClassAspect,
   RaceAspect,
   SkillsAspect,
-])
+]);
 
-template.validate(actor) // throws listing all missing aspects
-template.create() // creates empty Actor, does not validate
+template.validate(actor); // throws listing all missing aspects
+template.create(); // creates empty Actor, does not validate
 ```
 
 ### Prefab
@@ -264,7 +264,7 @@ Local events use `createEvent`, `@Subscribe`, `Emitter` — unchanged from origi
 Network events extend this for the WS boundary:
 
 ```ts
-const HpChanged = createNetworkEvent<{ actorId: string; current: number }>('hp_changed', 's2c')
+const HpChanged = createNetworkEvent<{ actorId: string; current: number }>("hp_changed", "s2c");
 ```
 
 `NetworkEvent` carries a stable string id for wire format and direction (`c2s` | `s2c` | `both`).
@@ -296,9 +296,9 @@ Content is loaded at startup via explicit entry point — no magic glob scanning
 
 ```ts
 // server/src/content/index.ts — user writes this
-import './classes/Fighter'
-import './classes/Wizard'
-import './spells/Fireball'
+import "./classes/Fighter";
+import "./classes/Wizard";
+import "./spells/Fireball";
 // etc
 ```
 
@@ -311,13 +311,13 @@ populating TypeMaps. Content files don't need to export anything meaningful.
 // content/classes/Fighter.ts
 @Register(Classes)
 export class Fighter extends Class {
-  readonly name = 'Fighter'
-  readonly hitDie = 10
+  readonly name = "Fighter";
+  readonly hitDie = 10;
 
   @Subscribe(LoadEffectsEvent)
   loadEffects(actor: Actor) {
-    actor.get(SavingThrowsAspect).addProficiency('strength')
-    actor.get(SavingThrowsAspect).addProficiency('constitution')
+    actor.get(SavingThrowsAspect).addProficiency("strength");
+    actor.get(SavingThrowsAspect).addProficiency("constitution");
   }
 }
 ```
@@ -334,7 +334,7 @@ that's a frontend quality-of-life feature for generic renderers, not core infras
 @Register(Spells)
 class Fireball extends Spell {
   cast(actor: ReadyActor, inputs: { targetPoint: Point; slotLevel: number }) {
-    actor.get(SpellSlotsAspect).consume(inputs.slotLevel)
+    actor.get(SpellSlotsAspect).consume(inputs.slotLevel);
     // apply damage to actors in range
   }
 }
@@ -391,14 +391,14 @@ Content authors never call this manually.
 
 ```ts
 // src/lib/Logger.ts — the entire implementation
-const level = Bun.env.LOG_LEVEL ?? 'info'
+const level = Bun.env.LOG_LEVEL ?? "info";
 
 export const logger = {
-  info: (...args: any[]) => console.log('[INFO]', ...args),
-  warn: (...args: any[]) => console.warn('[WARN]', ...args),
-  error: (...args: any[]) => console.error('[ERROR]', ...args),
-  debug: (...args: any[]) => level === 'debug' && console.debug('[DEBUG]', ...args),
-}
+  info: (...args: any[]) => console.log("[INFO]", ...args),
+  warn: (...args: any[]) => console.warn("[WARN]", ...args),
+  error: (...args: any[]) => console.error("[ERROR]", ...args),
+  debug: (...args: any[]) => level === "debug" && console.debug("[DEBUG]", ...args),
+};
 ```
 
 `info`: lifecycle (server start, content loaded, WS connect)
@@ -415,11 +415,11 @@ Headless scenario runner for testing game logic. Same aspects/events/handlers as
 events captured to log instead of broadcast over WS.
 
 ```ts
-const sim = new Simulation(encounterPrefab)
+const sim = new Simulation(encounterPrefab);
 const result = await sim.run(async (scope, log) => {
   // drive combat manually, inspect state
-})
-console.log(result.events)
+});
+console.log(result.events);
 ```
 
 Accessible via CLI: `sim run ./scripts/encounter.ts`
@@ -455,11 +455,11 @@ the client maintains an override registry keyed by spell id:
 
 ```ts
 // client/src/lib/overrides/index.ts
-import HighIdentifyUI from './spells/HighIdentify.svelte'
+import HighIdentifyUI from "./spells/HighIdentify.svelte";
 
 export const SpellUIOverrides: Record<string, Component> = {
   high_identify: HighIdentifyUI,
-}
+};
 ```
 
 Auto-populated via `import.meta.glob('./spells/*.svelte', { eager: true })` if preferred.
@@ -474,7 +474,7 @@ to submit through the same `cast` method. UI is bespoke, contract is typed and s
 
 ```ts
 // vite resolves this at build time — pattern must be a literal
-const modules = import.meta.glob('/content/**/*.svelte', { eager: true })
+const modules = import.meta.glob("/content/**/*.svelte", { eager: true });
 ```
 
 Server content (logic) can live anywhere at runtime.

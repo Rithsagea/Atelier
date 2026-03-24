@@ -1,4 +1,4 @@
-import { Property, type Serializer } from '../serial/Data'
+import { Property, type Serializer } from "../serial/Data";
 
 /**
  * Typed wrapper for inter-actor references. Never use raw strings.
@@ -8,10 +8,10 @@ import { Property, type Serializer } from '../serial/Data'
  */
 export class ActorRef {
   @Property.Primitive
-  id: string
+  id: string;
 
   constructor(id: string) {
-    this.id = id
+    this.id = id;
   }
 }
 
@@ -19,4 +19,4 @@ export class ActorRef {
 export const ActorRefContext: Serializer<ActorRef> = {
   serialize: (ref: ActorRef) => ref.id,
   deserialize: (raw: string) => new ActorRef(raw),
-}
+};
