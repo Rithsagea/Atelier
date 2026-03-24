@@ -1,4 +1,4 @@
-import { Property, type Serializer } from "../serial/Data";
+import { Property, type SerializationStrategy } from "../serial/Data";
 
 /**
  * Typed wrapper for inter-actor references. Never use raw strings.
@@ -15,8 +15,8 @@ export class ActorRef {
   }
 }
 
-/** Serializer context for use in @Property.Map and @Property.List */
-export const ActorRefContext: Serializer<ActorRef> = {
+/** SerializationStrategy for use in @Property.Map and @Property.List */
+export const ActorRefContext: SerializationStrategy<ActorRef> = {
   serialize: (ref: ActorRef) => ref.id,
   deserialize: (raw: string) => new ActorRef(raw),
 };

@@ -1,196 +1,129 @@
+import { BiMap } from "../util/Algorithms";
+import { type Constructor } from "../util/Types";
 import { getMetadata } from "./Metadata";
-import { isPrimitive, type Constructor } from "../util/Types";
-import { createEvent, Emitter } from "../event/Event";
 
-// --- Serializer interface ---
+export type Context = BiMap<string, Constructor>;
 
-export interface Serializer<V> {
-  serialize(value: V): any;
-  deserialize(raw: any): V;
+export interface SerializationStrategy<T = any> {
+  serialize(source: T): any;
+  deserialize(source: any): T;
 }
 
-export function isSerializer<V>(obj: unknown): obj is Serializer<V> {
-  return (
-    typeof (obj as any)?.serialize === "function" && typeof (obj as any)?.deserialize === "function"
-  );
+// --- Property data ---
+
+type PropertyData = Record<string, SerializationStrategy>;
+const PROPERTY_SYMBOL = Symbol("properties");
+
+function getPropertyData(target: object): PropertyData {
+  const proto = (target as any).constructor?.prototype ?? target;
+  return getMetadata<PropertyData>(proto, PROPERTY_SYMBOL, {});
 }
 
-// --- TypeMap ---
+// --- serialize / deserialize ---
 
-export class TypeMap<T extends object> {
-  private readonly map = new Map<string, Constructor<T>[]>();
-
-  add(ctor: Constructor<T>): void {
-    const list = this.map.get(ctor.name) ?? [];
-    if (!list.includes(ctor)) list.push(ctor);
-    this.map.set(ctor.name, list);
-  }
-
-  hash(ctor: Constructor): string | undefined {
-    const list = this.map.get(ctor.name);
-    if (!list) return undefined;
-    const idx = list.indexOf(ctor as Constructor<T>);
-    if (idx === -1) return undefined;
-    return list.length > 1 ? `${ctor.name}@${idx + 1}` : ctor.name;
-  }
-
-  get(hash: string): Constructor<T> {
-    const [name, idxStr] = hash.split("@");
-    const list = this.map.get(name);
-    if (!list?.length) throw new Error(`TypeMap: unknown type "${hash}"`);
-    return list[idxStr ? parseInt(idxStr) - 1 : 0];
-  }
-
-  values(): Constructor<T>[] {
-    return [...this.map.values()].flat();
-  }
-}
-
-export function isTypeMap<T extends object>(obj: unknown): obj is TypeMap<T> {
-  return obj instanceof TypeMap;
-}
-
-export function Register<T extends object>(typeMap: TypeMap<T>) {
-  return (ctor: Constructor<T>) => typeMap.add(ctor);
-}
-
-// --- InitializeObjectEvent ---
-
-export const InitializeObjectEvent = createEvent("InitializeObjectEvent");
-
-// --- Core serialize / deserialize ---
-
-export type SerializableValue = Primitive | any[] | object;
-type Primitive = string | number | boolean | bigint | symbol | null | undefined;
-
-export function serialize(value: unknown): any {
-  if (typeof value === "function") return undefined;
-  if (isPrimitive(value)) return value;
-  if (Array.isArray(value)) return value.map(serialize);
-
-  const properties = getMetadata(value as object, false)?.propertyData;
-  if (!properties) return { ...(value as object) };
-
-  const res: Record<string, any> = {};
-  for (const [k, v] of Object.entries(value as object)) {
-    if (v === undefined) continue;
-    const serializer = properties[k];
-    if (serializer === undefined) continue;
-    res[k] = Array.isArray(v)
-      ? (v as unknown[]).map((item) => serializer.serialize(item))
-      : serializer.serialize(v);
+export function serialize(target: object): object {
+  const res: any = {};
+  const properties = getPropertyData(target);
+  for (const [label, strategy] of Object.entries(properties)) {
+    const value = (target as any)[label];
+    if (value === undefined) continue;
+    res[label] = strategy.serialize(value);
   }
   return res;
 }
 
-export function deserialize<T extends object>(data: any, ctor: Constructor<T>): T;
-export function deserialize<D>(data: D): D;
-export function deserialize(data: any, ctor?: Constructor): any {
-  if (!ctor) return data;
-
-  const res = new ctor();
-  const properties = getMetadata(res).propertyData;
-
-  for (const [k, v] of Object.entries(data)) {
-    const serializer = properties[k];
-    Reflect.set(
-      res,
-      k,
-      serializer === undefined
-        ? v
-        : Array.isArray(v)
-          ? (v as any[]).map((item) => serializer.deserialize(item))
-          : serializer.deserialize(v),
-    );
+export function deserialize<T extends object>(source: any, constructor: Constructor<T>): T {
+  const res = new constructor();
+  const properties = getPropertyData(res);
+  for (const [label, strategy] of Object.entries(properties)) {
+    const value = source[label];
+    if (value === undefined) continue;
+    (res as any)[label] = strategy.deserialize(value);
   }
-
-  const emitter = new Emitter();
-  emitter.addListener(res);
-  emitter.call(InitializeObjectEvent);
-
   return res;
 }
 
-// --- Built-in serializers ---
+// --- Strategies ---
 
-const DefaultSerializer: Serializer<any> = { serialize, deserialize };
-
-export class ClassSerializer<T extends object> implements Serializer<T> {
-  constructor(private readonly ctor: Constructor<T>) {}
-  serialize(obj: T): any {
-    return serialize(obj);
-  }
-  deserialize(raw: any): T {
-    return deserialize(raw, this.ctor);
-  }
+function PrimitiveStrategy(): SerializationStrategy {
+  return { serialize: (i) => i, deserialize: (i) => i };
 }
 
-export class MultiSerializer<T extends object> implements Serializer<T> {
-  constructor(private readonly typeMap: TypeMap<T>) {}
-
-  serialize(obj: T): any {
-    const res = serialize(obj);
-    res.$type = this.typeMap.hash(obj.constructor as Constructor);
-    return res;
-  }
-
-  deserialize(raw: any): T {
-    const { $type, ...data } = raw as { $type: string; [k: string]: unknown };
-    if (!$type) throw new Error("MultiSerializer: missing $type tag");
-    return deserialize(data, this.typeMap.get($type));
-  }
+function ClassStrategy<T extends object>(constructor: Constructor<T>): SerializationStrategy<T> {
+  return {
+    serialize: (source) => serialize(source),
+    deserialize: (source) => deserialize(source, constructor),
+  };
 }
 
-export class ListSerializer<T> implements Serializer<T[]> {
-  constructor(private readonly item?: Serializer<T>) {}
-
-  serialize(arr: T[]): any[] {
-    return this.item ? arr.map((v) => this.item!.serialize(v)) : arr.map(serialize);
-  }
-
-  deserialize(raw: any[]): T[] {
-    return this.item ? raw.map((v) => this.item!.deserialize(v)) : raw;
-  }
+function MultiStrategy(context: Context): SerializationStrategy {
+  return {
+    serialize(source) {
+      return { ...serialize(source), $type: context.inverse().get(source.constructor) };
+    },
+    deserialize(source) {
+      return deserialize(source, context.get(source.$type)!);
+    },
+  };
 }
 
-export class MapSerializer<V> implements Serializer<Record<string, V>> {
-  constructor(private readonly value?: Serializer<V>) {}
+function ListStrategy<T>(base: SerializationStrategy<T>): SerializationStrategy<T[]> {
+  return {
+    serialize: (source) => source.map((i) => base.serialize(i)),
+    deserialize: (source) => (source as any[]).map((i) => base.deserialize(i)),
+  };
+}
 
-  serialize(rec: Record<string, V>): any {
-    if (!this.value) return rec;
-    return Object.fromEntries(Object.entries(rec).map(([k, v]) => [k, this.value!.serialize(v)]));
-  }
-
-  deserialize(raw: Record<string, any>): Record<string, V> {
-    if (!this.value) return raw as Record<string, V>;
-    return Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, this.value!.deserialize(v)]));
-  }
+function MapStrategy<T>(base: SerializationStrategy<T>): SerializationStrategy<Record<string, T>> {
+  return {
+    serialize(source) {
+      const res: any = {};
+      for (const k in source) res[k] = base.serialize(source[k]!);
+      return res;
+    },
+    deserialize(source) {
+      const res: Record<string, T> = {};
+      for (const k in source) res[k] = base.deserialize(source[k]);
+      return res;
+    },
+  };
 }
 
 // --- Property decorator namespace ---
 
-function makeDecorator(serializer: Serializer<any>): PropertyDecorator {
-  return (target: object, key: string | symbol) => {
-    getMetadata(target).propertyData[key] = serializer;
-  };
+function getStrategy(
+  context?: Constructor | Context | SerializationStrategy,
+): SerializationStrategy {
+  if (!context) return PrimitiveStrategy();
+  if (typeof context === "function") return ClassStrategy(context);
+  if (context instanceof BiMap) return MultiStrategy(context as Context);
+  return context;
 }
 
 export namespace Property {
-  export const Primitive: PropertyDecorator = makeDecorator(DefaultSerializer);
-
-  export function Class<T extends object>(ctor: Constructor<T>): PropertyDecorator {
-    return makeDecorator(new ClassSerializer(ctor));
+  export function Serialize(strategy: SerializationStrategy): PropertyDecorator {
+    return (target: object, key: string | symbol) => {
+      getPropertyData(target)[key as string] = strategy;
+    };
   }
 
-  export function Multi<T extends object>(typeMap: TypeMap<T>): PropertyDecorator {
-    return makeDecorator(new MultiSerializer(typeMap));
+  export const Primitive: PropertyDecorator = (target, key) => {
+    getPropertyData(target)[key as string] = PrimitiveStrategy();
+  };
+
+  export function Class<T extends object>(constructor: Constructor<T>): PropertyDecorator {
+    return Serialize(ClassStrategy(constructor));
   }
 
-  export function List<T>(serializer?: Serializer<T>): PropertyDecorator {
-    return makeDecorator(new ListSerializer(serializer));
+  export function Multi(context: Context): PropertyDecorator {
+    return Serialize(MultiStrategy(context));
   }
 
-  export function Map<T>(serializer?: Serializer<T>): PropertyDecorator {
-    return makeDecorator(new MapSerializer(serializer));
+  export function List(context?: Constructor | Context | SerializationStrategy): PropertyDecorator {
+    return Serialize(ListStrategy(getStrategy(context)));
+  }
+
+  export function Map(context?: Constructor | Context | SerializationStrategy): PropertyDecorator {
+    return Serialize(MapStrategy(getStrategy(context)));
   }
 }
