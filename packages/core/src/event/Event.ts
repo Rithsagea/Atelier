@@ -1,5 +1,6 @@
 import { getMethodLabels } from '../util/Util'
 import { getMetadata, type AnyFunction } from '../serial/Metadata'
+import { SortedSet, TreapSet } from '../util/SortedSet'
 
 export interface Event<_ = any> {
   id: string
@@ -28,24 +29,25 @@ export function Subscribe<D>(event: Event<D>, priority: number = 0) {
 }
 
 export class Emitter {
-  private handlers: Record<string, Handler<any>[]> = {}
+  private seq = 0
+  private readonly seqMap = new WeakMap<Handler<any>, number>()
+  private readonly compare = (a: Handler<any>, b: Handler<any>) => {
+    const byPriority = b.priority - a.priority
+    return byPriority !== 0 ? byPriority : this.seqMap.get(a)! - this.seqMap.get(b)!
+  }
+  private handlers: Record<string, SortedSet<Handler<any>>> = {}
 
   clearHandlers(): void {
     this.handlers = {}
   }
 
   addHandler<E extends Event>(event: E, handler: Handler<E>): void {
-    const id = event.id
-    if (!this.handlers[id]) this.handlers[id] = []
-    this.handlers[id].push(handler)
-    this.handlers[id].sort((a, b) => b.priority - a.priority)
+    if (!this.seqMap.has(handler)) this.seqMap.set(handler, this.seq++)
+    ;(this.handlers[event.id] ??= new TreapSet(this.compare)).add(handler)
   }
 
   removeHandler<E extends Event>(event: E, handler: Handler<E>): boolean {
-    const handlers = this.handlers[event.id]
-    if (!handlers) return false
-    this.handlers[event.id] = handlers.filter((h) => h !== handler)
-    return handlers.length !== this.handlers[event.id].length
+    return this.handlers[event.id]?.delete(handler) ?? false
   }
 
   addListener(listener: object): void {
@@ -74,14 +76,20 @@ export class Emitter {
       const method: Method<any> = Reflect.get(listener, label)
       const metadata = getMetadata(method, false)
       if (!metadata?.event) continue
-      const handlers = this.handlers[metadata.event.id]
-      if (handlers) {
-        this.handlers[metadata.event.id] = handlers.filter((h) => h.method !== method)
+      const set = this.handlers[metadata.event.id]
+      if (!set) continue
+      for (const handler of set) {
+        if (handler.method === method) {
+          set.delete(handler)
+          break
+        }
       }
     }
   }
 
   call<E extends Event<D>, D>(event: E, data?: D): void {
-    this.handlers[event.id]?.forEach((handler) => handler.method.call(handler.listener, data))
+    const set = this.handlers[event.id]
+    if (!set) return
+    for (const handler of set) handler.method.call(handler.listener, data)
   }
 }
