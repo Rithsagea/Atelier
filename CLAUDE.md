@@ -38,7 +38,7 @@ CLAUDE.md        # this file
 All imports use package aliases. **Never use relative paths that cross package boundaries.**
 
 ```ts
-import { Aspect } from "@atelier/core/actor/Aspect";
+import { Aspect } from "@atelier/core/composite/Aspect";
 import { Subscribe } from "@atelier/core/event/Event";
 import { AbilityScoresAspect } from "@atelier/server/aspects/AbilityScores";
 ```
@@ -175,24 +175,24 @@ const HpAspect = new Aspect<HitPoints>("HitPoints");
 
 An `Aspect` has a stable symbol id and a name for error messages. Nothing else.
 
-### Actor
+### Composite
 
 A container of aspects. No lifecycle state — it either has an aspect or it doesn't.
 
 ```ts
-actor.provide(HpAspect, new HitPoints(30, 30));
-actor.get(HpAspect); // throws with clear message if missing — this is intentional
-actor.suppose(HpAspect); // returns T | undefined
+composite.provide(HpAspect, new HitPoints(30, 30));
+composite.get(HpAspect); // throws with clear message if missing — this is intentional
+composite.suppose(HpAspect); // returns T | undefined
 ```
 
 **There is no Phase or lifecycle guard.** Missing aspect = content bug = thrown error.
 The engine runs or it doesn't. Editing and running are mutually exclusive at the
-session level, not the actor level. Serialization of incomplete actors works fine —
+session level, not the composite level. Serialization of incomplete composites works fine —
 serialize whatever aspects exist, reconstruct on load.
 
 ### Scope
 
-A closed graph of actors. Session is the top-level scope. Prefabs are sub-scopes
+A closed graph of composites. Session is the top-level scope. Prefabs are sub-scopes
 stamped into a session at instantiation.
 
 **Session = Campaign.** A session does not map to a single play session — it is the
@@ -202,33 +202,33 @@ fields. Anything serialized is explicitly decorated. The content author owns thi
 distinction entirely.
 
 ```ts
-scope.get(actorId); // throws if missing
-scope.suppose(actorId); // returns Actor | undefined
+scope.get(compositeId); // throws if missing
+scope.suppose(compositeId); // returns Composite | undefined
 scope.all();
 scope.allWhere(predicate);
 ```
 
-### ActorRef
+### CompositeRef
 
-Typed wrapper for inter-actor references. **Never use raw strings for inter-actor refs.**
+Typed wrapper for inter-composite references. **Never use raw strings for inter-composite refs.**
 
 ```ts
 class Links {
-  @Property.Map(ActorRefContext) refs: Record<string, ActorRef>;
+  @Property.Map(CompositeRefContext) refs: Record<string, CompositeRef>;
 }
 ```
 
 At prefab definition time, IDs are local strings (`'leader'`, `'follower_1'`).
-At stamp time, a resolution pass rewrites all `ActorRef.id` fields from local → absolute UUIDs.
+At stamp time, a resolution pass rewrites all `CompositeRef.id` fields from local → absolute UUIDs.
 This is what makes prefabs reusable without ID collisions.
 
-### ActorTemplate
+### Template
 
 Declares required aspects for an entity type. Used for validation and documentation,
 not runtime enforcement.
 
 ```ts
-const PlayerCharacter = new ActorTemplate("PlayerCharacter", [
+const PlayerCharacter = new Template("PlayerCharacter", [
   AbilityScoresAspect,
   HpAspect,
   ClassAspect,
@@ -236,13 +236,13 @@ const PlayerCharacter = new ActorTemplate("PlayerCharacter", [
   SkillsAspect,
 ]);
 
-template.validate(actor); // throws listing all missing aspects
-template.create(); // creates empty Actor, does not validate
+template.validate(composite); // throws listing all missing aspects
+template.create(); // creates empty Composite, does not validate
 ```
 
 ### Prefab
 
-A definition of a group of related actors with local IDs. The `BandOfCultists` example:
+A definition of a group of related composites with local IDs. The `BandOfCultists` example:
 
 ```ts
 const BandOfCultists = definePrefab({
@@ -264,7 +264,7 @@ Local events use `createEvent`, `@Subscribe`, `Emitter` — unchanged from origi
 Network events extend this for the WS boundary:
 
 ```ts
-const HpChanged = createNetworkEvent<{ actorId: string; current: number }>("hp_changed", "s2c");
+const HpChanged = createNetworkEvent<{ compositeId: string; current: number }>("hp_changed", "s2c");
 ```
 
 `NetworkEvent` carries a stable string id for wire format and direction (`c2s` | `s2c` | `both`).
@@ -315,9 +315,9 @@ export class Fighter extends Class {
   readonly hitDie = 10;
 
   @Subscribe(LoadEffectsEvent)
-  loadEffects(actor: Actor) {
-    actor.get(SavingThrowsAspect).addProficiency("strength");
-    actor.get(SavingThrowsAspect).addProficiency("constitution");
+  loadEffects(composite: Composite) {
+    composite.get(SavingThrowsAspect).addProficiency("strength");
+    composite.get(SavingThrowsAspect).addProficiency("constitution");
   }
 }
 ```
@@ -333,9 +333,9 @@ that's a frontend quality-of-life feature for generic renderers, not core infras
 ```ts
 @Register(Spells)
 class Fireball extends Spell {
-  cast(actor: ReadyActor, inputs: { targetPoint: Point; slotLevel: number }) {
-    actor.get(SpellSlotsAspect).consume(inputs.slotLevel);
-    // apply damage to actors in range
+  cast(composite: Composite, inputs: { targetPoint: Point; slotLevel: number }) {
+    composite.get(SpellSlotsAspect).consume(inputs.slotLevel);
+    // apply damage to composites in range
   }
 }
 ```
@@ -362,7 +362,7 @@ class Fireball extends Spell {
 
 **Critical split — HTTP vs WS:**
 
-- HTTP: request/response shaped operations (load sheet, create actor, cast spell action)
+- HTTP: request/response shaped operations (load sheet, create composite, cast spell action)
 - WS: push/broadcast only (HP changed, scene advanced, chat, dice results broadcast)
 
 Client sends actions via HTTP. Server broadcasts state changes via WS.
@@ -372,9 +372,9 @@ This makes reconnection trivial — fetch current state via HTTP, resubscribe to
 
 SQLite via `bun:sqlite`. WAL mode. Foreign keys on.
 
-Tables: `sessions`, `actors`, `scenes`, `events`
+Tables: `sessions`, `composites`, `scenes`, `events`
 
-Actors stored as id + template name + JSON blob of serialized aspects.
+Composites stored as id + template name + JSON blob of serialized aspects.
 Do not normalize aspects into columns — schema varies per template and content pack.
 
 Event log (`events` table) is append-only. Never update or delete rows.
@@ -534,10 +534,10 @@ tree needs to be right from the start.
 lives on the session (campaign). Scenes are lenses over that state — they can display
 it differently (board vs no-board, cutscene vs combat) but they never own it.
 Transient scene data (animation state, UI cursor position) never enters the session.
-Any scene implementation is therefore orthogonal to the existing actor/aspect work.
+Any scene implementation is therefore orthogonal to the existing composite/aspect work.
 Turn order is federated by the active scene — the engine has no global turn concept.
 
-Board is a view over actor state, not a separate system. The same combat mechanics
+Board is a view over composite state, not a separate system. The same combat mechanics
 work with or without a board — board is additive, not a replacement.
 
 **Key decisions to make before building:**
@@ -553,7 +553,7 @@ work with or without a board — board is additive, not a replacement.
 
 **Prefab stamping** is the mechanism for placing encounter groups on the board.
 Local IDs in prefab definition → resolution pass at stamp time → absolute session UUIDs.
-The `actor_groups` table tracks which actors came from the same stamp for collective ops.
+The `composite_groups` table tracks which composites came from the same stamp for collective ops.
 
 ---
 
@@ -589,7 +589,7 @@ Permissions are modeled as "role has access to action X on resource Y." Implemen
 is a decorator on HTTP/WS handlers — not baked into the engine or the actor model.
 Build this during M2 when the web layer exists. Do not design it during M1.
 
-Ownership (`player owns actor`) is just another decorator — orthogonal to the engine.
+Ownership (`player owns composite`) is just another decorator — orthogonal to the engine.
 The engine never checks ownership. The web layer does.
 
 ---
@@ -657,9 +657,15 @@ These constraints are intentional and should not be worked around without good r
 
 ---
 
+## Conventions
+
+- **No speculative methods.** Only add a function when there is an immediate, concrete caller for it in the current changeset. "We'll need this later" is not a reason to write it now. The event system, serialization hooks, and aspect interactions will dictate the right shape when the time comes — don't guess ahead of that.
+
+---
+
 ## Things That Were Considered and Rejected
 
-- **Phase/lifecycle on Actor** — unnecessary. Engine runs or it doesn't.
+- **Phase/lifecycle on Composite** — unnecessary. Engine runs or it doesn't.
   Missing aspect is a content bug, not a recoverable state.
 
 - **Input schema DSL** — deferred to P2. Content authors write typed `cast()` signatures.
@@ -674,7 +680,7 @@ These constraints are intentional and should not be worked around without good r
   entry point is idiomatic. Glob as optional convenience for users who want it.
 
 - **ECS for core model** — wrong problem. ECS solves runtime add/remove of components
-  for simulation actors. You want static typed aspects with serialization.
+  for simulation entities. You want static typed aspects with serialization.
 
 - **OT/CRDT for conflict resolution** — massively overengineered for D&D.
   Last-write-wins with delta + idempotency keys is sufficient.

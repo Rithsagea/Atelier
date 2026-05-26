@@ -1,0 +1,7 @@
+{
+  "name": "@atelier/playground",
+  "type": "module",
+  "dependencies": {
+    "@atelier/core": "workspace:*"
+  }
+}

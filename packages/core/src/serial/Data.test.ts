@@ -1,11 +1,11 @@
 import { expect, test } from "bun:test";
-import { Property, serialize, deserialize, type Context } from "./Data";
+import { Property, serialize, deserialize, type Context, SerializedObject } from "./Data";
 import { BiMap } from "../util/Algorithms";
 import type { Constructor } from "../util/Types";
 
 export function testSerialize<T extends object>(
   source: T,
-  target: object,
+  target: SerializedObject,
   constructor: Constructor<T>,
 ) {
   const forwardResult = serialize(source);

@@ -1,9 +1,9 @@
 import type { Aspect } from "./Aspect";
 
-export class Actor {
+export class Composite {
   readonly id: string;
 
-  // TRANSIENT — aspects are not serialized on Actor itself;
+  // TRANSIENT — aspects are not serialized on Composite itself;
   // serialization is handled by the DB layer (id + template + JSON blob per aspect)
   private readonly aspects = new Map<symbol, unknown>();
 
@@ -17,9 +17,8 @@ export class Actor {
 
   /** Throws if the aspect is not present. Missing aspect = content bug. */
   get<T>(aspect: Aspect<T>): T {
-    if (!this.aspects.has(aspect.id)) {
-      throw new Error(`Actor "${this.id}" does not have aspect "${aspect.name}"`);
-    }
+    if (!this.aspects.has(aspect.id))
+      throw new Error(`Composite "${this.id}" does not have aspect "${aspect.name}"`);
     return this.aspects.get(aspect.id) as T;
   }
 

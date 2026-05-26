@@ -1,21 +1,4 @@
-export const Abilities = [
-  "strength",
-  "dexterity",
-  "constitution",
-  "intelligence",
-  "wisdom",
-  "charisma",
-] as const;
-export type Ability = (typeof Abilities)[number];
-
-export const AbilityLabels: Record<Ability, string> = {
-  strength: "Strength",
-  dexterity: "Dexterity",
-  constitution: "Constitution",
-  intelligence: "Intelligence",
-  wisdom: "Wisdom",
-  charisma: "Charisma",
-};
+import { type Ability } from "./AbilityScore";
 
 export const Skills = [
   "acrobatics",

@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@atelier/core/*": ["../core/src/*"]
+    }
+  },
+  "include": ["src"]
+}
