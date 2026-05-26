@@ -1,7 +1,7 @@
 # CORE — Core Abstractions
 
-*Load when: touching anything in `packages/core`, or any content that contributes to stats,
-serializes, or references other composites.*
+_Load when: touching anything in `packages/core`, or any content that contributes to stats,
+serializes, or references other composites._
 
 These live in `packages/core`. Understand these before touching anything else.
 
@@ -13,14 +13,14 @@ These live in `packages/core`. Understand these before touching anything else.
 Capabilities — identity, serialization, structure, contribution to stats — are aspects
 attached to a composite, not intrinsic properties of bespoke classes.
 
-The burden of proof is inverted: a thing is a composite unless there is a *specific*
+The burden of proof is inverted: a thing is a composite unless there is a _specific_
 reason it should not be. "This doesn't need a composite" is not a reason — a non-composite
 living in a composite-everything system is the anomaly that breaks uniformity, and that
 cost is usually larger than the local cost of the composite. Reserve non-composite typed
 values for leaves with no independent capability surface.
 
 This is a deliberate adoption of an ECS-style pattern (see the reversal note in `PLAN.md`).
-The value being bought is *uniformity*: one substrate, one discovery primitive, one extension
+The value being bought is _uniformity_: one substrate, one discovery primitive, one extension
 mechanism, applied fractally at every level (a scope of entities, a composite of aspects).
 
 ---
@@ -45,7 +45,7 @@ A container of aspects. No lifecycle state — it either has an aspect or it doe
 
 ```ts
 composite.provide(HpAspect, new HitPoints(30, 30));
-composite.get(HpAspect);     // throws with clear message if missing — this is intentional
+composite.get(HpAspect); // throws with clear message if missing — this is intentional
 composite.suppose(HpAspect); // returns T | undefined
 ```
 
@@ -71,7 +71,7 @@ on a sheet, environmental effects that query all sheets, etc.
 
 Discovery is **dynamic and rebuilt on demand**, not maintained as a synced list. Because all
 SRD content is treated as homebrew (homebrew is an extension of the base engine, not a
-special case), the engine cannot enumerate participant *kinds* in advance — so participation
+special case), the engine cannot enumerate participant _kinds_ in advance — so participation
 is found by querying for a capability, never by a hardcoded source list or a cache that must
 be kept in sync.
 
@@ -94,8 +94,8 @@ fields. Anything serialized is explicitly decorated. The content author owns thi
 distinction entirely.
 
 ```ts
-scope.get(compositeId);       // throws if missing
-scope.suppose(compositeId);   // returns Composite | undefined
+scope.get(compositeId); // throws if missing
+scope.suppose(compositeId); // returns Composite | undefined
 scope.all();
 scope.allWhere(predicate);
 ```
@@ -129,7 +129,7 @@ this?" identification.
 The long-term direction is a **StructureAspect**: structure becomes an aspect carried by the
 composite (kind = item / trait / monster / prop / sheet, plus the expected aspect set) rather
 than an external object the composite is checked against. Where the StructureAspect is
-expected to be present it is *assumed* present — its absence is a type error, consistent with
+expected to be present it is _assumed_ present — its absence is a type error, consistent with
 the "missing aspect = content bug = throw" stance.
 
 StructureAspect is **derived, not declared twice**: the serializer generates the necessary
@@ -190,7 +190,7 @@ piece of content is written against them):
 - **A contribution carries a thunk, not a precomputed number.** It computes its value from a
   stat-reader supplied at evaluation time. This is what allows conditional contributions
   (e.g. "+2 CON if final STR ≥ 13") and a future transition to fixed-point / topological
-  ordering *without rewriting any content* — the contributor's signature is identical whether
+  ordering _without rewriting any content_ — the contributor's signature is identical whether
   it reads nothing or reads final stats.
 - **Contributors receive the owning composite at evaluation time**, never closing over stats
   at construction. This is the sanctioned "reach back up" mechanism; sub-composite nesting is
@@ -236,13 +236,13 @@ individually consistent.
 Aspects are **transient by default**. An aspect persists only the fields it explicitly
 decorates with `@Property`; everything else is rebuilt on load.
 
-**The purity law:** *if it serializes, the serializer can reconstruct it; if it is transient,
-it must be a pure function of the persisted aspects.* A transient aspect (e.g. computed
+**The purity law:** _if it serializes, the serializer can reconstruct it; if it is transient,
+it must be a pure function of the persisted aspects._ A transient aspect (e.g. computed
 ability scores) holds no persisted state of its own and is regenerated on load by recomputing
 from the persisted contributors.
 
-The one studied way purity breaks is when a transient needs to remember *what was* or *what
-happened* (a previous overwritten value, an ordering, a random roll) rather than *what is*.
+The one studied way purity breaks is when a transient needs to remember _what was_ or _what
+happened_ (a previous overwritten value, an ordering, a random roll) rather than _what is_.
 The resolution is to **promote that aspect to persisted** — move the transient/persistent
 boundary rather than violate the law. This keeps the change local (one aspect crosses the
 line) instead of a rewrite. Randomness is already handled this way: rolls are logged scenario

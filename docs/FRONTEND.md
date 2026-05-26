@@ -1,6 +1,6 @@
 # FRONTEND — Frontend Architecture
 
-*Load when: working on the client.*
+_Load when: working on the client._
 
 ---
 

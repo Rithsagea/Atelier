@@ -10,19 +10,19 @@ clean abstractions are not to be compromised on that account.
 
 ## How this documentation is organized
 
-This file is a **router**, not a summary. It holds only the invariants that govern *every*
+This file is a **router**, not a summary. It holds only the invariants that govern _every_
 change. Everything else lives in a subsystem file under `docs/`; load the one you need.
 
-| File | Load when |
-|------|-----------|
-| `ENV.md` | Setting up the project, touching build config, adding a package, or debugging imports/aliases. |
-| `CORE.md` | Touching anything in `packages/core`, or any content that contributes to stats, serializes, or references other composites. |
-| `SERVER.md` | Working on the server, WS/HTTP handlers, the DB, content loading, or simulation. |
-| `FRONTEND.md` | Working on the client. |
-| `PLAN.md` | Planning future milestones (rarely needed during implementation). Also holds the record of rejected alternatives. |
+| File          | Load when                                                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `ENV.md`      | Setting up the project, touching build config, adding a package, or debugging imports/aliases.                              |
+| `CORE.md`     | Touching anything in `packages/core`, or any content that contributes to stats, serializes, or references other composites. |
+| `SERVER.md`   | Working on the server, WS/HTTP handlers, the DB, content loading, or simulation.                                            |
+| `FRONTEND.md` | Working on the client.                                                                                                      |
+| `PLAN.md`     | Planning future milestones (rarely needed during implementation). Also holds the record of rejected alternatives.           |
 
 Each file opens with a one-line statement of when to load it, mirroring the table above.
-This table is the single source of truth for *which file do I need* — answer that question
+This table is the single source of truth for _which file do I need_ — answer that question
 from here without opening anything else.
 
 ---
@@ -35,7 +35,7 @@ permanently rather than in any one subsystem file.
 - **Everything is a composite by default.** Capabilities — identity, serialization,
   structure, contribution to stats — are aspects attached to a composite, not intrinsic
   properties of bespoke classes. The burden of proof is inverted: a thing is a composite
-  unless there is a *specific* reason it should not be. "This doesn't need a composite" is
+  unless there is a _specific_ reason it should not be. "This doesn't need a composite" is
   not a reason. A non-composite living in a composite-everything system is the anomaly that
   breaks uniformity, and that cost is usually larger than the local cost of the composite.
   Reserve non-composite typed values for leaves with no independent capability surface. (Full
@@ -71,7 +71,7 @@ permanently rather than in any one subsystem file.
   is the small set of signatures that all content is written against (e.g. a stat
   contribution carrying a thunk rather than a number, a contributor receiving its owning
   composite). These are worth a small generality tax up front because retrofitting them later
-  rewrites every piece of content. Everything *behind* such a contract (ordering strategy,
+  rewrites every piece of content. Everything _behind_ such a contract (ordering strategy,
   fixed-point vs. single-pass, etc.) stays deferred. The test: a change is worth committing to
   early only if adding it later would be a breaking change for content — optional parameters
   and optional fields with defaults are always safe to defer.

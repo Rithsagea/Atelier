@@ -1,4 +1,5 @@
 import { Aspect } from "../composite/Aspect";
+import { enumMap } from "../util/Types";
 
 export const Abilities = [
   "strength",
@@ -19,15 +20,12 @@ export const AbilityLabels: Record<Ability, string> = {
   charisma: "Charisma",
 };
 
-export class AbilityScores {
-  scores: Record<Ability, number> = {
-    strength: 0,
-    dexterity: 0,
-    constitution: 0,
-    intelligence: 0,
-    wisdom: 0,
-    charisma: 0,
-  };
+export class AbilityScore {
+  scores: Record<Ability, number> = enumMap(Abilities, (_) => 0);
 }
 
-export const AbilityScoresAspect = new Aspect<AbilityScores>("AbilityScores");
+export const AbilityScoreAspect = new Aspect<AbilityScore>("AbilityScores");
+
+export interface AbilityScoreMutator {}
+
+export const AbilityScoreMutatorAspect = new Aspect<AbilityScoreMutator>("AbilityScoreMutator");

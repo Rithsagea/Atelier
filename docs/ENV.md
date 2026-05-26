@@ -1,7 +1,7 @@
 # ENV — Project Organization & Environment
 
-*Load when: setting up the project, touching build config, adding a package, or debugging
-imports/aliases.*
+_Load when: setting up the project, touching build config, adding a package, or debugging
+imports/aliases._
 
 ---
 

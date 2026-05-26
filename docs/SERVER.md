@@ -1,6 +1,6 @@
 # SERVER — Server Architecture
 
-*Load when: working on the server, WS/HTTP handlers, the DB, content loading, or simulation.*
+_Load when: working on the server, WS/HTTP handlers, the DB, content loading, or simulation._
 
 ---
 
@@ -25,7 +25,7 @@ populating TypeMaps. Content files don't need to export anything meaningful.
 
 SRD content is treated as homebrew: it is built as an extension of the base engine using the
 same primitives, not as a privileged built-in. The engine therefore never enumerates content
-*kinds* in advance — discovery is always by capability query — so that homebrew mechanics
+_kinds_ in advance — discovery is always by capability query — so that homebrew mechanics
 extend the system exactly the way SRD content does.
 
 ### Defining Content

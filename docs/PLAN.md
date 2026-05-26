@@ -1,7 +1,7 @@
 # PLAN — Milestones & Design Record
 
-*Load when: planning future milestones (rarely needed during implementation). Also holds the
-record of rejected alternatives.*
+_Load when: planning future milestones (rarely needed during implementation). Also holds the
+record of rejected alternatives._
 
 ---
 
@@ -132,7 +132,7 @@ explain.)
   grounds that "ECS solves runtime add/remove of components for simulation entities; you want
   static typed aspects with serialization." That reasoning has been deliberately reversed: the
   composite-substrate model (everything is a composite, capabilities are aspects, discovery is
-  by capability query at every level) is an ECS-style pattern, adopted because the *uniformity*
+  by capability query at every level) is an ECS-style pattern, adopted because the _uniformity_
   it buys — one substrate, one discovery primitive, one extension mechanism — is worth the cost
   of giving up some static-type legibility (recovered where needed via StructureAspect and
   content-author view wrappers). This note is kept rather than deleted so the reversal is on the
