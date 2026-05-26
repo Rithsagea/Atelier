@@ -1,4 +1,4 @@
-import { Aspect } from "../composite/Aspect";
+import { Aspect, AspectKey, Composite } from "../composite/Composite";
 import { enumMap } from "../util/Types";
 
 export const Abilities = [
@@ -20,12 +20,24 @@ export const AbilityLabels: Record<Ability, string> = {
   charisma: "Charisma",
 };
 
+@Aspect("AbilityScore")
 export class AbilityScore {
   scores: Record<Ability, number> = enumMap(Abilities, (_) => 0);
+
+  refresh(sheet: Composite): void {
+    for (const v of sheet.aspects.values()) {
+      if (v instanceof Composite && v.has(AbilityScoreContributor)) {
+        v.get(AbilityScoreContributor).apply(this);
+      }
+    }
+  }
 }
 
-export const AbilityScoreAspect = new Aspect<AbilityScore>("AbilityScores");
+export interface AbilityScoreContributor {
+  readonly source: Composite;
+  apply(abilityScore: AbilityScore): void;
+}
 
-export interface AbilityScoreMutator {}
-
-export const AbilityScoreMutatorAspect = new Aspect<AbilityScoreMutator>("AbilityScoreMutator");
+export const AbilityScoreContributor = new AspectKey<AbilityScoreContributor>(
+  "AbilityScoreContributor",
+);

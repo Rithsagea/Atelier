@@ -1,32 +1,76 @@
-import type { Aspect } from "./Aspect";
+import { Constructor } from "../util/Types";
+
+// Aspects
+
+export class AspectKey<T> {
+  declare readonly _type: T;
+  readonly id: symbol;
+  readonly name: string;
+
+  constructor(name: string) {
+    this.name = name;
+    this.id = Symbol(name);
+  }
+}
+
+const aspectRegistry = new WeakMap<Constructor, AspectKey<unknown>>();
+
+export function Aspect(id: string) {
+  return (ctor: Constructor) => {
+    aspectRegistry.set(ctor, new AspectKey(id));
+  };
+}
+
+export type AspectRef<T extends object> = AspectKey<T> | Constructor<T>;
+
+export function getAspectKey<T extends object>(ref: AspectRef<T>) {
+  if (ref instanceof AspectKey) return ref;
+  const key = aspectRegistry.get(ref);
+  if (!key) throw new Error(`${ref.name} is not registered as an aspect - add @Aspect(...)`);
+  return key as AspectKey<T>;
+}
+
+// Composite
 
 export class Composite {
-  readonly id: string;
+  readonly aspects = new Map<symbol, unknown>();
 
-  // TRANSIENT — aspects are not serialized on Composite itself;
-  // serialization is handled by the DB layer (id + template + JSON blob per aspect)
-  private readonly aspects = new Map<symbol, unknown>();
-
-  constructor(id: string = crypto.randomUUID()) {
-    this.id = id;
-  }
-
-  provide<T>(aspect: Aspect<T>, value: T): void {
-    this.aspects.set(aspect.id, value);
+  provide<T extends object>(aspect: AspectRef<T>, value: T): void {
+    this.aspects.set(getAspectKey(aspect).id, value);
   }
 
   /** Throws if the aspect is not present. Missing aspect = content bug. */
-  get<T>(aspect: Aspect<T>): T {
-    if (!this.aspects.has(aspect.id))
-      throw new Error(`Composite "${this.id}" does not have aspect "${aspect.name}"`);
-    return this.aspects.get(aspect.id) as T;
+  get<T extends object>(ref: AspectRef<T>): T {
+    const key = getAspectKey(ref);
+    if (!this.aspects.has(key.id)) throw new Error(`Composite does not have aspect "${key.name}"`);
+    return this.aspects.get(key.id) as T;
   }
 
-  suppose<T>(aspect: Aspect<T>): T | undefined {
-    return this.aspects.get(aspect.id) as T | undefined;
+  suppose<T extends object>(aspect: AspectRef<T>): T | undefined {
+    return this.aspects.get(getAspectKey(aspect).id) as T | undefined;
   }
 
-  has(aspect: Aspect<unknown>): boolean {
-    return this.aspects.has(aspect.id);
+  has<T extends object>(ref: AspectRef<T>): boolean {
+    return this.aspects.has(getAspectKey(ref).id);
+  }
+}
+
+// Template
+
+export class Template {
+  constructor(
+    readonly name: string,
+    readonly aspects: AspectRef<object>[],
+  ) {}
+
+  /** Throws listing all missing aspects if the composite doesn't satisfy this template. */
+  validate(composite: Composite): void {
+    const missing = this.aspects.filter((a) => !composite.has(a));
+    if (missing.length > 0) {
+      throw new Error(
+        `Composite is missing aspects for template "${this.name}": ` +
+          missing.map((a) => a.name).join(", "),
+      );
+    }
   }
 }

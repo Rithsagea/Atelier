@@ -1,5 +1,5 @@
-import { Template } from "../composite/Template";
-import { AbilityScoreAspect } from "../stats/AbilityScore";
-import { BaseAbilityScoreAspect } from "../stats/BaseAbilityScore";
+import { Template } from "../composite/Composite";
+import { AbilityScore } from "../stats/AbilityScore";
+import { BaseAbilityScore } from "../stats/BaseAbilityScore";
 
-export const SheetTemplate = new Template("Sheet", [BaseAbilityScoreAspect, AbilityScoreAspect]);
+export const SheetTemplate = new Template("Sheet", [BaseAbilityScore, AbilityScore]);
