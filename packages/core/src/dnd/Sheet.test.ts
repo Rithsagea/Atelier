@@ -8,7 +8,7 @@ import {
 } from "../stats/BaseAbilityScore";
 import { Holder } from "../composite/Structure";
 import { Id } from "../composite/Id";
-import { Aspect, getAspectKey, getAspectTypeMap } from "../composite/Composite";
+import { Aspect, getAspectKey } from "../composite/Composite";
 import { Sheet } from "./Sheet";
 
 test("sheet provides Id", () => {
@@ -93,11 +93,10 @@ test("lowering base score refunds points", () => {
 });
 
 test("BaseAbilityScore typemap resolves impls by tag", () => {
-  const map = getAspectTypeMap(BaseAbilityScore);
-  expect(map.get("PointBuy")).toBe(PointBuyAbilityScore);
-  expect(map.get("Static")).toBe(StaticAbilityScore);
-  expect(map.getKey(PointBuyAbilityScore)).toBe("PointBuy");
-  expect(map.getKey(StaticAbilityScore)).toBe("Static");
+  expect(BaseAbilityScore.typeMap.get("PointBuy")).toBe(PointBuyAbilityScore);
+  expect(BaseAbilityScore.typeMap.get("Static")).toBe(StaticAbilityScore);
+  expect(BaseAbilityScore.typeMap.getKey(PointBuyAbilityScore)).toBe("PointBuy");
+  expect(BaseAbilityScore.typeMap.getKey(StaticAbilityScore)).toBe("Static");
 });
 
 test("two-arg @Aspect does not populate aspectRegistry", () => {
