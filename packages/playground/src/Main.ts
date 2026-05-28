@@ -1,14 +1,9 @@
-import { Structure } from "@atelier/core/composite/Structure";
+import { Sheet } from "@atelier/core/dnd/Sheet";
+import { Id } from "@atelier/core/composite/Id";
 import { AbilityScore } from "@atelier/core/stats/AbilityScore";
 import { BaseAbilityScore, PointBuyScore } from "@atelier/core/stats/BaseAbilityScore";
 
-class Id {
-  readonly value = crypto.randomUUID();
-}
-
-const Entity = Structure([Id, () => new Id()]);
-
-const sheet = new Entity();
+const sheet = new Sheet();
 const score = new AbilityScore();
 sheet.provide(BaseAbilityScore, new PointBuyScore());
 sheet.provide(AbilityScore, score);

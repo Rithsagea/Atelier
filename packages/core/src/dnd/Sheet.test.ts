@@ -1,5 +1,4 @@
 import { expect, test } from "bun:test";
-import { Composite } from "../composite/Composite";
 import { AbilityScore } from "../stats/AbilityScore";
 import {
   PointBuyScore,
@@ -7,17 +6,32 @@ import {
   BaseAbilityScore,
   POINT_BUY_BUDGET,
 } from "../stats/BaseAbilityScore";
-import { SheetTemplate } from "./Sheet";
+import { Holder } from "../composite/Structure";
+import { Id } from "../composite/Id";
+import { Sheet } from "./Sheet";
 
-test("validate passes with point buy scores", () => {
-  const sheet = new Composite();
-  sheet.provide(BaseAbilityScore, new PointBuyScore());
-  sheet.provide(AbilityScore, new AbilityScore());
-  expect(() => SheetTemplate.validate(sheet)).not.toThrow();
+test("sheet provides Id", () => {
+  const sheet = new Sheet();
+  expect(sheet.has(Id)).toBe(true);
+  expect(typeof sheet.get(Id).value).toBe("string");
 });
 
-test("validate passes with static scores", () => {
-  const sheet = new Composite();
+test("sheet provides Holder", () => {
+  const sheet = new Sheet();
+  expect(sheet.has(Holder)).toBe(true);
+});
+
+test("refresh via Holder applies point buy contributions", () => {
+  const sheet = new Sheet();
+  sheet.provide(BaseAbilityScore, new PointBuyScore());
+  const score = new AbilityScore();
+  sheet.provide(AbilityScore, score);
+  score.refresh(sheet);
+  expect(score.scores.strength).toBe(8);
+});
+
+test("refresh via Holder applies static contributions", () => {
+  const sheet = new Sheet();
   sheet.provide(
     BaseAbilityScore,
     new StaticAbilityScore({
@@ -29,20 +43,11 @@ test("validate passes with static scores", () => {
       charisma: 8,
     }),
   );
-  sheet.provide(AbilityScore, new AbilityScore());
-  expect(() => SheetTemplate.validate(sheet)).not.toThrow();
-});
-
-test("validate throws without base ability scores", () => {
-  const sheet = new Composite();
-  sheet.provide(AbilityScore, new AbilityScore());
-  expect(() => SheetTemplate.validate(sheet)).toThrow();
-});
-
-test("validate throws without ability scores", () => {
-  const sheet = new Composite();
-  sheet.provide(BaseAbilityScore, new PointBuyScore());
-  expect(() => SheetTemplate.validate(sheet)).toThrow();
+  const score = new AbilityScore();
+  sheet.provide(AbilityScore, score);
+  score.refresh(sheet);
+  expect(score.scores.strength).toBe(15);
+  expect(score.scores.charisma).toBe(8);
 });
 
 test("default base scores cost zero points", () => {
