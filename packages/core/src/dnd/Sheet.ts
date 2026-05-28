@@ -1,5 +1,8 @@
-import { Template } from "../composite/Composite";
-import { AbilityScore } from "../stats/AbilityScore";
-import { BaseAbilityScore } from "../stats/BaseAbilityScore";
+import { Structure, Holder } from "../composite/Structure";
+import { Id } from "../composite/Id";
+import { AspectHolder } from "../composite/AspectHolder";
 
-export const SheetTemplate = new Template("Sheet", [BaseAbilityScore, AbilityScore]);
+export const Sheet = Structure(
+  [Id, () => new Id()],
+  [Holder, () => new AspectHolder()],
+);
