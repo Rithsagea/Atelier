@@ -1,4 +1,5 @@
 import { Constructor } from "../util/Types";
+import { BiMap } from "../util/Algorithms";
 
 // Aspects
 
@@ -6,6 +7,8 @@ export class AspectKey<T> {
   declare readonly _type: T;
   readonly id: symbol;
   readonly name: string;
+  ctor?: Constructor<T>;
+  typeMap?: BiMap<string, Constructor<T>>;
 
   constructor(name: string) {
     this.name = name;
@@ -15,9 +18,21 @@ export class AspectKey<T> {
 
 const aspectRegistry = new WeakMap<Constructor, AspectKey<unknown>>();
 
-export function Aspect(id: string) {
+export function Aspect<T extends object>(id: string, key?: AspectKey<T>) {
   return (ctor: Constructor) => {
-    aspectRegistry.set(ctor, new AspectKey(id));
+    if (key) {
+      key.typeMap ??= new BiMap<string, Constructor<T>>();
+      if (!key.typeMap.set(id, ctor as Constructor<T>)) {
+        throw new Error(
+          `Aspect impl "${id}" already registered under "${key.name}" ` +
+            `(or constructor ${ctor.name} already mapped under that key)`,
+        );
+      }
+    } else {
+      const newKey = new AspectKey(id);
+      newKey.ctor = ctor;
+      aspectRegistry.set(ctor, newKey);
+    }
   };
 }
 
@@ -52,25 +67,5 @@ export class Composite {
 
   has<T extends object>(ref: AspectRef<T>): boolean {
     return this.aspects.has(getAspectKey(ref).id);
-  }
-}
-
-// Template
-
-export class Template {
-  constructor(
-    readonly name: string,
-    readonly aspects: AspectRef<object>[],
-  ) {}
-
-  /** Throws listing all missing aspects if the composite doesn't satisfy this template. */
-  validate(composite: Composite): void {
-    const missing = this.aspects.filter((a) => !composite.has(a));
-    if (missing.length > 0) {
-      throw new Error(
-        `Composite is missing aspects for template "${this.name}": ` +
-          missing.map((a) => a.name).join(", "),
-      );
-    }
   }
 }
