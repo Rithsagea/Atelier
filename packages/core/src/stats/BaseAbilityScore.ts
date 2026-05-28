@@ -1,4 +1,4 @@
-import { AspectKey, Composite } from "../composite/Composite";
+import { Aspect, AspectKey, Composite } from "../composite/Composite";
 import { enumMap } from "../util/Types";
 import { type Ability, Abilities, AbilityScore, AbilityScoreContributor } from "./AbilityScore";
 
@@ -36,7 +36,8 @@ const POINT_BUY_SCORES: Record<number, number> = {
 
 export const POINT_BUY_BUDGET = 27;
 
-export class PointBuyScore extends AbstractBaseAbilityScore {
+@Aspect("PointBuy", BaseAbilityScore)
+export class PointBuyAbilityScore extends AbstractBaseAbilityScore {
   points: Record<Ability, number> = enumMap(Abilities, (_) => 0);
 
   get scores(): Record<Ability, number> {
@@ -60,6 +61,7 @@ export class PointBuyScore extends AbstractBaseAbilityScore {
   }
 }
 
+@Aspect("Static", BaseAbilityScore)
 export class StaticAbilityScore extends AbstractBaseAbilityScore {
   constructor(readonly scores: Record<Ability, number>) {
     super();

@@ -1,4 +1,5 @@
 import { Constructor } from "../util/Types";
+import { BiMap } from "../util/Algorithms";
 
 // Aspects
 
@@ -14,11 +15,33 @@ export class AspectKey<T> {
 }
 
 const aspectRegistry = new WeakMap<Constructor, AspectKey<unknown>>();
+const aspectTypeMaps = new Map<symbol, BiMap<string, Constructor>>();
 
-export function Aspect(id: string) {
+export function Aspect<T extends object>(id: string, key?: AspectKey<T>) {
   return (ctor: Constructor) => {
-    aspectRegistry.set(ctor, new AspectKey(id));
+    if (key) {
+      const map = getAspectTypeMap(key);
+      if (!map.set(id, ctor as Constructor<T>)) {
+        throw new Error(
+          `Aspect impl "${id}" already registered under "${key.name}" ` +
+            `(or constructor ${ctor.name} already mapped under that key)`,
+        );
+      }
+    } else {
+      aspectRegistry.set(ctor, new AspectKey(id));
+    }
   };
+}
+
+export function getAspectTypeMap<T extends object>(
+  key: AspectKey<T>,
+): BiMap<string, Constructor<T>> {
+  let map = aspectTypeMaps.get(key.id);
+  if (!map) {
+    map = new BiMap<string, Constructor>();
+    aspectTypeMaps.set(key.id, map);
+  }
+  return map as BiMap<string, Constructor<T>>;
 }
 
 export type AspectRef<T extends object> = AspectKey<T> | Constructor<T>;
