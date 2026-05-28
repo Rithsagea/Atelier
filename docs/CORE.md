@@ -61,13 +61,70 @@ that role demands. Structure accretes; it is not mandated up front.
 
 ---
 
+## Structure
+
+A factory that creates a `Composite` subclass with aspects pre-initialized. The canonical
+way to define an entity type.
+
+```ts
+const Sheet = Structure(
+  [Id,     () => new Id()],
+  [Holder, () => new AspectHolder()],
+);
+
+const sheet = new Sheet(); // Id and Holder already provided
+```
+
+Each entry is `[AspectRef, () => T]`. The thunk is called once per constructor invocation,
+so every instance gets its own fresh aspect values — no shared state.
+
+`Structure` imposes no required aspects and performs no validation. It is purely a
+convenience over calling `provide` manually in a subclass constructor. Validation (once
+needed) lives in a separate Template or StructureAspect, not inside `Structure` itself.
+
+---
+
+## Holder
+
+Intra-entity child discovery. A composite that has children exposes a `Holder` aspect;
+anything that needs to iterate those children calls `sheet.get(Holder).children(sheet)`.
+
+```ts
+interface Holder<T extends Composite = Composite> {
+  children(parent: T): Iterable<Composite>;
+}
+
+const Holder = new AspectKey<Holder<Composite>>("Holder");
+```
+
+The generic `T` lets an implementation access the parent's typed aspects without casts.
+`Holder<Composite>` is used at the key level as the base contract; method bivariance allows
+more-specific implementations (`Holder<Sheet>`, `Holder<Monster>`) to be stored under it.
+
+**`AspectHolder<T>`** is the built-in implementation. It yields every aspect value of the
+parent that is itself a `Composite`:
+
+```ts
+class AspectHolder<T extends Composite = Composite> implements Holder<T> {
+  *children(parent: T): Iterable<Composite> {
+    for (const value of parent.aspects.values())
+      if (value instanceof Composite) yield value;
+  }
+}
+```
+
+`AspectHolder` is the default for `Sheet`. Custom holders can filter, reorder, or aggregate
+differently — the consumer (e.g. `AbilityScore.refresh`) is decoupled from the strategy.
+
+---
+
 ## Capability discovery
 
 The reusable discovery primitive is **filter a collection by capability**. It runs over a
-composite's aspect values (intra-entity: a sheet's stat contributors) and over a scope's
-composites (inter-entity: "find all sheets in the scene with a resist effect") with the
-same shape. This is the single pattern reused across mechanics — feats that modify anything
-on a sheet, environmental effects that query all sheets, etc.
+composite's children via `Holder` (intra-entity: a sheet's stat contributors) and over a
+scope's composites (inter-entity: "find all sheets in the scene with a resist effect") with
+the same shape. This is the single pattern reused across mechanics — feats that modify
+anything on a sheet, environmental effects that query all sheets, etc.
 
 Discovery is **dynamic and rebuilt on demand**, not maintained as a synced list. Because all
 SRD content is treated as homebrew (homebrew is an extension of the base engine, not a
@@ -124,7 +181,7 @@ This is what makes prefabs reusable without ID collisions.
 ## Template / StructureAspect
 
 Declares the aspects an entity type is expected to have. Used for validation and "what is
-this?" identification.
+this?" identification. `Template.validate(composite)` throws listing all missing aspects.
 
 The long-term direction is a **StructureAspect**: structure becomes an aspect carried by the
 composite (kind = item / trait / monster / prop / sheet, plus the expected aspect set) rather
@@ -134,7 +191,7 @@ the "missing aspect = content bug = throw" stance.
 
 StructureAspect is **derived, not declared twice**: the serializer generates the necessary
 structural information from the `@Property` declarations rather than the author maintaining a
-separate schema. (Not built yet — realized when complexity demands it.)
+separate schema. (Not built yet — merged into `Structure` when complexity demands it.)
 
 ---
 
@@ -181,8 +238,8 @@ advanced, chat).
 
 Computed stats (ability scores, and later AC, saves, skills) are a **pure projection** over
 a set of contributors. Anything that writes to a stat exposes the contributor capability and
-is discovered by capability query over the owning composite's values; the computed stat
-aspect rebuilds itself by gathering and folding those contributions.
+is discovered by capability query over the owning composite's children (via `Holder`); the
+computed stat aspect rebuilds itself by gathering and folding those contributions.
 
 Key commitments (these are the content-facing contract — expensive to change because every
 piece of content is written against them):
