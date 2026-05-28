@@ -21,7 +21,7 @@ const aspectRegistry = new WeakMap<Constructor, AspectKey<unknown>>();
 export function Aspect<T extends object>(id: string, key?: AspectKey<T>) {
   return (ctor: Constructor) => {
     if (key) {
-      if (!key.typeMap) key.typeMap = new BiMap<string, Constructor<T>>();
+      key.typeMap ??= new BiMap<string, Constructor<T>>();
       if (!key.typeMap.set(id, ctor as Constructor<T>)) {
         throw new Error(
           `Aspect impl "${id}" already registered under "${key.name}" ` +

@@ -13,9 +13,9 @@ type Entry<T extends object> = [AspectRef<T>, () => T] | [AspectRef<T>];
 export function Structure<const Types extends readonly object[]>(
   ...entries: { [K in keyof Types]: Entry<Types[K]> }
 ) {
-  const refs = entries.map(([ref]) => ref) as AspectRef<object>[];
   const refsByName = new Map<string, AspectRef<object>>();
-  for (const ref of refs) {
+  for (const entry of entries) {
+    const ref = entry[0];
     const name = getAspectKey(ref).name;
     if (refsByName.has(name)) {
       throw new Error(`Structure has duplicate aspect name "${name}"`);
@@ -31,11 +31,14 @@ export function Structure<const Types extends readonly object[]>(
       }
     }
     validate(): boolean {
-      return refs.every((ref) => this.has(ref));
+      for (const ref of refsByName.values()) {
+        if (!this.has(ref)) return false;
+      }
+      return true;
     }
   };
 
-  Property.Serialize(makeAspectsStrategy(entries as readonly Entry<object>[], refs, refsByName))(
+  Property.Serialize(makeAspectsStrategy(entries as readonly Entry<object>[], refsByName))(
     Klass.prototype,
     "aspects",
   );
@@ -44,13 +47,12 @@ export function Structure<const Types extends readonly object[]>(
 
 function makeAspectsStrategy(
   entries: readonly Entry<object>[],
-  refs: AspectRef<object>[],
   refsByName: Map<string, AspectRef<object>>,
 ): SerializationStrategy<Map<symbol, unknown>> {
   return {
     serialize(source) {
       const out: SerializedObject = {};
-      for (const ref of refs) {
+      for (const ref of refsByName.values()) {
         const key = getAspectKey(ref);
         if (!source.has(key.id)) continue;
         const v = source.get(key.id) as object;
