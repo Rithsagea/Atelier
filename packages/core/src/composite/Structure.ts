@@ -35,11 +35,15 @@ export function Structure<const Types extends readonly object[]>(
     }
   };
 
-  Property.Serialize(makeAspectsStrategy(refs, refsByName))(Klass.prototype, "aspects");
+  Property.Serialize(makeAspectsStrategy(entries as readonly Entry<object>[], refs, refsByName))(
+    Klass.prototype,
+    "aspects",
+  );
   return Klass;
 }
 
 function makeAspectsStrategy(
+  entries: readonly Entry<object>[],
   refs: AspectRef<object>[],
   refsByName: Map<string, AspectRef<object>>,
 ): SerializationStrategy<Map<symbol, unknown>> {
@@ -65,8 +69,15 @@ function makeAspectsStrategy(
       }
       return Object.keys(out).length === 0 ? undefined : out;
     },
-    deserialize(source, current) {
-      const map = current ?? new Map<symbol, unknown>();
+    deserialize(source) {
+      const map = new Map<symbol, unknown>();
+      for (const entry of entries) {
+        if (entry.length !== 2) continue;
+        const key = getAspectKey(entry[0]);
+        if (!key.ctor && !key.typeMap) {
+          map.set(key.id, entry[1]());
+        }
+      }
       for (const [name, raw] of Object.entries(source as SerializedObject)) {
         const ref = refsByName.get(name);
         if (!ref) throw new Error(`Unknown aspect "${name}"`);

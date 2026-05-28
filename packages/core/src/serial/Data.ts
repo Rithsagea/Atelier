@@ -7,7 +7,7 @@ export type SerializedObject = Record<string, unknown>;
 
 export interface SerializationStrategy<T = any> {
   serialize(source: T): any;
-  deserialize(source: any, current?: T): T;
+  deserialize(source: any): T;
 }
 
 // --- Property data ---
@@ -57,8 +57,7 @@ export function deserialize<T extends object>(
   for (const [label, strategy] of Object.entries(properties)) {
     const value = source[label];
     if (value === undefined) continue;
-    const current = (res as SerializedObject)[label];
-    (res as SerializedObject)[label] = strategy.deserialize(value, current);
+    (res as SerializedObject)[label] = strategy.deserialize(value);
   }
   return res;
 }
