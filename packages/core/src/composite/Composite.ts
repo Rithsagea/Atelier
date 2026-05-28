@@ -17,7 +17,8 @@ export class AspectKey<T> {
   declare readonly _type: T;
   readonly id: symbol;
   readonly name: string;
-  readonly typeMap = new BiMap<string, Constructor<T>>();
+  ctor?: Constructor<T>;
+  typeMap?: BiMap<string, Constructor<T>>;
 
   constructor(name: string) {
     if (aspectKeyByName.has(name)) {
@@ -35,6 +36,7 @@ const aspectRegistry = new WeakMap<Constructor, AspectKey<unknown>>();
 export function Aspect<T extends object>(id: string, key?: AspectKey<T>) {
   return (ctor: Constructor) => {
     if (key) {
+      if (!key.typeMap) key.typeMap = new BiMap<string, Constructor<T>>();
       if (!key.typeMap.set(id, ctor as Constructor<T>)) {
         throw new Error(
           `Aspect impl "${id}" already registered under "${key.name}" ` +
@@ -43,7 +45,7 @@ export function Aspect<T extends object>(id: string, key?: AspectKey<T>) {
       }
     } else {
       const newKey = new AspectKey(id);
-      newKey.typeMap.set(id, ctor);
+      newKey.ctor = ctor;
       aspectRegistry.set(ctor, newKey);
     }
   };
@@ -65,16 +67,20 @@ const aspectsStrategy: SerializationStrategy<Map<symbol, unknown>> = {
     const out: SerializedObject = {};
     for (const [symId, value] of source) {
       const key = aspectKeyById.get(symId);
-      if (!key || key.typeMap.size === 0) continue;
+      if (!key) continue;
       const v = value as object;
-      const tag = key.typeMap.getKey(v.constructor as Constructor);
-      if (!tag) {
-        throw new Error(
-          `Aspect "${key.name}" value of type ${v.constructor.name} ` +
-            `has no entry in its typeMap`,
-        );
+      if (key.typeMap) {
+        const tag = key.typeMap.getKey(v.constructor as Constructor);
+        if (!tag) {
+          throw new Error(
+            `Aspect "${key.name}" value of type ${v.constructor.name} ` +
+              `has no entry in its typeMap`,
+          );
+        }
+        out[key.name] = { $type: tag, ...serializeFields(v) };
+      } else if (key.ctor) {
+        out[key.name] = serializeFields(v);
       }
-      out[key.name] = { $type: tag, ...serializeFields(v) };
     }
     return Object.keys(out).length === 0 ? undefined : out;
   },
@@ -84,9 +90,16 @@ const aspectsStrategy: SerializationStrategy<Map<symbol, unknown>> = {
       const key = aspectKeyByName.get(name);
       if (!key) throw new Error(`Unknown aspect "${name}"`);
       const r = raw as SerializedObject;
-      const ctor = key.typeMap.get(r.$type as string);
-      if (!ctor) {
-        throw new Error(`Unknown $type "${r.$type}" for aspect "${name}"`);
+      let ctor: Constructor | undefined;
+      if (key.typeMap) {
+        ctor = key.typeMap.get(r.$type as string);
+        if (!ctor) {
+          throw new Error(`Unknown $type "${r.$type}" for aspect "${name}"`);
+        }
+      } else if (key.ctor) {
+        ctor = key.ctor;
+      } else {
+        throw new Error(`Aspect "${name}" has no impl registered`);
       }
       map.set(key.id, deserializeFields(r, ctor));
     }

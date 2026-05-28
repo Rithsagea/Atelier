@@ -94,10 +94,10 @@ test("lowering base score refunds points", () => {
 });
 
 test("BaseAbilityScore typemap resolves impls by tag", () => {
-  expect(BaseAbilityScore.typeMap.get("PointBuy")).toBe(PointBuyAbilityScore);
-  expect(BaseAbilityScore.typeMap.get("Static")).toBe(StaticAbilityScore);
-  expect(BaseAbilityScore.typeMap.getKey(PointBuyAbilityScore)).toBe("PointBuy");
-  expect(BaseAbilityScore.typeMap.getKey(StaticAbilityScore)).toBe("Static");
+  expect(BaseAbilityScore.typeMap!.get("PointBuy")).toBe(PointBuyAbilityScore);
+  expect(BaseAbilityScore.typeMap!.get("Static")).toBe(StaticAbilityScore);
+  expect(BaseAbilityScore.typeMap!.getKey(PointBuyAbilityScore)).toBe("PointBuy");
+  expect(BaseAbilityScore.typeMap!.getKey(StaticAbilityScore)).toBe("Static");
 });
 
 test("two-arg @Aspect does not populate aspectRegistry", () => {
@@ -109,10 +109,10 @@ test("duplicate impl registration throws", () => {
   expect(() => Aspect("PointBuy", BaseAbilityScore)(class {})).toThrow();
 });
 
-test("single-arg @Aspect self-registers in own typeMap", () => {
+test("single-arg @Aspect sets ctor and leaves typeMap undefined", () => {
   const idKey = getAspectKey(Id);
-  expect(idKey.typeMap.get("Id")).toBe(Id);
-  expect(idKey.typeMap.getKey(Id)).toBe("Id");
+  expect(idKey.ctor).toBe(Id);
+  expect(idKey.typeMap).toBeUndefined();
 });
 
 test("sheet serializes point buy round-trip", () => {
@@ -125,7 +125,7 @@ test("sheet serializes point buy round-trip", () => {
   const data = serialize(sheet);
   expect(data).toStrictEqual({
     aspects: {
-      Id: { $type: "Id", value: sheet.get(Id).value },
+      Id: { value: sheet.get(Id).value },
       BaseAbilityScore: {
         $type: "PointBuy",
         points: {
@@ -210,7 +210,7 @@ test("deserialize unknown $type throws", () => {
 
 test("deserialize without BaseAbilityScore leaves sheet invalid", () => {
   const sheet = deserialize(
-    { aspects: { Id: { $type: "Id", value: "abc" } } },
+    { aspects: { Id: { value: "abc" } } },
     Sheet,
   );
   expect(sheet.validate()).toBe(false);
