@@ -87,6 +87,10 @@ content files get type-checking and alias resolution without extra config.
 
 ### `packages/client/tsconfig.json` (planned)
 
+`packages/client` will be the SvelteKit frontend. It needs `$lib/*` (SvelteKit's built-in
+alias for `src/lib`) and `@atelier/core/*` for shared types. No `@atelier/server` alias —
+the client never imports server internals directly.
+
 ```json
 {
   "extends": "../../tsconfig.json",
@@ -101,14 +105,15 @@ content files get type-checking and alias resolution without extra config.
 
 ### `content/tsconfig.json` (planned)
 
+`content/` will hold user-defined homebrew — classes, races, spells, items. It extends the
+server tsconfig so content files automatically get both `@atelier/core` and `@atelier/server`
+aliases. Content authors never touch tsconfig.
+
 ```json
 {
   "extends": "../packages/server/tsconfig.json"
 }
 ```
-
-Extends server tsconfig so content files get `@atelier/core` and `@atelier/server`
-aliases automatically. Content authors never touch tsconfig.
 
 ---
 
@@ -134,8 +139,10 @@ aliases automatically. Content authors never touch tsconfig.
 }
 ```
 
-The `exports` map is what resolves `@atelier/core/composite/Composite` to
-`./src/composite/Composite.ts` at runtime.
+The `exports` map is what resolves subpath imports like `@atelier/core/composite/Composite`
+to `./src/composite/Composite.ts`. The `module` field is a bundler convention (Bun, Rollup,
+Vite) for the ESM entry point used when the package is imported without a subpath
+(`import "@atelier/core"`); it does not affect subpath imports.
 
 ### `packages/server/package.json`
 
