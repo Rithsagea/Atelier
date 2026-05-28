@@ -107,3 +107,108 @@ test("two-arg @Aspect does not populate aspectRegistry", () => {
 test("duplicate impl registration throws", () => {
   expect(() => Aspect("PointBuy", BaseAbilityScore)(class {})).toThrow();
 });
+
+test("single-arg @Aspect self-registers in own typeMap", () => {
+  const idKey = getAspectKey(Id);
+  expect(idKey.typeMap.get("Id")).toBe(Id);
+  expect(idKey.typeMap.getKey(Id)).toBe("Id");
+});
+
+test("sheet serializes point buy round-trip", () => {
+  const sheet = new Sheet();
+  const points = new PointBuyAbilityScore();
+  sheet.provide(BaseAbilityScore, points);
+  points.set("strength", 9);
+  points.set("dexterity", 5);
+
+  const data = sheet.serialize();
+  expect(data).toStrictEqual({
+    Id: { $type: "Id", value: sheet.get(Id).value },
+    BaseAbilityScore: {
+      $type: "PointBuy",
+      points: {
+        strength: 9,
+        dexterity: 5,
+        constitution: 0,
+        intelligence: 0,
+        wisdom: 0,
+        charisma: 0,
+      },
+    },
+  });
+  expect("Holder" in data).toBe(false);
+
+  const restored = new Sheet();
+  restored.deserialize(data);
+  expect(restored.validate()).toBe(true);
+  expect(restored.get(Id).value).toBe(sheet.get(Id).value);
+  const restoredPoints = restored.get(BaseAbilityScore) as PointBuyAbilityScore;
+  expect(restoredPoints.points.strength).toBe(9);
+  expect(restoredPoints.points.dexterity).toBe(5);
+});
+
+test("sheet serializes static score round-trip", () => {
+  const sheet = new Sheet();
+  sheet.provide(
+    BaseAbilityScore,
+    new StaticAbilityScore({
+      strength: 15,
+      dexterity: 14,
+      constitution: 13,
+      intelligence: 12,
+      wisdom: 10,
+      charisma: 8,
+    }),
+  );
+
+  const data = sheet.serialize();
+  expect(data.BaseAbilityScore).toStrictEqual({
+    $type: "Static",
+    scores: {
+      strength: 15,
+      dexterity: 14,
+      constitution: 13,
+      intelligence: 12,
+      wisdom: 10,
+      charisma: 8,
+    },
+  });
+
+  const restored = new Sheet();
+  restored.deserialize(data);
+  expect(restored.validate()).toBe(true);
+  const restoredScores = restored.get(BaseAbilityScore) as StaticAbilityScore;
+  expect(restoredScores.scores.strength).toBe(15);
+  expect(restoredScores.scores.charisma).toBe(8);
+});
+
+test("refresh works on deserialized point buy sheet", () => {
+  const original = new Sheet();
+  original.provide(BaseAbilityScore, new PointBuyAbilityScore());
+  (original.get(BaseAbilityScore) as PointBuyAbilityScore).set("strength", 9);
+  const before = new AbilityScore();
+  original.provide(AbilityScore, before);
+  before.refresh(original);
+
+  const restored = new Sheet();
+  restored.deserialize(original.serialize());
+  const after = new AbilityScore();
+  restored.provide(AbilityScore, after);
+  after.refresh(restored);
+
+  expect(after.scores).toStrictEqual(before.scores);
+});
+
+test("deserialize unknown $type throws", () => {
+  const sheet = new Sheet();
+  expect(() =>
+    sheet.deserialize({ BaseAbilityScore: { $type: "Bogus", points: {} } }),
+  ).toThrow(/Bogus/);
+});
+
+test("deserialize without BaseAbilityScore leaves sheet invalid", () => {
+  const sheet = new Sheet();
+  sheet.deserialize({ Id: { $type: "Id", value: "abc" } });
+  expect(sheet.validate()).toBe(false);
+  expect(sheet.get(Id).value).toBe("abc");
+});

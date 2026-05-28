@@ -1,4 +1,5 @@
 import { Aspect, AspectKey, Composite } from "../composite/Composite";
+import { Property } from "../serial/Data";
 import { enumMap } from "../util/Types";
 import { type Ability, Abilities, AbilityScore, AbilityScoreContributor } from "./AbilityScore";
 
@@ -38,6 +39,7 @@ export const POINT_BUY_BUDGET = 27;
 
 @Aspect("PointBuy", BaseAbilityScore)
 export class PointBuyAbilityScore extends AbstractBaseAbilityScore {
+  @Property.Primitive
   points: Record<Ability, number> = enumMap(Abilities, (_) => 0);
 
   get scores(): Record<Ability, number> {
@@ -63,7 +65,11 @@ export class PointBuyAbilityScore extends AbstractBaseAbilityScore {
 
 @Aspect("Static", BaseAbilityScore)
 export class StaticAbilityScore extends AbstractBaseAbilityScore {
-  constructor(readonly scores: Record<Ability, number>) {
+  @Property.Primitive
+  readonly scores: Record<Ability, number>;
+
+  constructor(scores: Record<Ability, number> = enumMap(Abilities, (_) => 0)) {
     super();
+    this.scores = scores;
   }
 }

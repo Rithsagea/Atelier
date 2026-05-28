@@ -27,7 +27,9 @@ export function Aspect<T extends object>(id: string, key?: AspectKey<T>) {
         );
       }
     } else {
-      aspectRegistry.set(ctor, new AspectKey(id));
+      const newKey = new AspectKey(id);
+      newKey.typeMap.set(id, ctor);
+      aspectRegistry.set(ctor, newKey);
     }
   };
 }
