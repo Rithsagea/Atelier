@@ -7,7 +7,7 @@ export type SerializedObject = Record<string, unknown>;
 
 export interface SerializationStrategy<T = any> {
   serialize(source: T): any;
-  deserialize(source: any): T;
+  deserialize(source: any, current?: T): T;
 }
 
 // --- Property data ---
@@ -15,9 +15,23 @@ export interface SerializationStrategy<T = any> {
 type PropertyData = Record<string, SerializationStrategy>;
 const PROPERTY_SYMBOL = Symbol("properties");
 
-function getPropertyData(target: object): PropertyData {
+function ownPropertyData(target: object): PropertyData {
   const proto = (target as any).constructor?.prototype ?? target;
   return getMetadata<PropertyData>(proto, PROPERTY_SYMBOL, {});
+}
+
+function getPropertyData(target: object): PropertyData {
+  const chain: object[] = [];
+  let proto: object | null = Object.getPrototypeOf(target);
+  while (proto && proto !== Object.prototype) {
+    chain.push(proto);
+    proto = Object.getPrototypeOf(proto);
+  }
+  const merged: PropertyData = {};
+  for (let i = chain.length - 1; i >= 0; i--) {
+    Object.assign(merged, getMetadata<PropertyData>(chain[i]!, PROPERTY_SYMBOL, {}));
+  }
+  return merged;
 }
 
 // --- serialize / deserialize ---
@@ -28,7 +42,8 @@ export function serialize(target: object): SerializedObject {
   for (const [label, strategy] of Object.entries(properties)) {
     const value = (target as SerializedObject)[label];
     if (value === undefined) continue;
-    res[label] = strategy.serialize(value);
+    const out = strategy.serialize(value);
+    if (out !== undefined) res[label] = out;
   }
   return res;
 }
@@ -42,7 +57,8 @@ export function deserialize<T extends object>(
   for (const [label, strategy] of Object.entries(properties)) {
     const value = source[label];
     if (value === undefined) continue;
-    (res as SerializedObject)[label] = strategy.deserialize(value);
+    const current = (res as SerializedObject)[label];
+    (res as SerializedObject)[label] = strategy.deserialize(value, current);
   }
   return res;
 }
@@ -107,12 +123,12 @@ function getStrategy(
 export namespace Property {
   export function Serialize(strategy: SerializationStrategy): PropertyDecorator {
     return (target: object, key: string | symbol) => {
-      getPropertyData(target)[key as string] = strategy;
+      ownPropertyData(target)[key as string] = strategy;
     };
   }
 
   export const Primitive: PropertyDecorator = (target, key) => {
-    getPropertyData(target)[key as string] = PrimitiveStrategy();
+    ownPropertyData(target)[key as string] = PrimitiveStrategy();
   };
 
   export function Class<T extends object>(constructor: Constructor<T>): PropertyDecorator {

@@ -9,6 +9,7 @@ import {
 import { Holder } from "../composite/Structure";
 import { Id } from "../composite/Id";
 import { Aspect, getAspectKey } from "../composite/Composite";
+import { serialize, deserialize } from "../serial/Data";
 import { Sheet } from "./Sheet";
 
 test("sheet provides Id", () => {
@@ -121,25 +122,26 @@ test("sheet serializes point buy round-trip", () => {
   points.set("strength", 9);
   points.set("dexterity", 5);
 
-  const data = sheet.serialize();
+  const data = serialize(sheet);
   expect(data).toStrictEqual({
-    Id: { $type: "Id", value: sheet.get(Id).value },
-    BaseAbilityScore: {
-      $type: "PointBuy",
-      points: {
-        strength: 9,
-        dexterity: 5,
-        constitution: 0,
-        intelligence: 0,
-        wisdom: 0,
-        charisma: 0,
+    aspects: {
+      Id: { $type: "Id", value: sheet.get(Id).value },
+      BaseAbilityScore: {
+        $type: "PointBuy",
+        points: {
+          strength: 9,
+          dexterity: 5,
+          constitution: 0,
+          intelligence: 0,
+          wisdom: 0,
+          charisma: 0,
+        },
       },
     },
   });
-  expect("Holder" in data).toBe(false);
+  expect("Holder" in (data.aspects as object)).toBe(false);
 
-  const restored = new Sheet();
-  restored.deserialize(data);
+  const restored = deserialize(data, Sheet);
   expect(restored.validate()).toBe(true);
   expect(restored.get(Id).value).toBe(sheet.get(Id).value);
   const restoredPoints = restored.get(BaseAbilityScore) as PointBuyAbilityScore;
@@ -161,8 +163,8 @@ test("sheet serializes static score round-trip", () => {
     }),
   );
 
-  const data = sheet.serialize();
-  expect(data.BaseAbilityScore).toStrictEqual({
+  const data = serialize(sheet);
+  expect((data.aspects as { BaseAbilityScore: unknown }).BaseAbilityScore).toStrictEqual({
     $type: "Static",
     scores: {
       strength: 15,
@@ -174,8 +176,7 @@ test("sheet serializes static score round-trip", () => {
     },
   });
 
-  const restored = new Sheet();
-  restored.deserialize(data);
+  const restored = deserialize(data, Sheet);
   expect(restored.validate()).toBe(true);
   const restoredScores = restored.get(BaseAbilityScore) as StaticAbilityScore;
   expect(restoredScores.scores.strength).toBe(15);
@@ -190,8 +191,7 @@ test("refresh works on deserialized point buy sheet", () => {
   original.provide(AbilityScore, before);
   before.refresh(original);
 
-  const restored = new Sheet();
-  restored.deserialize(original.serialize());
+  const restored = deserialize(serialize(original), Sheet);
   const after = new AbilityScore();
   restored.provide(AbilityScore, after);
   after.refresh(restored);
@@ -200,15 +200,19 @@ test("refresh works on deserialized point buy sheet", () => {
 });
 
 test("deserialize unknown $type throws", () => {
-  const sheet = new Sheet();
   expect(() =>
-    sheet.deserialize({ BaseAbilityScore: { $type: "Bogus", points: {} } }),
+    deserialize(
+      { aspects: { BaseAbilityScore: { $type: "Bogus", points: {} } } },
+      Sheet,
+    ),
   ).toThrow(/Bogus/);
 });
 
 test("deserialize without BaseAbilityScore leaves sheet invalid", () => {
-  const sheet = new Sheet();
-  sheet.deserialize({ Id: { $type: "Id", value: "abc" } });
+  const sheet = deserialize(
+    { aspects: { Id: { $type: "Id", value: "abc" } } },
+    Sheet,
+  );
   expect(sheet.validate()).toBe(false);
   expect(sheet.get(Id).value).toBe("abc");
 });
