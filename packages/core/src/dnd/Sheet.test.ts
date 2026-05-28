@@ -201,18 +201,12 @@ test("refresh works on deserialized point buy sheet", () => {
 
 test("deserialize unknown $type throws", () => {
   expect(() =>
-    deserialize(
-      { aspects: { BaseAbilityScore: { $type: "Bogus", points: {} } } },
-      Sheet,
-    ),
+    deserialize({ aspects: { BaseAbilityScore: { $type: "Bogus", points: {} } } }, Sheet),
   ).toThrow(/Bogus/);
 });
 
 test("deserialize without BaseAbilityScore leaves sheet invalid", () => {
-  const sheet = deserialize(
-    { aspects: { Id: { value: "abc" } } },
-    Sheet,
-  );
+  const sheet = deserialize({ aspects: { Id: { value: "abc" } } }, Sheet);
   expect(sheet.validate()).toBe(false);
   expect(sheet.get(Id).value).toBe("abc");
 });

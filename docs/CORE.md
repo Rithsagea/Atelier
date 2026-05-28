@@ -67,10 +67,7 @@ A factory that creates a `Composite` subclass with aspects pre-initialized. The 
 way to define an entity type.
 
 ```ts
-const Sheet = Structure(
-  [Id,     () => new Id()],
-  [Holder, () => new AspectHolder()],
-);
+const Sheet = Structure([Id, () => new Id()], [Holder, () => new AspectHolder()]);
 
 const sheet = new Sheet(); // Id and Holder already provided
 ```
@@ -107,8 +104,7 @@ parent that is itself a `Composite`:
 ```ts
 class AspectHolder<T extends Composite = Composite> implements Holder<T> {
   *children(parent: T): Iterable<Composite> {
-    for (const value of parent.aspects.values())
-      if (value instanceof Composite) yield value;
+    for (const value of parent.aspects.values()) if (value instanceof Composite) yield value;
   }
 }
 ```

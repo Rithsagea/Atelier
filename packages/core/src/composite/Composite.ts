@@ -2,8 +2,8 @@ import { Constructor } from "../util/Types";
 import { BiMap } from "../util/Algorithms";
 import {
   Property,
-  serialize as serializeFields,
-  deserialize as deserializeFields,
+  serialize,
+  deserialize,
   type SerializedObject,
   type SerializationStrategy,
 } from "../serial/Data";
@@ -77,9 +77,9 @@ const aspectsStrategy: SerializationStrategy<Map<symbol, unknown>> = {
               `has no entry in its typeMap`,
           );
         }
-        out[key.name] = { $type: tag, ...serializeFields(v) };
+        out[key.name] = { $type: tag, ...serialize(v) };
       } else if (key.ctor) {
-        out[key.name] = serializeFields(v);
+        out[key.name] = serialize(v);
       }
     }
     return Object.keys(out).length === 0 ? undefined : out;
@@ -101,7 +101,7 @@ const aspectsStrategy: SerializationStrategy<Map<symbol, unknown>> = {
       } else {
         throw new Error(`Aspect "${name}" has no impl registered`);
       }
-      map.set(key.id, deserializeFields(r, ctor));
+      map.set(key.id, deserialize(r, ctor));
     }
     return map;
   },
