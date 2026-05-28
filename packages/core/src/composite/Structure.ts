@@ -11,8 +11,8 @@ export function Structure<const Types extends readonly object[]>(
   };
 }
 
-interface Holder<T> {
-  children(parent: T): Generator<Iterable<Composite>>;
+export interface Holder<T extends Composite = Composite> {
+  children(parent: T): Iterable<Composite>;
 }
 
-export const Holder = new AspectKey<Holder<any>>("Holder");
+export const Holder = new AspectKey<Holder<Composite>>("Holder");

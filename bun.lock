@@ -7,16 +7,22 @@
       "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@types/bun": "latest",
-        "eslint": "^10.1.0",
-        "prettier": "^3.8.1",
-        "typescript-eslint": "^8.57.2",
+        "eslint": "^10.4.0",
+        "prettier": "^3.8.3",
+        "typescript-eslint": "^8.60.0",
       },
       "peerDependencies": {
-        "typescript": "^5",
+        "typescript": "^5.9.3",
       },
     },
     "packages/core": {
       "name": "@atelier/core",
+    },
+    "packages/playground": {
+      "name": "@atelier/playground",
+      "dependencies": {
+        "@atelier/core": "workspace:*",
+      },
     },
     "packages/server": {
       "name": "@atelier/server",
@@ -27,6 +33,8 @@
   },
   "packages": {
     "@atelier/core": ["@atelier/core@workspace:packages/core"],
+
+    "@atelier/playground": ["@atelier/playground@workspace:packages/playground"],
 
     "@atelier/server": ["@atelier/server@workspace:packages/server"],
 

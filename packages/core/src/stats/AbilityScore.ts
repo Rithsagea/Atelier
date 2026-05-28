@@ -1,4 +1,5 @@
 import { Aspect, AspectKey, Composite } from "../composite/Composite";
+import { Holder } from "../composite/Structure";
 import { enumMap } from "../util/Types";
 
 export const Abilities = [
@@ -25,9 +26,9 @@ export class AbilityScore {
   scores: Record<Ability, number> = enumMap(Abilities, (_) => 0);
 
   refresh(sheet: Composite): void {
-    for (const v of sheet.aspects.values()) {
-      if (v instanceof Composite && v.has(AbilityScoreContributor)) {
-        v.get(AbilityScoreContributor).apply(this);
+    for (const child of sheet.get(Holder).children(sheet)) {
+      if (child.has(AbilityScoreContributor)) {
+        child.get(AbilityScoreContributor).apply(this);
       }
     }
   }

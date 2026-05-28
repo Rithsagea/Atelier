@@ -11,9 +11,10 @@ imports/aliases._
 packages/
 ├── core/        # shared types, primitives, base classes — no Bun APIs, no Svelte
 ├── server/      # Hono server, game engine, SRD content, CLI
-└── client/      # SvelteKit frontend
+├── client/      # SvelteKit frontend (not yet created)
+└── playground/  # scratch pad for manual testing of core primitives
 
-content/         # user-defined homebrew (explicit index.ts entry point)
+content/         # user-defined homebrew (not yet created; explicit index.ts entry point)
 CLAUDE.md        # router + invariants
 ```
 
@@ -24,9 +25,9 @@ CLAUDE.md        # router + invariants
 All imports use package aliases. **Never use relative paths that cross package boundaries.**
 
 ```ts
-import { Aspect } from "@atelier/core/composite/Aspect";
+import { Composite } from "@atelier/core/composite/Composite";
 import { Subscribe } from "@atelier/core/event/Event";
-import { AbilityScoresAspect } from "@atelier/server/aspects/AbilityScores";
+import { SomeServerThing } from "@atelier/server/path/to/module";
 ```
 
 `@atelier/core/*` for core primitives. `@atelier/server/*` for server internals.
@@ -77,14 +78,18 @@ Content files use both — never `../../packages/`.
       "@atelier/server/*": ["./src/*"]
     }
   },
-  "include": ["src", "../../content"]
+  "include": ["src"]
 }
 ```
 
-Note `content` is included here — this gives content files type-checking and alias
-resolution without any extra config on the content author's side.
+When the `content/` directory is added, extend `include` to `["src", "../../content"]` so
+content files get type-checking and alias resolution without extra config.
 
-### `packages/client/tsconfig.json`
+### `packages/client/tsconfig.json` (planned)
+
+`packages/client` will be the SvelteKit frontend. It needs `$lib/*` (SvelteKit's built-in
+alias for `src/lib`) and `@atelier/core/*` for shared types. No `@atelier/server` alias —
+the client never imports server internals directly.
 
 ```json
 {
@@ -98,16 +103,17 @@ resolution without any extra config on the content author's side.
 }
 ```
 
-### `content/tsconfig.json`
+### `content/tsconfig.json` (planned)
+
+`content/` will hold user-defined homebrew — classes, races, spells, items. It extends the
+server tsconfig so content files automatically get both `@atelier/core` and `@atelier/server`
+aliases. Content authors never touch tsconfig.
 
 ```json
 {
   "extends": "../packages/server/tsconfig.json"
 }
 ```
-
-Extends server tsconfig so content files get `@atelier/core` and `@atelier/server`
-aliases automatically. Content authors never touch tsconfig.
 
 ---
 
@@ -127,15 +133,24 @@ aliases automatically. Content authors never touch tsconfig.
 ```json
 {
   "name": "@atelier/core",
-  "module": "src/index.ts"
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": { "./*": "./src/*" }
 }
 ```
+
+The `exports` map is what resolves subpath imports like `@atelier/core/composite/Composite`
+to `./src/composite/Composite.ts`. The `module` field is a bundler convention (Bun, Rollup,
+Vite) for the ESM entry point used when the package is imported without a subpath
+(`import "@atelier/core"`); it does not affect subpath imports.
 
 ### `packages/server/package.json`
 
 ```json
 {
   "name": "@atelier/server",
+  "module": "src/index.ts",
+  "type": "module",
   "dependencies": {
     "@atelier/core": "workspace:*"
   }
