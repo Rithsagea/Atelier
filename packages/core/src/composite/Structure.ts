@@ -1,12 +1,20 @@
 import { AspectKey, AspectRef, Composite } from "./Composite";
 
+type Entry<T extends object> = [AspectRef<T>, () => T] | [AspectRef<T>];
+
 export function Structure<const Types extends readonly object[]>(
-  ...aspects: { [K in keyof Types]: [AspectRef<Types[K]>, () => Types[K]] }
+  ...entries: { [K in keyof Types]: Entry<Types[K]> }
 ) {
+  const expected = entries.map(([ref]) => ref) as AspectRef<object>[];
   return class extends Composite {
     constructor() {
       super();
-      for (const [ref, provider] of aspects) this.provide(ref, provider());
+      for (const entry of entries) {
+        if (entry.length === 2) this.provide(entry[0], entry[1]());
+      }
+    }
+    validate(): boolean {
+      return expected.every((ref) => this.has(ref));
     }
   };
 }

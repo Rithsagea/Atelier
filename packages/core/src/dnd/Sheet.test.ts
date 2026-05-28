@@ -21,6 +21,13 @@ test("sheet provides Holder", () => {
   expect(sheet.has(Holder)).toBe(true);
 });
 
+test("sheet validate reflects BaseAbilityScore presence", () => {
+  const sheet = new Sheet();
+  expect(sheet.validate()).toBe(false);
+  sheet.provide(BaseAbilityScore, new PointBuyScore());
+  expect(sheet.validate()).toBe(true);
+});
+
 test("refresh via Holder applies point buy contributions", () => {
   const sheet = new Sheet();
   sheet.provide(BaseAbilityScore, new PointBuyScore());

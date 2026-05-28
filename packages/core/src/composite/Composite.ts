@@ -54,23 +54,3 @@ export class Composite {
     return this.aspects.has(getAspectKey(ref).id);
   }
 }
-
-// Template
-
-export class Template {
-  constructor(
-    readonly name: string,
-    readonly aspects: AspectRef<object>[],
-  ) {}
-
-  /** Throws listing all missing aspects if the composite doesn't satisfy this template. */
-  validate(composite: Composite): void {
-    const missing = this.aspects.filter((a) => !composite.has(a));
-    if (missing.length > 0) {
-      throw new Error(
-        `Composite is missing aspects for template "${this.name}": ` +
-          missing.map((a) => a.name).join(", "),
-      );
-    }
-  }
-}
