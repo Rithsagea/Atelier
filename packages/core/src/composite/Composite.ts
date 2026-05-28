@@ -1,17 +1,7 @@
 import { Constructor } from "../util/Types";
 import { BiMap } from "../util/Algorithms";
-import {
-  Property,
-  serialize,
-  deserialize,
-  type SerializedObject,
-  type SerializationStrategy,
-} from "../serial/Data";
 
 // Aspects
-
-const aspectKeyByName = new Map<string, AspectKey<unknown>>();
-const aspectKeyById = new Map<symbol, AspectKey<unknown>>();
 
 export class AspectKey<T> {
   declare readonly _type: T;
@@ -21,13 +11,8 @@ export class AspectKey<T> {
   typeMap?: BiMap<string, Constructor<T>>;
 
   constructor(name: string) {
-    if (aspectKeyByName.has(name)) {
-      throw new Error(`AspectKey "${name}" already registered`);
-    }
     this.name = name;
     this.id = Symbol(name);
-    aspectKeyByName.set(name, this as AspectKey<unknown>);
-    aspectKeyById.set(this.id, this as AspectKey<unknown>);
   }
 }
 
@@ -60,57 +45,9 @@ export function getAspectKey<T extends object>(ref: AspectRef<T>) {
   return key as AspectKey<T>;
 }
 
-// Aspect-map strategy: encodes Composite.aspects as { [name]: { $type, ...fields } }
-
-const aspectsStrategy: SerializationStrategy<Map<symbol, unknown>> = {
-  serialize(source) {
-    const out: SerializedObject = {};
-    for (const [symId, value] of source) {
-      const key = aspectKeyById.get(symId);
-      if (!key) continue;
-      const v = value as object;
-      if (key.typeMap) {
-        const tag = key.typeMap.getKey(v.constructor as Constructor);
-        if (!tag) {
-          throw new Error(
-            `Aspect "${key.name}" value of type ${v.constructor.name} ` +
-              `has no entry in its typeMap`,
-          );
-        }
-        out[key.name] = { $type: tag, ...serialize(v) };
-      } else if (key.ctor) {
-        out[key.name] = serialize(v);
-      }
-    }
-    return Object.keys(out).length === 0 ? undefined : out;
-  },
-  deserialize(source, current) {
-    const map = current ?? new Map<symbol, unknown>();
-    for (const [name, raw] of Object.entries(source as SerializedObject)) {
-      const key = aspectKeyByName.get(name);
-      if (!key) throw new Error(`Unknown aspect "${name}"`);
-      const r = raw as SerializedObject;
-      let ctor: Constructor | undefined;
-      if (key.typeMap) {
-        ctor = key.typeMap.get(r.$type as string);
-        if (!ctor) {
-          throw new Error(`Unknown $type "${r.$type}" for aspect "${name}"`);
-        }
-      } else if (key.ctor) {
-        ctor = key.ctor;
-      } else {
-        throw new Error(`Aspect "${name}" has no impl registered`);
-      }
-      map.set(key.id, deserialize(r, ctor));
-    }
-    return map;
-  },
-};
-
 // Composite
 
 export class Composite {
-  @Property.Serialize(aspectsStrategy)
   readonly aspects = new Map<symbol, unknown>();
 
   provide<T extends object>(aspect: AspectRef<T>, value: T): void {
