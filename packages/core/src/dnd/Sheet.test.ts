@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { AbilityScore, ComputedAbilityScore, abilityModifier } from "../stats/AbilityScore";
-import { ComputedSkillScore, SkillScore } from "../stats/Stats";
+import { AbilityScore, abilityModifier } from "../stats/AbilityScore";
+import { SkillScore } from "../stats/Stats";
 import {
   PointBuyAbilityScore,
   StaticAbilityScore,
@@ -33,7 +33,7 @@ test("sheet validate reflects BaseAbilityScore presence", () => {
 test("refresh via Holder applies point buy contributions", () => {
   const sheet = new Sheet();
   sheet.provide(BaseAbilityScore, new PointBuyAbilityScore());
-  const score = new ComputedAbilityScore();
+  const score = new AbilityScore();
   sheet.provide(AbilityScore, score);
   score.refresh(sheet);
   expect(score.scores.strength).toBe(8);
@@ -52,7 +52,7 @@ test("refresh via Holder applies static contributions", () => {
       charisma: 8,
     }),
   );
-  const score = new ComputedAbilityScore();
+  const score = new AbilityScore();
   sheet.provide(AbilityScore, score);
   score.refresh(sheet);
   expect(score.scores.strength).toBe(15);
@@ -79,11 +79,11 @@ test("SkillScore refresh applies ability modifiers to governed skills", () => {
       charisma: 8,
     }),
   );
-  const score = new ComputedAbilityScore();
+  const score = new AbilityScore();
   sheet.provide(AbilityScore, score);
   score.refresh(sheet);
 
-  const skills = new ComputedSkillScore();
+  const skills = new SkillScore();
   sheet.provide(SkillScore, skills);
   skills.refresh(sheet);
 
@@ -190,8 +190,8 @@ test("computed AbilityScore and SkillScore are transient (not serialized)", () =
   expect(sheet.has(SkillScore)).toBe(true);
 
   const aspects = serialize(sheet).aspects as Map<object, unknown>;
-  expect(aspects.has(AbilityScore)).toBe(false);
-  expect(aspects.has(SkillScore)).toBe(false);
+  expect(aspects.has(getAspectKey(AbilityScore))).toBe(false);
+  expect(aspects.has(getAspectKey(SkillScore))).toBe(false);
   expect(aspects.has(Holder)).toBe(false);
 
   // regenerated on load even though they were never serialized
@@ -238,12 +238,12 @@ test("refresh works on deserialized point buy sheet", () => {
   const original = new Sheet();
   original.provide(BaseAbilityScore, new PointBuyAbilityScore());
   (original.get(BaseAbilityScore) as PointBuyAbilityScore).set("strength", 9);
-  const before = new ComputedAbilityScore();
+  const before = new AbilityScore();
   original.provide(AbilityScore, before);
   before.refresh(original);
 
   const restored = deserialize(serialize(original), Sheet);
-  const after = new ComputedAbilityScore();
+  const after = new AbilityScore();
   restored.provide(AbilityScore, after);
   after.refresh(restored);
 

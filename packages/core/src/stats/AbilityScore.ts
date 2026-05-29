@@ -1,5 +1,5 @@
 import { Holder } from "../composite/Aspects";
-import { AspectKey, Composite } from "../composite/Composite";
+import { Aspect, AspectKey, Composite } from "../composite/Composite";
 import { enumMap } from "../util/Types";
 import { AbilitySkills, SkillContributor, type SkillScore } from "./Stats";
 
@@ -26,16 +26,10 @@ export function abilityModifier(score: number): number {
   return Math.floor((score - 10) / 2);
 }
 
-export interface AbilityScore {
-  scores: Record<Ability, number>;
-  refresh(sheet: Composite): void;
-}
-
-export const AbilityScore = new AspectKey<AbilityScore>("AbilityScore");
-
-// Computed projection over the sheet's AbilityScoreContributors. Transient: holds no
-// persisted state, regenerated on load and recomputed via refresh (see CORE.md).
-export class ComputedAbilityScore extends Composite implements AbilityScore {
+// Computed projection over the sheet's AbilityScoreContributors. Transient: it declares no
+// @Property fields, so it is never serialized and is rebuilt on load (see CORE.md).
+@Aspect("AbilityScore")
+export class AbilityScore extends Composite {
   scores: Record<Ability, number> = enumMap(Abilities, (_) => 0);
 
   constructor() {
