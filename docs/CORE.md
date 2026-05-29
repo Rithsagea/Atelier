@@ -27,13 +27,16 @@ mechanism, applied fractally at every level (a scope of entities, a composite of
 
 ## Aspect\<T>
 
-A typed capability slot. The primitive everything builds on.
+A typed capability slot. The primitive everything builds on. The slot itself is an
+`AspectKey<T>`; the companion `@Aspect("Name")` decorator registers a class as a
+(non-polymorphic) aspect under an auto-created key, so the class can be passed directly
+wherever an aspect ref is expected.
 
 ```ts
-const HpAspect = new Aspect<HitPoints>("HitPoints");
+const HpAspect = new AspectKey<HitPoints>("HitPoints");
 ```
 
-An `Aspect` has a name that doubles as the map key and the **stable serialization key**.
+An aspect has a name that doubles as the map key and the **stable serialization key**.
 Names must be unique within a containing `Structure` type — the `Structure` constructor
 detects duplicates at definition time.
 
@@ -75,9 +78,11 @@ const sheet = new Sheet(); // Id and Holder already provided
 Each entry is `[AspectRef, () => T]`. The thunk is called once per constructor invocation,
 so every instance gets its own fresh aspect values — no shared state.
 
-`Structure` imposes no required aspects and performs no validation. It is purely a
-convenience over calling `provide` manually in a subclass constructor. Validation (once
-needed) lives in a separate Template or StructureAspect, not inside `Structure` itself.
+`Structure` imposes no _required_ aspects — it never blocks construction or serialization on
+a missing one. It does expose a `validate()` method returning whether every aspect declared
+in the structure is currently present (the "is this composite complete enough to run?"
+check). Richer, typed validation and "what is this?" identification remain the future
+Template / StructureAspect direction below, not part of `Structure` today.
 
 ---
 
@@ -176,8 +181,10 @@ This is what makes prefabs reusable without ID collisions.
 
 ## Template / StructureAspect
 
-Declares the aspects an entity type is expected to have. Used for validation and "what is
-this?" identification. `Template.validate(composite)` throws listing all missing aspects.
+Declares the aspects an entity type is expected to have, for validation and "what is this?"
+identification. Today the presence check lives on the structure itself — `Structure.validate()`
+returns a boolean for whether every declared aspect is present. A dedicated Template that
+throws listing all missing aspects is future direction.
 
 The long-term direction is a **StructureAspect**: structure becomes an aspect carried by the
 composite (kind = item / trait / monster / prop / sheet, plus the expected aspect set) rather
@@ -213,7 +220,7 @@ Scope.fromPrefab(BandOfCultists)
 
 ## Event System
 
-Local events use `createEvent`, `@Subscribe`, `Emitter` — unchanged from original impl.
+Local events use `createEvent`, `@Subscribe`, and `emit` — unchanged from original impl.
 Network events extend this for the WS boundary:
 
 ```ts
@@ -232,10 +239,16 @@ advanced, chat).
 
 ## Stat Contribution
 
-Computed stats (ability scores, and later AC, saves, skills) are a **pure projection** over
-a set of contributors. Anything that writes to a stat exposes the contributor capability and
-is discovered by capability query over the owning composite's children (via `Holder`); the
-computed stat aspect rebuilds itself by gathering and folding those contributions.
+Computed stats (ability scores and skills today; AC, saves, etc. later) are a **pure
+projection** over a set of contributors. Anything that writes to a stat exposes the
+contributor capability and is discovered by capability query over the owning composite's
+children (via `Holder`); the computed stat aspect rebuilds itself by gathering and folding
+those contributions.
+
+Projections **chain**: a computed stat can itself be a contributor to another. The computed
+`AbilityScore` is a `SkillContributor` that folds each ability's modifier into its governed
+skills. Its `apply` reads `this.scores` at evaluation time, so it sees the already-computed
+ability scores — the thunk-at-evaluation-time contract below is exactly what makes this safe.
 
 Key commitments (these are the content-facing contract — expensive to change because every
 piece of content is written against them):
@@ -287,7 +300,11 @@ individually consistent.
 ### Transient-by-default and the purity law
 
 Aspects are **transient by default**. An aspect persists only the fields it explicitly
-decorates with `@Property`; everything else is rebuilt on load.
+decorates with `@Property`; everything else is rebuilt on load. The rule is purely about
+`@Property` presence, so even a class-backed aspect registered via `@Aspect` (e.g. the
+computed `AbilityScore`/`SkillScore`) is transient when it declares no persisted fields: it
+serializes to nothing and is omitted from the output, and `Structure` rebuilds it to its
+default by re-running its factory for any declared aspect absent from the serialized data.
 
 **The purity law:** _if it serializes, the serializer can reconstruct it; if it is transient,
 it must be a pure function of the persisted aspects._ A transient aspect (e.g. computed
@@ -302,8 +319,8 @@ line) instead of a rewrite. Randomness is already handled this way: rolls are lo
 events whose results are persisted as fixed values, so they enter folds as constants, never as
 re-rolled functions.
 
-Post-deserialization, an init pass fires on each reconstructed object so derived/transient
-fields can be recomputed from the persisted ones.
+Recomputing derived values from the persisted contributors (e.g. `AbilityScore.refresh`) is
+an explicit, on-demand step — there is no automatic post-load recompute pass.
 
 ---
 
