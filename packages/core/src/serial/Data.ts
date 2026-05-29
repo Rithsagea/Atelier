@@ -78,10 +78,14 @@ function ClassStrategy<T extends object>(constructor: Constructor<T>): Serializa
 function MultiStrategy(context: Context): SerializationStrategy {
   return {
     serialize(source) {
-      return { ...serialize(source), $type: context.inverse().get(source.constructor) };
+      const tag = context.inverse().get(source.constructor);
+      if (!tag) throw new Error(`Type ${source.constructor.name} has no entry in its typeMap`);
+      return { $type: tag, ...serialize(source) };
     },
     deserialize(source) {
-      return deserialize(source, context.get(source.$type)!);
+      const ctor = context.get(source.$type);
+      if (!ctor) throw new Error(`Unknown $type "${source.$type}"`);
+      return deserialize(source, ctor);
     },
   };
 }
@@ -110,7 +114,7 @@ function MapStrategy<T>(base: SerializationStrategy<T>): SerializationStrategy<R
 
 // --- Property decorator namespace ---
 
-function getStrategy(
+export function getStrategy(
   context?: Constructor | Context | SerializationStrategy,
 ): SerializationStrategy {
   if (!context) return PrimitiveStrategy();

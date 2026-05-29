@@ -6,8 +6,7 @@ import {
   BaseAbilityScore,
   POINT_BUY_BUDGET,
 } from "../stats/BaseAbilityScore";
-import { Holder } from "../composite/Structure";
-import { Id } from "../composite/Id";
+import { Holder, Id } from "../composite/Aspects";
 import { Aspect, getAspectKey } from "../composite/Composite";
 import { serialize, deserialize } from "../serial/Data";
 import { Sheet } from "./Sheet";
@@ -123,23 +122,21 @@ test("sheet serializes point buy round-trip", () => {
   points.set("dexterity", 5);
 
   const data = serialize(sheet);
-  expect(data).toStrictEqual({
-    aspects: {
-      Id: { value: sheet.get(Id).value },
-      BaseAbilityScore: {
-        $type: "PointBuy",
-        points: {
-          strength: 9,
-          dexterity: 5,
-          constitution: 0,
-          intelligence: 0,
-          wisdom: 0,
-          charisma: 0,
-        },
-      },
+  const aspects = data.aspects as Map<object, unknown>;
+  expect(aspects).toBeInstanceOf(Map);
+  expect(aspects.get(getAspectKey(Id))).toStrictEqual({ value: sheet.get(Id).value });
+  expect(aspects.get(BaseAbilityScore)).toStrictEqual({
+    $type: "PointBuy",
+    points: {
+      strength: 9,
+      dexterity: 5,
+      constitution: 0,
+      intelligence: 0,
+      wisdom: 0,
+      charisma: 0,
     },
   });
-  expect("Holder" in (data.aspects as object)).toBe(false);
+  expect(aspects.has(Holder)).toBe(false);
 
   const restored = deserialize(data, Sheet);
   expect(restored.validate()).toBe(true);
@@ -164,7 +161,7 @@ test("sheet serializes static score round-trip", () => {
   );
 
   const data = serialize(sheet);
-  expect((data.aspects as { BaseAbilityScore: unknown }).BaseAbilityScore).toStrictEqual({
+  expect((data.aspects as Map<object, unknown>).get(BaseAbilityScore)).toStrictEqual({
     $type: "Static",
     scores: {
       strength: 15,
@@ -201,12 +198,15 @@ test("refresh works on deserialized point buy sheet", () => {
 
 test("deserialize unknown $type throws", () => {
   expect(() =>
-    deserialize({ aspects: { BaseAbilityScore: { $type: "Bogus", points: {} } } }, Sheet),
+    deserialize(
+      { aspects: new Map().set(BaseAbilityScore, { $type: "Bogus", points: {} }) },
+      Sheet,
+    ),
   ).toThrow(/Bogus/);
 });
 
 test("deserialize without BaseAbilityScore leaves sheet invalid", () => {
-  const sheet = deserialize({ aspects: { Id: { value: "abc" } } }, Sheet);
+  const sheet = deserialize({ aspects: new Map().set(getAspectKey(Id), { value: "abc" }) }, Sheet);
   expect(sheet.validate()).toBe(false);
   expect(sheet.get(Id).value).toBe("abc");
 });

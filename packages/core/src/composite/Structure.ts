@@ -1,110 +1,72 @@
 import { AspectKey, AspectRef, Composite, getAspectKey } from "./Composite";
-import {
-  Property,
-  serialize,
-  deserialize,
-  type SerializedObject,
-  type SerializationStrategy,
-} from "../serial/Data";
-import { type Constructor } from "../util/Types";
+import { Property, getStrategy, type SerializationStrategy } from "../serial/Data";
 
 type Entry<T extends object> = [AspectRef<T>, () => T] | [AspectRef<T>];
 
 export function Structure<const Types extends readonly object[]>(
   ...entries: { [K in keyof Types]: Entry<Types[K]> }
 ) {
-  const refsByName = new Map<string, AspectRef<object>>();
-  for (const entry of entries) {
-    const ref = entry[0];
-    const name = getAspectKey(ref).name;
-    if (refsByName.has(name)) {
+  const aspectNames = new Map<string, AspectRef<object>>();
+  for (const [aspect] of entries) {
+    const name = getAspectKey(aspect).name;
+    if (aspectNames.has(name)) {
       throw new Error(`Structure has duplicate aspect name "${name}"`);
     }
-    refsByName.set(name, ref);
+    aspectNames.set(name, aspect);
   }
 
   const Klass = class extends Composite {
     constructor() {
       super();
-      for (const entry of entries) {
-        if (entry.length === 2) this.provide(entry[0], entry[1]());
+      for (const [aspect, factory] of entries) {
+        if (factory) this.provide(aspect, factory());
       }
     }
     validate(): boolean {
-      for (const ref of refsByName.values()) {
+      for (const ref of aspectNames.values()) {
         if (!this.has(ref)) return false;
       }
       return true;
     }
   };
 
-  Property.Serialize(makeAspectsStrategy(entries as readonly Entry<object>[], refsByName))(
-    Klass.prototype,
-    "aspects",
-  );
+  Property.Serialize(AspectStrategy(entries, aspectNames))(Klass.prototype, "aspects");
   return Klass;
 }
 
-function makeAspectsStrategy(
+function AspectStrategy(
   entries: readonly Entry<object>[],
   refsByName: Map<string, AspectRef<object>>,
-): SerializationStrategy<Map<symbol, unknown>> {
+): SerializationStrategy<Map<AspectKey<object>, unknown>> {
+  const strategyFor = (key: AspectKey<object>) => {
+    const ctx = key.typeMap ?? key.ctor;
+    return ctx ? getStrategy(ctx) : undefined;
+  };
   return {
     serialize(source) {
-      const out: SerializedObject = {};
+      const out = new Map<AspectKey<object>, unknown>();
       for (const ref of refsByName.values()) {
         const key = getAspectKey(ref);
-        if (!source.has(key.id)) continue;
-        const v = source.get(key.id) as object;
-        if (key.typeMap) {
-          const tag = key.typeMap.getKey(v.constructor as Constructor);
-          if (!tag) {
-            throw new Error(
-              `Aspect "${key.name}" value of type ${v.constructor.name} ` +
-                `has no entry in its typeMap`,
-            );
-          }
-          out[key.name] = { $type: tag, ...serialize(v) };
-        } else if (key.ctor) {
-          out[key.name] = serialize(v);
-        }
+        if (!source.has(key)) continue;
+        const strategy = strategyFor(key);
+        if (strategy) out.set(key, strategy.serialize(source.get(key)));
       }
-      return Object.keys(out).length === 0 ? undefined : out;
+      return out.size === 0 ? undefined : out;
     },
     deserialize(source) {
-      const map = new Map<symbol, unknown>();
-      for (const entry of entries) {
-        if (entry.length !== 2) continue;
-        const key = getAspectKey(entry[0]);
-        if (!key.ctor && !key.typeMap) {
-          map.set(key.id, entry[1]());
+      const map = new Map<AspectKey<object>, unknown>();
+      for (const [aspect, factory] of entries) {
+        if (factory && !strategyFor(getAspectKey(aspect))) {
+          map.set(getAspectKey(aspect), factory());
         }
       }
-      for (const [name, raw] of Object.entries(source as SerializedObject)) {
-        const ref = refsByName.get(name);
-        if (!ref) throw new Error(`Unknown aspect "${name}"`);
-        const key = getAspectKey(ref);
-        const r = raw as SerializedObject;
-        let ctor: Constructor | undefined;
-        if (key.typeMap) {
-          ctor = key.typeMap.get(r.$type as string);
-          if (!ctor) {
-            throw new Error(`Unknown $type "${r.$type}" for aspect "${name}"`);
-          }
-        } else if (key.ctor) {
-          ctor = key.ctor;
-        } else {
-          throw new Error(`Aspect "${name}" has no impl registered`);
-        }
-        map.set(key.id, deserialize(r, ctor));
+      for (const [key, raw] of source as Map<AspectKey<object>, unknown>) {
+        if (!refsByName.has(key.name)) throw new Error(`Unknown aspect "${key.name}"`);
+        const strategy = strategyFor(key);
+        if (!strategy) throw new Error(`Aspect "${key.name}" has no impl registered`);
+        map.set(key, strategy.deserialize(raw));
       }
       return map;
     },
   };
 }
-
-export interface Holder<T extends Composite = Composite> {
-  children(parent: T): Iterable<Composite>;
-}
-
-export const Holder = new AspectKey<Holder<Composite>>("Holder");

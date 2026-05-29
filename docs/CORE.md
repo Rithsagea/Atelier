@@ -33,9 +33,9 @@ A typed capability slot. The primitive everything builds on.
 const HpAspect = new Aspect<HitPoints>("HitPoints");
 ```
 
-An `Aspect` has a stable symbol id and a name for error messages. The name additionally
-serves as the **stable serialization key** — aspect names must be globally unique, with
-conflicts detected once at initialization.
+An `Aspect` has a name that doubles as the map key and the **stable serialization key**.
+Names must be unique within a containing `Structure` type — the `Structure` constructor
+detects duplicates at definition time.
 
 ---
 

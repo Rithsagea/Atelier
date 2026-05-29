@@ -1,6 +1,5 @@
-import { Structure, Holder } from "../composite/Structure";
-import { Id } from "../composite/Id";
-import { AspectHolder } from "../composite/AspectHolder";
+import { AspectHolder, Holder, Id } from "../composite/Aspects";
+import { Structure } from "../composite/Structure";
 import { BaseAbilityScore } from "../stats/BaseAbilityScore";
 
 export const Sheet = Structure(
