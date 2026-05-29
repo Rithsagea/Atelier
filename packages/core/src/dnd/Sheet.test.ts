@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test";
-import { AbilityScore } from "../stats/AbilityScore";
+import { AbilityScore, abilityModifier } from "../stats/AbilityScore";
+import { SkillScore } from "../stats/Stats";
 import {
   PointBuyAbilityScore,
   StaticAbilityScore,
@@ -56,6 +57,41 @@ test("refresh via Holder applies static contributions", () => {
   score.refresh(sheet);
   expect(score.scores.strength).toBe(15);
   expect(score.scores.charisma).toBe(8);
+});
+
+test("abilityModifier computes 5e modifier", () => {
+  expect(abilityModifier(8)).toBe(-1);
+  expect(abilityModifier(10)).toBe(0);
+  expect(abilityModifier(14)).toBe(2);
+  expect(abilityModifier(15)).toBe(2);
+});
+
+test("SkillScore refresh applies ability modifiers to governed skills", () => {
+  const sheet = new Sheet();
+  sheet.provide(
+    BaseAbilityScore,
+    new StaticAbilityScore({
+      strength: 15,
+      dexterity: 14,
+      constitution: 13,
+      intelligence: 12,
+      wisdom: 10,
+      charisma: 8,
+    }),
+  );
+  const score = new AbilityScore();
+  sheet.provide(AbilityScore, score);
+  score.refresh(sheet);
+
+  const skills = new SkillScore();
+  sheet.provide(SkillScore, skills);
+  skills.refresh(sheet);
+
+  expect(skills.scores.athletics).toBe(2); // STR 15 -> +2
+  expect(skills.scores.acrobatics).toBe(2); // DEX 14 -> +2
+  expect(skills.scores.stealth).toBe(2); // DEX 14 -> +2
+  expect(skills.scores.deception).toBe(-1); // CHA 8 -> -1
+  expect(skills.scores.insight).toBe(0); // WIS 10 -> +0
 });
 
 test("default base scores cost zero points", () => {

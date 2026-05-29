@@ -1,6 +1,7 @@
 import { Holder } from "../composite/Aspects";
 import { Aspect, AspectKey, Composite } from "../composite/Composite";
 import { enumMap } from "../util/Types";
+import { AbilitySkills, SkillContributor, type SkillScore } from "./Stats";
 
 export const Abilities = [
   "strength",
@@ -21,9 +22,26 @@ export const AbilityLabels: Record<Ability, string> = {
   charisma: "Charisma",
 };
 
+export function abilityModifier(score: number): number {
+  return Math.floor((score - 10) / 2);
+}
+
 @Aspect("AbilityScore")
-export class AbilityScore {
+export class AbilityScore extends Composite {
   scores: Record<Ability, number> = enumMap(Abilities, (_) => 0);
+
+  constructor() {
+    super();
+    this.provide(SkillContributor, {
+      source: this,
+      apply: (skill: SkillScore) => {
+        for (const ability of Abilities) {
+          const mod = abilityModifier(this.scores[ability]);
+          for (const s of AbilitySkills[ability]) skill.scores[s] += mod;
+        }
+      },
+    });
+  }
 
   refresh(sheet: Composite): void {
     for (const child of sheet.get(Holder).children(sheet)) {
