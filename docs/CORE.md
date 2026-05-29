@@ -81,8 +81,7 @@ so every instance gets its own fresh aspect values — no shared state.
 `Structure` imposes no _required_ aspects — it never blocks construction or serialization on
 a missing one. It does expose a `validate()` method returning whether every aspect declared
 in the structure is currently present (the "is this composite complete enough to run?"
-check). Richer, typed validation and "what is this?" identification remain the future
-Template / StructureAspect direction below, not part of `Structure` today.
+check).
 
 ---
 
@@ -176,25 +175,6 @@ class Links {
 At prefab definition time, IDs are local strings (`'leader'`, `'follower_1'`).
 At stamp time, a resolution pass rewrites all `CompositeRef.id` fields from local → absolute UUIDs.
 This is what makes prefabs reusable without ID collisions.
-
----
-
-## Template / StructureAspect
-
-Declares the aspects an entity type is expected to have, for validation and "what is this?"
-identification. Today the presence check lives on the structure itself — `Structure.validate()`
-returns a boolean for whether every declared aspect is present. A dedicated Template that
-throws listing all missing aspects is future direction.
-
-The long-term direction is a **StructureAspect**: structure becomes an aspect carried by the
-composite (kind = item / trait / monster / prop / sheet, plus the expected aspect set) rather
-than an external object the composite is checked against. Where the StructureAspect is
-expected to be present it is _assumed_ present — its absence is a type error, consistent with
-the "missing aspect = content bug = throw" stance.
-
-StructureAspect is **derived, not declared twice**: the serializer generates the necessary
-structural information from the `@Property` declarations rather than the author maintaining a
-separate schema. (Not built yet — merged into `Structure` when complexity demands it.)
 
 ---
 
