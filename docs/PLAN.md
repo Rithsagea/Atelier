@@ -134,8 +134,8 @@ explain.)
   composite-substrate model (everything is a composite, capabilities are aspects, discovery is
   by capability query at every level) is an ECS-style pattern, adopted because the _uniformity_
   it buys — one substrate, one discovery primitive, one extension mechanism — is worth the cost
-  of giving up some static-type legibility (recovered where needed via StructureAspect and
-  content-author view wrappers). This note is kept rather than deleted so the reversal is on the
+  of giving up some static-type legibility (recovered where needed via content-author view
+  wrappers). This note is kept rather than deleted so the reversal is on the
   record; the original concern about serialization is addressed by the transient-by-default
   purity law in `CORE.md` (transient state is a pure function of persisted state).
 

@@ -1,3 +1,6 @@
+import { Holder } from "../composite/Aspects";
+import { Aspect, AspectKey, Composite } from "../composite/Composite";
+import { enumMap } from "../util/Types";
 import { type Ability } from "./AbilityScore";
 
 export const Skills = [
@@ -51,3 +54,25 @@ export const AbilitySkills: Record<Ability, Skill[]> = {
   wisdom: ["animal_handling", "insight", "medicine", "perception", "survival"],
   charisma: ["deception", "intimidation", "performance", "persuasion"],
 };
+
+// Computed projection over the sheet's SkillContributors. Transient: it declares no
+// @Property fields, so it is never serialized and is rebuilt on load (see CORE.md).
+@Aspect("SkillScore")
+export class SkillScore extends Composite {
+  scores: Record<Skill, number> = enumMap(Skills, (_) => 0);
+
+  refresh(sheet: Composite): void {
+    for (const child of sheet.get(Holder).children(sheet)) {
+      if (child.has(SkillContributor)) {
+        child.get(SkillContributor).apply(this);
+      }
+    }
+  }
+}
+
+export interface SkillContributor {
+  readonly source: Composite;
+  apply(skill: SkillScore): void;
+}
+
+export const SkillContributor = new AspectKey<SkillContributor>("SkillContributor");
