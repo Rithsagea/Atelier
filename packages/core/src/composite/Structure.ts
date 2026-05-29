@@ -1,5 +1,6 @@
 import { AspectKey, AspectRef, Composite, getAspectKey } from "./Composite";
 import { Property, getStrategy, type SerializationStrategy } from "../serial/Data";
+import { isEmpty } from "../util/Util";
 
 type Entry<T extends object> = [AspectRef<T>, () => T] | [AspectRef<T>];
 
@@ -32,17 +33,6 @@ export function Structure<const Types extends readonly object[]>(
 
   Property.Serialize(AspectStrategy(entries, aspectNames))(Klass.prototype, "aspects");
   return Klass;
-}
-
-// A serialized aspect carries no persisted state when it is absent or an empty plain object.
-function isEmpty(value: unknown): boolean {
-  return (
-    value === undefined ||
-    (typeof value === "object" &&
-      value !== null &&
-      value.constructor === Object &&
-      Object.keys(value).length === 0)
-  );
 }
 
 function AspectStrategy(
