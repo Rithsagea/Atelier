@@ -4,10 +4,9 @@ import { AbilityScore } from "@atelier/core/stats/AbilityScore";
 import { BaseAbilityScore, PointBuyAbilityScore } from "@atelier/core/stats/BaseAbilityScore";
 
 const sheet = new Sheet();
-const score = new AbilityScore();
 sheet.provide(BaseAbilityScore, new PointBuyAbilityScore());
-sheet.provide(AbilityScore, score);
 
+const score = sheet.get(AbilityScore);
 score.refresh(sheet);
 
 console.log(sheet.get(Id).value);

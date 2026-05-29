@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { AbilityScore, abilityModifier } from "../stats/AbilityScore";
-import { SkillScore } from "../stats/Stats";
+import { AbilityScore, ComputedAbilityScore, abilityModifier } from "../stats/AbilityScore";
+import { ComputedSkillScore, SkillScore } from "../stats/Stats";
 import {
   PointBuyAbilityScore,
   StaticAbilityScore,
@@ -33,7 +33,7 @@ test("sheet validate reflects BaseAbilityScore presence", () => {
 test("refresh via Holder applies point buy contributions", () => {
   const sheet = new Sheet();
   sheet.provide(BaseAbilityScore, new PointBuyAbilityScore());
-  const score = new AbilityScore();
+  const score = new ComputedAbilityScore();
   sheet.provide(AbilityScore, score);
   score.refresh(sheet);
   expect(score.scores.strength).toBe(8);
@@ -52,7 +52,7 @@ test("refresh via Holder applies static contributions", () => {
       charisma: 8,
     }),
   );
-  const score = new AbilityScore();
+  const score = new ComputedAbilityScore();
   sheet.provide(AbilityScore, score);
   score.refresh(sheet);
   expect(score.scores.strength).toBe(15);
@@ -79,11 +79,11 @@ test("SkillScore refresh applies ability modifiers to governed skills", () => {
       charisma: 8,
     }),
   );
-  const score = new AbilityScore();
+  const score = new ComputedAbilityScore();
   sheet.provide(AbilityScore, score);
   score.refresh(sheet);
 
-  const skills = new SkillScore();
+  const skills = new ComputedSkillScore();
   sheet.provide(SkillScore, skills);
   skills.refresh(sheet);
 
@@ -182,6 +182,24 @@ test("sheet serializes point buy round-trip", () => {
   expect(restoredPoints.points.dexterity).toBe(5);
 });
 
+test("computed AbilityScore and SkillScore are transient (not serialized)", () => {
+  const sheet = new Sheet();
+  sheet.provide(BaseAbilityScore, new PointBuyAbilityScore());
+  // both are auto-provided by the Sheet structure
+  expect(sheet.has(AbilityScore)).toBe(true);
+  expect(sheet.has(SkillScore)).toBe(true);
+
+  const aspects = serialize(sheet).aspects as Map<object, unknown>;
+  expect(aspects.has(AbilityScore)).toBe(false);
+  expect(aspects.has(SkillScore)).toBe(false);
+  expect(aspects.has(Holder)).toBe(false);
+
+  // regenerated on load even though they were never serialized
+  const restored = deserialize(serialize(sheet), Sheet);
+  expect(restored.has(AbilityScore)).toBe(true);
+  expect(restored.has(SkillScore)).toBe(true);
+});
+
 test("sheet serializes static score round-trip", () => {
   const sheet = new Sheet();
   sheet.provide(
@@ -220,12 +238,12 @@ test("refresh works on deserialized point buy sheet", () => {
   const original = new Sheet();
   original.provide(BaseAbilityScore, new PointBuyAbilityScore());
   (original.get(BaseAbilityScore) as PointBuyAbilityScore).set("strength", 9);
-  const before = new AbilityScore();
+  const before = new ComputedAbilityScore();
   original.provide(AbilityScore, before);
   before.refresh(original);
 
   const restored = deserialize(serialize(original), Sheet);
-  const after = new AbilityScore();
+  const after = new ComputedAbilityScore();
   restored.provide(AbilityScore, after);
   after.refresh(restored);
 
