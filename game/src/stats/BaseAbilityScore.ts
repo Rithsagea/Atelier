@@ -9,7 +9,6 @@ export abstract class AbstractBaseAbilityScore extends Composite {
   constructor() {
     super();
     this.provide(AbilityScoreContributor, {
-      source: this,
       apply: (score: AbilityScore) => {
         for (const ability of Abilities) {
           score.scores[ability] += this.scores[ability];

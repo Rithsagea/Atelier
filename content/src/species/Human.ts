@@ -15,7 +15,6 @@ export class Human extends Composite {
     super();
     this.skill = skill;
     this.provide(SkillContributor, {
-      source: this,
       apply: (skills: SkillScore, owner: Composite) => {
         skills.scores[this.skill] += owner.get(Level).proficiencyBonus;
       },

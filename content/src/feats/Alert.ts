@@ -9,7 +9,6 @@ export class Alert extends Composite {
   constructor() {
     super();
     this.provide(InitiativeContributor, {
-      source: this,
       apply: (initiative: Initiative, owner: Composite) => {
         initiative.value += owner.get(Level).proficiencyBonus;
       },

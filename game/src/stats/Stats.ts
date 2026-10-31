@@ -1,5 +1,5 @@
-import { Holder } from "@atelier/core/composite/Aspects";
-import { Aspect, AspectKey, Composite } from "@atelier/core/composite/Composite";
+import { Aspect, Composite } from "@atelier/core/composite/Composite";
+import { contribute, ContributorKey } from "@atelier/core/composite/Contributor";
 import { enumMap } from "@atelier/core/util/Types";
 import { type Ability } from "./AbilityScore";
 
@@ -62,17 +62,8 @@ export class SkillScore extends Composite {
   scores: Record<Skill, number> = enumMap(Skills, (_) => 0);
 
   refresh(sheet: Composite): void {
-    for (const child of sheet.get(Holder).children(sheet)) {
-      if (child.has(SkillContributor)) {
-        child.get(SkillContributor).apply(this, sheet);
-      }
-    }
+    contribute(SkillContributor, sheet, this);
   }
 }
 
-export interface SkillContributor {
-  readonly source: Composite;
-  apply(skill: SkillScore, owner: Composite): void;
-}
-
-export const SkillContributor = new AspectKey<SkillContributor>("SkillContributor");
+export const SkillContributor = ContributorKey<SkillScore>("SkillContributor");
