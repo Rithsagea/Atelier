@@ -1,5 +1,10 @@
 import { AspectKey, AspectRef, Composite, getAspectKey } from "./Composite";
-import { Property, getStrategy, type SerializationStrategy } from "../serial/Data";
+import {
+  Property,
+  getStrategy,
+  type SerializationStrategy,
+  type SerializedObject,
+} from "../serial/Data";
 import { isEmpty } from "../util/Util";
 
 type Entry<T extends object> = [AspectRef<T>, () => T] | [AspectRef<T>];
@@ -45,8 +50,8 @@ function AspectStrategy(
   };
   return {
     serialize(source) {
-      const out = new Map<AspectKey<object>, unknown>();
-      for (const ref of refsByName.values()) {
+      const out: SerializedObject = {};
+      for (const [name, ref] of refsByName) {
         const key = getAspectKey(ref);
         if (!source.has(key)) continue;
         const strategy = strategyFor(key);
@@ -54,22 +59,24 @@ function AspectStrategy(
         // An aspect with no @Property fields serializes to an empty object: it persists
         // nothing and is transient. Omit it; its factory rebuilds it on load.
         const value = strategy.serialize(source.get(key));
-        if (!isEmpty(value)) out.set(key, value);
+        if (!isEmpty(value)) out[name] = value;
       }
-      return out.size === 0 ? undefined : out;
+      return isEmpty(out) ? undefined : out;
     },
     deserialize(source) {
-      const data = source as Map<AspectKey<object>, unknown>;
+      const data = source as SerializedObject;
       const map = new Map<AspectKey<object>, unknown>();
       // Rebuild every factoried aspect that was not persisted (transients, defaults).
       for (const [aspect, factory] of entries) {
         const key = getAspectKey(aspect);
-        if (factory && !data.has(key)) map.set(key, factory());
+        if (factory && !(key.name in data)) map.set(key, factory());
       }
-      for (const [key, raw] of data) {
-        if (!refsByName.has(key.name)) throw new Error(`Unknown aspect "${key.name}"`);
+      for (const [name, raw] of Object.entries(data)) {
+        const ref = refsByName.get(name);
+        if (!ref) throw new Error(`Unknown aspect "${name}"`);
+        const key = getAspectKey(ref);
         const strategy = strategyFor(key);
-        if (!strategy) throw new Error(`Aspect "${key.name}" has no impl registered`);
+        if (!strategy) throw new Error(`Aspect "${name}" has no impl registered`);
         map.set(key, strategy.deserialize(raw));
       }
       return map;

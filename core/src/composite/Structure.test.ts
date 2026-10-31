@@ -52,8 +52,7 @@ test("aspects with no @Property fields are transient and rebuilt from their fact
   const source = new Creature();
   source.provide(Health, new Health());
 
-  const data = serialize(source).aspects as Map<AspectKey<object>, unknown>;
-  assert.equal(data.has(Holder), false);
+  assert.equal("Holder" in (serialize(source).aspects as object), false);
 
   assert.ok(roundTrip(source).get(Holder) instanceof AspectHolder);
 });
@@ -66,6 +65,24 @@ test("a polymorphic aspect restores its concrete implementation", () => {
     assert.deepEqual(roundTrip(source).get(Weapon), weapon);
     assert.equal(roundTrip(source).get(Weapon).constructor, weapon.constructor);
   }
+});
+
+test("serialized form is plain JSON keyed by aspect name", () => {
+  const source = new Creature();
+  source.get(Id).value = "a";
+  source.provide(Health, Object.assign(new Health(), { value: 3 }));
+  source.provide(Weapon, new Bow());
+
+  const json = JSON.parse(JSON.stringify(serialize(source)));
+
+  assert.deepEqual(json, {
+    aspects: {
+      Id: { value: "a" },
+      Health: { value: 3 },
+      Weapon: { $type: "Bow", damage: 6, range: 80 },
+    },
+  });
+  assert.deepEqual(deserialize(json, Creature), source);
 });
 
 test("validate reports missing aspects that have no factory", () => {
