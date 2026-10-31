@@ -1,7 +1,7 @@
 # Atelier
 
 A self-hosted D&D 5e engine. Node + `node:sqlite`, TypeScript strict mode, npm-workspaces
-monorepo (`core`, `game`, `server`, `playground`; `server` is not created yet). The current target is a headless, single-user MVP
+monorepo (`core`, `game`, `content`, `server`, `playground`; `server` is not created yet). The current target is a headless, single-user MVP
 driven by an in-process client; a WebSocket layer and a SvelteKit frontend come later. Designed
 for personal use — there is only one user, but ergonomics and clean abstractions are not to be
 compromised on that account.
@@ -81,11 +81,18 @@ permanently rather than in any one subsystem file.
 
 - **No `index.ts` files.** No barrel files and no `exports: ./src/index.ts`. Packages expose
   their modules through a subpath `exports` map (`"./*": "./src/*.ts"`), and callers import the
-  module they use (`@atelier/core/composite/Composite`).
+  module they use (`@atelier/core/composite/Composite`). The one exception is `content`, where
+  an `index.ts` per category lists the content it registers (`content/src/feats/index.ts`);
+  importing it is what registers that content.
 
 - **`core` is generic; D&D lives under `game`.** Anything specific to D&D (abilities, skills,
   `Sheet`, rules) goes in the `game` package (`game/src`). The rest of `core`
   (composites, aspects, structure, serialization, events, util) must make sense without D&D.
+
+- **Concrete content lives in `content`.** SRD and user-authored content (species, feats,
+  classes, monsters, items) is written in `content` and registered into lists that `game`
+  defines (`Feat`, `Species`, ...). `game` holds the keys, rules, and engine; it never imports
+  `content`.
 
 - **No `eslint-disable` / `eslint-enable` comments.** When a rule fires, fix the code (better
   types, a cast, a restructure). If a rule is wrong for the project, change `eslint.config.js`,

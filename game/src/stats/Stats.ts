@@ -64,7 +64,7 @@ export class SkillScore extends Composite {
   refresh(sheet: Composite): void {
     for (const child of sheet.get(Holder).children(sheet)) {
       if (child.has(SkillContributor)) {
-        child.get(SkillContributor).apply(this);
+        child.get(SkillContributor).apply(this, sheet);
       }
     }
   }
@@ -72,7 +72,7 @@ export class SkillScore extends Composite {
 
 export interface SkillContributor {
   readonly source: Composite;
-  apply(skill: SkillScore): void;
+  apply(skill: SkillScore, owner: Composite): void;
 }
 
 export const SkillContributor = new AspectKey<SkillContributor>("SkillContributor");

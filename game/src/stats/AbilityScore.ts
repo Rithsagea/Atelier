@@ -1,6 +1,7 @@
 import { Holder } from "@atelier/core/composite/Aspects";
 import { Aspect, AspectKey, Composite } from "@atelier/core/composite/Composite";
 import { enumMap } from "@atelier/core/util/Types";
+import { InitiativeContributor, type Initiative } from "./Initiative";
 import { AbilitySkills, SkillContributor, type SkillScore } from "./Stats";
 
 export const Abilities = [
@@ -43,12 +44,18 @@ export class AbilityScore extends Composite {
         }
       },
     });
+    this.provide(InitiativeContributor, {
+      source: this,
+      apply: (initiative: Initiative) => {
+        initiative.value += abilityModifier(this.scores.dexterity);
+      },
+    });
   }
 
   refresh(sheet: Composite): void {
     for (const child of sheet.get(Holder).children(sheet)) {
       if (child.has(AbilityScoreContributor)) {
-        child.get(AbilityScoreContributor).apply(this);
+        child.get(AbilityScoreContributor).apply(this, sheet);
       }
     }
   }
@@ -56,7 +63,7 @@ export class AbilityScore extends Composite {
 
 export interface AbilityScoreContributor {
   readonly source: Composite;
-  apply(abilityScore: AbilityScore): void;
+  apply(abilityScore: AbilityScore, owner: Composite): void;
 }
 
 export const AbilityScoreContributor = new AspectKey<AbilityScoreContributor>(

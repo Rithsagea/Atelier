@@ -1,0 +1,13 @@
+{
+  "name": "@atelier/content",
+  "description": "D&D 5e content (feats, ...) registered into the game package's lists",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@atelier/core": "*",
+    "@atelier/game": "*"
+  }
+}

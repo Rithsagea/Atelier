@@ -20,3 +20,9 @@ export class Id {
   @Property.Primitive
   value: string = crypto.randomUUID();
 }
+
+@Aspect("Name")
+export class Name {
+  @Property.Primitive
+  value: string = "";
+}

@@ -50,18 +50,21 @@ client).
 
 ## Architecture
 
-Four workspaces, all Node, run through `tsx` (see open decision 1). `server` does not exist yet;
+Five workspaces, all Node, run through `tsx` (see open decision 1). `server` does not exist yet;
 it is created when persistence (M3) needs a home.
 
-| Package      | Role                                                                                  |
-| ------------ | ------------------------------------------------------------------------------------- |
-| `core`       | Generic plumbing, no D&D: composites, aspects, structure, serialization, events, util |
-| `game`       | Everything D&D-specific: abilities, skills, `Sheet`, content, and the rules over them |
-| `server`     | Persistence (`node:sqlite`), the live game registry, and the client; the authority    |
-| `playground` | Dummy-driver harness: bot policies that call the client; runs the scenario            |
+| Package      | Role                                                                                    |
+| ------------ | --------------------------------------------------------------------------------------- |
+| `core`       | Generic plumbing, no D&D: composites, aspects, structure, serialization, events, util   |
+| `game`       | D&D-specific engine: abilities, skills, `Sheet`, the rules, and the lists content fills |
+| `content`    | Concrete SRD and user content (species, feats, ...), registered into `game`'s lists     |
+| `server`     | Persistence (`node:sqlite`), the live game registry, and the client; the authority      |
+| `playground` | Dummy-driver harness: bot policies that call the client; runs the scenario              |
 
-`core` and `game` stay free of Node APIs so a future client can import them (DRY across the
-network boundary). `game` depends on `core`; `server` depends on both. The client's request and
+`core`, `game`, and `content` stay free of Node APIs so a future client can import them (DRY
+across the network boundary). `game` depends on `core`; `content` depends on both; `server`
+depends on all three and imports each `content` index at startup, since content registers by
+being imported. The client's request and
 result types live in `core` (generic) or `game` (D&D-specific), never in `server`, so the future
 WebSocket wrapper and any remote caller share them.
 
@@ -371,7 +374,7 @@ strategies. _Done:_ round-trip serialization tests pass under the chosen test ru
 contributions with thunks, computed `AbilityScore`/`SkillScore`. _Done:_ a `Sheet` structure
 builds, serializes, deserializes, and recomputes derived stats identically.
 
-**M2 — Rules in `server`.** Fighter, Human, Goblin, items, the combat actions, seeded dice.
+**M2 — Rules in `game`, content in `content`.** Fighter, Human, Goblin, items, the combat actions, seeded dice.
 Run a full encounter as a pure function call — no client, no database. _Done:_ a scripted
 Fighter vs Goblin fight resolves deterministically, the reference character from _Minimum
 player character_ builds with the SRD's level 1 numbers, and both player interactions pass

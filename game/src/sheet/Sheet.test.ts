@@ -8,10 +8,16 @@ import {
   BaseAbilityScore,
   POINT_BUY_BUDGET,
 } from "../stats/BaseAbilityScore";
-import { Holder, Id } from "@atelier/core/composite/Aspects";
-import { getAspectKey } from "@atelier/core/composite/Composite";
+import { Holder, Id, Name } from "@atelier/core/composite/Aspects";
+import { Level, proficiencyBonus } from "../stats/Level";
+import { Aspect, Composite, getAspectKey } from "@atelier/core/composite/Composite";
 import { serialize, deserialize } from "@atelier/core/serial/Data";
+import { Species } from "../species/Species";
 import { Sheet } from "./Sheet";
+
+// Stands in for content, which `game` cannot depend on.
+@Aspect("TestSpecies", Species)
+class TestSpecies extends Composite {}
 
 const STANDARD_ARRAY = {
   strength: 15,
@@ -39,6 +45,8 @@ test("sheet validate reflects BaseAbilityScore presence", () => {
   const sheet = new Sheet();
   assert.equal(sheet.validate(), false);
   sheet.provide(BaseAbilityScore, new PointBuyAbilityScore());
+  assert.equal(sheet.validate(), false);
+  sheet.provide(Species, new TestSpecies());
   assert.equal(sheet.validate(), true);
 });
 
@@ -114,6 +122,7 @@ test("sheet serializes point buy round-trip through JSON", () => {
   const sheet = new Sheet();
   const points = new PointBuyAbilityScore();
   sheet.provide(BaseAbilityScore, points);
+  sheet.provide(Species, new TestSpecies());
   points.set("strength", 9);
   points.set("dexterity", 5);
 
@@ -121,6 +130,10 @@ test("sheet serializes point buy round-trip through JSON", () => {
   assert.deepEqual(data, {
     aspects: {
       Id: { value: sheet.get(Id).value },
+      Name: { value: "" },
+      Level: { value: 1 },
+      Feats: { list: [] },
+      Species: { $type: "TestSpecies" },
       BaseAbilityScore: {
         $type: "PointBuy",
         points: {
@@ -144,6 +157,7 @@ test("sheet serializes point buy round-trip through JSON", () => {
 test("sheet serializes static score round-trip through JSON", () => {
   const sheet = new Sheet();
   sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
+  sheet.provide(Species, new TestSpecies());
 
   const data = JSON.parse(JSON.stringify(serialize(sheet)));
   assert.deepEqual(data.aspects.BaseAbilityScore, { $type: "Static", scores: STANDARD_ARRAY });
@@ -189,4 +203,20 @@ test("deserialize without BaseAbilityScore leaves sheet invalid", () => {
   const sheet = deserialize({ aspects: { Id: { value: "abc" } } }, Sheet);
   assert.equal(sheet.validate(), false);
   assert.equal(sheet.get(Id).value, "abc");
+});
+
+test("proficiency bonus steps up every four levels", () => {
+  assert.deepEqual([1, 4, 5, 8, 9, 13, 17, 20].map(proficiencyBonus), [2, 2, 3, 3, 4, 5, 6, 6]);
+});
+
+test("Name and Level persist through a round trip", () => {
+  const sheet = new Sheet();
+  sheet.get(Name).value = "Aldric";
+  sheet.get(Level).value = 5;
+  sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
+
+  const restored = deserialize(JSON.parse(JSON.stringify(serialize(sheet))), Sheet);
+  assert.equal(restored.get(Name).value, "Aldric");
+  assert.equal(restored.get(Level).value, 5);
+  assert.equal(restored.get(Level).proficiencyBonus, 3);
 });
