@@ -1,7 +1,7 @@
 # Atelier
 
 A self-hosted D&D 5e engine. Node + `node:sqlite`, TypeScript strict mode, npm-workspaces
-monorepo (`core`, `server`, `playground`). The current target is a headless, single-user MVP
+monorepo (`core`, `game`, `server`, `playground`; `server` is not created yet). The current target is a headless, single-user MVP
 driven by an in-process client; a WebSocket layer and a SvelteKit frontend come later. Designed
 for personal use — there is only one user, but ergonomics and clean abstractions are not to be
 compromised on that account.
@@ -48,8 +48,9 @@ permanently rather than in any one subsystem file.
   engine runs or it doesn't. `get` throws with a clear message if an aspect is absent; this
   is intentional, not a gap to defend against.
 
-- **DRY across the network boundary.** All shared types live in `core`. Nothing is
-  duplicated between server and client. If a type exists in both places, it belongs in core.
+- **DRY across the network boundary.** All shared types live in `core` (generic) or
+  `game` (D&D-specific). Nothing is duplicated between server and client. If a type exists in
+  both places, it belongs in one of those.
 
 - **Minimal dependencies; less code is better.** Node + `node:sqlite` today, SvelteKit for the later frontend (+ pino if
   structured logging is ever needed). Each dependency is a future maintenance burden when

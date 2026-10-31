@@ -50,17 +50,20 @@ client).
 
 ## Architecture
 
-Three workspaces, all Node, run through `tsx` (see open decision 1):
+Four workspaces, all Node, run through `tsx` (see open decision 1). `server` does not exist yet;
+it is created when persistence (M3) needs a home.
 
-| Package      | Role                                                                                     |
-| ------------ | ---------------------------------------------------------------------------------------- |
-| `core`       | Plumbing and library types: composites, aspects, structure, serialization, events, stats |
-| `server`     | Game content, rules, persistence (`node:sqlite`), and the client; the authority          |
-| `playground` | Dummy-driver harness: bot policies that call the client; runs the scenario               |
+| Package      | Role                                                                                  |
+| ------------ | ------------------------------------------------------------------------------------- |
+| `core`       | Generic plumbing, no D&D: composites, aspects, structure, serialization, events, util |
+| `game`       | Everything D&D-specific: abilities, skills, `Sheet`, content, and the rules over them |
+| `server`     | Persistence (`node:sqlite`), the live game registry, and the client; the authority    |
+| `playground` | Dummy-driver harness: bot policies that call the client; runs the scenario            |
 
-`core` stays free of Node APIs so a future client can import it (DRY across the network
-boundary). The client's request and result types live in `core`, never in `server`, so the
-future WebSocket wrapper and any remote caller share them.
+`core` and `game` stay free of Node APIs so a future client can import them (DRY across the
+network boundary). `game` depends on `core`; `server` depends on both. The client's request and
+result types live in `core` (generic) or `game` (D&D-specific), never in `server`, so the future
+WebSocket wrapper and any remote caller share them.
 
 ### Invariants carried over from CLAUDE.md
 
@@ -91,21 +94,21 @@ persisted aspects.
 
 Three layers, each importing only downward:
 
-| Layer      | Lives in                           | Owns                                                                       |
-| ---------- | ---------------------------------- | -------------------------------------------------------------------------- |
-| **Engine** | `core` (composite, serial, …)      | Composites, aspects, events, stats. Knows nothing of games.                |
-| **Game**   | `core/src/game`, `server/src/game` | The objects the user interacts with, and the rules over them.              |
-| **Server** | `server` (client, db)              | The client, persistence, and all history (event log, `seq`, initial seed). |
+| Layer      | Lives in                      | Owns                                                                       |
+| ---------- | ----------------------------- | -------------------------------------------------------------------------- |
+| **Engine** | `core` (composite, serial, …) | Composites, aspects, structure, serialization, events. Knows no D&D.       |
+| **Game**   | `game`                        | The objects the user interacts with, and the rules over them.              |
+| **Server** | `server` (client, db)         | The client, persistence, and all history (event log, `seq`, initial seed). |
 
 The game module is **plain JS objects** at the surface: a `Game` (a composite, see the decision
 below) serializes to JSON data with no methods, so it can be stored, sent over the wire later,
 and replayed as-is. Game-specific behavior is free functions over that data. Split by what depends
 on Node:
 
-- `core/src/game` — the object shapes (`Game`, encounter status) and the pure rules over them,
+- `game` — the object shapes (`Game`, encounter status) and the pure rules over them,
   such as whether an action is legal right now. No Node APIs, so a future client imports the
   same definitions.
-- `server/src/game` — the live side: loading a `Game` from the database, the in-memory
+- `server` — the live side: loading a `Game` from the database, the in-memory
   registry of active games, and applying engine results to a `Game` before they are persisted.
 
 Shape sketch (illustrative, not final):
