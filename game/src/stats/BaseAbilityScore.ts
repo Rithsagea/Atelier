@@ -1,6 +1,6 @@
-import { Aspect, AspectKey, Composite } from "../../composite/Composite";
-import { Property } from "../../serial/Data";
-import { enumMap } from "../../util/Types";
+import { Aspect, AspectKey, Composite } from "@atelier/core/composite/Composite";
+import { Property } from "@atelier/core/serial/Data";
+import { enumMap } from "@atelier/core/util/Types";
 import { type Ability, Abilities, AbilityScore, AbilityScoreContributor } from "./AbilityScore";
 
 export abstract class AbstractBaseAbilityScore extends Composite {

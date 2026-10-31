@@ -398,7 +398,10 @@ Settle in M0, before anything depends on them.
    Rejected: standard TC39 decorators (needs a new `Structure` registration path and a
    `Symbol.metadata` polyfill) and explicit `static serial` registration (about twice the
    lines per field, with a silent-drop hazard). Risk: legacy decorators are frozen; every
-   consumer of `core` (Vite, tests) must apply `experimentalDecorators` to core's files.
+   consumer of `core` (Vite, tests) must apply `experimentalDecorators` to core's files. `tsx`
+   applies a tsconfig only to files matched by its `include`, so a script in one package that
+   imports another compiles the other with _standard_ decorators and crashes; run `tsx` with
+   `--tsconfig` pointing at the root `tsconfig.json` (which has no `include`).
 2. **Extensionless imports. Decided:** `tsx` resolves them, so keep the old extensionless style.
 3. **Test runner. Decided:** `node:test`, run as `node --import tsx --test`; tests are colocated
    (`Foo.test.ts`). Revisit when a frontend shares a Vite config.

@@ -78,8 +78,12 @@ permanently rather than in any one subsystem file.
   The event system, serialization hooks, and aspect interactions will dictate the right shape
   when the time comes — don't guess ahead of that.
 
+- **No `index.ts` files.** No barrel files and no `exports: ./src/index.ts`. Packages expose
+  their modules through a subpath `exports` map (`"./*": "./src/*.ts"`), and callers import the
+  module they use (`@atelier/core/composite/Composite`).
+
 - **`core` is generic; D&D lives under `game`.** Anything specific to D&D (abilities, skills,
-  `Sheet`, rules) goes under `core/src/game` (or `server/src/game`). The rest of `core`
+  `Sheet`, rules) goes in the `game` package (`game/src`). The rest of `core`
   (composites, aspects, structure, serialization, events, util) must make sense without D&D.
 
 - **No `eslint-disable` / `eslint-enable` comments.** When a rule fires, fix the code (better

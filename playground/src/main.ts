@@ -1,3 +1,4 @@
-import { TEST_CONSTANT } from "@atelier/core";
+import { serialize } from "@atelier/core/serial/Data";
+import { Sheet } from "@atelier/game/sheet/Sheet";
 
-console.log(TEST_CONSTANT);
+console.log(JSON.stringify(serialize(new Sheet())));

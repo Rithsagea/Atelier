@@ -1,0 +1,12 @@
+{
+  "name": "@atelier/game",
+  "description": "D&D 5e content and rules over the core composite engine",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@atelier/core": "*"
+  }
+}
