@@ -193,7 +193,8 @@ Deliberately minimal, built **as homebrew on the base engine** — no privileged
 
 - **Class:** Fighter (Champion), levels 1–3 only. Fighting style, Second Wind, Action Surge,
   Improved Critical.
-- **Race:** Human.
+- **Species:** Human. **Background:** Soldier. (Terms follow SRD 5.2.1; see _Minimum player
+  character_.)
 - **Monster:** Goblin (Nimble Escape optional).
 - **Items:** longsword, shortbow, chain mail, shield.
 - **Combat:** initiative, action / bonus action / movement economy (abstract distance, no
@@ -205,6 +206,118 @@ Deliberately minimal, built **as homebrew on the base engine** — no privileged
   deterministic.
 
 Skills and saving throws are computed aspects as already modelled in `reference/old`.
+
+---
+
+## Minimum player character
+
+The smallest character that is _complete_: it can be built from a spec, has every number a
+level 1 sheet needs, and can take part in the encounter. Rules text is SRD 5.2.1 (2024), kept
+locally in `scratch/dnd-5e-srd-markdown/` and not committed; its terms apply (_species_ not
+race, _background_ supplies ability increases and an Origin feat). Section names below point
+into it.
+
+**The reference character:** level 1 **Human Fighter** with the **Soldier** background, using
+the Standard Array. Everything below is the minimum needed to build and play exactly this
+character. Anything not listed is out of scope.
+
+### Sheet (aspects on the character composite)
+
+| Aspect                 | Contents                                                                           | Source                      |
+| ---------------------- | ---------------------------------------------------------------------------------- | --------------------------- |
+| `Id`, `Name`           | identity                                                                           |                             |
+| `BaseAbilityScore`     | six scores, assigned from the Standard Array (15, 14, 13, 12, 10, 8)               | Character Creation, step 3  |
+| `Level`                | class level (1); proficiency bonus is derived from it (+2 at levels 1–4)           | Fighter Features table      |
+| `AbilityScore` (comp.) | base + background increase (+2/+1, or +1/+1/+1); modifier is `floor((score−10)/2)` | Adjust Ability Scores       |
+| `SkillScore` (comp.)   | the 18 skills: ability modifier + proficiency bonus if proficient                  | Fill In Numbers             |
+| `SavingThrow` (comp.)  | six saves; class grants Strength and Constitution proficiency                      | Core Fighter Traits         |
+| `HitPoints`            | max, current, temporary; level 1 max is die + Constitution modifier (d10 → 10 + C) | Level 1 Hit Points by Class |
+| `HitDice`              | die size and spent count; 1 die at level 1                                         | Fill In Numbers             |
+| `DeathSaves`           | successes and failures                                                             | Death Saving Throws         |
+| `ArmorClass` (comp.)   | base from armor or 10 + Dexterity modifier, plus Shield, plus contributions        | Equipment, Armor            |
+| `Initiative` (comp.)   | Dexterity modifier plus contributions                                              |                             |
+| `Speed`                | 30 feet (abstract distance)                                                        | Human                       |
+| `Equipment`            | inventory; equipped armor, shield, and weapons                                     | Starting Equipment          |
+| `Attacks` (comp.)      | per weapon: attack bonus (ability modifier + proficiency), damage dice and type    | Fill In Numbers             |
+| `Resources`            | named use-pools with a recharge rule (short, long) — see _Supporting systems_      | Second Wind, Long Rest      |
+| `Features`             | feature composites held via `Holder`: class features, species traits, feats        | below                       |
+| `HeroicInspiration`    | boolean, held by the character                                                     | Rules Glossary              |
+| `Conditions`           | `unconscious`, `dead` only                                                         | Rules slice                 |
+
+Class features, species traits, and feats are **composites**, not flags on the sheet. Each is a
+feature composite attached through `Holder` that contributes to the owning character through
+the same event-based stat contribution as everything else (CLAUDE.md, composite-by-default). The
+sheet never checks "does this character have Defense?"; the Defense feature contributes +1 to
+`ArmorClass` while armor is worn.
+
+### The character's content
+
+- **Fighter level 1:** d10 Hit Die; Strength and Constitution saves; two skills from the class
+  list; all weapons and armor plus Shield; _Fighting Style_ (feat: **Defense**, +1 AC while
+  wearing armor); _Second Wind_ (below). _Weapon Mastery_ is out of scope.
+- **Human:** Medium, 30 feet; _Resourceful_ (below); _Skillful_ (one skill of choice);
+  _Versatile_ (one Origin feat of choice: **Alert**, which adds the proficiency bonus to
+  Initiative).
+- **Soldier:** +2/+1 to Strength, Dexterity, or Constitution; Origin feat **Savage Attacker**
+  (once per turn, roll a weapon's damage dice twice and use either); Athletics and Intimidation;
+  the gaming-set tool is recorded as a name with no mechanics.
+- **Equipment:** chain mail (AC 16), shield (+2 AC), longsword, shortbow, arrows. Chosen
+  directly, not through the Class's "choose A, B, or C" packages. No gold or encumbrance.
+
+Out of scope for the minimum: languages, alignment, personality and backstory fields, tool
+mechanics, experience points and leveling, multiclassing, spellcasting, weapon mastery, ability
+score rolling or point buy (see `BaseAbilityScore` in `reference/old` for the aspect shape).
+
+### Supporting systems
+
+What the sheet above needs underneath it. Each is a rule over composites, not a new kind of
+object.
+
+1. **d20 tests.** Ability checks, saving throws, and attack rolls: d20 plus modifier, with
+   advantage and disadvantage, critical hits (natural 20), and Heroic Inspiration reroll.
+2. **Dice.** One seeded PRNG in the `Game` snapshot (Rules slice); damage dice, the d20, and
+   "roll twice" (Savage Attacker) all draw from it.
+3. **Stat contribution.** Thunk-based contributions to ability scores, AC, Initiative, and
+   attack/damage, so features compose without the sheet knowing about them.
+4. **Action economy.** Per-turn action, bonus action, and movement, reset when a turn starts;
+   `legalActions` reads it.
+5. **Resources.** A use-pool aspect (`current`, `max`, recharge `short | long`) that features
+   own and rests reset. Second Wind is the first user.
+6. **Rests.** Short and long rest as **actions** performed through `act`, not new client
+   methods. A short rest lets the character spend Hit Dice and recharges short-rest resources; a
+   long rest restores Hit Points, recharges everything, and fires a "long rest finished" event
+   that Human _Resourceful_ listens for.
+7. **Hit points.** Damage, healing clamped to the maximum, temporary HP, 0 HP → unconscious →
+   death saves → dead (already in the Rules slice).
+8. **Equipment rules.** Weapon records (damage dice, damage type, melee/ranged, Versatile) and
+   armor records (base AC, Dexterity cap); AC is a computed aspect over what is equipped.
+9. **Character builder.** `createCharacter(id, spec)` (Client) takes
+   `{ name, class, species, background, abilities, skills, ... }`, validates it against the
+   steps above, and returns the composite. It is the only place that knows the creation order.
+
+### Two player interactions
+
+One from the class and one from the species. Between them they exercise the action economy,
+resources, rests, dice, HP, and the one genuinely new mechanism, a mid-action decision.
+
+**1. Second Wind (Fighter).** Bonus action: regain `1d10 + Fighter level` HP, up to the maximum.
+Two uses; a short rest restores one, a long rest restores both.
+
+- Legal only when it is the character's turn, the bonus action is unspent, and a use remains.
+- Exercises: bonus action, resource pool, a die roll, HP clamp, short and long rest recharge,
+  and `legalActions` hiding it when it is not available.
+
+**2. Heroic Inspiration (Human _Resourceful_).** Finishing a long rest sets
+`HeroicInspiration`. The player may expend it to reroll any die they just rolled and must keep
+the new result. A character that already has it gains nothing.
+
+- Exercises: rest-triggered events, a character-held flag, and a **decision after a roll**. The
+  action that produced the roll cannot complete until the player chooses keep or reroll.
+- This requires the game to suspend an action and wait. See open decision 6.
+
+**Scenario tests:** (a) a damaged Fighter uses Second Wind twice, is refused a third time,
+short-rests, and uses it again; (b) a Human finishes a long rest, attacks, rerolls the attack,
+and the reroll replays identically from the same seed.
 
 ---
 
@@ -257,7 +370,9 @@ builds, serializes, deserializes, and recomputes derived stats identically.
 
 **M2 — Rules in `server`.** Fighter, Human, Goblin, items, the combat actions, seeded dice.
 Run a full encounter as a pure function call — no client, no database. _Done:_ a scripted
-Fighter vs Goblin fight resolves deterministically.
+Fighter vs Goblin fight resolves deterministically, the reference character from _Minimum
+player character_ builds with the SRD's level 1 numbers, and both player interactions pass
+their scenario tests.
 
 **M3 — Persistence and the event log.** SQLite schema, repositories, transactional
 write-and-append, replay. _Done:_ replaying a stored log into a fresh game reproduces state;
@@ -293,6 +408,14 @@ Settle in M0, before anything depends on them.
    (Vite, esbuild) apply `experimentalDecorators` to core's files.
 5. **Typed `get`.** Whether `Structure` should constrain `get` to its declared aspects. Not
    needed for the MVP; do not build it speculatively.
+6. **Mid-action decisions.** Heroic Inspiration lets the player reroll _after_ seeing a roll, so
+   an action must be able to pause. Proposal: `act` returns a result with a `pending` prompt
+   (the roll and the legal choices) and the `Game` records it as part of its snapshot; while it
+   is set, `legalActions` offers only the choices, and answering is another `act`. This keeps
+   the client surface unchanged, persists across a restart, and replays from the log. The
+   alternative, declaring the reroll up front (`act(..., { rerollIfBelow })`), is simpler but
+   wrong against the rules. Settle before M2 builds attack resolution, since both reactions and
+   this reroll will use the same mechanism. Limit the first version to the attack roll.
 
 ---
 
