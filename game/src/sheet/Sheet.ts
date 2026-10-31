@@ -1,4 +1,5 @@
 import { Holder, Id, Name } from "@atelier/core/composite/Aspects";
+import { type Composite } from "@atelier/core/composite/Composite";
 import { Structure } from "@atelier/core/composite/Structure";
 import { Species } from "../species/Species";
 import { AbilityScore } from "../stats/AbilityScore";
@@ -23,3 +24,26 @@ export const Sheet = Structure(
   [SkillScore, () => new SkillScore()],
   [Initiative, () => new Initiative()],
 );
+
+/**
+ * Recompute every derived stat of a sheet. Each projection is rebuilt from scratch, so calling
+ * this twice never double-counts. Order matters: SkillScore and Initiative read AbilityScore,
+ * and SkillScore reads SkillProficiency, so those come first.
+ */
+export function refresh(sheet: Composite): void {
+  const abilities = new AbilityScore();
+  sheet.provide(AbilityScore, abilities);
+  abilities.refresh(sheet);
+
+  const proficiency = new SkillProficiency();
+  sheet.provide(SkillProficiency, proficiency);
+  proficiency.refresh(sheet);
+
+  const skills = new SkillScore();
+  sheet.provide(SkillScore, skills);
+  skills.refresh(sheet);
+
+  const initiative = new Initiative();
+  sheet.provide(Initiative, initiative);
+  initiative.refresh(sheet);
+}

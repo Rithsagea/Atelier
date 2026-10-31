@@ -15,7 +15,7 @@ import { Aspect, Composite, getAspectKey } from "@atelier/core/composite/Composi
 import { serialize, deserialize } from "@atelier/core/serial/Data";
 import { Species } from "../species/Species";
 import { Feats } from "./Feats";
-import { Sheet } from "./Sheet";
+import { Sheet, refresh } from "./Sheet";
 
 // Stands in for content, which `game` cannot depend on.
 @Aspect("TestSpecies", Species)
@@ -29,13 +29,6 @@ const STANDARD_ARRAY = {
   wisdom: 10,
   charisma: 8,
 };
-
-function refreshed(sheet: InstanceType<typeof Sheet>) {
-  const abilities = new AbilityScore();
-  sheet.provide(AbilityScore, abilities);
-  abilities.refresh(sheet);
-  return abilities;
-}
 
 test("sheet provides Id and Holder", () => {
   const sheet = new Sheet();
@@ -55,13 +48,15 @@ test("sheet validate reflects BaseAbilityScore presence", () => {
 test("refresh via Holder applies point buy contributions", () => {
   const sheet = new Sheet();
   sheet.provide(BaseAbilityScore, new PointBuyAbilityScore());
-  assert.equal(refreshed(sheet).scores.strength, 8);
+  refresh(sheet);
+  assert.equal(sheet.get(AbilityScore).scores.strength, 8);
 });
 
 test("refresh via Holder applies static contributions", () => {
   const sheet = new Sheet();
   sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
-  const abilities = refreshed(sheet);
+  refresh(sheet);
+  const abilities = sheet.get(AbilityScore);
   assert.equal(abilities.scores.strength, 15);
   assert.equal(abilities.scores.charisma, 8);
 });
@@ -73,12 +68,9 @@ test("abilityModifier computes 5e modifier", () => {
 test("SkillScore refresh applies ability modifiers to governed skills", () => {
   const sheet = new Sheet();
   sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
-  refreshed(sheet);
+  refresh(sheet);
 
-  const skills = new SkillScore();
-  sheet.provide(SkillScore, skills);
-  skills.refresh(sheet);
-
+  const skills = sheet.get(SkillScore);
   assert.equal(skills.scores.athletics, 2); // STR 15
   assert.equal(skills.scores.acrobatics, 2); // DEX 14
   assert.equal(skills.scores.stealth, 2); // DEX 14
@@ -188,10 +180,12 @@ test("derived stats recompute identically after a round trip", () => {
   const points = new PointBuyAbilityScore();
   original.provide(BaseAbilityScore, points);
   points.set("strength", 9);
-  const before = refreshed(original);
+  refresh(original);
+  const before = original.get(AbilityScore);
 
   const restored = deserialize(JSON.parse(JSON.stringify(serialize(original))), Sheet);
-  const after = refreshed(restored);
+  refresh(restored);
+  const after = restored.get(AbilityScore);
 
   assert.deepEqual(after.scores, before.scores);
 });
@@ -235,17 +229,20 @@ test("a skill granted by two sources is proficient once", () => {
   sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
   sheet.provide(Species, new TestSpecies());
   sheet.get(Feats).list.push(grants("athletics"), grants("athletics"), grants("stealth"));
-  refreshed(sheet);
+  refresh(sheet);
 
-  const proficiency = new SkillProficiency();
-  const skills = new SkillScore();
-  sheet.provide(SkillProficiency, proficiency);
-  sheet.provide(SkillScore, skills);
-  proficiency.refresh(sheet);
-  skills.refresh(sheet);
-
-  assert.deepEqual([...proficiency.skills].sort(), ["athletics", "stealth"]);
+  const skills = sheet.get(SkillScore);
+  assert.deepEqual([...sheet.get(SkillProficiency).skills].sort(), ["athletics", "stealth"]);
   assert.equal(skills.scores.athletics, 4); // STR 15 (+2) + proficiency once (+2)
   assert.equal(skills.scores.stealth, 4); // DEX 14 (+2) + proficiency (+2)
   assert.equal(skills.scores.acrobatics, 2); // not proficient
+});
+
+test("refresh recomputes from scratch, so repeating it changes nothing", () => {
+  const sheet = new Sheet();
+  sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
+  refresh(sheet);
+  const once = { ...sheet.get(SkillScore).scores };
+  refresh(sheet);
+  assert.deepEqual(sheet.get(SkillScore).scores, once);
 });

@@ -1,12 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { deserialize, serialize } from "@atelier/core/serial/Data";
-import { Sheet } from "@atelier/game/sheet/Sheet";
+import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { Species } from "@atelier/game/species/Species";
-import { AbilityScore } from "@atelier/game/stats/AbilityScore";
 import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAbilityScore";
 import { Level } from "@atelier/game/stats/Level";
-import { SkillProficiency } from "@atelier/game/stats/SkillProficiency";
 import { type Skill, SkillScore } from "@atelier/game/stats/Stats";
 import { Human } from "./Human";
 import { species } from "./index";
@@ -32,16 +30,8 @@ function build(skill?: Skill) {
 }
 
 function skillsOf(sheet: InstanceType<typeof Sheet>) {
-  const abilities = new AbilityScore();
-  const proficiency = new SkillProficiency();
-  const skills = new SkillScore();
-  sheet.provide(AbilityScore, abilities);
-  sheet.provide(SkillProficiency, proficiency);
-  sheet.provide(SkillScore, skills);
-  abilities.refresh(sheet);
-  proficiency.refresh(sheet);
-  skills.refresh(sheet);
-  return skills.scores;
+  refresh(sheet);
+  return sheet.get(SkillScore).scores;
 }
 
 test("every listed species is registered in game's Species list", () => {

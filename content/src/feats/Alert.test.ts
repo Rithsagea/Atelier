@@ -3,10 +3,9 @@ import { test } from "node:test";
 import { deserialize, serialize } from "@atelier/core/serial/Data";
 import { Feat } from "@atelier/game/feats/Feat";
 import { Feats } from "@atelier/game/sheet/Feats";
-import { Sheet } from "@atelier/game/sheet/Sheet";
+import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { Human } from "../species/Human";
 import { Species } from "@atelier/game/species/Species";
-import { AbilityScore } from "@atelier/game/stats/AbilityScore";
 import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAbilityScore";
 import { Initiative } from "@atelier/game/stats/Initiative";
 import { Alert } from "./Alert";
@@ -31,13 +30,8 @@ function build(withAlert: boolean) {
 }
 
 function initiativeOf(sheet: InstanceType<typeof Sheet>) {
-  const abilities = new AbilityScore();
-  const initiative = new Initiative();
-  sheet.provide(AbilityScore, abilities);
-  sheet.provide(Initiative, initiative);
-  abilities.refresh(sheet);
-  initiative.refresh(sheet);
-  return initiative.value;
+  refresh(sheet);
+  return sheet.get(Initiative).value;
 }
 
 test("every listed feat is registered in game's Feat list", () => {
