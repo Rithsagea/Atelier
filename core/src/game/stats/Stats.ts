@@ -1,6 +1,6 @@
-import { Holder } from "../composite/Aspects";
-import { Aspect, AspectKey, Composite } from "../composite/Composite";
-import { enumMap } from "../util/Types";
+import { Holder } from "../../composite/Aspects";
+import { Aspect, AspectKey, Composite } from "../../composite/Composite";
+import { enumMap } from "../../util/Types";
 import { type Ability } from "./AbilityScore";
 
 export const Skills = [

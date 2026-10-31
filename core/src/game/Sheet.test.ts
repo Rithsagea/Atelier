@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { AbilityScore, abilityModifier } from "../stats/AbilityScore";
-import { SkillScore } from "../stats/Stats";
+import { AbilityScore, abilityModifier } from "./stats/AbilityScore";
+import { SkillScore } from "./stats/Stats";
 import {
   PointBuyAbilityScore,
   StaticAbilityScore,
   BaseAbilityScore,
   POINT_BUY_BUDGET,
-} from "../stats/BaseAbilityScore";
+} from "./stats/BaseAbilityScore";
 import { Holder, Id } from "../composite/Aspects";
 import { getAspectKey } from "../composite/Composite";
 import { serialize, deserialize } from "../serial/Data";
