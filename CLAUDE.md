@@ -124,4 +124,23 @@ skip a section when it is empty, and do not retell the steps taken.
 - **Verified** — what was run and its result (`npm test` count, `typecheck`, `lint`). Say plainly
   what was _not_ run.
 - **Needs you** — decisions, surprises, or follow-ups that block or shape the next step. Also
-  list anything uncommitted. This is the only section that asks the reader to act.
+  list anything uncommitted. This is the only section that asks the reader to act, so notes
+  that need nothing from the reader (a test reworked for a type change, a cast, a cosmetic
+  line width) belong in **Changed** or **Verified**, not here.
+
+## Working agreements (how to carry out a task)
+
+- **Decide, then say so.** When a choice is not the user's to make (naming within an existing
+  pattern, file placement, ordering of steps, commit grouping), pick the recommended option,
+  state it in one line, and continue. Ask only when the answer changes what gets built or
+  contradicts something the user already decided. Do not ask "should I proceed?" after
+  recommending a course of action.
+- **Docs move with the code.** A change that makes `CLAUDE.md` or `PLAN.md` wrong updates them
+  in the same changeset. Do not finish a task and then ask whether to update the docs. When a
+  request conflicts with a rule in `CLAUDE.md`, follow the request and draft the amended rule
+  alongside it.
+- **Check the source before stating a rule.** SRD rules, existing code, and the docs in this
+  repo are available to read. Look up the SRD text in `scratch/dnd-5e-srd-markdown/` before
+  naming or classifying a rule, rather than recalling it.
+- **Commit only when asked, and group by concern.** When asked to commit, split into one commit
+  per concern if the files separate cleanly, otherwise make one commit and say why.
