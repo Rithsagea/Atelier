@@ -78,6 +78,10 @@ permanently rather than in any one subsystem file.
   The event system, serialization hooks, and aspect interactions will dictate the right shape
   when the time comes — don't guess ahead of that.
 
+- **No `eslint-disable` / `eslint-enable` comments.** When a rule fires, fix the code (better
+  types, a cast, a restructure). If a rule is wrong for the project, change `eslint.config.js`,
+  where the exception is visible in one place, instead of silencing it inline.
+
 - **Reserve future-proofing for content-facing contracts only.** The exception to the above
   is the small set of signatures that all content is written against (e.g. a stat
   contribution carrying a thunk rather than a number, a contributor receiving its owning

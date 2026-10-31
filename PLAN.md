@@ -50,7 +50,7 @@ client).
 
 ## Architecture
 
-Three workspaces, all Node (native type stripping unless a decision below says otherwise):
+Three workspaces, all Node, run through `tsx` (see open decision 1):
 
 | Package      | Role                                                                                     |
 | ------------ | ---------------------------------------------------------------------------------------- |
@@ -277,18 +277,20 @@ violations.
 
 Settle in M0, before anything depends on them.
 
-1. **Decorators.** The old design is built on legacy `experimentalDecorators` (about 20 uses),
-   which Node's native stripping cannot run. Options: keep legacy decorators and add `tsx`;
-   move to standard TC39 decorators (`tsx` runs them; `Structure`'s imperative
-   `Property.Serialize(...)(prototype, "aspects")` needs a different registration path); or
-   drop decorators for explicit registration calls, which keeps native stripping and removes
-   the loader. Spike the third option first — it is the least tooling.
-2. **Extensionless imports.** Native Node needs `.ts` extensions. Adopt them with
-   `allowImportingTsExtensions` unless option 1 lands on `tsx`.
-3. **Test runner.** `node:test` (zero dependencies) vs Vitest. Default to `node:test`; revisit
-   when a client exists.
-4. **Type checking.** Add `tsc --noEmit` as a script (TypeScript is pinned to `~6.0`
-   because `typescript-eslint` does not yet support 7).
+1. **Decorators. Decided: legacy `experimentalDecorators`, run through `tsx`.** Nearly every
+   class is annotated, so one line per field matters more than avoiding a loader; the old
+   `Property.*` / `@Aspect` design and `Structure`'s imperative registration port unchanged.
+   Rejected: standard TC39 decorators (needs a new `Structure` registration path and a
+   `Symbol.metadata` polyfill) and explicit `static serial` registration (about twice the
+   lines per field, with a silent-drop hazard). Risk: legacy decorators are frozen; every
+   consumer of `core` (Vite, tests) must apply `experimentalDecorators` to core's files.
+2. **Extensionless imports. Decided:** `tsx` resolves them, so keep the old extensionless style.
+3. **Test runner. Decided:** `node:test`, run as `node --import tsx --test`; tests are colocated
+   (`Foo.test.ts`). Revisit when a frontend shares a Vite config.
+4. **Type checking. Decided:** `npm run typecheck` (`tsc --noEmit` per package). TypeScript is
+   pinned to `~6.0` because `typescript-eslint` does not yet support 7. Each package has its own
+   `tsconfig.json` extending the root one, so tools that look up the nearest tsconfig per file
+   (Vite, esbuild) apply `experimentalDecorators` to core's files.
 5. **Typed `get`.** Whether `Structure` should constrain `get` to its declared aspects. Not
    needed for the MVP; do not build it speculatively.
 

@@ -13,4 +13,14 @@ export default defineConfig(
       ],
     },
   },
+  {
+    files: ["core/src/**/*.ts"],
+    ignores: ["**/*.test.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        { patterns: [{ group: ["node:*"], message: "core must stay free of Node APIs." }] },
+      ],
+    },
+  },
 );
