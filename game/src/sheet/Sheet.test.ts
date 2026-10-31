@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { AbilityScore, abilityModifier } from "../stats/AbilityScore";
+import { SkillProficiency, SkillProficiencyContributor } from "../stats/SkillProficiency";
 import { SkillScore } from "../stats/Stats";
 import {
   PointBuyAbilityScore,
@@ -13,6 +14,7 @@ import { Level, proficiencyBonus } from "../stats/Level";
 import { Aspect, Composite, getAspectKey } from "@atelier/core/composite/Composite";
 import { serialize, deserialize } from "@atelier/core/serial/Data";
 import { Species } from "../species/Species";
+import { Feats } from "./Feats";
 import { Sheet } from "./Sheet";
 
 // Stands in for content, which `game` cannot depend on.
@@ -172,7 +174,7 @@ test("computed AbilityScore and SkillScore are transient and rebuilt on load", (
   sheet.provide(BaseAbilityScore, new PointBuyAbilityScore());
   const aspects = serialize(sheet).aspects as object;
 
-  for (const name of ["AbilityScore", "SkillScore", "Holder"]) {
+  for (const name of ["AbilityScore", "SkillScore", "SkillProficiency", "Holder"]) {
     assert.equal(name in aspects, false);
   }
 
@@ -219,4 +221,31 @@ test("Name and Level persist through a round trip", () => {
   assert.equal(restored.get(Name).value, "Aldric");
   assert.equal(restored.get(Level).value, 5);
   assert.equal(restored.get(Level).proficiencyBonus, 3);
+});
+
+test("a skill granted by two sources is proficient once", () => {
+  const grants = (skill: "athletics" | "stealth") => {
+    const source = new Composite();
+    source.provide(SkillProficiencyContributor, {
+      apply: (proficiency) => void proficiency.skills.add(skill),
+    });
+    return source;
+  };
+  const sheet = new Sheet();
+  sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
+  sheet.provide(Species, new TestSpecies());
+  sheet.get(Feats).list.push(grants("athletics"), grants("athletics"), grants("stealth"));
+  refreshed(sheet);
+
+  const proficiency = new SkillProficiency();
+  const skills = new SkillScore();
+  sheet.provide(SkillProficiency, proficiency);
+  sheet.provide(SkillScore, skills);
+  proficiency.refresh(sheet);
+  skills.refresh(sheet);
+
+  assert.deepEqual([...proficiency.skills].sort(), ["athletics", "stealth"]);
+  assert.equal(skills.scores.athletics, 4); // STR 15 (+2) + proficiency once (+2)
+  assert.equal(skills.scores.stealth, 4); // DEX 14 (+2) + proficiency (+2)
+  assert.equal(skills.scores.acrobatics, 2); // not proficient
 });

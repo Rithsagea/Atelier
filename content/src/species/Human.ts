@@ -1,23 +1,13 @@
-import { Aspect, Composite } from "@atelier/core/composite/Composite";
-import { Property } from "@atelier/core/serial/Data";
-import { Level } from "@atelier/game/stats/Level";
-import { type Skill, type SkillScore, SkillContributor } from "@atelier/game/stats/Stats";
+import { AspectHolder, Holder } from "@atelier/core/composite/Aspects";
+import { Aspect } from "@atelier/core/composite/Composite";
+import { Structure } from "@atelier/core/composite/Structure";
 import { Species } from "@atelier/game/species/Species";
+import { Skillful } from "./Skillful";
 
-// Skillful: proficiency in one skill of choice. Versatile (an Origin feat of choice) is
-// not modelled here; the chosen feat lives in the sheet's Feats.
+// Versatile (an Origin feat of choice) is not modelled here; the chosen feat lives in the
+// sheet's Feats.
 @Aspect("Human", Species)
-export class Human extends Composite {
-  @Property.Primitive
-  readonly skill: Skill;
-
-  constructor(skill: Skill = "athletics") {
-    super();
-    this.skill = skill;
-    this.provide(SkillContributor, {
-      apply: (skills: SkillScore, owner: Composite) => {
-        skills.scores[this.skill] += owner.get(Level).proficiencyBonus;
-      },
-    });
-  }
-}
+export class Human extends Structure(
+  [Holder, () => new AspectHolder()],
+  [Skillful, () => new Skillful()],
+) {}

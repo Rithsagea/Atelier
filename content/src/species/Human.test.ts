@@ -6,11 +6,13 @@ import { Species } from "@atelier/game/species/Species";
 import { AbilityScore } from "@atelier/game/stats/AbilityScore";
 import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAbilityScore";
 import { Level } from "@atelier/game/stats/Level";
-import { SkillScore } from "@atelier/game/stats/Stats";
+import { SkillProficiency } from "@atelier/game/stats/SkillProficiency";
+import { type Skill, SkillScore } from "@atelier/game/stats/Stats";
 import { Human } from "./Human";
 import { species } from "./index";
+import { Skillful } from "./Skillful";
 
-function build(skill: ConstructorParameters<typeof Human>[0]) {
+function build(skill?: Skill) {
   const sheet = new Sheet();
   sheet.provide(
     BaseAbilityScore,
@@ -23,16 +25,21 @@ function build(skill: ConstructorParameters<typeof Human>[0]) {
       charisma: 8,
     }),
   );
-  sheet.provide(Species, new Human(skill));
+  const human = new Human();
+  human.get(Skillful).skill = skill;
+  sheet.provide(Species, human);
   return sheet;
 }
 
 function skillsOf(sheet: InstanceType<typeof Sheet>) {
   const abilities = new AbilityScore();
+  const proficiency = new SkillProficiency();
   const skills = new SkillScore();
   sheet.provide(AbilityScore, abilities);
+  sheet.provide(SkillProficiency, proficiency);
   sheet.provide(SkillScore, skills);
   abilities.refresh(sheet);
+  proficiency.refresh(sheet);
   skills.refresh(sheet);
   return skills.scores;
 }
@@ -56,9 +63,21 @@ test("proficiency follows the owner's level", () => {
 test("a sheet with Human round-trips through JSON", () => {
   const sheet = build("stealth");
   const data = JSON.parse(JSON.stringify(serialize(sheet)));
-  assert.deepEqual(data.aspects.Species, { $type: "Human", skill: "stealth" });
+  assert.deepEqual(data.aspects.Species, {
+    $type: "Human",
+    aspects: { Skillful: { skill: "stealth" } },
+  });
 
   const restored = deserialize(data, Sheet);
   assert.equal(restored.validate(), true);
   assert.deepEqual(skillsOf(restored), skillsOf(sheet));
+});
+
+test("Skillful is empty by default and contributes nothing", () => {
+  const sheet = build();
+  assert.equal(sheet.get(Species).get(Skillful).skill, undefined);
+  assert.equal(skillsOf(sheet).athletics, 2); // STR 15, not proficient
+
+  const restored = deserialize(JSON.parse(JSON.stringify(serialize(sheet))), Sheet);
+  assert.equal(restored.get(Species).get(Skillful).skill, undefined);
 });

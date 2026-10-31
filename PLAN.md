@@ -229,26 +229,27 @@ character. Anything not listed is out of scope.
 
 ### Sheet (aspects on the character composite)
 
-| Aspect                 | Contents                                                                           | Source                      |
-| ---------------------- | ---------------------------------------------------------------------------------- | --------------------------- |
-| `Id`, `Name`           | identity                                                                           |                             |
-| `BaseAbilityScore`     | six scores, assigned from the Standard Array (15, 14, 13, 12, 10, 8)               | Character Creation, step 3  |
-| `Level`                | class level (1); proficiency bonus is derived from it (+2 at levels 1–4)           | Fighter Features table      |
-| `AbilityScore` (comp.) | base + background increase (+2/+1, or +1/+1/+1); modifier is `floor((score−10)/2)` | Adjust Ability Scores       |
-| `SkillScore` (comp.)   | the 18 skills: ability modifier + proficiency bonus if proficient                  | Fill In Numbers             |
-| `SavingThrow` (comp.)  | six saves; class grants Strength and Constitution proficiency                      | Core Fighter Traits         |
-| `HitPoints`            | max, current, temporary; level 1 max is die + Constitution modifier (d10 → 10 + C) | Level 1 Hit Points by Class |
-| `HitDice`              | die size and spent count; 1 die at level 1                                         | Fill In Numbers             |
-| `DeathSaves`           | successes and failures                                                             | Death Saving Throws         |
-| `ArmorClass` (comp.)   | base from armor or 10 + Dexterity modifier, plus Shield, plus contributions        | Equipment, Armor            |
-| `Initiative` (comp.)   | Dexterity modifier plus contributions                                              |                             |
-| `Speed`                | 30 feet (abstract distance)                                                        | Human                       |
-| `Equipment`            | inventory; equipped armor, shield, and weapons                                     | Starting Equipment          |
-| `Attacks` (comp.)      | per weapon: attack bonus (ability modifier + proficiency), damage dice and type    | Fill In Numbers             |
-| `Resources`            | named use-pools with a recharge rule (short, long) — see _Supporting systems_      | Second Wind, Long Rest      |
-| `Features`             | feature composites held via `Holder`: class features, species traits, feats        | below                       |
-| `HeroicInspiration`    | boolean, held by the character                                                     | Rules Glossary              |
-| `Conditions`           | `unconscious`, `dead` only                                                         | Rules slice                 |
+| Aspect                     | Contents                                                                           | Source                      |
+| -------------------------- | ---------------------------------------------------------------------------------- | --------------------------- |
+| `Id`, `Name`               | identity                                                                           |                             |
+| `BaseAbilityScore`         | six scores, assigned from the Standard Array (15, 14, 13, 12, 10, 8)               | Character Creation, step 3  |
+| `Level`                    | class level (1); proficiency bonus is derived from it (+2 at levels 1–4)           | Fighter Features table      |
+| `AbilityScore` (comp.)     | base + background increase (+2/+1, or +1/+1/+1); modifier is `floor((score−10)/2)` | Adjust Ability Scores       |
+| `SkillProficiency` (comp.) | set of proficient skills; contributors add to it, expertise is deferred            | Fill In Numbers             |
+| `SkillScore` (comp.)       | the 18 skills: ability modifier + proficiency bonus if in `SkillProficiency`       | Fill In Numbers             |
+| `SavingThrow` (comp.)      | six saves; class grants Strength and Constitution proficiency                      | Core Fighter Traits         |
+| `HitPoints`                | max, current, temporary; level 1 max is die + Constitution modifier (d10 → 10 + C) | Level 1 Hit Points by Class |
+| `HitDice`                  | die size and spent count; 1 die at level 1                                         | Fill In Numbers             |
+| `DeathSaves`               | successes and failures                                                             | Death Saving Throws         |
+| `ArmorClass` (comp.)       | base from armor or 10 + Dexterity modifier, plus Shield, plus contributions        | Equipment, Armor            |
+| `Initiative` (comp.)       | Dexterity modifier plus contributions                                              |                             |
+| `Speed`                    | 30 feet (abstract distance)                                                        | Human                       |
+| `Equipment`                | inventory; equipped armor, shield, and weapons                                     | Starting Equipment          |
+| `Attacks` (comp.)          | per weapon: attack bonus (ability modifier + proficiency), damage dice and type    | Fill In Numbers             |
+| `Resources`                | named use-pools with a recharge rule (short, long) — see _Supporting systems_      | Second Wind, Long Rest      |
+| `Features`                 | feature composites held via `Holder`: class features, species traits, feats        | below                       |
+| `HeroicInspiration`        | boolean, held by the character                                                     | Rules Glossary              |
+| `Conditions`               | `unconscious`, `dead` only                                                         | Rules slice                 |
 
 Class features, species traits, and feats are **composites**, not flags on the sheet. Each is a
 feature composite attached through `Holder` that contributes to the owning character through
