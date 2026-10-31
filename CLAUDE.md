@@ -99,3 +99,17 @@ permanently rather than in any one subsystem file.
   fixed-point vs. single-pass, etc.) stays deferred. The test: a change is worth committing to
   early only if adding it later would be a breaking change for content — optional parameters
   and optional fields with defaults are always safe to defer.
+
+---
+
+## Reporting (how to summarize finished work)
+
+End a task with a report in this shape. Keep each section to what changed the reader's picture;
+skip a section when it is empty, and do not retell the steps taken.
+
+- **Done** — one line saying what now exists, with the commit hash if one was made.
+- **Changed** — bullets of files or areas, each with the _why_ when it is not obvious.
+- **Verified** — what was run and its result (`npm test` count, `typecheck`, `lint`). Say plainly
+  what was _not_ run.
+- **Needs you** — decisions, surprises, or follow-ups that block or shape the next step. Also
+  list anything uncommitted. This is the only section that asks the reader to act.
