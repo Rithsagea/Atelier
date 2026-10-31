@@ -1,6 +1,7 @@
 import { Holder, Id, Name } from "@atelier/core/composite/Aspects";
 import { type Composite } from "@atelier/core/composite/Composite";
 import { Structure } from "@atelier/core/composite/Structure";
+import { Background } from "../backgrounds/Background";
 import { Species } from "../species/Species";
 import { AbilityScore } from "../stats/AbilityScore";
 import { BaseAbilityScore } from "../stats/BaseAbilityScore";
@@ -18,6 +19,7 @@ export const Sheet = Structure(
   [Holder, () => new SheetHolder()],
   [BaseAbilityScore],
   [Species],
+  [Background],
   [Feats, () => new Feats()],
   [AbilityScore, () => new AbilityScore()],
   [SkillProficiency, () => new SkillProficiency()],

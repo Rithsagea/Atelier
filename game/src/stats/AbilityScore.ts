@@ -29,7 +29,7 @@ export function abilityModifier(score: number): number {
 
 // Computed projection over the sheet's AbilityScoreContributors. Transient: it declares no
 // @Property fields, so it is never serialized and is rebuilt on load (see CORE.md).
-@Aspect("AbilityScore")
+@Aspect.Final("AbilityScore")
 export class AbilityScore extends Composite {
   scores: Record<Ability, number> = enumMap(Abilities, (_) => 0);
 

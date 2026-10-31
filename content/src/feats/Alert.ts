@@ -3,8 +3,9 @@ import { type Initiative, InitiativeContributor } from "@atelier/game/stats/Init
 import { Level } from "@atelier/game/stats/Level";
 import { Feat } from "@atelier/game/feats/Feat";
 
-// Initiative Proficiency only; Initiative Swap needs an encounter.
-@Aspect("Alert", Feat)
+// Initiative Proficiency only.
+// TODO: Initiative Swap, once there is an encounter.
+@Aspect.Variant(Feat, "Alert")
 export class Alert extends Composite {
   constructor() {
     super();

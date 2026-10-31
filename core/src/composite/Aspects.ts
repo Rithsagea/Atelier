@@ -15,13 +15,13 @@ export class AspectHolder<T extends Composite = Composite> implements Holder<T> 
   }
 }
 
-@Aspect("Id")
+@Aspect.Final("Id")
 export class Id {
   @Property.Primitive
   value: string = crypto.randomUUID();
 }
 
-@Aspect("Name")
+@Aspect.Final("Name")
 export class Name {
   @Property.Primitive
   value: string = "";

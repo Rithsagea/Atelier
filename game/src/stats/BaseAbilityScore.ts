@@ -1,4 +1,4 @@
-import { Aspect, AspectKey, Composite } from "@atelier/core/composite/Composite";
+import { Aspect, Composite, RegistryKey } from "@atelier/core/composite/Composite";
 import { Property } from "@atelier/core/serial/Data";
 import { enumMap } from "@atelier/core/util/Types";
 import { type Ability, Abilities, AbilityScore, AbilityScoreContributor } from "./AbilityScore";
@@ -18,7 +18,7 @@ export abstract class AbstractBaseAbilityScore extends Composite {
   }
 }
 
-export const BaseAbilityScore = new AspectKey<AbstractBaseAbilityScore>("BaseAbilityScore");
+export const BaseAbilityScore = new RegistryKey<AbstractBaseAbilityScore>("BaseAbilityScore");
 
 // --- Implementations ---
 
@@ -36,7 +36,7 @@ const POINT_BUY_SCORES: Record<number, number> = {
 
 export const POINT_BUY_BUDGET = 27;
 
-@Aspect("PointBuy", BaseAbilityScore)
+@Aspect.Variant(BaseAbilityScore, "PointBuy")
 export class PointBuyAbilityScore extends AbstractBaseAbilityScore {
   @Property.Primitive
   points: Record<Ability, number> = enumMap(Abilities, (_) => 0);
@@ -62,7 +62,7 @@ export class PointBuyAbilityScore extends AbstractBaseAbilityScore {
   }
 }
 
-@Aspect("Static", BaseAbilityScore)
+@Aspect.Variant(BaseAbilityScore, "Static")
 export class StaticAbilityScore extends AbstractBaseAbilityScore {
   @Property.Primitive
   readonly scores: Record<Ability, number>;

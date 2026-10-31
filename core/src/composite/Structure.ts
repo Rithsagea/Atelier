@@ -1,4 +1,4 @@
-import { AspectKey, AspectRef, Composite, getAspectKey } from "./Composite";
+import { AspectKey, AspectRef, Composite, FinalKey, RegistryKey, getAspectKey } from "./Composite";
 import {
   Property,
   getStrategy,
@@ -45,8 +45,9 @@ function AspectStrategy(
   refsByName: Map<string, AspectRef<object>>,
 ): SerializationStrategy<Map<AspectKey<object>, unknown>> {
   const strategyFor = (key: AspectKey<object>) => {
-    const ctx = key.typeMap ?? key.ctor;
-    return ctx ? getStrategy(ctx) : undefined;
+    if (key instanceof RegistryKey) return getStrategy(key.typeMap);
+    if (key instanceof FinalKey) return getStrategy(key.ctor);
+    return undefined;
   };
   return {
     serialize(source) {

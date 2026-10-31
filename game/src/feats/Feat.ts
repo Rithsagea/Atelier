@@ -1,8 +1,5 @@
-import { AspectKey, type Composite } from "@atelier/core/composite/Composite";
-import { BiMap } from "@atelier/core/util/Algorithms";
-import { type Constructor } from "@atelier/core/util/Types";
+import { RegistryKey, type Composite } from "@atelier/core/composite/Composite";
 
-// The list of known feats. Content registers into it with `@Aspect(name, Feat)`; it exists
+// The list of known feats. Content registers into it with `@Aspect.Variant(Feat, name)`; it exists
 // up front so `Feats` can serialize against it before any content has loaded.
-export const Feat = new AspectKey<Composite>("Feat");
-Feat.typeMap = new BiMap<string, Constructor<Composite>>();
+export const Feat = new RegistryKey<Composite>("Feat");

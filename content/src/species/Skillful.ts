@@ -7,7 +7,7 @@ import {
 import { type Skill } from "@atelier/game/stats/Stats";
 
 // Proficiency in one skill of choice. Empty until a skill is chosen.
-@Aspect("Skillful")
+@Aspect.Final("Skillful")
 export class Skillful extends Composite {
   @Property.Primitive
   skill?: Skill;

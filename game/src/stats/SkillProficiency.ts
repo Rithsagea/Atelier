@@ -6,7 +6,7 @@ import { type Skill, type SkillScore, SkillContributor } from "./Stats";
 // Computed projection over the sheet's SkillProficiencyContributors: which skills the
 // character is proficient in. Transient, like SkillScore. A set, so a skill granted twice is
 // still proficient once. Feeds SkillScore as a contributor that adds the bonus per skill.
-@Aspect("SkillProficiency")
+@Aspect.Final("SkillProficiency")
 export class SkillProficiency extends Composite {
   skills = new Set<Skill>();
 

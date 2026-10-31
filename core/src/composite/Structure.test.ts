@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { Aspect, AspectKey } from "./Composite";
+import { Aspect, RegistryKey } from "./Composite";
 import { AspectHolder, Holder, Id } from "./Aspects";
 import { Structure } from "./Structure";
 import { Property, deserialize, serialize } from "../serial/Data";
 
-@Aspect("Health")
+@Aspect.Final("Health")
 class Health {
   @Property.Primitive value = 10;
 }
@@ -13,14 +13,14 @@ class Health {
 interface Weapon {
   damage: number;
 }
-const Weapon = new AspectKey<Weapon>("Weapon");
+const Weapon = new RegistryKey<Weapon>("Weapon");
 
-@Aspect("Sword", Weapon)
+@Aspect.Variant(Weapon, "Sword")
 class Sword implements Weapon {
   @Property.Primitive damage = 8;
 }
 
-@Aspect("Bow", Weapon)
+@Aspect.Variant(Weapon, "Bow")
 class Bow implements Weapon {
   @Property.Primitive damage = 6;
   @Property.Primitive range = 80;

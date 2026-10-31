@@ -1,15 +1,21 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { deserialize, serialize } from "@atelier/core/serial/Data";
 import { Feat } from "@atelier/game/feats/Feat";
 import { Feats } from "@atelier/game/sheet/Feats";
 import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { Human } from "../species/Human";
+import { Background } from "@atelier/game/backgrounds/Background";
 import { Species } from "@atelier/game/species/Species";
 import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAbilityScore";
 import { Initiative } from "@atelier/game/stats/Initiative";
 import { Alert } from "./Alert";
 import { feats } from "./index";
+
+// Stands in for a real background, so these tests do not depend on one.
+@Aspect.Variant(Background, "TestBackground")
+class TestBackground extends Composite {}
 
 function build(withAlert: boolean) {
   const sheet = new Sheet();
@@ -25,6 +31,7 @@ function build(withAlert: boolean) {
     }),
   );
   sheet.provide(Species, new Human());
+  sheet.provide(Background, new TestBackground());
   if (withAlert) sheet.get(Feats).list.push(new Alert());
   return sheet;
 }
@@ -35,7 +42,7 @@ function initiativeOf(sheet: InstanceType<typeof Sheet>) {
 }
 
 test("every listed feat is registered in game's Feat list", () => {
-  for (const feat of feats) assert.ok(Feat.typeMap!.inverse().get(feat));
+  for (const feat of feats) assert.ok(Feat.typeMap.inverse().get(feat));
 });
 
 test("Alert adds the proficiency bonus to Initiative", () => {

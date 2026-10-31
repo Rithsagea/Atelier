@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { deserialize, serialize } from "@atelier/core/serial/Data";
 import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
+import { Background } from "@atelier/game/backgrounds/Background";
 import { Species } from "@atelier/game/species/Species";
 import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAbilityScore";
 import { Level } from "@atelier/game/stats/Level";
@@ -9,6 +11,10 @@ import { type Skill, SkillScore } from "@atelier/game/stats/Stats";
 import { Human } from "./Human";
 import { species } from "./index";
 import { Skillful } from "./Skillful";
+
+// Stands in for a real background, so these tests do not depend on one.
+@Aspect.Variant(Background, "TestBackground")
+class TestBackground extends Composite {}
 
 function build(skill?: Skill) {
   const sheet = new Sheet();
@@ -26,6 +32,7 @@ function build(skill?: Skill) {
   const human = new Human();
   human.get(Skillful).skill = skill;
   sheet.provide(Species, human);
+  sheet.provide(Background, new TestBackground());
   return sheet;
 }
 
@@ -35,7 +42,7 @@ function skillsOf(sheet: InstanceType<typeof Sheet>) {
 }
 
 test("every listed species is registered in game's Species list", () => {
-  for (const s of species) assert.ok(Species.typeMap!.inverse().get(s));
+  for (const s of species) assert.ok(Species.typeMap.inverse().get(s));
 });
 
 test("Skillful adds the proficiency bonus to the chosen skill only", () => {

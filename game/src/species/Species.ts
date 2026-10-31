@@ -1,8 +1,5 @@
-import { AspectKey, type Composite } from "@atelier/core/composite/Composite";
-import { BiMap } from "@atelier/core/util/Algorithms";
-import { type Constructor } from "@atelier/core/util/Types";
+import { RegistryKey, type Composite } from "@atelier/core/composite/Composite";
 
-// The list of known species. Content registers into it with `@Aspect(name, Species)`; it
+// The list of known species. Content registers into it with `@Aspect.Variant(Species, name)`; it
 // exists up front so a sheet serializes its species before any content has loaded.
-export const Species = new AspectKey<Composite>("Species");
-Species.typeMap = new BiMap<string, Constructor<Composite>>();
+export const Species = new RegistryKey<Composite>("Species");

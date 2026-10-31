@@ -57,7 +57,7 @@ export const AbilitySkills: Record<Ability, Skill[]> = {
 
 // Computed projection over the sheet's SkillContributors. Transient: it declares no
 // @Property fields, so it is never serialized and is rebuilt on load (see CORE.md).
-@Aspect("SkillScore")
+@Aspect.Final("SkillScore")
 export class SkillScore extends Composite {
   scores: Record<Skill, number> = enumMap(Skills, (_) => 0);
 
