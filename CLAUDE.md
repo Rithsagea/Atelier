@@ -1,29 +1,32 @@
 # Atelier
 
-A self-hosted D&D 5e tabletop app. Single Bun server, SvelteKit frontend, SQLite
-database. Stack: Bun + Hono + SvelteKit + Tailwind + `bun:sqlite`, TypeScript strict mode
-with decorators, Bun-workspaces monorepo (`packages/core`, `packages/server`,
-`packages/client`). Designed for personal use — there is only one user, but ergonomics and
-clean abstractions are not to be compromised on that account.
+A self-hosted D&D 5e engine. Node + `node:sqlite`, TypeScript strict mode, npm-workspaces
+monorepo (`core`, `server`, `playground`). The current target is a headless, single-user MVP
+driven by an in-process client; a WebSocket layer and a SvelteKit frontend come later. Designed
+for personal use — there is only one user, but ergonomics and clean abstractions are not to be
+compromised on that account.
+
+The project is mid-rewrite. The previous Bun implementation is archived in `reference/old/`
+(code in `reference/old/packages/`, design docs in `reference/old/docs/`); it is reference
+material, not part of the build — do not import from it.
 
 ---
 
 ## How this documentation is organized
 
 This file is a **router**, not a summary. It holds only the invariants that govern _every_
-change. Everything else lives in a subsystem file under `docs/`; load the one you need.
+change. Load the file you need; answer _which file do I need_ from this table without opening
+anything else.
 
-| File          | Load when                                                                                                                   |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `ENV.md`      | Setting up the project, touching build config, adding a package, or debugging imports/aliases.                              |
-| `CORE.md`     | Touching anything in `packages/core`, or any content that contributes to stats, serializes, or references other composites. |
-| `SERVER.md`   | Working on the server, WS/HTTP handlers, the DB, content loading, or simulation.                                            |
-| `FRONTEND.md` | Working on the client.                                                                                                      |
-| `PLAN.md`     | Planning future milestones (rarely needed during implementation). Also holds the record of rejected alternatives.           |
+| File                                       | Load when                                                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `PLAN.md`                                  | Planning or implementing the MVP: scope, layers, client surface, persistence, milestones.       |
+| `reference/old/docs/CORE.md`               | Touching composites, aspects, `Structure`, serialization, or stat contribution (old design).    |
+| `reference/old/docs/SERVER.md`             | Working on content loading, WS/DB handlers, or simulation (old design; Bun- and HTTP-specific). |
+| `reference/old/docs/ENV.md`, `FRONTEND.md` | Rarely: build config and client notes from the Bun-era design.                                  |
 
-Each file opens with a one-line statement of when to load it, mirroring the table above.
-This table is the single source of truth for _which file do I need_ — answer that question
-from here without opening anything else.
+The `reference/old/docs/` files describe the **old** implementation. Where they conflict with
+`PLAN.md` or this file, those win.
 
 ---
 
@@ -39,20 +42,28 @@ permanently rather than in any one subsystem file.
   not a reason. A non-composite living in a composite-everything system is the anomaly that
   breaks uniformity, and that cost is usually larger than the local cost of the composite.
   Reserve non-composite typed values for leaves with no independent capability surface. (Full
-  rationale in `CORE.md`.)
+  rationale in `reference/old/docs/CORE.md`.)
 
 - **Missing aspect = content bug = thrown error.** There is no phase or lifecycle guard. The
   engine runs or it doesn't. `get` throws with a clear message if an aspect is absent; this
   is intentional, not a gap to defend against.
 
-- **DRY across the network boundary.** All shared types live in `packages/core`. Nothing is
+- **DRY across the network boundary.** All shared types live in `core`. Nothing is
   duplicated between server and client. If a type exists in both places, it belongs in core.
 
-- **Minimal dependencies; less code is better.** Bun + Hono + SvelteKit + SQLite (+ pino if
+- **Minimal dependencies; less code is better.** Node + `node:sqlite` today, SvelteKit for the later frontend (+ pino if
   structured logging is ever needed). Each dependency is a future maintenance burden when
   picking this up after months away. If a problem can be solved with ~50 lines of TypeScript,
   do that instead. Implementations should read like proofs — declarative, DRY, no incidental
   complexity. If something takes more code than feels right, the abstraction is probably wrong.
+
+- **Game state is a memoryless snapshot; history lives in the server layer.** A `Game`
+  holds only current state. The event log, sequence numbers, and initial seed are server
+  metadata that nothing in `core` reads. State is the latest snapshot; history is the log.
+
+- **The client is the only way in.** Everything reads and writes a game through the client
+  (async methods, JSON-serializable arguments and results, snapshots never live objects), so a
+  WebSocket layer can later wrap it mechanically.
 
 - **Web browser only, and latency is not a concern.** No Electron, no mobile bundling — the
   browser is the only client, permanently. All interactions are turn-based or low-frequency:

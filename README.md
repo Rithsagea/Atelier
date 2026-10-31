@@ -1,15 +1,11 @@
-# atelier
+# Atelier
 
-To install dependencies:
+A self-hosted D&D 5e engine for personal use. Characters, monsters, and the game itself are
+composites of typed aspects, played through an in-process client. Node, TypeScript, SQLite.
 
-```bash
-bun install
-```
-
-To run:
+Work in progress — see [PLAN.md](PLAN.md).
 
 ```bash
-bun run index.ts
+npm install
+npm start -w @atelier/playground
 ```
-
-This project was created using `bun init` in bun v1.3.9. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.

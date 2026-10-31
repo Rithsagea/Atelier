@@ -1,25 +1,22 @@
 {
   "name": "atelier",
-  "type": "module",
   "private": true,
+  "type": "module",
   "workspaces": [
-    "packages/*"
+    "core",
+    "playground"
   ],
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.1"
+  },
   "scripts": {
-    "dev": "bun run --cwd packages/server src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
-  },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/bun": "latest",
-    "eslint": "^10.4.0",
-    "prettier": "^3.8.3",
-    "typescript-eslint": "^8.60.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5.9.3"
   }
 }

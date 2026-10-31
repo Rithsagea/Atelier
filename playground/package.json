@@ -1,0 +1,11 @@
+{
+  "name": "@atelier/playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.ts"
+  },
+  "dependencies": {
+    "@atelier/core": "*"
+  }
+}

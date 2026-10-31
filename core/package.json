@@ -1,0 +1,7 @@
+{
+  "name": "@atelier/core",
+  "description": "Plumbing and library types for game logic",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts"
+}
