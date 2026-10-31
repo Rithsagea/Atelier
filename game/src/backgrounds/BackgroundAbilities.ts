@@ -6,14 +6,14 @@ import { type Ability, type AbilityScore, AbilityScoreContributor } from "../sta
 export type AbilityIncreases<A extends Ability> =
   { type: "heterogeneous"; double: A; single: A } | { type: "homogeneous" };
 
-// Distinctness is checked whenever increases cross the serialization boundary, in either
-// direction, rather than when they are written.
+// Distinctness is enforced on every path into the state: when it is written, and when it
+// crosses the serialization boundary in either direction.
 const distinct: SerializationStrategy<AbilityIncreases<Ability>> = {
   serialize: assertDistinct,
   deserialize: (data) => assertDistinct(data as AbilityIncreases<Ability>),
 };
 
-function assertDistinct(increases: AbilityIncreases<Ability>): AbilityIncreases<Ability> {
+function assertDistinct<A extends Ability>(increases: AbilityIncreases<A>): AbilityIncreases<A> {
   if (increases.type === "heterogeneous" && increases.double === increases.single) {
     throw new Error(`Ability increases must name different abilities: ${increases.double}`);
   }
@@ -46,7 +46,7 @@ export abstract class AbstractBackgroundAbilities<A extends Ability = Ability> e
 
   /** +2 to one ability and +1 to another. */
   raise(plusTwo: A, plusOne: A): void {
-    this.increases = { type: "heterogeneous", double: plusTwo, single: plusOne };
+    this.increases = assertDistinct({ type: "heterogeneous", double: plusTwo, single: plusOne });
   }
 
   /** +1 to each of the three abilities. */

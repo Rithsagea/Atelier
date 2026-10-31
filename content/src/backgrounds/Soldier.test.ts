@@ -60,9 +60,8 @@ test("three abilities raise each by 1", () => {
   assert.deepEqual([scores.strength, scores.dexterity, scores.constitution], [16, 15, 14]);
 });
 
-test("increases naming the same ability twice are rejected when serialized", () => {
-  const sheet = build((a) => a.raise("strength", "strength"));
-  assert.throws(() => serialize(sheet), /different abilities/);
+test("raise rejects naming the same ability twice", () => {
+  assert.throws(() => build((a) => a.raise("strength", "strength")), /different abilities/);
 });
 
 test("duplicate increases in saved data are rejected on load", () => {
