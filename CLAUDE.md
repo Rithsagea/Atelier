@@ -85,6 +85,12 @@ permanently rather than in any one subsystem file.
   an `index.ts` per category lists the content it registers (`content/src/feats/index.ts`);
   importing it is what registers that content.
 
+- **Aspects are final or variant.** `@Aspect.Final(id)` declares a class that is its own aspect
+  (one implementation, serialized as that class). `@Aspect.Variant(Key, id)` registers a class
+  into a polymorphic slot declared as a `RegistryKey` (`Species`, `Feat`, `Background`),
+  serialized with a `$type` tag. A plain `AspectKey` is never serialized: capabilities such as
+  `Holder` and the contributor keys.
+
 - **`core` is generic; D&D lives under `game`.** Anything specific to D&D (abilities, skills,
   `Sheet`, rules) goes in the `game` package (`game/src`). The rest of `core`
   (composites, aspects, structure, serialization, events, util) must make sense without D&D.
@@ -99,9 +105,8 @@ permanently rather than in any one subsystem file.
   where the exception is visible in one place, instead of silencing it inline.
 
 - **Reserve future-proofing for content-facing contracts only.** The exception to the above
-  is the small set of signatures that all content is written against (e.g. a stat
-  contribution carrying a thunk rather than a number, a contributor receiving its owning
-  composite). These are worth a small generality tax up front because retrofitting them later
+  is the small set of signatures that all content is written against (e.g. a
+  contributor that writes to a mutable stat, and receives its owning composite). These are worth a small generality tax up front because retrofitting them later
   rewrites every piece of content. Everything _behind_ such a contract (ordering strategy,
   fixed-point vs. single-pass, etc.) stays deferred. The test: a change is worth committing to
   early only if adding it later would be a breaking change for content — optional parameters

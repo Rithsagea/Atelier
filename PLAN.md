@@ -89,9 +89,16 @@ minimal dependencies.
   (Distinct from engine events such as `LoadEffectsEvent`, which are in-memory dispatch and
   never persisted.)
 
-Stat contribution follows the existing contract: a contribution carries a **thunk**, evaluated
-against the owning composite at read time; computed aspects are transient and pure functions of
-persisted aspects.
+Stat contribution is a `Contributor<T>` (`core/src/composite/Contributor.ts`): `apply(target,
+owner)` writes to a mutable `T` (an `AbilityScore`, a `SkillProficiency`, ...) given the owning
+composite, and runs at refresh time against the owner's current state. `contribute(key, owner,
+target)` walks the owner's descendants through each composite's own `Holder`. Computed aspects
+are transient and rebuilt by `refresh(sheet)` (`game/src/sheet/Sheet.ts`), which runs the
+projections in dependency order.
+
+**Aspects are final or variant.** `@Aspect.Final(id)` is a class that is its own aspect;
+`@Aspect.Variant(Key, id)` registers a class into a `RegistryKey` slot (`Species`, `Background`,
+`Feat`). `game` defines the keys and rules; `content` fills the slots (see _Architecture_).
 
 ### Game module
 
@@ -229,27 +236,30 @@ character. Anything not listed is out of scope.
 
 ### Sheet (aspects on the character composite)
 
-| Aspect                     | Contents                                                                           | Source                      |
-| -------------------------- | ---------------------------------------------------------------------------------- | --------------------------- |
-| `Id`, `Name`               | identity                                                                           |                             |
-| `BaseAbilityScore`         | six scores, assigned from the Standard Array (15, 14, 13, 12, 10, 8)               | Character Creation, step 3  |
-| `Level`                    | class level (1); proficiency bonus is derived from it (+2 at levels 1–4)           | Fighter Features table      |
-| `AbilityScore` (comp.)     | base + background increase (+2/+1, or +1/+1/+1); modifier is `floor((score−10)/2)` | Adjust Ability Scores       |
-| `SkillProficiency` (comp.) | set of proficient skills; contributors add to it, expertise is deferred            | Fill In Numbers             |
-| `SkillScore` (comp.)       | the 18 skills: ability modifier + proficiency bonus if in `SkillProficiency`       | Fill In Numbers             |
-| `SavingThrow` (comp.)      | six saves; class grants Strength and Constitution proficiency                      | Core Fighter Traits         |
-| `HitPoints`                | max, current, temporary; level 1 max is die + Constitution modifier (d10 → 10 + C) | Level 1 Hit Points by Class |
-| `HitDice`                  | die size and spent count; 1 die at level 1                                         | Fill In Numbers             |
-| `DeathSaves`               | successes and failures                                                             | Death Saving Throws         |
-| `ArmorClass` (comp.)       | base from armor or 10 + Dexterity modifier, plus Shield, plus contributions        | Equipment, Armor            |
-| `Initiative` (comp.)       | Dexterity modifier plus contributions                                              |                             |
-| `Speed`                    | 30 feet (abstract distance)                                                        | Human                       |
-| `Equipment`                | inventory; equipped armor, shield, and weapons                                     | Starting Equipment          |
-| `Attacks` (comp.)          | per weapon: attack bonus (ability modifier + proficiency), damage dice and type    | Fill In Numbers             |
-| `Resources`                | named use-pools with a recharge rule (short, long) — see _Supporting systems_      | Second Wind, Long Rest      |
-| `Features`                 | feature composites held via `Holder`: class features, species traits, feats        | below                       |
-| `HeroicInspiration`        | boolean, held by the character                                                     | Rules Glossary              |
-| `Conditions`               | `unconscious`, `dead` only                                                         | Rules slice                 |
+| Aspect                     | Contents                                                                            | Source                      |
+| -------------------------- | ----------------------------------------------------------------------------------- | --------------------------- |
+| `Id`, `Name`               | identity                                                                            |                             |
+| `BaseAbilityScore`         | six scores, assigned from the Standard Array (15, 14, 13, 12, 10, 8)                | Character Creation, step 3  |
+| `Level`                    | class level (1); proficiency bonus is derived from it (+2 at levels 1–4)            | Fighter Features table      |
+| `AbilityScore` (comp.)     | base + background increase (+2/+1, or +1/+1/+1); modifier is `floor((score−10)/2)`  | Adjust Ability Scores       |
+| `SkillProficiency` (comp.) | set of proficient skills; contributors add to it, expertise is deferred             | Fill In Numbers             |
+| `SkillScore` (comp.)       | the 18 skills: ability modifier + proficiency bonus if in `SkillProficiency`        | Fill In Numbers             |
+| `SavingThrow` (comp.)      | six saves; class grants Strength and Constitution proficiency                       | Core Fighter Traits         |
+| `HitPoints`                | max, current, temporary; level 1 max is die + Constitution modifier (d10 → 10 + C)  | Level 1 Hit Points by Class |
+| `HitDice`                  | die size and spent count; 1 die at level 1                                          | Fill In Numbers             |
+| `DeathSaves`               | successes and failures                                                              | Death Saving Throws         |
+| `ArmorClass` (comp.)       | base from armor or 10 + Dexterity modifier, plus Shield, plus contributions         | Equipment, Armor            |
+| `Initiative` (comp.)       | Dexterity modifier plus contributions                                               |                             |
+| `Speed`                    | 30 feet (abstract distance)                                                         | Human                       |
+| `Equipment`                | inventory; equipped armor, shield, and weapons                                      | Starting Equipment          |
+| `Attacks` (comp.)          | per weapon: attack bonus (ability modifier + proficiency), damage dice and type     | Fill In Numbers             |
+| `Resources`                | named use-pools with a recharge rule (short, long) — see _Supporting systems_       | Second Wind, Long Rest      |
+| `Species`                  | one registry slot (variant): species traits such as Human's Skillful                | Character Species           |
+| `Background`               | one registry slot (variant) of five parts: abilities, feat, skills, tool, equipment | Character Backgrounds       |
+| `Feats`                    | list of feat composites, each a variant of `Feat`                                   | Feats                       |
+| `Class`                    | not built yet: one registry slot (variant) for the class and its features           | Core Fighter Traits         |
+| `HeroicInspiration`        | boolean, held by the character                                                      | Rules Glossary              |
+| `Conditions`               | `unconscious`, `dead` only                                                          | Rules slice                 |
 
 Class features, species traits, and feats are **composites**, not flags on the sheet. Each is a
 feature composite attached through `Holder` that contributes to the owning character through
@@ -284,8 +294,8 @@ object.
    advantage and disadvantage, critical hits (natural 20), and Heroic Inspiration reroll.
 2. **Dice.** One seeded PRNG in the `Game` snapshot (Rules slice); damage dice, the d20, and
    "roll twice" (Savage Attacker) all draw from it.
-3. **Stat contribution.** Thunk-based contributions to ability scores, AC, Initiative, and
-   attack/damage, so features compose without the sheet knowing about them.
+3. **Stat contribution.** `Contributor<T>`s write to ability scores, skill proficiency, AC,
+   Initiative, and attack/damage, so features compose without the sheet knowing about them.
 4. **Action economy.** Per-turn action, bonus action, and movement, reset when a turn starts;
    `legalActions` reads it.
 5. **Resources.** A use-pool aspect (`current`, `max`, recharge `short | long`) that features
@@ -372,10 +382,13 @@ Port the reference primitives to Node: `BiMap`, `Constructor`, metadata, the ser
 strategies. _Done:_ round-trip serialization tests pass under the chosen test runner.
 
 **M1 — Composites in `core`.** `AspectKey`, `Composite`, `Structure`, events, stat
-contributions with thunks, computed `AbilityScore`/`SkillScore`. _Done:_ a `Sheet` structure
+contributions (`Contributor<T>`), computed `AbilityScore`/`SkillScore`. _Done:_ a `Sheet` structure
 builds, serializes, deserializes, and recomputes derived stats identically.
 
-**M2 — Rules in `game`, content in `content`.** Fighter, Human, Goblin, items, the combat actions, seeded dice.
+**M2 — Rules in `game`, content in `content`.** _Progress:_ built: `Sheet` with ability scores,
+`SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; Human (Skillful), Alert,
+Soldier (abilities and skills only). Remaining: `HitPoints`/`HitDice`, `SavingThrow`,
+`Equipment`/`ArmorClass`, `Attacks`, `Class` and Fighter, dice and the `Game`, actions. Fighter, Human, Goblin, items, the combat actions, seeded dice.
 Run a full encounter as a pure function call — no client, no database. _Done:_ a scripted
 Fighter vs Goblin fight resolves deterministically, the reference character from _Minimum
 player character_ builds with the SRD's level 1 numbers, and both player interactions pass
