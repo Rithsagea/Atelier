@@ -1,7 +1,7 @@
 import { Aspect, Composite, RegistryKey } from "@atelier/core/composite/Composite";
 import { Property } from "@atelier/core/serial/Data";
 import { enumMap } from "@atelier/core/util/Types";
-import { AbilityScore, AbilityScoreContributor } from "./AbilityScore";
+import { AbilityScoreContributor } from "./AbilityScore";
 import { type Ability, Abilities } from "./Stats";
 
 export abstract class AbstractBaseAbilityScore extends Composite {
@@ -10,7 +10,7 @@ export abstract class AbstractBaseAbilityScore extends Composite {
   constructor() {
     super();
     this.provide(AbilityScoreContributor, {
-      apply: (score: AbilityScore) => {
+      apply: (score) => {
         for (const ability of Abilities) {
           score.scores[ability] += this.scores[ability];
         }

@@ -139,7 +139,7 @@ test("sheet serializes point buy round-trip through JSON", () => {
       Name: { value: "" },
       Level: { value: 1 },
       Feats: { list: [] },
-      Equipment: { items: [] },
+      Inventory: { items: [], equipment: [] },
       HitPoints: { damage: 0, temporary: 0 },
       HitDice: { spent: {} },
       Species: { $type: "TestSpecies" },

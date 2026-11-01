@@ -1,17 +1,18 @@
 import { Composite, RegistryKey } from "@atelier/core/composite/Composite";
-import { Property } from "@atelier/core/serial/Data";
 
 // The list of known items. Content registers into it with `@Aspect.Variant(Item, name)`.
-export const Item = new RegistryKey<Equippable>("Item");
+export const Item = new RegistryKey<Composite>("Item");
 
-/** What a creature can wear or wield at once: one item per slot. */
-export type Slot = "armor" | "shield" | "weapon";
+/** Where an item is worn or held. `armor` takes one piece; `hands` takes two hands' worth. */
+export type Slot = "armor" | "hands";
 
-// An item that is worn or held. Whether it is in use lives on the item, so it cannot drift out
-// of step with the inventory; a subclass contributes to stats only while `equipped`.
+export const SlotCapacity: Record<Slot, number> = { armor: 1, hands: 2 };
+
+// An item that can be put into a slot of the Inventory's `equipment`. It contributes to stats
+// simply by being there: carried items are never visited, so it does not check whether it is in use.
+// `slots` is how much of the slot it fills: a one-handed weapon or a Shield fills one of the two
+// hands, a two-handed weapon both.
 export abstract class Equippable extends Composite {
   abstract readonly slot: Slot;
-
-  @Property.Primitive
-  equipped: boolean = false;
+  readonly slots: number = 1;
 }

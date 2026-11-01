@@ -1,6 +1,6 @@
 import { Composite, RegistryKey } from "@atelier/core/composite/Composite";
 import { Property, type SerializationStrategy } from "@atelier/core/serial/Data";
-import { type AbilityScore, AbilityScoreContributor } from "../stats/AbilityScore";
+import { AbilityScoreContributor } from "../stats/AbilityScore";
 import { type Ability } from "../stats/Stats";
 
 /** Heterogeneous: +2 to one ability and +1 to another. Homogeneous: +1 to every ability offered. */
@@ -33,7 +33,7 @@ export abstract class AbstractBackgroundAbilities<A extends Ability = Ability> e
   constructor() {
     super();
     this.provide(AbilityScoreContributor, {
-      apply: (score: AbilityScore) => {
+      apply: (score) => {
         const increases = this.increases;
         if (increases?.type === "heterogeneous") {
           score.scores[increases.double] += 2;

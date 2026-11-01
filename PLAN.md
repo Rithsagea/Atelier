@@ -81,7 +81,7 @@ minimal dependencies.
 - **Composite** — characters, monsters, and the game itself are all composites built from a
   `Structure`. Capabilities are aspects:
   `Id`, `Name`, `BaseAbilityScore`, `AbilityScore` (computed), `HitPoints`, `ArmorClass`
-  (computed), `Equipment`, `Actions`/`ActionEconomy`, `Initiative`, `Conditions`, `Holder`.
+  (computed), `Inventory`, `Actions`/`ActionEconomy`, `Initiative`, `Conditions`, `Holder`.
 - **Encounter** — a composite aspect of the game that federates turn order. The engine has no
   global turn concept; the active encounter owns it (carried over from the old M3 note).
 - **Log entry** — a server-layer, append-only record of an applied action (what, inputs,
@@ -251,7 +251,7 @@ character. Anything not listed is out of scope.
 | `ArmorClass` (comp.)       | worn armor sets base and Dexterity cap, then Shield and features add; two passes    | Equipment, Armor            |
 | `Initiative` (comp.)       | Dexterity modifier plus contributions                                               |                             |
 | `Speed`                    | 30 feet (abstract distance)                                                         | Human                       |
-| `Equipment`                | inventory of `Item` variants; each carries its own `equipped` flag, one per slot    | Starting Equipment          |
+| `Inventory`                | carried `Item` variants, plus an `equipment` container: one armor, two hands' worth | Starting Equipment          |
 | `Attacks` (comp.)          | per weapon: attack bonus (ability modifier + proficiency), damage dice and type     | Fill In Numbers             |
 | `Resources`                | named use-pools with a recharge rule (short, long) — see _Supporting systems_       | Second Wind, Long Rest      |
 | `Species`                  | one registry slot (variant): species traits such as Human's Skillful                | Character Species           |
@@ -390,7 +390,7 @@ builds, serializes, deserializes, and recomputes derived stats identically.
 
 **M2 — Rules in `game`, content in `content`.** _Progress:_ built: `Sheet` with ability scores,
 `SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; `HitPoints`/`HitDice`
-(with `MaxHitPoints`/`HitDicePool`), `SavingThrow`, `Equipment`/`ArmorClass`/`ArmorTraining`
+(with `MaxHitPoints`/`HitDicePool`), `SavingThrow`, `Inventory`/`ArmorClass`/`ArmorTraining`
 (chain mail, Shield), `WeaponTraining`/`Attacks` (longsword, shortbow), the seeded `Rng` and the
 `Game` composite (status and RNG only), the `Class` slot; Fighter (skills, fixed Hit Points,
 saves, armor and weapon training, the Defense fighting style), Human (Skillful), Alert, Soldier
@@ -449,6 +449,11 @@ Settle in M0, before anything depends on them.
    client surface unchanged, persists across a restart, and replays from the log. The
    alternative, declaring the reroll up front (`act(..., { rerollIfBelow })`), is simpler but
    wrong against the rules. Reactions will use the same mechanism.
+7. **Refreshing computed aspects.** `refresh(sheet)` in `game/src/sheet/Sheet.ts` rebuilds each
+   computed aspect by hand, in a hard-coded dependency order, one three-line block per
+   projection. Likely fix: a refreshable (computable) aspect that declares what it reads, so the
+   order is derived and a new projection is one registration. Design it deliberately; do not
+   paper over it with a loop. Not blocking.
 
 ---
 

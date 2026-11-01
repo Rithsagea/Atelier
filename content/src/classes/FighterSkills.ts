@@ -1,9 +1,6 @@
 import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { Property } from "@atelier/core/serial/Data";
-import {
-  type SkillProficiency,
-  SkillProficiencyContributor,
-} from "@atelier/game/stats/SkillProficiency";
+import { SkillProficiencyContributor } from "@atelier/game/stats/SkillProficiency";
 import { type Skill } from "@atelier/game/stats/Stats";
 
 export const FighterSkillList = [
@@ -27,7 +24,7 @@ export class FighterSkills extends Composite {
   constructor() {
     super();
     this.provide(SkillProficiencyContributor, {
-      apply: (proficiency: SkillProficiency) => {
+      apply: (proficiency) => {
         for (const skill of this.skills) proficiency.skills.add(skill);
       },
     });

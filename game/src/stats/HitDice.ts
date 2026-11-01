@@ -5,8 +5,7 @@ import { Property } from "@atelier/core/serial/Data";
 export const Dice = ["d6", "d8", "d10", "d12"] as const;
 export type Die = (typeof Dice)[number];
 
-// Computed projection over the sheet's HitDicePoolContributors: how many Hit Dice of each size
-// the character has in total (the class grants one per level). Transient, like Initiative.
+// How many Hit Dice of each size the character has in total (the class grants one per level).
 @Aspect.Final("HitDicePool")
 export class HitDicePool extends Composite {
   dice: Partial<Record<Die, number>> = {};

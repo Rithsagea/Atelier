@@ -10,7 +10,7 @@ import { BaseAbilityScore, StaticAbilityScore } from "../stats/BaseAbilityScore"
 import { HitDice, HitDicePoolContributor } from "../stats/HitDice";
 import { HitPoints, MaxHitPointsContributor } from "../stats/HitPoints";
 import { SavingThrow, SavingThrowProficiencyContributor } from "../stats/SavingThrow";
-import { Equipment } from "./Equipment";
+import { Inventory } from "./Inventory";
 import { Feats } from "./Feats";
 import { Sheet, refresh } from "./Sheet";
 
@@ -154,17 +154,17 @@ test("equipped armor sets the base and caps Dexterity; unequipped armor does not
   const sheet = build();
   const chain = new TestChain();
   const breastplate = new TestBreastplate();
-  sheet.get(Equipment).items.push(chain, breastplate);
+  sheet.get(Inventory).items.push(chain, breastplate);
 
   refresh(sheet);
   assert.equal(sheet.get(ArmorClass).value, 12);
 
-  sheet.get(Equipment).equip(chain);
+  sheet.get(Inventory).equip(chain);
   refresh(sheet);
   assert.equal(sheet.get(ArmorClass).value, 16); // heavy armor ignores DEX
 
-  sheet.get(Equipment).unequip(chain);
-  sheet.get(Equipment).equip(breastplate);
+  sheet.get(Inventory).unequip(chain);
+  sheet.get(Inventory).equip(breastplate);
   refresh(sheet);
   assert.equal(sheet.get(ArmorClass).value, 16); // 14 + DEX 14 (+2, at the cap)
 });
@@ -172,10 +172,15 @@ test("equipped armor sets the base and caps Dexterity; unequipped armor does not
 test("only one suit of armor can be equipped at a time", () => {
   const sheet = build();
   const [chain, breastplate] = [new TestChain(), new TestBreastplate()];
-  sheet.get(Equipment).items.push(chain, breastplate);
-  sheet.get(Equipment).equip(chain);
-  assert.throws(() => sheet.get(Equipment).equip(breastplate), /armor slot/);
-  assert.throws(() => sheet.get(Equipment).equip(new TestChain()), /not in the inventory/);
+  sheet.get(Inventory).items.push(chain, breastplate);
+  sheet.get(Inventory).equip(chain);
+  assert.throws(() => sheet.get(Inventory).equip(breastplate), /armor slot/);
+  assert.throws(() => sheet.get(Inventory).equip(new TestChain()), /not in the inventory/);
+
+  sheet.get(Inventory).unequip(chain);
+  assert.deepEqual(sheet.get(Inventory).equipment, []);
+  assert.deepEqual(sheet.get(Inventory).items, [breastplate, chain]);
+  assert.throws(() => sheet.get(Inventory).unequip(chain), /not equipped/);
 });
 
 test("a bonus that needs worn armor sees it whatever the contributor order", () => {
@@ -185,28 +190,26 @@ test("a bonus that needs worn armor sees it whatever the contributor order", () 
   sheet.get(Feats).list.push(defense); // before the inventory in SheetHolder's order
 
   const chain = new TestChain();
-  sheet.get(Equipment).items.push(chain);
-  sheet.get(Equipment).equip(chain);
+  sheet.get(Inventory).items.push(chain);
+  sheet.get(Inventory).equip(chain);
   refresh(sheet);
   assert.equal(sheet.get(ArmorClass).value, 17);
 
-  sheet.get(Equipment).unequip(chain);
+  sheet.get(Inventory).unequip(chain);
   refresh(sheet);
   assert.equal(sheet.get(ArmorClass).value, 12);
 });
 
-test("equipment and which items are equipped round-trip through JSON", () => {
+test("the inventory and what is equipped round-trip through JSON", () => {
   const sheet = build();
   const chain = new TestChain();
-  sheet.get(Equipment).items.push(chain, new TestBreastplate());
-  sheet.get(Equipment).equip(chain);
+  sheet.get(Inventory).items.push(chain, new TestBreastplate());
+  sheet.get(Inventory).equip(chain);
 
   const data = JSON.parse(JSON.stringify(serialize(sheet)));
-  assert.deepEqual(data.aspects.Equipment, {
-    items: [
-      { $type: "TestChain", equipped: true },
-      { $type: "TestBreastplate", equipped: false },
-    ],
+  assert.deepEqual(data.aspects.Inventory, {
+    items: [{ $type: "TestBreastplate" }],
+    equipment: [{ $type: "TestChain" }],
   });
 
   const restored = deserialize(data, Sheet);

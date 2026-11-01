@@ -17,8 +17,8 @@ import { SavingThrow, SavingThrowProficiency } from "../stats/SavingThrow";
 import { SkillProficiency } from "../stats/SkillProficiency";
 import { SkillScore } from "../stats/SkillScore";
 import { WeaponTraining } from "../stats/WeaponTraining";
-import { Equipment } from "./Equipment";
 import { Feats } from "./Feats";
+import { Inventory } from "./Inventory";
 import { SheetHolder } from "./SheetHolder";
 
 export const Sheet = Structure(
@@ -31,7 +31,7 @@ export const Sheet = Structure(
   [Background],
   [Class],
   [Feats, () => new Feats()],
-  [Equipment, () => new Equipment()],
+  [Inventory, () => new Inventory()],
   [HitPoints, () => new HitPoints()],
   [HitDice, () => new HitDice()],
   [AbilityScore, () => new AbilityScore()],
@@ -53,6 +53,10 @@ export const Sheet = Structure(
  * this twice never double-counts. Order matters: everything reads AbilityScore, SkillScore reads
  * SkillProficiency, SavingThrow reads SavingThrowProficiency, a Shield in ArmorClass reads ArmorTraining, and
  * Attacks reads WeaponTraining, so those come first.
+ *
+ * TODO: this repeats the same three lines per projection and hard-codes the dependency order.
+ * It needs a more careful abstraction (likely a refreshable/computable aspect that declares what
+ * it reads) rather than a quick loop; left as is until that is designed.
  */
 export function refresh(sheet: Composite): void {
   const abilities = new AbilityScore();

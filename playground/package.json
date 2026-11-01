@@ -6,6 +6,8 @@
     "start": "tsx --tsconfig ../tsconfig.json src/main.ts"
   },
   "dependencies": {
+    "@atelier/content": "*",
+    "@atelier/core": "*",
     "@atelier/game": "*"
   }
 }

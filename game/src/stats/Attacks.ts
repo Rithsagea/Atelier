@@ -14,10 +14,9 @@ export interface Attack {
   damageType: DamageType;
 }
 
-// Computed projection of the character's attacks, one per equipped weapon. Transient, like
-// ArmorClass. Built in two passes so content never depends on contributor order: wielded weapons
-// first add their entries (the base contributors), then features adjust the entries that exist
-// (the contributors: Archery, Improved Critical, a magic weapon's bonus).
+// One entry per equipped weapon. Built in two passes so content never depends on contributor
+// order: wielded weapons first add their entries (the base contributors), then features adjust the
+// entries that exist (the contributors: Archery, Improved Critical, a magic weapon's bonus).
 @Aspect.Final("Attacks")
 export class Attacks extends Composite {
   list: Attack[] = [];

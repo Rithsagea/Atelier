@@ -1,14 +1,11 @@
 import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { AbilityScore, abilityModifier } from "@atelier/game/stats/AbilityScore";
-import { type ArmorTraining, ArmorTrainingContributor } from "@atelier/game/stats/ArmorTraining";
-import { type HitDicePool, HitDicePoolContributor } from "@atelier/game/stats/HitDice";
-import { type MaxHitPoints, MaxHitPointsContributor } from "@atelier/game/stats/HitPoints";
+import { ArmorTrainingContributor } from "@atelier/game/stats/ArmorTraining";
+import { HitDicePoolContributor } from "@atelier/game/stats/HitDice";
+import { MaxHitPointsContributor } from "@atelier/game/stats/HitPoints";
 import { Level } from "@atelier/game/stats/Level";
-import { type WeaponTraining, WeaponTrainingContributor } from "@atelier/game/stats/WeaponTraining";
-import {
-  type SavingThrowProficiency,
-  SavingThrowProficiencyContributor,
-} from "@atelier/game/stats/SavingThrow";
+import { WeaponTrainingContributor } from "@atelier/game/stats/WeaponTraining";
+import { SavingThrowProficiencyContributor } from "@atelier/game/stats/SavingThrow";
 
 // The Core Fighter Traits that scale with level or feed a stat. Stores nothing, so it is rebuilt
 // on load. Hit Points use the fixed value (6 + Con per level after the first), not a roll.
@@ -17,31 +14,31 @@ export class FighterTraits extends Composite {
   constructor() {
     super();
     this.provide(MaxHitPointsContributor, {
-      apply: (max: MaxHitPoints, owner: Composite) => {
+      apply: (max, owner) => {
         const level = owner.get(Level).value;
         const constitution = abilityModifier(owner.get(AbilityScore).scores.constitution);
         max.value += 10 + 6 * (level - 1) + constitution * level;
       },
     });
     this.provide(HitDicePoolContributor, {
-      apply: (pool: HitDicePool, owner: Composite) => {
+      apply: (pool, owner) => {
         pool.dice.d10 = (pool.dice.d10 ?? 0) + owner.get(Level).value;
       },
     });
     this.provide(SavingThrowProficiencyContributor, {
-      apply: (proficiency: SavingThrowProficiency) => {
+      apply: (proficiency) => {
         proficiency.abilities.add("strength").add("constitution");
       },
     });
     this.provide(ArmorTrainingContributor, {
-      apply: (training: ArmorTraining) => {
+      apply: (training) => {
         for (const category of ["light", "medium", "heavy", "shield"] as const) {
           training.categories.add(category);
         }
       },
     });
     this.provide(WeaponTrainingContributor, {
-      apply: (training: WeaponTraining) => {
+      apply: (training) => {
         training.categories.add("simple").add("martial");
       },
     });

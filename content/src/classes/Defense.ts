@@ -1,5 +1,5 @@
 import { Aspect, Composite } from "@atelier/core/composite/Composite";
-import { type ArmorClass, ArmorClassContributor } from "@atelier/game/stats/ArmorClass";
+import { ArmorClassContributor } from "@atelier/game/stats/ArmorClass";
 import { FightingStyle } from "./FightingStyle";
 
 // +1 AC while wearing armor.
@@ -8,7 +8,7 @@ export class Defense extends Composite {
   constructor() {
     super();
     this.provide(ArmorClassContributor, {
-      apply: (ac: ArmorClass) => {
+      apply: (ac) => {
         if (ac.armor) ac.bonus += 1;
       },
     });

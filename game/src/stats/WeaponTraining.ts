@@ -3,8 +3,7 @@ import { contribute, ContributorKey } from "@atelier/core/composite/Contributor"
 
 export type WeaponCategory = "simple" | "martial";
 
-// Computed projection over the sheet's WeaponTrainingContributors: which weapon categories the
-// character is proficient with. Transient, like ArmorTraining. An untrained weapon still attacks,
+// Which weapon categories the character is proficient with. An untrained weapon still attacks,
 // just without the proficiency bonus.
 @Aspect.Final("WeaponTraining")
 export class WeaponTraining extends Composite {

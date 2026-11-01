@@ -112,6 +112,14 @@ permanently rather than in any one subsystem file.
   types, a cast, a restructure). If a rule is wrong for the project, change `eslint.config.js`,
   where the exception is visible in one place, instead of silencing it inline.
 
+- **Comments say what is not obvious, once.** Describe a thing by its own rule or invariant,
+  not by its category or its siblings. Do not write "Computed projection over ...",
+  "Transient, like X", or any comment that points at another file to explain this one; the
+  structure (a class that extends `Composite` and has no `@Property` fields) already says it.
+  Leave a class uncommented when it has no rule worth stating. Let types be inferred where the
+  context supplies them: a contributor's `apply: (ac, owner) => ...` takes its types from its
+  `ContributorKey`, so do not annotate them.
+
 - **Reserve future-proofing for content-facing contracts only.** The exception to the above
   is the small set of signatures that all content is written against (e.g. a
   contributor that writes to a mutable stat, and receives its owning composite). These are worth a small generality tax up front because retrofitting them later

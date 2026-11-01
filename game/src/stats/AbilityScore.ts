@@ -1,17 +1,15 @@
 import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { contribute, ContributorKey } from "@atelier/core/composite/Contributor";
 import { enumMap } from "@atelier/core/util/Types";
-import { InitiativeContributor, type Initiative } from "./Initiative";
-import { SavingThrowContributor, type SavingThrow } from "./SavingThrow";
-import { SkillContributor, type SkillScore } from "./SkillScore";
+import { InitiativeContributor } from "./Initiative";
+import { SavingThrowContributor } from "./SavingThrow";
+import { SkillContributor } from "./SkillScore";
 import { type Ability, Abilities, AbilitySkills } from "./Stats";
 
 export function abilityModifier(score: number): number {
   return Math.floor((score - 10) / 2);
 }
 
-// Computed projection over the sheet's AbilityScoreContributors. Transient: it declares no
-// @Property fields, so it is never serialized and is rebuilt on load (see CORE.md).
 @Aspect.Final("AbilityScore")
 export class AbilityScore extends Composite {
   scores: Record<Ability, number> = enumMap(Abilities, (_) => 0);
@@ -19,7 +17,7 @@ export class AbilityScore extends Composite {
   constructor() {
     super();
     this.provide(SkillContributor, {
-      apply: (skill: SkillScore) => {
+      apply: (skill) => {
         for (const ability of Abilities) {
           for (const s of AbilitySkills[ability])
             skill.scores[s] += abilityModifier(this.scores[ability]);
@@ -27,14 +25,14 @@ export class AbilityScore extends Composite {
       },
     });
     this.provide(SavingThrowContributor, {
-      apply: (save: SavingThrow) => {
+      apply: (save) => {
         for (const ability of Abilities) {
           save.scores[ability] += abilityModifier(this.scores[ability]);
         }
       },
     });
     this.provide(InitiativeContributor, {
-      apply: (initiative: Initiative) => {
+      apply: (initiative) => {
         initiative.value += abilityModifier(this.scores.dexterity);
       },
     });

@@ -1,4 +1,4 @@
-import { type ArmorClass, ArmorClassBaseContributor } from "../stats/ArmorClass";
+import { ArmorClassBaseContributor } from "../stats/ArmorClass";
 import { Equippable } from "./Item";
 
 // Body armor. `dexCap` is the most Dexterity modifier it allows: Infinity for light armor, 2 for
@@ -11,8 +11,7 @@ export abstract class Armor extends Equippable {
   constructor() {
     super();
     this.provide(ArmorClassBaseContributor, {
-      apply: (ac: ArmorClass) => {
-        if (!this.equipped) return;
+      apply: (ac) => {
         ac.base = this.base;
         ac.dexCap = this.dexCap;
         ac.armor = true;

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { deserialize, serialize } from "@atelier/core/serial/Data";
 import { Class } from "@atelier/game/classes/Class";
-import { Equipment } from "@atelier/game/sheet/Equipment";
+import { Inventory } from "@atelier/game/sheet/Inventory";
 import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { ArmorClass } from "@atelier/game/stats/ArmorClass";
 import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAbilityScore";
@@ -89,12 +89,12 @@ test("Defense adds 1 AC only while wearing armor", () => {
   const sheet = build();
   fighterOf(sheet).provide(FightingStyle, new Defense());
   const chain = new ChainMail();
-  sheet.get(Equipment).items.push(chain);
+  sheet.get(Inventory).items.push(chain);
 
   refresh(sheet);
   assert.equal(sheet.get(ArmorClass).value, 12); // unarmored
 
-  sheet.get(Equipment).equip(chain);
+  sheet.get(Inventory).equip(chain);
   refresh(sheet);
   assert.equal(sheet.get(ArmorClass).value, 17);
 });
@@ -103,9 +103,9 @@ test("a Fighter with chain mail, Shield and Defense has AC 19", () => {
   const sheet = build();
   fighterOf(sheet).provide(FightingStyle, new Defense());
   const [chain, shield] = [new ChainMail(), new Shield()];
-  sheet.get(Equipment).items.push(chain, shield);
-  sheet.get(Equipment).equip(chain);
-  sheet.get(Equipment).equip(shield);
+  sheet.get(Inventory).items.push(chain, shield);
+  sheet.get(Inventory).equip(chain);
+  sheet.get(Inventory).equip(shield);
   refresh(sheet);
   assert.equal(sheet.get(ArmorClass).value, 19);
 });

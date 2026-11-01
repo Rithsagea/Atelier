@@ -2,7 +2,6 @@ import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { contribute, ContributorKey } from "@atelier/core/composite/Contributor";
 import { Property } from "@atelier/core/serial/Data";
 
-// Computed projection over the sheet's MaxHitPointsContributors. Transient, like Initiative.
 @Aspect.Final("MaxHitPoints")
 export class MaxHitPoints extends Composite {
   value = 0;

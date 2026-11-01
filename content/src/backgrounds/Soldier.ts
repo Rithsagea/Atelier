@@ -13,10 +13,7 @@ import {
   AbstractBackgroundAbilities,
   BackgroundAbilities,
 } from "@atelier/game/backgrounds/BackgroundAbilities";
-import {
-  type SkillProficiency,
-  SkillProficiencyContributor,
-} from "@atelier/game/stats/SkillProficiency";
+import { SkillProficiencyContributor } from "@atelier/game/stats/SkillProficiency";
 
 // Strength, Dexterity, or Constitution.
 @Aspect.Variant(BackgroundAbilities, "Soldier")
@@ -39,7 +36,7 @@ export class SoldierSkills extends Composite {
   constructor() {
     super();
     this.provide(SkillProficiencyContributor, {
-      apply: (proficiency: SkillProficiency) => {
+      apply: (proficiency) => {
         proficiency.skills.add("athletics").add("intimidation");
       },
     });
@@ -48,7 +45,7 @@ export class SoldierSkills extends Composite {
 
 // One kind of Gaming Set.
 // TODO: a tool object, written to the inventory when the background is applied, not a name.
-// Needs an inventory (Equipment) aspect.
+// Needs an inventory (Inventory) aspect.
 @Aspect.Variant(BackgroundTool, "Soldier")
 export class SoldierTool extends Composite {
   @Property.Primitive
@@ -58,7 +55,7 @@ export class SoldierTool extends Composite {
 // Package A (spear, shortbow, arrows, gaming set, healer's kit, quiver, clothes, 14 GP) or
 // package B (50 GP).
 // TODO: write the chosen package's items to the inventory when the background is applied;
-// only the choice is kept. Needs an inventory (Equipment) aspect.
+// only the choice is kept. Needs an inventory (Inventory) aspect.
 @Aspect.Variant(BackgroundEquipment, "Soldier")
 export class SoldierEquipment extends Composite {
   @Property.Primitive
