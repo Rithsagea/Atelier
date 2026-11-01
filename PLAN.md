@@ -257,7 +257,7 @@ character. Anything not listed is out of scope.
 | `Species`                  | one registry slot (variant): species traits such as Human's Skillful                | Character Species           |
 | `Background`               | one registry slot (variant) of five parts: abilities, feat, skills, tool, equipment | Character Backgrounds       |
 | `Feats`                    | list of feat composites, each a variant of `Feat`                                   | Feats                       |
-| `Class`                    | not built yet: one registry slot (variant) for the class and its features           | Core Fighter Traits         |
+| `Class`                    | one registry slot (variant) for the class and its features; Fighter levels 1–3      | Core Fighter Traits         |
 | `HeroicInspiration`        | boolean, held by the character                                                      | Rules Glossary              |
 | `Conditions`               | `unconscious`, `dead` only                                                          | Rules slice                 |
 
@@ -309,8 +309,11 @@ object.
 8. **Equipment rules.** Weapon records (damage dice, damage type, melee/ranged, Versatile) and
    armor records (base AC, Dexterity cap); AC is a computed aspect over what is equipped.
 9. **Character builder.** `createCharacter(id, spec)` (Client) takes
-   `{ name, class, species, background, abilities, skills, ... }`, validates it against the
-   steps above, and returns the composite. It is the only place that knows the creation order.
+   `{ name, class, species, background, abilities, skills, ... }`, every field optional: a
+   field left out stays a hole (see CLAUDE.md, _A partial character is a valid character_),
+   and the partial composite is returned and saved. Choices are filled in by later calls. It is
+   the only place that knows the creation order. `startEncounter` is where a character is
+   selected for play, so it requires `validate()` to pass.
 
 ### Two player interactions
 
@@ -387,9 +390,11 @@ builds, serializes, deserializes, and recomputes derived stats identically.
 
 **M2 — Rules in `game`, content in `content`.** _Progress:_ built: `Sheet` with ability scores,
 `SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; `HitPoints`/`HitDice`
-(with `MaxHitPoints`/`HitDicePool` awaiting a class), `SavingThrow`, `Equipment`/`ArmorClass`
-(chain mail, Shield); Human (Skillful), Alert, Soldier (abilities and skills only). Remaining:
-`Attacks`, `Class` and Fighter, dice and the `Game`, actions. Fighter, Human, Goblin, items, the combat actions, seeded dice.
+(with `MaxHitPoints`/`HitDicePool`), `SavingThrow`, `Equipment`/`ArmorClass`/`ArmorTraining`
+(chain mail, Shield), the `Class` slot; Fighter (skills, fixed Hit Points, saves, armor training,
+the Defense fighting style), Human (Skillful), Alert, Soldier (abilities and skills only).
+Remaining: `Attacks`, Fighter's Second Wind, Action Surge and Champion, dice and the `Game`,
+actions. Fighter, Human, Goblin, items, the combat actions, seeded dice.
 Run a full encounter as a pure function call — no client, no database. _Done:_ a scripted
 Fighter vs Goblin fight resolves deterministically, the reference character from _Minimum
 player character_ builds with the SRD's level 1 numbers, and both player interactions pass

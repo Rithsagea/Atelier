@@ -2,7 +2,9 @@ import { Holder, Id, Name } from "@atelier/core/composite/Aspects";
 import { type Composite } from "@atelier/core/composite/Composite";
 import { Structure } from "@atelier/core/composite/Structure";
 import { Background } from "../backgrounds/Background";
+import { Class } from "../classes/Class";
 import { Species } from "../species/Species";
+import { ArmorTraining } from "../stats/ArmorTraining";
 import { AbilityScore } from "../stats/AbilityScore";
 import { BaseAbilityScore } from "../stats/BaseAbilityScore";
 import { ArmorClass } from "../stats/ArmorClass";
@@ -25,6 +27,7 @@ export const Sheet = Structure(
   [BaseAbilityScore],
   [Species],
   [Background],
+  [Class],
   [Feats, () => new Feats()],
   [Equipment, () => new Equipment()],
   [HitPoints, () => new HitPoints()],
@@ -35,6 +38,7 @@ export const Sheet = Structure(
   [SavingThrowProficiency, () => new SavingThrowProficiency()],
   [SavingThrow, () => new SavingThrow()],
   [Initiative, () => new Initiative()],
+  [ArmorTraining, () => new ArmorTraining()],
   [ArmorClass, () => new ArmorClass()],
   [MaxHitPoints, () => new MaxHitPoints()],
   [HitDicePool, () => new HitDicePool()],
@@ -43,7 +47,8 @@ export const Sheet = Structure(
 /**
  * Recompute every derived stat of a sheet. Each projection is rebuilt from scratch, so calling
  * this twice never double-counts. Order matters: everything reads AbilityScore, SkillScore reads
- * SkillProficiency, and SavingThrow reads SavingThrowProficiency, so those come first.
+ * SkillProficiency, SavingThrow reads SavingThrowProficiency, and a Shield in ArmorClass reads ArmorTraining, so
+ * those come first.
  */
 export function refresh(sheet: Composite): void {
   const abilities = new AbilityScore();
@@ -69,6 +74,10 @@ export function refresh(sheet: Composite): void {
   const saves = new SavingThrow();
   sheet.provide(SavingThrow, saves);
   saves.refresh(sheet);
+
+  const armorTraining = new ArmorTraining();
+  sheet.provide(ArmorTraining, armorTraining);
+  armorTraining.refresh(sheet);
 
   const armorClass = new ArmorClass();
   sheet.provide(ArmorClass, armorClass);

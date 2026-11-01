@@ -14,6 +14,7 @@ import { Level, proficiencyBonus } from "../stats/Level";
 import { Aspect, Composite, getAspectKey } from "@atelier/core/composite/Composite";
 import { serialize, deserialize } from "@atelier/core/serial/Data";
 import { Background } from "../backgrounds/Background";
+import { Class } from "../classes/Class";
 import { Species } from "../species/Species";
 import { Feats } from "./Feats";
 import { Sheet, refresh } from "./Sheet";
@@ -24,6 +25,9 @@ class TestSpecies extends Composite {}
 
 @Aspect.Variant(Background, "TestBackground")
 class TestBackground extends Composite {}
+
+@Aspect.Variant(Class, "TestClass")
+class TestClass extends Composite {}
 
 const STANDARD_ARRAY = {
   strength: 15,
@@ -47,6 +51,7 @@ test("sheet validate reflects BaseAbilityScore presence", () => {
   assert.equal(sheet.validate(), false);
   sheet.provide(Species, new TestSpecies());
   sheet.provide(Background, new TestBackground());
+  sheet.provide(Class, new TestClass());
   assert.equal(sheet.validate(), true);
 });
 
@@ -123,6 +128,7 @@ test("sheet serializes point buy round-trip through JSON", () => {
   sheet.provide(BaseAbilityScore, points);
   sheet.provide(Species, new TestSpecies());
   sheet.provide(Background, new TestBackground());
+  sheet.provide(Class, new TestClass());
   points.set("strength", 9);
   points.set("dexterity", 5);
 
@@ -138,6 +144,7 @@ test("sheet serializes point buy round-trip through JSON", () => {
       HitDice: { spent: {} },
       Species: { $type: "TestSpecies" },
       Background: { $type: "TestBackground" },
+      Class: { $type: "TestClass" },
       BaseAbilityScore: {
         $type: "PointBuy",
         points: {
@@ -163,6 +170,7 @@ test("sheet serializes static score round-trip through JSON", () => {
   sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
   sheet.provide(Species, new TestSpecies());
   sheet.provide(Background, new TestBackground());
+  sheet.provide(Class, new TestClass());
 
   const data = JSON.parse(JSON.stringify(serialize(sheet)));
   assert.deepEqual(data.aspects.BaseAbilityScore, { $type: "Static", scores: STANDARD_ARRAY });
@@ -250,6 +258,7 @@ test("a skill granted by two sources is proficient once", () => {
   sheet.provide(BaseAbilityScore, new StaticAbilityScore(STANDARD_ARRAY));
   sheet.provide(Species, new TestSpecies());
   sheet.provide(Background, new TestBackground());
+  sheet.provide(Class, new TestClass());
   sheet.get(Feats).list.push(grants("athletics"), grants("athletics"), grants("stealth"));
   refresh(sheet);
 
@@ -267,4 +276,15 @@ test("refresh recomputes from scratch, so repeating it changes nothing", () => {
   const once = { ...sheet.get(SkillScore).scores };
   refresh(sheet);
   assert.deepEqual(sheet.get(SkillScore).scores, once);
+});
+
+test("a sheet with every choice left open refreshes and round-trips, but is not valid", () => {
+  const sheet = new Sheet();
+  refresh(sheet);
+  assert.equal(sheet.validate(), false);
+  assert.equal(sheet.get(AbilityScore).scores.strength, 0);
+
+  const restored = deserialize(JSON.parse(JSON.stringify(serialize(sheet))), Sheet);
+  refresh(restored);
+  assert.equal(restored.validate(), false);
 });

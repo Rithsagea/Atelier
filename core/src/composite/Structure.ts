@@ -28,6 +28,10 @@ export function Structure<const Types extends readonly object[]>(
         if (factory) this.provide(aspect, factory());
       }
     }
+    // TODO: shallow. It only checks that every aspect is present, so a filled slot with holes
+    // inside it (a Fighter with no skills or fighting style chosen) still passes. It also returns
+    // a boolean, so a caller cannot list which choices are still open. Deepen it, and report the
+    // holes, when the character builder needs "complete enough to select for play".
     validate(): boolean {
       for (const ref of aspectNames.values()) {
         if (!this.has(ref)) return false;

@@ -46,7 +46,15 @@ permanently rather than in any one subsystem file.
 
 - **Missing aspect = content bug = thrown error.** There is no phase or lifecycle guard. The
   engine runs or it doesn't. `get` throws with a clear message if an aspect is absent; this
-  is intentional, not a gap to defend against.
+  is intentional, not a gap to defend against. The one exception is a player's _choice_ (see
+  the next rule), where absence is a legal hole, not a bug.
+
+- **A partial character is a valid character.** Every choice a player makes (class, species,
+  background, base ability scores, chosen skills, fighting style, ...) defaults to a _hole_: an
+  absent registry aspect (a slot with no factory) or an empty field (`undefined`, `[]`). Building,
+  saving, loading, and `refresh` all work with holes, and contributors skip them. Nothing reads a
+  hole as if it were filled. A hole is filled by a later call. Completeness is checked only when
+  a character is _selected_ for play (`validate()`), never when it is built or loaded.
 
 - **DRY across the network boundary.** All shared types live in `core` (generic) or
   `game` (D&D-specific). Nothing is duplicated between server and client. If a type exists in

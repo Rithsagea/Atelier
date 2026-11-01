@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { deserialize, serialize } from "@atelier/core/serial/Data";
+import { Class } from "@atelier/game/classes/Class";
 import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { Background } from "@atelier/game/backgrounds/Background";
 import { Species } from "@atelier/game/species/Species";
@@ -12,6 +13,7 @@ import { type Skill } from "@atelier/game/stats/Stats";
 import { Human } from "./Human";
 import { species } from "./index";
 import { Skillful } from "./Skillful";
+import { Fighter } from "../classes/Fighter";
 
 // Stands in for a real background, so these tests do not depend on one.
 @Aspect.Variant(Background, "TestBackground")
@@ -34,6 +36,7 @@ function build(skill?: Skill) {
   human.get(Skillful).skill = skill;
   sheet.provide(Species, human);
   sheet.provide(Background, new TestBackground());
+  sheet.provide(Class, new Fighter());
   return sheet;
 }
 

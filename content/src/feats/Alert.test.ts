@@ -4,6 +4,7 @@ import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { deserialize, serialize } from "@atelier/core/serial/Data";
 import { Feat } from "@atelier/game/feats/Feat";
 import { Feats } from "@atelier/game/sheet/Feats";
+import { Class } from "@atelier/game/classes/Class";
 import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { Human } from "../species/Human";
 import { Background } from "@atelier/game/backgrounds/Background";
@@ -12,6 +13,7 @@ import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAb
 import { Initiative } from "@atelier/game/stats/Initiative";
 import { Alert } from "./Alert";
 import { feats } from "./index";
+import { Fighter } from "../classes/Fighter";
 
 // Stands in for a real background, so these tests do not depend on one.
 @Aspect.Variant(Background, "TestBackground")
@@ -32,6 +34,7 @@ function build(withAlert: boolean) {
   );
   sheet.provide(Species, new Human());
   sheet.provide(Background, new TestBackground());
+  sheet.provide(Class, new Fighter());
   if (withAlert) sheet.get(Feats).list.push(new Alert());
   return sheet;
 }

@@ -10,6 +10,7 @@ import {
   type AbstractBackgroundAbilities,
   BackgroundAbilities,
 } from "@atelier/game/backgrounds/BackgroundAbilities";
+import { Class } from "@atelier/game/classes/Class";
 import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { Species } from "@atelier/game/species/Species";
 import { AbilityScore } from "@atelier/game/stats/AbilityScore";
@@ -19,6 +20,7 @@ import { Human } from "../species/Human";
 import { Skillful } from "../species/Skillful";
 import { backgrounds } from "./index";
 import { Soldier, SoldierEquipment, SoldierTool } from "./Soldier";
+import { Fighter } from "../classes/Fighter";
 
 function build(choose?: (abilities: AbstractBackgroundAbilities) => void) {
   const sheet = new Sheet();
@@ -37,6 +39,7 @@ function build(choose?: (abilities: AbstractBackgroundAbilities) => void) {
   const soldier = new Soldier();
   if (choose) choose(soldier.get(BackgroundAbilities));
   sheet.provide(Background, soldier);
+  sheet.provide(Class, new Fighter());
   return sheet;
 }
 
