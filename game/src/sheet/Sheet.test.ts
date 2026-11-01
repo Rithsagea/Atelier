@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { AbilityScore, abilityModifier } from "../stats/AbilityScore";
 import { SkillProficiency, SkillProficiencyContributor } from "../stats/SkillProficiency";
-import { SkillScore } from "../stats/Stats";
+import { SkillScore } from "../stats/SkillScore";
 import {
   PointBuyAbilityScore,
   StaticAbilityScore,
@@ -133,6 +133,9 @@ test("sheet serializes point buy round-trip through JSON", () => {
       Name: { value: "" },
       Level: { value: 1 },
       Feats: { list: [] },
+      Equipment: { items: [] },
+      HitPoints: { damage: 0, temporary: 0 },
+      HitDice: { spent: {} },
       Species: { $type: "TestSpecies" },
       Background: { $type: "TestBackground" },
       BaseAbilityScore: {
@@ -174,7 +177,17 @@ test("computed AbilityScore and SkillScore are transient and rebuilt on load", (
   sheet.provide(BaseAbilityScore, new PointBuyAbilityScore());
   const aspects = serialize(sheet).aspects as object;
 
-  for (const name of ["AbilityScore", "SkillScore", "SkillProficiency", "Holder"]) {
+  for (const name of [
+    "AbilityScore",
+    "SkillScore",
+    "SkillProficiency",
+    "SavingThrow",
+    "SavingThrowProficiency",
+    "ArmorClass",
+    "MaxHitPoints",
+    "HitDicePool",
+    "Holder",
+  ]) {
     assert.equal(name in aspects, false);
   }
 

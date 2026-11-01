@@ -1,6 +1,7 @@
 import { Composite, RegistryKey } from "@atelier/core/composite/Composite";
 import { Property, type SerializationStrategy } from "@atelier/core/serial/Data";
-import { type Ability, type AbilityScore, AbilityScoreContributor } from "../stats/AbilityScore";
+import { type AbilityScore, AbilityScoreContributor } from "../stats/AbilityScore";
+import { type Ability } from "../stats/Stats";
 
 /** Heterogeneous: +2 to one ability and +1 to another. Homogeneous: +1 to every ability offered. */
 export type AbilityIncreases<A extends Ability> =

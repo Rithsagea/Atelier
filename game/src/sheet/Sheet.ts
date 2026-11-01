@@ -5,10 +5,15 @@ import { Background } from "../backgrounds/Background";
 import { Species } from "../species/Species";
 import { AbilityScore } from "../stats/AbilityScore";
 import { BaseAbilityScore } from "../stats/BaseAbilityScore";
+import { ArmorClass } from "../stats/ArmorClass";
+import { HitDice, HitDicePool } from "../stats/HitDice";
+import { HitPoints, MaxHitPoints } from "../stats/HitPoints";
 import { Initiative } from "../stats/Initiative";
 import { Level } from "../stats/Level";
+import { SavingThrow, SavingThrowProficiency } from "../stats/SavingThrow";
 import { SkillProficiency } from "../stats/SkillProficiency";
-import { SkillScore } from "../stats/Stats";
+import { SkillScore } from "../stats/SkillScore";
+import { Equipment } from "./Equipment";
 import { Feats } from "./Feats";
 import { SheetHolder } from "./SheetHolder";
 
@@ -21,16 +26,24 @@ export const Sheet = Structure(
   [Species],
   [Background],
   [Feats, () => new Feats()],
+  [Equipment, () => new Equipment()],
+  [HitPoints, () => new HitPoints()],
+  [HitDice, () => new HitDice()],
   [AbilityScore, () => new AbilityScore()],
   [SkillProficiency, () => new SkillProficiency()],
   [SkillScore, () => new SkillScore()],
+  [SavingThrowProficiency, () => new SavingThrowProficiency()],
+  [SavingThrow, () => new SavingThrow()],
   [Initiative, () => new Initiative()],
+  [ArmorClass, () => new ArmorClass()],
+  [MaxHitPoints, () => new MaxHitPoints()],
+  [HitDicePool, () => new HitDicePool()],
 );
 
 /**
  * Recompute every derived stat of a sheet. Each projection is rebuilt from scratch, so calling
- * this twice never double-counts. Order matters: SkillScore and Initiative read AbilityScore,
- * and SkillScore reads SkillProficiency, so those come first.
+ * this twice never double-counts. Order matters: everything reads AbilityScore, SkillScore reads
+ * SkillProficiency, and SavingThrow reads SavingThrowProficiency, so those come first.
  */
 export function refresh(sheet: Composite): void {
   const abilities = new AbilityScore();
@@ -48,4 +61,24 @@ export function refresh(sheet: Composite): void {
   const initiative = new Initiative();
   sheet.provide(Initiative, initiative);
   initiative.refresh(sheet);
+
+  const proficientSaves = new SavingThrowProficiency();
+  sheet.provide(SavingThrowProficiency, proficientSaves);
+  proficientSaves.refresh(sheet);
+
+  const saves = new SavingThrow();
+  sheet.provide(SavingThrow, saves);
+  saves.refresh(sheet);
+
+  const armorClass = new ArmorClass();
+  sheet.provide(ArmorClass, armorClass);
+  armorClass.refresh(sheet);
+
+  const maxHitPoints = new MaxHitPoints();
+  sheet.provide(MaxHitPoints, maxHitPoints);
+  maxHitPoints.refresh(sheet);
+
+  const hitDicePool = new HitDicePool();
+  sheet.provide(HitDicePool, hitDicePool);
+  hitDicePool.refresh(sheet);
 }

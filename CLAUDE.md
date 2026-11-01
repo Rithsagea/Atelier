@@ -142,5 +142,6 @@ skip a section when it is empty, and do not retell the steps taken.
 - **Check the source before stating a rule.** SRD rules, existing code, and the docs in this
   repo are available to read. Look up the SRD text in `scratch/dnd-5e-srd-markdown/` before
   naming or classifying a rule, rather than recalling it.
-- **Commit only when asked, and group by concern.** When asked to commit, split into one commit
-  per concern if the files separate cleanly, otherwise make one commit and say why.
+- **One commit per session.** A session's work lands as a single commit, made at the end of the
+  session once tests, typecheck, and lint pass. Do not split it by concern, and do not commit
+  mid-session unless asked.

@@ -244,14 +244,14 @@ character. Anything not listed is out of scope.
 | `AbilityScore` (comp.)     | base + background increase (+2/+1, or +1/+1/+1); modifier is `floor((score−10)/2)`  | Adjust Ability Scores       |
 | `SkillProficiency` (comp.) | set of proficient skills; contributors add to it, expertise is deferred             | Fill In Numbers             |
 | `SkillScore` (comp.)       | the 18 skills: ability modifier + proficiency bonus if in `SkillProficiency`        | Fill In Numbers             |
-| `SavingThrow` (comp.)      | six saves; class grants Strength and Constitution proficiency                       | Core Fighter Traits         |
-| `HitPoints`                | max, current, temporary; level 1 max is die + Constitution modifier (d10 → 10 + C)  | Level 1 Hit Points by Class |
-| `HitDice`                  | die size and spent count; 1 die at level 1                                          | Fill In Numbers             |
+| `SavingThrow` (comp.)      | six saves: modifier + proficiency bonus if in `SavingThrowProficiency` (comp.)      | Core Fighter Traits         |
+| `HitPoints`                | damage taken and temporary; current is derived as `MaxHitPoints` (comp.) − damage   | Level 1 Hit Points by Class |
+| `HitDice`                  | spent count per die size; the pool (`HitDicePool`, comp.) comes from the class      | Fill In Numbers             |
 | `DeathSaves`               | successes and failures                                                              | Death Saving Throws         |
-| `ArmorClass` (comp.)       | base from armor or 10 + Dexterity modifier, plus Shield, plus contributions         | Equipment, Armor            |
+| `ArmorClass` (comp.)       | worn armor sets base and Dexterity cap, then Shield and features add; two passes    | Equipment, Armor            |
 | `Initiative` (comp.)       | Dexterity modifier plus contributions                                               |                             |
 | `Speed`                    | 30 feet (abstract distance)                                                         | Human                       |
-| `Equipment`                | inventory; equipped armor, shield, and weapons                                      | Starting Equipment          |
+| `Equipment`                | inventory of `Item` variants; each carries its own `equipped` flag, one per slot    | Starting Equipment          |
 | `Attacks` (comp.)          | per weapon: attack bonus (ability modifier + proficiency), damage dice and type     | Fill In Numbers             |
 | `Resources`                | named use-pools with a recharge rule (short, long) — see _Supporting systems_       | Second Wind, Long Rest      |
 | `Species`                  | one registry slot (variant): species traits such as Human's Skillful                | Character Species           |
@@ -386,9 +386,10 @@ contributions (`Contributor<T>`), computed `AbilityScore`/`SkillScore`. _Done:_ 
 builds, serializes, deserializes, and recomputes derived stats identically.
 
 **M2 — Rules in `game`, content in `content`.** _Progress:_ built: `Sheet` with ability scores,
-`SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; Human (Skillful), Alert,
-Soldier (abilities and skills only). Remaining: `HitPoints`/`HitDice`, `SavingThrow`,
-`Equipment`/`ArmorClass`, `Attacks`, `Class` and Fighter, dice and the `Game`, actions. Fighter, Human, Goblin, items, the combat actions, seeded dice.
+`SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; `HitPoints`/`HitDice`
+(with `MaxHitPoints`/`HitDicePool` awaiting a class), `SavingThrow`, `Equipment`/`ArmorClass`
+(chain mail, Shield); Human (Skillful), Alert, Soldier (abilities and skills only). Remaining:
+`Attacks`, `Class` and Fighter, dice and the `Game`, actions. Fighter, Human, Goblin, items, the combat actions, seeded dice.
 Run a full encounter as a pure function call — no client, no database. _Done:_ a scripted
 Fighter vs Goblin fight resolves deterministically, the reference character from _Minimum
 player character_ builds with the SRD's level 1 numbers, and both player interactions pass

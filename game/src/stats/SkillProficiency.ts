@@ -1,7 +1,8 @@
 import { Aspect, Composite } from "@atelier/core/composite/Composite";
 import { contribute, ContributorKey } from "@atelier/core/composite/Contributor";
 import { Level } from "./Level";
-import { type Skill, type SkillScore, SkillContributor } from "./Stats";
+import { type SkillScore, SkillContributor } from "./SkillScore";
+import { type Skill } from "./Stats";
 
 // Computed projection over the sheet's SkillProficiencyContributors: which skills the
 // character is proficient in. Transient, like SkillScore. A set, so a skill granted twice is

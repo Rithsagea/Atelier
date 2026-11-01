@@ -1,7 +1,21 @@
-import { Aspect, Composite } from "@atelier/core/composite/Composite";
-import { contribute, ContributorKey } from "@atelier/core/composite/Contributor";
-import { enumMap } from "@atelier/core/util/Types";
-import { type Ability } from "./AbilityScore";
+export const Abilities = [
+  "strength",
+  "dexterity",
+  "constitution",
+  "intelligence",
+  "wisdom",
+  "charisma",
+] as const;
+export type Ability = (typeof Abilities)[number];
+
+export const AbilityLabels: Record<Ability, string> = {
+  strength: "Strength",
+  dexterity: "Dexterity",
+  constitution: "Constitution",
+  intelligence: "Intelligence",
+  wisdom: "Wisdom",
+  charisma: "Charisma",
+};
 
 export const Skills = [
   "acrobatics",
@@ -54,16 +68,3 @@ export const AbilitySkills: Record<Ability, Skill[]> = {
   wisdom: ["animal_handling", "insight", "medicine", "perception", "survival"],
   charisma: ["deception", "intimidation", "performance", "persuasion"],
 };
-
-// Computed projection over the sheet's SkillContributors. Transient: it declares no
-// @Property fields, so it is never serialized and is rebuilt on load (see CORE.md).
-@Aspect.Final("SkillScore")
-export class SkillScore extends Composite {
-  scores: Record<Skill, number> = enumMap(Skills, (_) => 0);
-
-  refresh(sheet: Composite): void {
-    contribute(SkillContributor, sheet, this);
-  }
-}
-
-export const SkillContributor = ContributorKey<SkillScore>("SkillContributor");

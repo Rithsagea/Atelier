@@ -14,7 +14,7 @@ import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { Species } from "@atelier/game/species/Species";
 import { AbilityScore } from "@atelier/game/stats/AbilityScore";
 import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAbilityScore";
-import { SkillScore } from "@atelier/game/stats/Stats";
+import { SkillScore } from "@atelier/game/stats/SkillScore";
 import { Human } from "../species/Human";
 import { Skillful } from "../species/Skillful";
 import { backgrounds } from "./index";

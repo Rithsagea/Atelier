@@ -1,7 +1,8 @@
 import { Aspect, Composite, RegistryKey } from "@atelier/core/composite/Composite";
 import { Property } from "@atelier/core/serial/Data";
 import { enumMap } from "@atelier/core/util/Types";
-import { type Ability, Abilities, AbilityScore, AbilityScoreContributor } from "./AbilityScore";
+import { AbilityScore, AbilityScoreContributor } from "./AbilityScore";
+import { type Ability, Abilities } from "./Stats";
 
 export abstract class AbstractBaseAbilityScore extends Composite {
   abstract scores: Record<Ability, number>;
