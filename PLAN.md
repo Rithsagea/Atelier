@@ -417,6 +417,22 @@ strategies. _Done:_ round-trip serialization tests pass under the chosen test ru
 contributions (`Contributor<T>`), computed `AbilityScore`/`SkillScore`. _Done:_ a `Sheet` structure
 builds, serializes, deserializes, and recomputes derived stats identically.
 
+> **WIP — resume here.** M2 is in progress: the interaction pilot is committed (`f4f2ae5`,
+> `ac9dc6a`) and everything built passes `npm test`, typecheck and lint. Open items for the next
+> session, in order:
+>
+> 1. Check against the SRD (`scratch/dnd-5e-srd-markdown/`, not in the checkout): Second Wind
+>    (2 uses, 1 regained on a short rest), and the Goblin (10 HP, AC 15, +4 to hit, 1d6+2).
+> 2. Decide whether `Rng` leaves the `Game` snapshot (see _Interactions_); it stays for now, and
+>    `autoRoll` draws from it. Settle before M3.
+> 3. Turns: an encounter aspect, initiative, and the action economy. Unblocks Action Surge,
+>    Savage Attacker, Remarkable Athlete, and Initiative Swap. Until then anyone may act at any time.
+> 4. Death saves and the `unconscious`/`dead` conditions (0 HP currently does nothing).
+> 5. Write the Soldier's equipment and tool to the inventory, and deepen `validate()`.
+>
+> Not started: M3 onward, the `server` workspace, `GameError` codes (the code throws plain
+> `Error`), and the client.
+
 **M2 — Rules in `game`, content in `content`.** _Progress:_ built: `Sheet` with ability scores,
 `SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; `HitPoints`/`HitDice`
 (with `MaxHitPoints`/`HitDicePool`), `SavingThrow`, `Inventory`/`ArmorClass`/`ArmorTraining`
