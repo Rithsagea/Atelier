@@ -5,6 +5,7 @@ import { Background } from "../backgrounds/Background";
 import { Class } from "../classes/Class";
 import { Species } from "../species/Species";
 import { ArmorTraining } from "../stats/ArmorTraining";
+import { Attacks } from "../stats/Attacks";
 import { AbilityScore } from "../stats/AbilityScore";
 import { BaseAbilityScore } from "../stats/BaseAbilityScore";
 import { ArmorClass } from "../stats/ArmorClass";
@@ -15,6 +16,7 @@ import { Level } from "../stats/Level";
 import { SavingThrow, SavingThrowProficiency } from "../stats/SavingThrow";
 import { SkillProficiency } from "../stats/SkillProficiency";
 import { SkillScore } from "../stats/SkillScore";
+import { WeaponTraining } from "../stats/WeaponTraining";
 import { Equipment } from "./Equipment";
 import { Feats } from "./Feats";
 import { SheetHolder } from "./SheetHolder";
@@ -40,6 +42,8 @@ export const Sheet = Structure(
   [Initiative, () => new Initiative()],
   [ArmorTraining, () => new ArmorTraining()],
   [ArmorClass, () => new ArmorClass()],
+  [WeaponTraining, () => new WeaponTraining()],
+  [Attacks, () => new Attacks()],
   [MaxHitPoints, () => new MaxHitPoints()],
   [HitDicePool, () => new HitDicePool()],
 );
@@ -47,8 +51,8 @@ export const Sheet = Structure(
 /**
  * Recompute every derived stat of a sheet. Each projection is rebuilt from scratch, so calling
  * this twice never double-counts. Order matters: everything reads AbilityScore, SkillScore reads
- * SkillProficiency, SavingThrow reads SavingThrowProficiency, and a Shield in ArmorClass reads ArmorTraining, so
- * those come first.
+ * SkillProficiency, SavingThrow reads SavingThrowProficiency, a Shield in ArmorClass reads ArmorTraining, and
+ * Attacks reads WeaponTraining, so those come first.
  */
 export function refresh(sheet: Composite): void {
   const abilities = new AbilityScore();
@@ -82,6 +86,14 @@ export function refresh(sheet: Composite): void {
   const armorClass = new ArmorClass();
   sheet.provide(ArmorClass, armorClass);
   armorClass.refresh(sheet);
+
+  const weaponTraining = new WeaponTraining();
+  sheet.provide(WeaponTraining, weaponTraining);
+  weaponTraining.refresh(sheet);
+
+  const attacks = new Attacks();
+  sheet.provide(Attacks, attacks);
+  attacks.refresh(sheet);
 
   const maxHitPoints = new MaxHitPoints();
   sheet.provide(MaxHitPoints, maxHitPoints);

@@ -8,7 +8,7 @@ import { FightingStyle } from "./FightingStyle";
 
 // Levels 1-3. The sheet's Level is the Fighter level; the fighting style is empty until chosen.
 // TODO: Second Wind and Action Surge (need Resources and actions), the Champion subclass (needs
-// Attacks).
+// critical hits, which need the d20 test).
 @Aspect.Variant(Class, "Fighter")
 export class Fighter extends Structure(
   [Holder, () => new AspectHolder()],

@@ -5,7 +5,7 @@ import { Property } from "@atelier/core/serial/Data";
 export const Item = new RegistryKey<Equippable>("Item");
 
 /** What a creature can wear or wield at once: one item per slot. */
-export type Slot = "armor" | "shield";
+export type Slot = "armor" | "shield" | "weapon";
 
 // An item that is worn or held. Whether it is in use lives on the item, so it cannot drift out
 // of step with the inventory; a subclass contributes to stats only while `equipped`.

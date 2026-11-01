@@ -391,10 +391,13 @@ builds, serializes, deserializes, and recomputes derived stats identically.
 **M2 — Rules in `game`, content in `content`.** _Progress:_ built: `Sheet` with ability scores,
 `SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; `HitPoints`/`HitDice`
 (with `MaxHitPoints`/`HitDicePool`), `SavingThrow`, `Equipment`/`ArmorClass`/`ArmorTraining`
-(chain mail, Shield), the `Class` slot; Fighter (skills, fixed Hit Points, saves, armor training,
-the Defense fighting style), Human (Skillful), Alert, Soldier (abilities and skills only).
-Remaining: `Attacks`, Fighter's Second Wind, Action Surge and Champion, dice and the `Game`,
-actions. Fighter, Human, Goblin, items, the combat actions, seeded dice.
+(chain mail, Shield), `WeaponTraining`/`Attacks` (longsword, shortbow), the seeded `Rng` and the
+`Game` composite (status and RNG only), the `Class` slot; Fighter (skills, fixed Hit Points,
+saves, armor and weapon training, the Defense fighting style), Human (Skillful), Alert, Soldier
+(abilities and skills only). Remaining: the roster and encounter on `Game`, Fighter's Second
+Wind, Action Surge and Champion, Goblin, the combat actions (how long-running and state-dependent
+actions behave, including the pause-for-reroll of open decision 6, is an actions design question,
+settled there).
 Run a full encounter as a pure function call — no client, no database. _Done:_ a scripted
 Fighter vs Goblin fight resolves deterministically, the reference character from _Minimum
 player character_ builds with the SRD's level 1 numbers, and both player interactions pass
@@ -438,13 +441,14 @@ Settle in M0, before anything depends on them.
 5. **Typed `get`.** Whether `Structure` should constrain `get` to its declared aspects. Not
    needed for the MVP; do not build it speculatively.
 6. **Mid-action decisions.** Heroic Inspiration lets the player reroll _after_ seeing a roll, so
-   an action must be able to pause. Proposal: `act` returns a result with a `pending` prompt
-   (the roll and the legal choices) and the `Game` records it as part of its snapshot; while it
-   is set, `legalActions` offers only the choices, and answering is another `act`. This keeps
-   the client surface unchanged, persists across a restart, and replays from the log. The
+   an action must be able to pause. This is an _actions_ concern, designed together with how
+   actions that last several steps or depend on state behave; it blocks nothing until the
+   combat actions are built. Proposal to start from: `act` returns a result with a `pending`
+   prompt (the roll and the legal choices) and the `Game` records it in its snapshot; while it is
+   set, `legalActions` offers only the choices, and answering is another `act`. This keeps the
+   client surface unchanged, persists across a restart, and replays from the log. The
    alternative, declaring the reroll up front (`act(..., { rerollIfBelow })`), is simpler but
-   wrong against the rules. Settle before M2 builds attack resolution, since both reactions and
-   this reroll will use the same mechanism. Limit the first version to the attack roll.
+   wrong against the rules. Reactions will use the same mechanism.
 
 ---
 

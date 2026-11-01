@@ -5,13 +5,16 @@ import { Equipment } from "@atelier/game/sheet/Equipment";
 import { Class } from "@atelier/game/classes/Class";
 import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
 import { ArmorClass } from "@atelier/game/stats/ArmorClass";
+import { Attacks } from "@atelier/game/stats/Attacks";
 import { BaseAbilityScore, StaticAbilityScore } from "@atelier/game/stats/BaseAbilityScore";
 import { Fighter } from "../classes/Fighter";
 import { ChainMail } from "./ChainMail";
 import { items } from "./index";
+import { Longsword } from "./Longsword";
 import { Shield } from "./Shield";
+import { Shortbow } from "./Shortbow";
 
-function armorClassWith(worn: (ChainMail | Shield)[], trained = true) {
+function build(worn: (ChainMail | Shield | Longsword | Shortbow)[], trained = true) {
   const sheet = new Sheet();
   if (trained) sheet.provide(Class, new Fighter());
   sheet.provide(
@@ -29,7 +32,11 @@ function armorClassWith(worn: (ChainMail | Shield)[], trained = true) {
   equipment.items.push(...worn);
   for (const item of worn) equipment.equip(item);
   refresh(sheet);
-  return sheet.get(ArmorClass).value;
+  return sheet;
+}
+
+function armorClassWith(worn: (ChainMail | Shield)[], trained = true) {
+  return build(worn, trained).get(ArmorClass).value;
 }
 
 test("every listed item is registered in game's Item list", () => {
@@ -46,4 +53,40 @@ test("chain mail is AC 16 and a Shield adds 2", () => {
 test("a Shield gives no AC without Shield training", () => {
   assert.equal(armorClassWith([new Shield()], false), 12);
   assert.equal(armorClassWith([new ChainMail(), new Shield()], false), 16);
+});
+
+test("a trained melee weapon attacks with Strength plus proficiency", () => {
+  const [attack, ...rest] = build([new Longsword()]).get(Attacks).list;
+  assert.equal(rest.length, 0);
+  assert.equal(attack.bonus, 4); // STR 15 (+2) + proficiency +2
+  assert.equal(attack.damageBonus, 2);
+  assert.deepEqual(attack.damage, { count: 1, sides: 8 });
+  assert.equal(attack.damageType, "slashing");
+});
+
+test("a ranged weapon attacks with Dexterity", () => {
+  const [attack] = build([new Shortbow()]).get(Attacks).list;
+  assert.equal(attack.bonus, 4); // DEX 14 (+2) + proficiency +2
+  assert.equal(attack.damageBonus, 2);
+  assert.equal(attack.ranged, true);
+});
+
+test("an untrained weapon attacks without the proficiency bonus", () => {
+  const [attack] = build([new Longsword()], false).get(Attacks).list;
+  assert.equal(attack.bonus, 2);
+  assert.equal(attack.damageBonus, 2);
+});
+
+test("only the equipped weapon attacks, and armor adds no attack", () => {
+  const sheet = build([new Longsword(), new ChainMail()]);
+  assert.equal(sheet.get(Attacks).list.length, 1);
+  const bow = new Shortbow();
+  sheet.get(Equipment).items.push(bow);
+  sheet.get(Equipment).unequip(sheet.get(Equipment).items[0] as Longsword);
+  sheet.get(Equipment).equip(bow);
+  refresh(sheet);
+  assert.deepEqual(
+    sheet.get(Attacks).list.map((a) => a.weapon),
+    [bow],
+  );
 });

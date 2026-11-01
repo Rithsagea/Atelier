@@ -4,6 +4,7 @@ import { type ArmorTraining, ArmorTrainingContributor } from "@atelier/game/stat
 import { type HitDicePool, HitDicePoolContributor } from "@atelier/game/stats/HitDice";
 import { type MaxHitPoints, MaxHitPointsContributor } from "@atelier/game/stats/HitPoints";
 import { Level } from "@atelier/game/stats/Level";
+import { type WeaponTraining, WeaponTrainingContributor } from "@atelier/game/stats/WeaponTraining";
 import {
   type SavingThrowProficiency,
   SavingThrowProficiencyContributor,
@@ -11,7 +12,6 @@ import {
 
 // The Core Fighter Traits that scale with level or feed a stat. Stores nothing, so it is rebuilt
 // on load. Hit Points use the fixed value (6 + Con per level after the first), not a roll.
-// TODO: weapon proficiency, once there are weapons.
 @Aspect.Final("FighterTraits")
 export class FighterTraits extends Composite {
   constructor() {
@@ -38,6 +38,11 @@ export class FighterTraits extends Composite {
         for (const category of ["light", "medium", "heavy", "shield"] as const) {
           training.categories.add(category);
         }
+      },
+    });
+    this.provide(WeaponTrainingContributor, {
+      apply: (training: WeaponTraining) => {
+        training.categories.add("simple").add("martial");
       },
     });
   }
