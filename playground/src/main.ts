@@ -21,7 +21,7 @@ import {
 import { BackgroundAbilities } from "@atelier/game/backgrounds/BackgroundAbilities";
 import { Class } from "@atelier/game/classes/Class";
 import { Rng } from "@atelier/game/dice/Rng";
-import { Game, GameStatus } from "@atelier/game/game/Game";
+import { Game } from "@atelier/game/game/Game";
 import { Feats } from "@atelier/game/sheet/Feats";
 import { Inventory } from "@atelier/game/sheet/Inventory";
 import { Sheet, refresh } from "@atelier/game/sheet/Sheet";
@@ -173,10 +173,7 @@ for (const attack of sheet.get(Attacks).list) {
 const savedGame = JSON.parse(JSON.stringify(serialize(game)));
 const resumed = deserialize(savedGame, Game);
 assert.equal(resumed.get(Rng).next(), game.get(Rng).next());
-game.get(GameStatus).value = "closed";
-console.log(
-  `game ${game.get(Id).value} ${game.get(GameStatus).value}; restored dice continue identically`,
-);
+console.log(`game ${game.get(Id).value}: restored dice continue identically`);
 
 // The other BaseAbilityScore variant: point buy, 27 points.
 const pointBuy = new PointBuyAbilityScore();

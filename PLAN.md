@@ -76,7 +76,7 @@ minimal dependencies.
 ### Domain model
 
 - **Game** — the root composite (old "session"): a **memoryless snapshot** of the game's current
-  state — its composites, encounter, status, and RNG state. It holds no history and no log;
+  state — its composites, encounter, and RNG state. It holds no history and no log;
   everything that records how it got here lives in the server layer (see _Game module_).
 - **Composite** — characters, monsters, and the game itself are all composites built from a
   `Structure`. Capabilities are aspects:
@@ -115,7 +115,7 @@ below) serializes to JSON data with no methods, so it can be stored, sent over t
 and replayed as-is. Game-specific behavior is free functions over that data. Split by what depends
 on Node:
 
-- `game` — the object shapes (`Game`, encounter status) and the pure rules over them,
+- `game` — the object shapes (`Game`, encounter) and the pure rules over them,
   such as whether an action is legal right now. No Node APIs, so a future client imports the
   same definitions.
 - `server` — the live side: loading a `Game` from the database, the in-memory
@@ -127,7 +127,6 @@ Shape sketch (illustrative, not final):
 interface Game {
   id: string;
   rng: number; // current PRNG state, so a restored snapshot rolls the same dice
-  status: "active" | "closed";
   encounter?: { order: string[]; active: number };
 }
 ```
@@ -139,7 +138,6 @@ What the game objects must serve (single user, so no one is ever refused for who
 - **Setup:** create a game; create characters and monsters into it.
 - **Turn gating:** only the active composite may act or end turn. This is a rule of the
   encounter, not an authorization check; out-of-turn actions throw a `GameError`.
-- **Lifecycle:** `active → closed`; a closed game rejects actions without the engine knowing.
 - **Direct editing:** the user may set HP or conditions outright, logged like any other change.
 - **Summary view:** `getGame` returns the `Game` snapshot nearly as-is.
 - **Driving by bot:** a bot is just a caller; nothing in the game layer distinguishes it from a
@@ -147,7 +145,7 @@ What the game objects must serve (single user, so no one is ever refused for who
 
 **Decision: `Game` stays a composite.** CLAUDE.md makes composite the default, so `Game` is
 built from a `Structure` like everything else, and its serialized form is the plain object
-sketched above. Its fields are aspects (encounter, status, RNG state), not bespoke class
+sketched above. Its fields are aspects (encounter, RNG state), not bespoke class
 members. Revisit only if a concrete need forces it.
 
 ---
@@ -178,7 +176,7 @@ Surface (names illustrative; the shape is the contract):
 | `closeEncounter(id)`                 | Close the encounter                              |
 
 Failures are thrown as a `GameError` with a stable string `code` (`out-of-turn`,
-`game-closed`, `illegal-action`, …) so a wrapper can forward them without parsing messages.
+`illegal-action`, …) so a wrapper can forward them without parsing messages.
 
 `legalActions` exists so the driver needs no rules knowledge: it asks what is legal and
 chooses. Actions are content classes with a typed `inputs` argument (no input-schema DSL yet),
@@ -392,7 +390,7 @@ builds, serializes, deserializes, and recomputes derived stats identically.
 `SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; `HitPoints`/`HitDice`
 (with `MaxHitPoints`/`HitDicePool`), `SavingThrow`, `Inventory`/`ArmorClass`/`ArmorTraining`
 (chain mail, Shield), `WeaponTraining`/`Attacks` (longsword, shortbow), the seeded `Rng` and the
-`Game` composite (status and RNG only), the `Class` slot; Fighter (skills, fixed Hit Points,
+`Game` composite (id and RNG only), the `Class` slot; Fighter (skills, fixed Hit Points,
 saves, armor and weapon training, the Defense fighting style), Human (Skillful), Alert, Soldier
 (abilities and skills only). Remaining: the roster and encounter on `Game`, Fighter's Second
 Wind, Action Surge and Champion, Goblin, the combat actions (how long-running and state-dependent
@@ -407,7 +405,7 @@ their scenario tests.
 write-and-append, replay. _Done:_ replaying a stored log into a fresh game reproduces state;
 restart mid-encounter resumes.
 
-**M4 — Client.** The client surface above, `GameError` codes for out-of-turn, closed-game and
+**M4 — Client.** The client surface above, `GameError` codes for out-of-turn and
 illegal actions, and the three wrap-readiness properties. _Done:_ every client method is
 exercised by tests, and results round-trip through `JSON.stringify`/`parse` unchanged.
 
