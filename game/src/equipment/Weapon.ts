@@ -9,20 +9,28 @@ export type DamageType = "bludgeoning" | "piercing" | "slashing";
 
 // A wielded weapon. Melee weapons attack with Strength, ranged with Dexterity; the same modifier
 // goes to the damage roll. The proficiency bonus is added only with the weapon's category.
-// TODO: Finesse, Versatile, Heavy, and Ammunition, once something needs them.
+// TODO: Versatile, Heavy, and Ammunition, once something needs them.
 export abstract class Weapon extends Equippable {
   readonly slot = "hands";
   abstract readonly category: WeaponCategory;
   abstract readonly ranged: boolean;
   abstract readonly damage: DiceRoll;
   abstract readonly damageType: DamageType;
+  /** Attacks with the better of Strength and Dexterity. */
+  readonly finesse: boolean = false;
 
   constructor() {
     super();
     this.provide(AttackBaseContributor, {
       apply: (attacks, owner) => {
         const scores = owner.get(AbilityScore).scores;
-        const modifier = abilityModifier(this.ranged ? scores.dexterity : scores.strength);
+        const strength = abilityModifier(scores.strength);
+        const dexterity = abilityModifier(scores.dexterity);
+        const modifier = this.finesse
+          ? Math.max(strength, dexterity)
+          : this.ranged
+            ? dexterity
+            : strength;
         const proficient = owner.get(WeaponTraining).categories.has(this.category);
         attacks.list.push({
           weapon: this,
@@ -31,6 +39,7 @@ export abstract class Weapon extends Equippable {
           damage: this.damage,
           damageBonus: modifier,
           damageType: this.damageType,
+          critical: 20,
         });
       },
     });

@@ -142,6 +142,8 @@ test("sheet serializes point buy round-trip through JSON", () => {
       Inventory: { items: [], equipment: [] },
       HitPoints: { damage: 0, temporary: 0 },
       HitDice: { spent: {} },
+      HeroicInspiration: { value: false },
+      Resources: { spent: {} },
       Species: { $type: "TestSpecies" },
       Background: { $type: "TestBackground" },
       Class: { $type: "TestClass" },

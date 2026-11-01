@@ -82,8 +82,11 @@ minimal dependencies.
   `Structure`. Capabilities are aspects:
   `Id`, `Name`, `BaseAbilityScore`, `AbilityScore` (computed), `HitPoints`, `ArmorClass`
   (computed), `Inventory`, `Actions`/`ActionEconomy`, `Initiative`, `Conditions`, `Holder`.
+- **Interaction** — ephemeral state in the game: a started action that is not finished yet (see
+  _Interactions_). Part of the snapshot, so it survives a restart and replays from the log.
 - **Encounter** — a composite aspect of the game that federates turn order. The engine has no
   global turn concept; the active encounter owns it (carried over from the old M3 note).
+  **Deferred**: for now anyone may start any action at any time, and there is no action economy.
 - **Log entry** — a server-layer, append-only record of an applied action (what, inputs,
   result). It is the audit trail and the replay source, and is never part of a `Game`.
   (Distinct from engine events such as `LoadEffectsEvent`, which are in-memory dispatch and
@@ -135,9 +138,9 @@ Composites are not nested in this sketch; they are reached through the game's `H
 
 What the game objects must serve (single user, so no one is ever refused for who they are):
 
-- **Setup:** create a game; create characters and monsters into it.
-- **Turn gating:** only the active composite may act or end turn. This is a rule of the
-  encounter, not an authorization check; out-of-turn actions throw a `GameError`.
+- **Setup:** create a game; create characters and monsters into it (the `Roster`).
+- **Turn gating (deferred):** later, only the active composite may act or end turn. This is a
+  rule of the encounter, not an authorization check. Until then there are no turns.
 - **Direct editing:** the user may set HP or conditions outright, logged like any other change.
 - **Summary view:** `getGame` returns the `Game` snapshot nearly as-is.
 - **Driving by bot:** a bot is just a caller; nothing in the game layer distinguishes it from a
@@ -150,6 +153,32 @@ members. Revisit only if a concrete need forces it.
 
 ---
 
+## Interactions
+
+An action does nothing by itself: it spends its cost and **starts an interaction**, which carries
+it out. An interaction (`game/src/game/Pending.ts`) holds a set of **requirements** for its
+current stage, each a typed slot that is open or filled:
+
+- `choice` — one of a list of options (which attack, which target, how many Hit Dice).
+- `roll` — a number within a dice expression. A die roll is just this; the game never rolls.
+
+Nothing owns or blocks an interaction: anyone (a player, the DM, a bot, an automatic dice source)
+may `fill` any open requirement. When none are open the interaction **advances**: it applies that
+stage's effect and either opens the next stage's requirements or finishes and is removed. An
+attack is one interaction: choose attack and target, roll the d20, then roll damage on a hit.
+An interaction with no requirements (a long rest) finishes as soon as it starts.
+
+Heroic Inspiration needs no special mechanism: when a roll is filled and its actor has
+inspiration, a `reroll` choice (keep or reroll) opens before the interaction advances; rerolling
+spends the inspiration and reopens the roll.
+
+Interactions live in the `Interactions` aspect of the `Game`, are variants of the `Interaction`
+registry key, and get sequential ids so replay assigns the same ones. The functions over them are
+in `game/src/game/Play.ts`: `listActions`, `act`, `fill`, and `autoRoll` (fills every open roll
+from the game's `Rng`; an explicit `fill` is how manual or DM-supplied dice would arrive).
+
+---
+
 ## Client
 
 The client is the **only way anything reads or writes a game**. It is an object in `server`
@@ -159,28 +188,29 @@ is a thin wrapper that forwards messages to the same methods.
 
 Surface (names illustrative; the shape is the contract):
 
-| Method                               | Purpose                                          |
-| ------------------------------------ | ------------------------------------------------ |
-| `createGame(seed?)`                  | Create a game; returns its snapshot              |
-| `getGame(id)`                        | The `Game` snapshot                              |
-| `events(id, after?)`                 | The log since `seq`, for following what happened |
-| `createCharacter(id, spec)`          | Create a character (class/race/abilities)        |
-| `createMonster(id, name)`            | Instantiate a monster template                   |
-| `getComposite(id, cid)`              | Serialized composite                             |
-| `editComposite(id, cid, patch)`      | Direct edit (HP, conditions), logged             |
-| `startEncounter(id, cids)`           | Participants in, initiative rolled               |
-| `getEncounter(id)`                   | Order, active composite, per-turn economy        |
-| `legalActions(id, cid)`              | Legal actions for this composite right now       |
-| `act(id, { actor, action, inputs })` | Perform an action                                |
-| `endTurn(id)`                        | End the active composite's turn                  |
-| `closeEncounter(id)`                 | Close the encounter                              |
+| Method                              | Purpose                                          |
+| ----------------------------------- | ------------------------------------------------ |
+| `createGame(seed?)`                 | Create a game; returns its snapshot              |
+| `getGame(id)`                       | The `Game` snapshot                              |
+| `events(id, after?)`                | The log since `seq`, for following what happened |
+| `createCharacter(id, spec)`         | Create a character (class/race/abilities)        |
+| `createMonster(id, name)`           | Instantiate a monster template                   |
+| `getComposite(id, cid)`             | Serialized composite                             |
+| `editComposite(id, cid, patch)`     | Direct edit (HP, conditions), logged             |
+| `startEncounter(id, cids)`          | Participants in, initiative rolled               |
+| `getEncounter(id)`                  | Order, active composite, per-turn economy        |
+| `listActions(id, cid)`              | Actions that exist for this composite right now  |
+| `act(id, { actor, action })`        | Start an action, which opens an interaction      |
+| `fill(id, interaction, key, value)` | Fill one requirement of an open interaction      |
+| `endTurn(id)`                       | End the active composite's turn (with turns)     |
+| `closeEncounter(id)`                | Close the encounter (with turns)                 |
 
-Failures are thrown as a `GameError` with a stable string `code` (`out-of-turn`,
-`illegal-action`, …) so a wrapper can forward them without parsing messages.
+Failures are thrown as a `GameError` with a stable string `code` (`unknown-action`,
+`invalid-input`, …) so a wrapper can forward them without parsing messages.
 
-`legalActions` exists so the driver needs no rules knowledge: it asks what is legal and
-chooses. Actions are content classes with a typed `inputs` argument (no input-schema DSL yet),
-validated by the action itself.
+`listActions` exists so the driver needs no rules knowledge: it asks what exists and chooses. An
+action that does not apply right now is absent, not illegal. The open requirements of the game's
+interactions say what input is wanted next; each requirement validates what fills it.
 
 **Built to be wrapped.** The WebSocket layer is deferred, but three properties are cheap now
 and breaking to retrofit, so they hold from the start:
@@ -208,13 +238,13 @@ Deliberately minimal, built **as homebrew on the base engine** — no privileged
   character_.)
 - **Monster:** Goblin (Nimble Escape optional).
 - **Items:** longsword, shortbow, chain mail, shield.
-- **Combat:** initiative, action / bonus action / movement economy (abstract distance, no
-  board), attack roll vs AC, advantage/disadvantage, damage and crits, 0 HP → unconscious → dead
-  (death saves), short rest. No spells, no concentration, no general conditions beyond
-  `unconscious`/`dead`.
-- **Dice:** a seeded PRNG whose current state lives in the `Game` snapshot. All randomness goes
-  through it; the initial seed (server metadata) plus the logged actions are what make replay
-  deterministic.
+- **Combat:** attack roll vs AC, damage and crits, short and long rest; then initiative, action /
+  bonus action / movement economy (abstract distance, no board), advantage/disadvantage, 0 HP →
+  unconscious → dead (death saves). No spells, no concentration, no general conditions beyond
+  `unconscious`/`dead`. Turns and the economy are deferred; combat is built from interactions.
+- **Dice:** a die value is an input to a `roll` requirement. The seeded PRNG (state in the `Game`
+  snapshot) is one source, used by `autoRoll`; the log holds every number filled, so replay needs
+  only the log.
 
 Skills and saving throws are computed aspects as already modelled in `reference/old`.
 
@@ -294,8 +324,8 @@ object.
    "roll twice" (Savage Attacker) all draw from it.
 3. **Stat contribution.** `Contributor<T>`s write to ability scores, skill proficiency, AC,
    Initiative, and attack/damage, so features compose without the sheet knowing about them.
-4. **Action economy.** Per-turn action, bonus action, and movement, reset when a turn starts;
-   `legalActions` reads it.
+4. **Action economy (deferred with turns).** Per-turn action, bonus action, and movement, reset
+   when a turn starts; `listActions` will read it.
 5. **Resources.** A use-pool aspect (`current`, `max`, recharge `short | long`) that features
    own and rests reset. Second Wind is the first user.
 6. **Rests.** Short and long rest as **actions** performed through `act`, not new client
@@ -321,9 +351,10 @@ resources, rests, dice, HP, and the one genuinely new mechanism, a mid-action de
 **1. Second Wind (Fighter).** Bonus action: regain `1d10 + Fighter level` HP, up to the maximum.
 Two uses; a short rest restores one, a long rest restores both.
 
-- Legal only when it is the character's turn, the bonus action is unspent, and a use remains.
-- Exercises: bonus action, resource pool, a die roll, HP clamp, short and long rest recharge,
-  and `legalActions` hiding it when it is not available.
+- Listed only while a use remains (and, later, while it is the character's turn and the bonus
+  action is unspent).
+- Exercises: resource pool, a die roll, HP clamp, short and long rest recharge, and
+  `listActions` omitting it when it is not available.
 
 **2. Heroic Inspiration (Human _Resourceful_).** Finishing a long rest sets
 `HeroicInspiration`. The player may expend it to reroll any die they just rolled and must keep
@@ -331,7 +362,7 @@ the new result. A character that already has it gains nothing.
 
 - Exercises: rest-triggered events, a character-held flag, and a **decision after a roll**. The
   action that produced the roll cannot complete until the player chooses keep or reroll.
-- This requires the game to suspend an action and wait. See open decision 6.
+- Built as the `reroll` choice on a roll requirement (see _Interactions_).
 
 **Scenario tests:** (a) a damaged Fighter uses Second Wind twice, is refused a third time,
 short-rests, and uses it again; (b) a Human finishes a long rest, attacks, rerolls the attack,
@@ -362,7 +393,7 @@ to a fresh game built from the initial seed.
 
 `playground` holds bot policies and runnable scenarios that call the client in-process.
 
-- `Bot` — a policy `(state, legalActions) => action`, applied to whichever composite is
+- `Bot` — a policy `(state, listActions) => action`, applied to whichever composite is
   active. Two to start: **aggressive** (attack the lowest-HP enemy, otherwise move closer) and
   **random** (uniform over legal actions, seeded).
 - `scenario` — builds the game, runs the encounter to completion under a seed and a turn cap,
@@ -389,17 +420,19 @@ builds, serializes, deserializes, and recomputes derived stats identically.
 **M2 — Rules in `game`, content in `content`.** _Progress:_ built: `Sheet` with ability scores,
 `SkillProficiency`/`SkillScore`, `Initiative`, `Level`, `refresh`; `HitPoints`/`HitDice`
 (with `MaxHitPoints`/`HitDicePool`), `SavingThrow`, `Inventory`/`ArmorClass`/`ArmorTraining`
-(chain mail, Shield), `WeaponTraining`/`Attacks` (longsword, shortbow), the seeded `Rng` and the
-`Game` composite (id and RNG only), the `Class` slot; Fighter (skills, fixed Hit Points,
-saves, armor and weapon training, the Defense fighting style), Human (Skillful), Alert, Soldier
-(abilities and skills only). Remaining: the roster and encounter on `Game`, Fighter's Second
-Wind, Action Surge and Champion, Goblin, the combat actions (how long-running and state-dependent
-actions behave, including the pause-for-reroll of open decision 6, is an actions design question,
-settled there).
-Run a full encounter as a pure function call — no client, no database. _Done:_ a scripted
-Fighter vs Goblin fight resolves deterministically, the reference character from _Minimum
-player character_ builds with the SRD's level 1 numbers, and both player interactions pass
-their scenario tests.
+(chain mail, leather armor, Shield), `WeaponTraining`/`Attacks` (longsword, scimitar, shortbow;
+critical range), `Resources`, `HeroicInspiration`, `Actions`; the seeded `Rng`, the `Game`
+composite (id, RNG, `Roster`, `Interactions`), and the interactions Attack, Short Rest and Long
+Rest with `listActions`/`act`/`fill`/`autoRoll`; the `Class` slot; Fighter (skills, fixed Hit
+Points, saves, armor and weapon training, the Defense fighting style, Second Wind, the Champion
+subclass's Improved Critical), Human (Skillful, Resourceful), Alert, Soldier (abilities and
+skills only), Goblin. _Done so far:_ a scripted Fighter vs Goblin fight resolves
+deterministically and survives a save and load, the reference character builds with the SRD's
+level 1 numbers, and both player interactions pass their scenario tests (`content/src/combat.test.ts`).
+Remaining: turns and the action economy (an encounter, initiative, Action Surge, Remarkable
+Athlete, Initiative Swap), Savage Attacker (once per turn), death saves and the `unconscious` /
+`dead` conditions, the Soldier's equipment and tool written to the inventory, and a deeper
+`validate()`.
 
 **M3 — Persistence and the event log.** SQLite schema, repositories, transactional
 write-and-append, replay. _Done:_ replaying a stored log into a fresh game reproduces state;
@@ -438,15 +471,8 @@ Settle in M0, before anything depends on them.
    (Vite, esbuild) apply `experimentalDecorators` to core's files.
 5. **Typed `get`.** Whether `Structure` should constrain `get` to its declared aspects. Not
    needed for the MVP; do not build it speculatively.
-6. **Mid-action decisions.** Heroic Inspiration lets the player reroll _after_ seeing a roll, so
-   an action must be able to pause. This is an _actions_ concern, designed together with how
-   actions that last several steps or depend on state behave; it blocks nothing until the
-   combat actions are built. Proposal to start from: `act` returns a result with a `pending`
-   prompt (the roll and the legal choices) and the `Game` records it in its snapshot; while it is
-   set, `legalActions` offers only the choices, and answering is another `act`. This keeps the
-   client surface unchanged, persists across a restart, and replays from the log. The
-   alternative, declaring the reroll up front (`act(..., { rerollIfBelow })`), is simpler but
-   wrong against the rules. Reactions will use the same mechanism.
+6. **Mid-action decisions. Decided:** interactions with requirements anyone may fill (see
+   _Interactions_). Reactions will use the same mechanism.
 7. **Refreshing computed aspects.** `refresh(sheet)` in `game/src/sheet/Sheet.ts` rebuilds each
    computed aspect by hand, in a hard-coded dependency order, one three-line block per
    projection. Likely fix: a refreshable (computable) aspect that declares what it reads, so the

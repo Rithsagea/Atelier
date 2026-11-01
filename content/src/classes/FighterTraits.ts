@@ -1,11 +1,14 @@
 import { Aspect, Composite } from "@atelier/core/composite/Composite";
+import { ActionContributor } from "@atelier/game/stats/Actions";
 import { AbilityScore, abilityModifier } from "@atelier/game/stats/AbilityScore";
 import { ArmorTrainingContributor } from "@atelier/game/stats/ArmorTraining";
 import { HitDicePoolContributor } from "@atelier/game/stats/HitDice";
 import { MaxHitPointsContributor } from "@atelier/game/stats/HitPoints";
 import { Level } from "@atelier/game/stats/Level";
+import { ResourceContributor } from "@atelier/game/stats/Resources";
 import { WeaponTrainingContributor } from "@atelier/game/stats/WeaponTraining";
 import { SavingThrowProficiencyContributor } from "@atelier/game/stats/SavingThrow";
+import { secondWind } from "./SecondWind";
 
 // The Core Fighter Traits that scale with level or feed a stat. Stores nothing, so it is rebuilt
 // on load. Hit Points use the fixed value (6 + Con per level after the first), not a roll.
@@ -35,6 +38,16 @@ export class FighterTraits extends Composite {
         for (const category of ["light", "medium", "heavy", "shield"] as const) {
           training.categories.add(category);
         }
+      },
+    });
+    this.provide(ResourceContributor, {
+      apply: (pool) => {
+        pool.pools["Second Wind"] = { max: 2, onShortRest: 1 };
+      },
+    });
+    this.provide(ActionContributor, {
+      apply: (actions) => {
+        actions.list.push(secondWind);
       },
     });
     this.provide(WeaponTrainingContributor, {

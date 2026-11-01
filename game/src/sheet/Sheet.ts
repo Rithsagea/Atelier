@@ -4,15 +4,18 @@ import { Structure } from "@atelier/core/composite/Structure";
 import { Background } from "../backgrounds/Background";
 import { Class } from "../classes/Class";
 import { Species } from "../species/Species";
+import { Actions } from "../stats/Actions";
 import { ArmorTraining } from "../stats/ArmorTraining";
 import { Attacks } from "../stats/Attacks";
 import { AbilityScore } from "../stats/AbilityScore";
 import { BaseAbilityScore } from "../stats/BaseAbilityScore";
 import { ArmorClass } from "../stats/ArmorClass";
+import { HeroicInspiration } from "../stats/HeroicInspiration";
 import { HitDice, HitDicePool } from "../stats/HitDice";
 import { HitPoints, MaxHitPoints } from "../stats/HitPoints";
 import { Initiative } from "../stats/Initiative";
 import { Level } from "../stats/Level";
+import { ResourcePool, Resources } from "../stats/Resources";
 import { SavingThrow, SavingThrowProficiency } from "../stats/SavingThrow";
 import { SkillProficiency } from "../stats/SkillProficiency";
 import { SkillScore } from "../stats/SkillScore";
@@ -34,6 +37,8 @@ export const Sheet = Structure(
   [Inventory, () => new Inventory()],
   [HitPoints, () => new HitPoints()],
   [HitDice, () => new HitDice()],
+  [HeroicInspiration, () => new HeroicInspiration()],
+  [Resources, () => new Resources()],
   [AbilityScore, () => new AbilityScore()],
   [SkillProficiency, () => new SkillProficiency()],
   [SkillScore, () => new SkillScore()],
@@ -46,6 +51,8 @@ export const Sheet = Structure(
   [Attacks, () => new Attacks()],
   [MaxHitPoints, () => new MaxHitPoints()],
   [HitDicePool, () => new HitDicePool()],
+  [ResourcePool, () => new ResourcePool()],
+  [Actions, () => new Actions()],
 );
 
 /**
@@ -106,4 +113,12 @@ export function refresh(sheet: Composite): void {
   const hitDicePool = new HitDicePool();
   sheet.provide(HitDicePool, hitDicePool);
   hitDicePool.refresh(sheet);
+
+  const resourcePool = new ResourcePool();
+  sheet.provide(ResourcePool, resourcePool);
+  resourcePool.refresh(sheet);
+
+  const actions = new Actions();
+  sheet.provide(Actions, actions);
+  actions.refresh(sheet);
 }

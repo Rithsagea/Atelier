@@ -12,6 +12,8 @@ export interface Attack {
   damage: DiceRoll;
   damageBonus: number;
   damageType: DamageType;
+  /** The lowest d20 roll that is a critical hit. */
+  critical: number;
 }
 
 // One entry per equipped weapon. Built in two passes so content never depends on contributor

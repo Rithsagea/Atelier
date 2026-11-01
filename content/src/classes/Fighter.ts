@@ -4,15 +4,17 @@ import { Structure } from "@atelier/core/composite/Structure";
 import { Class } from "@atelier/game/classes/Class";
 import { FighterSkills } from "./FighterSkills";
 import { FighterTraits } from "./FighterTraits";
+import { FighterSubclass } from "./FighterSubclass";
 import { FightingStyle } from "./FightingStyle";
 
-// Levels 1-3. The sheet's Level is the Fighter level; the fighting style is empty until chosen.
-// TODO: Second Wind and Action Surge (need Resources and actions), the Champion subclass (needs
-// critical hits, which need the d20 test).
+// Levels 1-3. The sheet's Level is the Fighter level; the fighting style and subclass are empty
+// until chosen.
+// TODO: Action Surge, once there is an action economy to grant an extra action in.
 @Aspect.Variant(Class, "Fighter")
 export class Fighter extends Structure(
   [Holder, () => new AspectHolder()],
   [FighterTraits, () => new FighterTraits()],
   [FighterSkills, () => new FighterSkills()],
   [FightingStyle],
+  [FighterSubclass],
 ) {}
